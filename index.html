@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نادي الوفاء | الجامعة اللبنانية الدولية في صور</title>
+  
+  <!-- خط تجوال الأكاديمي المتناسق -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  
+  <!-- مكتبة الأيقونات الاحترافية Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Tailwind CSS عبر CDN مع ضبط الألوان الخاصة -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Tajawal', 'sans-serif'],
+          },
+          colors: {
+            gold: {
+              400: '#fbbf24',
+              500: '#d97706',
+              600: '#b45309',
+            },
+            clubNavy: {
+              light: '#1e3a8a',
+              dark: '#070b14',
+              cardDark: '#111b33',
+              borderDark: '#1e293b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden">
+
+  <!-- ==================== الشريط العلوي (HEADER / NAVBAR) ==================== -->
+  <header class="sticky top-0 z-40 bg-white/90 dark:bg-[#080e1c]/90 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 transition-colors">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <!-- الجهة اليمنى: زر القائمة الجانبية وشعار النادي -->
+      <div class="flex items-center gap-4">
+        <!-- زر القائمة (☰) -->
+        <button id="openMenuBtn" aria-label="فتح القائمة" class="p-2.5 rounded-lg bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+
+        <!-- هوية النادي -->
+        <div class="flex items-center gap-3">
+          <img src="logo.png" alt="شعار نادي الوفاء" class="w-12 h-12 object-contain drop-shadow-sm transition-transform hover:scale-105">
+          <div>
+            <h1 class="text-lg font-bold tracking-tight gold-gradient-text">نادي الوفاء</h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400">الجامعة اللبنانية الدولية — صور</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- الجهة اليسرى: محول المظهر (Dark/Light) -->
+      <div class="flex items-center gap-3">
+        <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
+          <span id="themeIconContainer" class="flex items-center justify-center"></span>
+          <span id="themeText">الليلي</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== شريط الإعلانات العاجلة ==================== -->
+  <section id="announcementSection" class="max-w-7xl mx-auto px-4 lg:px-8 mt-5 transition-all">
+    <div class="rounded-xl border border-gold-500/30 bg-amber-50 dark:bg-[#17120a] p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
+      <div class="flex items-center gap-3 w-full sm:w-auto">
+        <span class="flex-shrink-0 p-1.5 rounded-md bg-gold-500/20 text-gold-600 dark:text-gold-400">
+          <i data-lucide="bell" class="w-4 h-4"></i>
+        </span>
+        <p id="announcementText" class="text-slate-800 dark:text-amber-100/90 font-medium">
+          <strong class="text-gold-600 dark:text-gold-400">إعلان هام:</strong> تم فتح باب التقديم للمنحة الطلابية السنوية التابعة لنادي الوفاء.
+        </p>
+      </div>
+      <a id="announcementBtn" href="scholarship.html" class="w-full sm:w-auto text-center px-4 py-1.5 rounded-lg bg-clubNavy-light dark:bg-gold-500 hover:opacity-90 text-white dark:text-slate-950 font-bold text-xs transition flex items-center justify-center gap-1.5">
+        <span id="announcementBtnText">التقديم المباشر</span>
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- ==================== بنر ترحيبي تعريفي (HERO) ==================== -->
+  <section class="max-w-7xl mx-auto px-4 lg:px-8 mt-6">
+    <div class="rounded-2xl p-6 sm:p-10 border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-gradient-to-l dark:from-[#0a1020] dark:to-[#111b33] shadow-sm">
+      <div class="max-w-3xl">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border border-gold-500/30 bg-gold-500/10 text-gold-600 dark:text-gold-400 mb-3">
+          <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+          بوابة الخدمات الأكاديمية والطلابية
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">
+          منصة نادي الوفاء الجامعية الموحدة
+        </h2>
+        <p class="mt-3 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+          مرجع شامل لطلاب الجامعة اللبنانية الدولية في صور: بنك الموارد الأكاديمية ونماذج الامتحانات، استعارة وتبادل المراجع الدراسية، وشبكة التوجيه الأكاديمي المباشر.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== الواجهة الأساسية: الأنشطة والفعاليات ==================== -->
+  <main class="max-w-7xl mx-auto px-4 lg:px-8 my-10">
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-2.5">
+        <div class="w-1.5 h-6 rounded-full bg-gold-500"></div>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white">الأنشطة والفعاليات الجامعية</h3>
+      </div>
+      <a href="archive.html" class="text-xs font-bold text-clubNavy-light dark:text-gold-400 hover:underline flex items-center gap-1">
+        <span>أرشيف الفعاليات</span>
+        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+      </a>
+    </div>
+
+    <!-- شبكة كروت الأنشطة -->
+    <div id="activitiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- كرت نشاط 1 -->
+      <article class="rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200">
+        <div>
+          <div class="h-44 bg-slate-200 dark:bg-slate-800 relative flex items-center justify-center text-slate-400">
+            <i data-lucide="image" class="w-10 h-10 opacity-40"></i>
+            <span class="absolute top-3 right-3 px-2.5 py-1 rounded bg-clubNavy-light text-white text-[11px] font-bold">معرض علمي</span>
+          </div>
+          <div class="p-5">
+            <h4 class="font-bold text-base text-slate-900 dark:text-white mb-2">معرض المشاريع والابتكارات الهندسية السنوي</h4>
+            <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+              افتتاح ملتقى النادي الهندسي بمشاركة طلابية واسعة لعرض نماذج تطبيقية لمشاريع التخرج والحلول البرمجية والميكانيكية.
+            </p>
+          </div>
+        </div>
+        <div class="px-5 py-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+          <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> 15 أيلول 2026</span>
+          <span class="text-gold-600 dark:text-gold-400 font-bold hover:underline cursor-pointer flex items-center gap-1">
+            التفاصيل <i data-lucide="arrow-left" class="w-3 h-3"></i>
+          </span>
+        </div>
+      </article>
+
+      <!-- كرت نشاط 2 -->
+      <article class="rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200">
+        <div>
+          <div class="h-44 bg-slate-200 dark:bg-slate-800 relative flex items-center justify-center text-slate-400">
+            <i data-lucide="image" class="w-10 h-10 opacity-40"></i>
+            <span class="absolute top-3 right-3 px-2.5 py-1 rounded bg-gold-600 text-white text-[11px] font-bold">حملة كتب</span>
+          </div>
+          <div class="p-5">
+            <h4 class="font-bold text-base text-slate-900 dark:text-white mb-2">إطلاق حملة تبادل واستعارة المراجع الدراسية</h4>
+            <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+              بدء تسليم واستلام الكتب الورقية لطلاب مختلف الكليات لتسهيل وصول الجميع إلى مصادر التعلم دون أعباء مادية.
+            </p>
+          </div>
+        </div>
+        <div class="px-5 py-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+          <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> 10 أيلول 2026</span>
+          <span class="text-gold-600 dark:text-gold-400 font-bold hover:underline cursor-pointer flex items-center gap-1">
+            التفاصيل <i data-lucide="arrow-left" class="w-3 h-3"></i>
+          </span>
+        </div>
+      </article>
+
+      <!-- كرت نشاط 3 -->
+      <article class="rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200">
+        <div>
+          <div class="h-44 bg-slate-200 dark:bg-slate-800 relative flex items-center justify-center text-slate-400">
+            <i data-lucide="image" class="w-10 h-10 opacity-40"></i>
+            <span class="absolute top-3 right-3 px-2.5 py-1 rounded bg-emerald-700 text-white text-[11px] font-bold">ندوة إرشادية</span>
+          </div>
+          <div class="p-5">
+            <h4 class="font-bold text-base text-slate-900 dark:text-white mb-2">جلسة توجيهية حول تسجيل المواد ومسارات التخصص</h4>
+            <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+              جلسة نقاش مفتوحة مع خريجين وأكاديميين للإجابة عن أسئلة الطلاب المستجدين حول الخطط الدراسية ومتطلبات التخرج.
+            </p>
+          </div>
+        </div>
+        <div class="px-5 py-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+          <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> 02 أيلول 2026</span>
+          <span class="text-gold-600 dark:text-gold-400 font-bold hover:underline cursor-pointer flex items-center gap-1">
+            التفاصيل <i data-lucide="arrow-left" class="w-3 h-3"></i>
+          </span>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- ==================== القائمة الجانبية (SLIDE-OVER MENU) ==================== -->
+  <div id="menuOverlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <aside id="sidebar" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0c1427] border-l border-slate-200 dark:border-clubNavy-borderDark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
+    
+    <div>
+      <!-- رأس القائمة -->
+      <div class="p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
+        <div>
+          <h2 class="font-bold text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">الوصول السريع لكافة الخدمات</p>
+        </div>
+        <button id="closeMenuBtn" aria-label="إغلاق القائمة" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-red-500">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- قائمة الروابط الرئيسية المعتمدة -->
+      <nav class="p-4 space-y-1.5">
+        
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
+          <i data-lucide="layout-grid" class="w-4 h-4"></i>
+          <span>الرئيسية (الأنشطة والإعلانات)</span>
+        </a>
+
+        <a href="scholarship.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="graduation-cap" class="w-4 h-4 text-slate-400"></i>
+          <span>المنح الطلابية (تسجيل مباشر)</span>
+        </a>
+
+        <a href="resources.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="folder-down" class="w-4 h-4 text-slate-400"></i>
+          <div>
+            <p>بنك الموارد الرقمية والامتحانات</p>
+            <p class="text-[10px] text-slate-400 dark:text-slate-500">كتب PDF • نماذج سابقة • ملخصات</p>
+          </div>
+        </a>
+
+        <a href="books.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="book-open" class="w-4 h-4 text-slate-400"></i>
+          <div>
+            <p>استعارة وتبادل الكتب الورقية</p>
+            <p class="text-[10px] text-slate-400 dark:text-slate-500">حجز أو تبرع بالنسخ الفيزيائية</p>
+          </div>
+        </a>
+
+        <a href="faculty.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+          <span>دليل الأساتذة والساعات المكتبية</span>
+        </a>
+
+        <a href="guidance.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="message-circle" class="w-4 h-4 text-slate-400"></i>
+          <div>
+            <p>شبكة التوجيه وممثلو الاختصاصات</p>
+            <span class="text-[10px] text-slate-400 dark:text-slate-500">مجموعات الواتساب والتواصل المباشر</span>
+          </div>
+        </a>
+
+      </nav>
+    </div>
+
+    <!-- أسفل القائمة -->
+    <div class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
+      نادي الوفاء — الجامعة اللبنانية الدولية في صور
+    </div>
+
+  </aside>
+
+  <!-- ==================== المساعد الذكي التفاعلي ==================== -->
+  <div class="fixed bottom-6 left-6 z-50 flex flex-col items-start">
+    
+    <!-- نافذة المحادثة المنبثقة -->
+    <div id="chatWindow" class="hidden mb-3 w-[330px] sm:w-[380px] h-[460px] rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl flex flex-col overflow-hidden transition-all">
+      
+      <!-- رأس نافذة الشات -->
+      <div class="p-3.5 bg-slate-100 dark:bg-[#111b33] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-gold-500/20 text-gold-500 flex items-center justify-center">
+            <i data-lucide="bot" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-xs font-bold text-slate-900 dark:text-white">مساعد نادي الوفاء الذكي</h3>
+            <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">متصل لخدمة الطلاب</p>
+          </div>
+        </div>
+        <button id="closeChatBtn" class="p-1 rounded-lg text-slate-500 hover:text-red-500 hover:bg-slate-200 dark:hover:bg-slate-800">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- صندوق الرسائل -->
+      <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs leading-relaxed">
+        <div class="flex items-start gap-2 max-w-[85%]">
+          <div class="p-3 rounded-2xl rounded-tr-none bg-slate-100 dark:bg-[#131e3a] text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-800">
+            أهلاً بك زميلي الطالب في بوابة نادي الوفاء. يمكنك استفساري عن: التقديم للمنحة، استعارة الكتب، بنك الامتحانات والمراجع، أو شبكة التوجيه وممثلي الاختصاصات.
+          </div>
+        </div>
+      </div>
+
+      <!-- خانة الإدخال والإرسال -->
+      <form id="chatForm" class="p-2.5 bg-slate-50 dark:bg-[#080e1c] border-t border-slate-200 dark:border-slate-800 flex items-center gap-2">
+        <input id="chatInput" type="text" placeholder="اكتب استفسارك هنا..." required class="flex-1 text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+        <button type="submit" class="p-2.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 hover:opacity-90 transition">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </form>
+
+    </div>
+
+    <!-- الزر العائم -->
+    <button id="toggleChatBtn" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs shadow-lg hover:shadow-xl hover:scale-105 transition-all">
+      <i data-lucide="bot" class="w-4 h-4"></i>
+      <span>المساعد الذكي (AI)</span>
+    </button>
+
+  </div>
+
+  <!-- سكربت التحكم الشامل: الأيقونات + القائمة الجانبية + المظهر + السحب الحي + الذكاء الاصطناعي -->
+  <script>
+    lucide.createIcons();
+
+    // 1. إدارة القائمة الجانبية
+    const openMenuBtn = document.getElementById('openMenuBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const sidebar = document.getElementById('sidebar');
+
+    function openSidebar() {
+      if (sidebar && menuOverlay) {
+        sidebar.classList.remove('translate-x-full');
+        menuOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      }
+    }
+
+    function closeSidebar() {
+      if (sidebar && menuOverlay) {
+        sidebar.classList.add('translate-x-full');
+        menuOverlay.classList.add('opacity-0', 'pointer-events-none');
+      }
+    }
+
+    if (openMenuBtn) openMenuBtn.addEventListener('click', openSidebar);
+    if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeSidebar);
+    if (menuOverlay) menuOverlay.addEventListener('click', closeSidebar);
+
+    // 2. إدارة التبديل بين المظهر الصباحي والليلي
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIconContainer = document.getElementById('themeIconContainer');
+    const themeText = document.getElementById('themeText');
+    const htmlElement = document.documentElement;
+
+    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+
+    function applyTheme(isDark) {
+      if (isDark) {
+        htmlElement.classList.add('dark');
+        if (themeText) themeText.textContent = 'الليلي';
+        if (themeIconContainer) themeIconContainer.innerHTML = moonSvg;
+      } else {
+        htmlElement.classList.remove('dark');
+        if (themeText) themeText.textContent = 'النهاري';
+        if (themeIconContainer) themeIconContainer.innerHTML = sunSvg;
+      }
+    }
+
+    const savedTheme = localStorage.getItem('clubTheme');
+    applyTheme(savedTheme !== 'light');
+
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+        const isDarkCurrently = htmlElement.classList.contains('dark');
+        const newThemeIsDark = !isDarkCurrently;
+        applyTheme(newThemeIsDark);
+        localStorage.setItem('clubTheme', newThemeIsDark ? 'dark' : 'light');
+      });
+    }
+
+    // ==================== 3. ربط وسحب البيانات الحية من Google Sheets ====================
+    // استبدل الرابط أدناه بالرابط الذي نسخته من نشر Google Apps Script (ينتهي بـ /exec)
+    const SCRIPT_URL = "ضع_رابط_السكربت_هنا";
+
+    async function fetchLiveHomeData() {
+      if (!SCRIPT_URL || SCRIPT_URL.includes("ضع_رابط")) return;
+      try {
+        const response = await fetch(SCRIPT_URL);
+        const data = await response.json();
+
+        // أ) تحديث شريط الإعلانات العاجلة تلقائياً
+        if (data.announcement) {
+          const sec = document.getElementById('announcementSection');
+          const txt = document.getElementById('announcementText');
+          const btn = document.getElementById('announcementBtn');
+          const btnTxt = document.getElementById('announcementBtnText');
+
+          if (data.announcement.active === false) {
+            if (sec) sec.classList.add('hidden');
+          } else {
+            if (sec) sec.classList.remove('hidden');
+            if (txt && data.announcement.text) {
+              txt.innerHTML = `<strong class="text-gold-600 dark:text-gold-400">إعلان هام:</strong> ${data.announcement.text}`;
+            }
+            if (btn && data.announcement.btnLink) {
+              btn.setAttribute('href', data.announcement.btnLink);
+            }
+            if (btnTxt && data.announcement.btnText) {
+              btnTxt.textContent = data.announcement.btnText;
+            }
+          }
+        }
+
+        // ب) تحديث كروت الأنشطة والفعاليات في الصفحة الرئيسية
+        if (data.activities && Array.isArray(data.activities) && data.activities.length > 0) {
+          const homeActivities = data.activities.filter(act => {
+            const show = String(act['عرض في الرئيسية'] || '').trim();
+            return show === 'نعم';
+          });
+
+          if (homeActivities.length > 0) {
+            const grid = document.getElementById('activitiesGrid');
+            if (grid) {
+              grid.innerHTML = homeActivities.slice(0, 6).map(act => {
+                const title = act['العنوان'] || '';
+                const date = act['التاريخ'] || '';
+                const cat = act['التصنيف'] || 'نشاط جامعي';
+                const desc = act['الوصف المختصر'] || '';
+                const img = act['رابط الصورة'] || '';
+
+                const imgMarkup = img 
+                  ? `<img src="${img}" alt="${title}" class="w-full h-full object-cover">`
+                  : `<div class="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+                       <i data-lucide="image" class="w-10 h-10 opacity-40"></i>
+                     </div>`;
+
+                return `
+                  <article class="rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200">
+                    <div>
+                      <div class="h-44 relative flex items-center justify-center overflow-hidden">
+                        ${imgMarkup}
+                        <span class="absolute top-3 right-3 px-2.5 py-1 rounded bg-clubNavy-light text-white text-[11px] font-bold shadow-sm">${cat}</span>
+                      </div>
+                      <div class="p-5">
+                        <h4 class="font-bold text-base text-slate-900 dark:text-white mb-2">${title}</h4>
+                        <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-300">${desc}</p>
+                      </div>
+                    </div>
+                    <div class="px-5 py-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                      <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${date}</span>
+                      <a href="archive.html" class="text-gold-600 dark:text-gold-400 font-bold hover:underline flex items-center gap-1">
+                        <span>التفاصيل</span>
+                        <i data-lucide="arrow-left" class="w-3 h-3"></i>
+                      </a>
+                    </div>
+                  </article>
+                `;
+              }).join('');
+              lucide.createIcons();
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("جاري استخدام البيانات الأساسية لتعذر الاتصال بقاعدة البيانات اللحظية:", err);
+      }
+    }
+
+    fetchLiveHomeData();
+
+    // ==================== 4. تشغيل المساعد الذكي التفاعلي ====================
+    const toggleChatBtn = document.getElementById('toggleChatBtn');
+    const closeChatBtn = document.getElementById('closeChatBtn');
+    const chatWindow = document.getElementById('chatWindow');
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+    const chatMessages = document.getElementById('chatMessages');
+
+    const GEMINI_API_KEY = "AQ.Ab8RN6JaPJEfgZ9nufs7JhCSvic8PqZ6eD5XkzxFnaSNkzRYXA";
+
+    let chatHistory = [];
+
+    const SYSTEM_INSTRUCTION = `
+أنت المساعد الذكي الرسمي والممثل الرقمي لـ "نادي الوفاء" في الجامعة اللبنانية الدولية (LIU) - فرع صور.
+مهمتك الأساسية: تقديم الإرشاد الأكاديمي الشامل والمباشر لطلاب الجامعة، والإجابة الدقيقة على استفسارات الخدمات، الهيئة التعليمية، وشبكة التواصل.
+
+==================================================
+أولاً: ضوابط الرد وأسلوب الصياغة (حاسمة وغير قابلة للتجاوز)
+==================================================
+1. منع الرموز التعبيرية (Emojis):
+   - يُمنع منعاً باتاً ومطلقاً إدراج أي إيموجي أو وجه تعبيري أياً كان نوعه في ردودك.
+2. اللغة والنبرة:
+   - الرد حصراً وبالكامل باللغة العربية الفصحى السلسة، بنبرة أكاديمية، مهذبة، وقاطعة دون حشو.
+   - استيعاب المصطلحات الجامعية بالإنجليزية (مثل: GPA, Drop & Add, Petition, Midterms, Finals, Prerequisite) والرد بما يقابلها بالعربية مع توضيح المصطلح المألوف للطلاب.
+3. ميزان التناسب وضبط طول الإجابة (Proportionality):
+   - التحيات والمجاملات (مرحبا، كيفك، يعطيك العافية): أجب بجملة واحدة فقط موجزة ومرحبة دون استعراض أو تعداد للخدمات (مثال: "أهلاً بك زميلي الطالب، أنا جاهز لمساعدتك، ما هو استفسارك الأكاديمي اليوم؟").
+   - الأسئلة المحددة والمباشرة (طلب إيميل دكتور، رقم مسؤول تخصص، رابط مجموعة، أو شرط محدد): أجب في سطر أو سطرين بالمعلومة المطلوبة فوراً.
+   - الأسئلة الإجرائية (شرح خطوات التقديم على المنحة، آلية الاستعارة، شروط العرائض والسحب والإضافة): نسّق الحل في نقاط مرقمة تسلسلية وواضحة.
+4. إدارة السياق والذاكرة:
+   - راقب تسلسل المحادثة كاملاً؛ إذا طرح الطالب سؤالاً مبتوراً أو مكملاً (مثل: "كيف بقدم عليها؟"، "أين أجده؟"، "كم رقمه؟")، اربطه مباشرة بالموضوع والخدمة الأخيرة التي كنتم تتحدثون عنها.
+
+==================================================
+ثانياً: القاعدة المعرفية المعتمدة لخدمات نادي الوفاء
+==================================================
+1. المنحة الطلابية السنوية (صفحة scholarship.html):
+   - الآلية: تعبئة استمارة إلكترونية مباشرة عبر الموقع.
+   - المستندات: لا تتطلب الاستمارة رفع أي أوراق ثبوتية أو ملفات PDF نهائياً لتسهيل التسجيل.
+   - البيانات المطلوبة في الاستمارة: الاسم الثلاثي، اسم الأب والأم والشهرة، مكان السكن والبلدة الأصلية، الجنس، تاريخ الولادة، رقم الهاتف الفعال، عمل رب الأسرة، اسم الجامعة والتخصص، السنة الدراسية، رقم الملف الجامعي (ID إن وجد)، ومعدل الثانوية العامة الرسمي من 20.
+   - التنويه النظامي: تعبئة الاستمارة لا تعني القبول التلقائي للحسم؛ تخضع الطلبات للتدقيق وتحدد نسب الحسم بحسب الاتفاقيات المتاحة، ويتم التواصل مع الطلاب المقبولين هاتفياً.
+
+2. بنك الموارد الرقمية (صفحة resources.html):
+   - المحتوى: مكتبة رقمية تشتمل على أرشيف الامتحانات النصفية (Midterms) والنهائية (Finals) السابقة مع الحلول النموذجية، سلايدات المحاضرات، ومراجع المقررات الأساسية.
+   - آلية الوصول: تحميل مجاني بالكامل وبشكل مباشر وفوري دون الحاجة لتسجيل دخول أو إنشاء حساب.
+
+3. استعارة وتبرع الكتب الورقية (صفحة books.html):
+   - النطاق: مخصص حصراً للكتب والمراجع المطبوعة الورقية الملموسة وليس النسخ الإلكترونية PDF.
+   - آلية الاستعارة: يتصفح الطالب قائمة العناوين المتوفرة على الموقع، ويحجز نسخته عبر إدخال: الاسم الكامل، رقم الهاتف (واتساب)، والـ ID الجامعي.
+   - آلية التبرع: يتيح للطلاب إيداع كتبهم الدراسية القديمة لدى النادي ليستفيد منها زملاؤهم.
+   - التسليم والاستلام: يتم يداً بيد داخل حرم الجامعة اللبنانية الدولية في فرع صور بالتنسيق مع مسؤولي النادي.
+
+4. دليل الأساتذة والإدارة (صفحة faculty.html):
+   - يتيح تصفح والبحث عن البريد الإلكتروني الرسمي ومواعيد المراجعة للأساتذة والإداريين مع خاصية النسخ المباشر بضغطة زر.
+
+5. شبكة التوجيه وممثلو الاختصاصات (صفحة guidance.html):
+   - منصة مخصصة لربط الطلاب بالمجموعات الرسمية ومنسقي الكليات للتواصل الفردي السريع عبر واتساب.
+
+6. الاستفسارات الأكاديمية العامة:
+   - فترة السحب والإضافة (Drop & Add): تُتاح خلال الأسبوع الأول من الفصل لتعديل المواد أو إسقاطها دون غرامة ودون تسجيل علامة انسحاب (W).
+   - عريضة الالتماس (Petition): تُرفع عبر البوابة الإلكترونية أو عمادة الكلية لطلب استثناء أكاديمي (مثل فتح شعبة مغلقة، رفع سقف الساعات، أو تسجيل مادة تزامناً مع متطلبها السابق).
+   - المعدل التراكمي (GPA): الحد الأدنى لتفادي الإنذار الأكاديمي (Academic Probation) هو 2.0/4.0، وإعادة المقررات ذات العلامات المنخفضة تستبدل الدرجة القديمة وترفع المعدل مباشرة.
+
+==================================================
+ثالثاً: دليل الاتصال الرسمي وممثلو الاختصاصات (فرع صور)
+==================================================
+1. مجموعات الواتساب الرسمية:
+   - مجموعة نادي الوفاء المركزية (الإعلانات والأنشطة):
+     https://chat.whatsapp.com/H5Gvs4LV3OaH7NQsuJpYFx
+   - مجموعة التوجيه الطلابي (إخوة):
+     https://chat.whatsapp.com/Kdt9QVnMsmW2GguggFDuvs
+   - مجموعة التوجيه الطلابي (أخوات):
+     الرابط قيد التحديث وسيعلن عنه قريباً عبر قنوات النادي.
+
+2. منسقو الاختصاصات للتواصل عبر واتساب:
+   - هندسة الميكانيك: 71336458 (+961 71 336 458)
+   - هندسة الكمبيوتر: 03945021 (+961 3 945 021)
+   - هندسة الاتصالات: 81604305 (+961 81 604 305)
+   - الاختصاصات التالية (هندسة الكهرباء، علوم الحاسوب CS، الصيدلة، والهندسة الطبية Biomedical): أرقام ممثليها قيد التحديث، ويمكن للطالب طرح سؤاله داخل مجموعة التوجيه الطلابي أو مراجعة ممثلي النادي في الحرم الجامعي.
+
+3. دليل البريد الإلكتروني للهيئة التعليمية والإدارية (فرع صور):
+   - د. هادي نور الدين (هندسة الكمبيوتر والاتصالات): hadi.noureddine@liu.edu.lb
+   - د. علي أبو خليل (هندسة الكهرباء): ali.aboukhalil@liu.edu.lb
+   - د. علي حلال (هندسة الميكانيك): ali.halal@liu.edu.lb
+   - د. حسن جابر (هندسة الميكانيك): hassan.jaber@liu.edu.lb
+   - د. إحسان عساكري (العلوم الطبية والطب): ihsan.asakereh@liu.edu.lb
+   - د. مايا بسام (قسم الرياضيات): maya.bassam@liu.edu.lb
+   - د. شيراز قاسم (قسم الرياضيات): shiraz.kassem@liu.edu.lb
+   - د. علي سرور (قسم الرياضيات): ali.srour@liu.edu.lb
+   - أ. علي اللبن (قسم اللغة الإنجليزية): ali.ellaban@liu.edu.lb
+   - أ. هبة حمود (أمينة المكتبة الجامعية العامة): hiba.hammoud@liu.edu.lb
+   - أ. غيا السمرة (المسؤولة المالية والإدارية): gheya.elsamra@liu.edu.lb
+
+==================================================
+رابعاً: سياسات الأمان والحالات الخاصة (Guardrails)
+==================================================
+1. الأسئلة الخارجة عن الإطار الجامعي:
+   - عند توجيه أسئلة غير أكاديمية، اعتذر باختصار تام: "دور المساعد الذكي مخصص حصراً لدعم طلاب الجامعة اللبنانية الدولية والإجابة على استفسارات خدمات نادي الوفاء في فرع صور."
+2. منع محاولات الغش أو حل الاختبارات الجارية: دور النادي يقتصر على توفير نماذج دورات سابقة وسلايدات للدراسة المسبقة.
+3. الرسوم الدراسية وأقساط الساعات الجامعية تؤخذ رسمياً من الدائرة المالية في الجامعة، بينما يقتصر دور النادي على التقديم للمنحة الطلابية.
+`;
+
+    if (toggleChatBtn) {
+      toggleChatBtn.addEventListener('click', () => {
+        chatWindow.classList.toggle('hidden');
+        if (!chatWindow.classList.contains('hidden')) {
+          chatInput.focus();
+        }
+      });
+    }
+
+    if (closeChatBtn) {
+      closeChatBtn.addEventListener('click', () => {
+        chatWindow.classList.add('hidden');
+      });
+    }
+
+    function addMessage(text, isUser = false) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = isUser ? 'flex justify-end' : 'flex items-start gap-2 max-w-[85%]';
+
+      const content = document.createElement('div');
+      content.className = isUser 
+        ? 'p-3 rounded-2xl rounded-tl-none bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-medium' 
+        : 'p-3 rounded-2xl rounded-tr-none bg-slate-100 dark:bg-[#131e3a] text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-800 leading-relaxed';
+      
+      content.textContent = text;
+      msgDiv.appendChild(content);
+      chatMessages.appendChild(msgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // الرد الاحتياطي المباشر
+    function getFallbackResponse(text) {
+      const q = text.toLowerCase().trim();
+
+      // 1. استفسارات الدكاترة وأعضاء الإدارة والإيميلات
+      if (q.includes('غيا') || q.includes('سمرة') || q.includes('مالية') || q.includes('المالي')) {
+        return 'البريد الإلكتروني للأستاذة غيا السمرة (المسؤولة المالية والإدارية): gheya.elsamra@liu.edu.lb';
+      }
+      if (q.includes('هبة') || q.includes('حمود') || q.includes('مكتبة') || q.includes('المكتبة')) {
+        return 'البريد الإلكتروني للأستاذة هبة حمود (أمينة المكتبة العامة): hiba.hammoud@liu.edu.lb';
+      }
+      if (q.includes('هادي') || q.includes('نور الدين')) {
+        return 'البريد الإلكتروني للدكتور هادي نور الدين (هندسة الكمبيوتر والاتصالات): hadi.noureddine@liu.edu.lb';
+      }
+      if (q.includes('أبو خليل') || (q.includes('علي') && q.includes('كهرباء'))) {
+        return 'البريد الإلكتروني للدكتور علي أبو خليل (هندسة الكهرباء): ali.aboukhalil@liu.edu.lb';
+      }
+      if (q.includes('حلال') || (q.includes('علي') && q.includes('ميكانيك'))) {
+        return 'البريد الإلكتروني للدكتور علي حلال (هندسة الميكانيك): ali.halal@liu.edu.lb';
+      }
+      if (q.includes('جابر') || (q.includes('حسن') && q.includes('ميكانيك'))) {
+        return 'البريد الإلكتروني للدكتور حسن جابر (هندسة الميكانيك): hassan.jaber@liu.edu.lb';
+      }
+      if (q.includes('عساكري') || q.includes('إحسان') || q.includes('طب')) {
+        return 'البريد الإلكتروني للدكتور إحسان عساكري (كلية الطب والعلوم الطبية): ihsan.asakereh@liu.edu.lb';
+      }
+      if (q.includes('مايا') || q.includes('بسام')) {
+        return 'البريد الإلكتروني للدكتورة مايا بسام (قسم الرياضيات): maya.bassam@liu.edu.lb';
+      }
+      if (q.includes('شيراز') || q.includes('قاسم')) {
+        return 'البريد الإلكتروني للدكتورة شيراز قاسم (قسم الرياضيات): shiraz.kassem@liu.edu.lb';
+      }
+      if (q.includes('سرور') || (q.includes('علي') && q.includes('رياضيات'))) {
+        return 'البريد الإلكتروني للدكتور علي سرور (قسم الرياضيات): ali.srour@liu.edu.lb';
+      }
+      if (q.includes('اللبن') || q.includes('انكليزي') || q.includes('إنجليزي') || q.includes('english')) {
+        return 'البريد الإلكتروني للأستاذ علي اللبن (قسم اللغة الإنجليزية): ali.ellaban@liu.edu.lb';
+      }
+      if (q.includes('ايميل') || q.includes('إيميل') || q.includes('دكتور') || q.includes('دكاترة') || q.includes('اساتذة')) {
+        return 'يمكنك تصفح ونسخ جميع إيميلات الأساتذة والإدارة في فرع صور مباشرة عبر صفحة "دليل الأساتذة والإدارة" (faculty.html).';
+      }
+
+      // 2. ممثلو الاختصاصات للتواصل عبر واتساب
+      if (q.includes('ميكانيك')) {
+        return 'مسؤول اختصاص هندسة الميكانيك: رقم الواتساب للتواصل هو 71336458 (+961 71 336 458).';
+      }
+      if (q.includes('كمبيوتر') || q.includes('حاسوب')) {
+        return 'مسؤول اختصاص هندسة الكمبيوتر: رقم الواتساب للتواصل هو 03945021 (+961 3 945 021).';
+      }
+      if (q.includes('اتصالات')) {
+        return 'مسؤول اختصاص هندسة الاتصالات: رقم الواتساب للتواصل هو 81604305 (+961 81 604 305).';
+      }
+      if (q.includes('كهرباء') || q.includes('صيدلة') || q.includes('طبي') || q.includes('biomedical')) {
+        return 'أرقام مسؤولي هذا الاختصاص قيد التحديث حالياً، ويمكنك طرح استفسارك مباشرة داخل مجموعة التوجيه الطلابي على واتساب.';
+      }
+
+      // 3. مجموعات الواتساب وروابط الدعم
+      if (q.includes('جروب') || q.includes('مجموعة') || q.includes('واتساب') || q.includes('رابط') || q.includes('لينك')) {
+        return 'روابط مجموعات نادي الوفاء الرسمية على واتساب:\n- مجموعة الإعلانات الأساسية: https://chat.whatsapp.com/H5Gvs4LV3OaH7NQsuJpYFx\n- مجموعة التوجيه الطلابي: https://chat.whatsapp.com/Kdt9QVnMsmW2GguggFDuvs';
+      }
+
+      // 4. خدمات المنحة، الكتب، وبنك الموارد
+      if (q.includes('منحة') || q.includes('حسم') || q.includes('تقديم') || q.includes('طلب')) {
+        return 'للتقديم على المنحة الطلابية: ادخل إلى صفحة "المنح الطلابية" عبر القائمة (☰) واملأ الاستمارة الإلكترونية مباشرة دون الحاجة لرفع أي ملفات PDF.';
+      }
+      if (q.includes('كتاب') || q.includes('كتب') || q.includes('استعارة') || q.includes('تبرع')) {
+        return 'بخصوص الكتب المطبوعة الورقية: يمكنك حجز كتاب أو التبرع به عبر صفحة "الكتب والمراجع الورقية" (books.html) بالاسم والـ ID ورقم الهاتف، والاستلام داخل حرم فرع صور.';
+      }
+      if (q.includes('امتحان') || q.includes('دورات') || q.includes('pdf') || q.includes('مراجع')) {
+        return 'جميع الامتحانات النصفية والنهائية السابقة والمراجع متوفرة للتحميل المجاني المباشر دون تسجيل دخول في صفحة "بنك الموارد الرقمية" (resources.html).';
+      }
+
+      // 5. الرد العام الترحيبي
+      return 'أهلاً بك زميلي الطالب في نادي الوفاء (LIU فرع صور). أنا جاهز لمساعدتك في: المنحة الطلابية، الكتب الورقية، إيميلات الدكاترة، أو التواصل مع ممثلي الاختصاصات. ما هو استفسارك؟';
+    }
+
+    async function queryAI(userPrompt) {
+      const loadingDiv = document.createElement('div');
+      loadingDiv.id = 'aiLoading';
+      loadingDiv.className = 'flex items-start gap-2 max-w-[85%] text-slate-400 text-[11px]';
+      loadingDiv.textContent = 'جاري المعالجة وإعداد الإجابة...';
+      chatMessages.appendChild(loadingDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      chatHistory.push({
+        role: "user",
+        parts: [{ text: userPrompt }]
+      });
+
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            system_instruction: {
+              parts: [{ text: SYSTEM_INSTRUCTION }]
+            },
+            contents: chatHistory,
+            generationConfig: {
+              temperature: 0.2,
+              maxOutputTokens: 2048
+            }
+          })
+        });
+
+        const data = await response.json();
+        const loading = document.getElementById('aiLoading');
+        if (loading) loading.remove();
+
+        if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+          const botReply = data.candidates[0].content.parts[0].text.trim();
+          addMessage(botReply, false);
+          chatHistory.push({
+            role: "model",
+            parts: [{ text: botReply }]
+          });
+        } else {
+          chatHistory.pop();
+          const fallback = getFallbackResponse(userPrompt);
+          addMessage(fallback, false);
+        }
+      } catch (error) {
+        const loading = document.getElementById('aiLoading');
+        if (loading) loading.remove();
+        chatHistory.pop();
+        const fallback = getFallbackResponse(userPrompt);
+        addMessage(fallback, false);
+      }
+    }
+
+    if (chatForm) {
+      chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const userText = chatInput.value.trim();
+        if (!userText) return;
+
+        addMessage(userText, true);
+        chatInput.value = '';
+        queryAI(userText);
+      });
+    }
+  </script>
+</body>
+</html>

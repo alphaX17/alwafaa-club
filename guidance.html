@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بوابة التوجيه الطلابي | نادي الوفاء - LIU صور</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Tajawal', 'sans-serif'] },
+          colors: {
+            gold: { 400: '#fbbf24', 500: '#d97706', 600: '#b45309' },
+            clubNavy: { light: '#1e3a8a', dark: '#070b14', cardDark: '#111b33', borderDark: '#1e293b' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden">
+
+  <!-- ==================== الشريط العلوي (HEADER / NAVBAR) ==================== -->
+  <header class="sticky top-0 z-40 bg-white/90 dark:bg-[#080e1c]/90 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 transition-colors">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <!-- الجهة اليمنى: زر القائمة الجانبية (☰) وهوية الصفحة -->
+      <div class="flex items-center gap-4">
+        <button id="openMenuBtn" aria-label="فتح القائمة" class="p-2.5 rounded-lg bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+
+        <div class="flex items-center gap-3">
+          <img src="logo.png" alt="شعار نادي الوفاء" class="w-10 h-10 object-contain">
+          <div>
+            <h1 class="text-base font-bold text-slate-900 dark:text-white">بوابة التوجيه الطلابي</h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400">شبكة الدعم والمجموعات الرسمية - فرع صور</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- الجهة اليسرى: محول المظهر (Dark/Light) -->
+      <div class="flex items-center gap-3">
+        <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
+          <span id="themeIconContainer" class="flex items-center justify-center"></span>
+          <span id="themeText">الليلي</span>
+        </button>
+
+        <a href="index.html" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 transition">
+          <i data-lucide="home" class="w-3.5 h-3.5"></i>
+          <span>الرئيسية</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== المحتوى الرئيسي ==================== -->
+  <main class="max-w-7xl mx-auto px-4 lg:px-8 py-8 space-y-10">
+
+    <!-- لافتة الترحيب والإرشاد -->
+    <div class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-gradient-to-br from-white to-slate-100 dark:from-[#0f172a] dark:to-[#090f1f] shadow-sm space-y-3">
+      <span class="px-3 py-1 rounded-full text-xs font-bold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20">
+        خدمة التوجيه الأكاديمي المباشر
+      </span>
+      <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+        دليلك المباشر للتواصل مع منسقي الكليات ومجموعات الدعم
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
+        يوفر نادي الوفاء هذه المنصة لمساعدة طلاب الجامعة اللبنانية الدولية (فرع صور) في اختيار المواد، تجاوز صعوبات التسجيل، والتواصل الفردي مع ممثلي الاختصاصات لحل أي استفسار دراسي.
+      </p>
+    </div>
+
+    <!-- 1. مجموعات الواتساب الرسمية (تتحدث تلقائياً من Google Sheets) -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i data-lucide="message-square" class="w-4 h-4 text-emerald-500"></i>
+          <span>مجموعات الدعم والإعلانات المركزية</span>
+        </h3>
+        <span class="text-[11px] text-slate-400 font-medium">واتساب الرسمي</span>
+      </div>
+
+      <div id="groupsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <!-- مجموعة إعلانات نادي الوفاء الأساسية (افتراضي) -->
+        <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm">
+          <div class="space-y-2">
+            <span class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">القناة المركزية</span>
+            <h4 class="font-bold text-sm text-slate-900 dark:text-white">مجموعة نادي الوفاء الأساسية</h4>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              القناة الرسمية المخصصة لكافة الإعلانات الأكاديمية، مواعيد التقديم للمنح السنوية، والنشاطات الجامعية.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <a href="https://chat.whatsapp.com/H5Gvs4LV3OaH7NQsuJpYFx" target="_blank" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition shadow-sm">
+              <i data-lucide="external-link" class="w-4 h-4"></i>
+              <span>انضمام للمجموعة الأساسية</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- مجموعة التوجيه الطلابي (إخوة) (افتراضي) -->
+        <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm">
+          <div class="space-y-2">
+            <span class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">إرشاد واستفسارات</span>
+            <h4 class="font-bold text-sm text-slate-900 dark:text-white">مجموعة التوجيه الطلابي (إخوة)</h4>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              مساحة تفاعلية للطلاب لطرح التساؤلات حول طبيعة المقررات، الأساتذة، ومشاكل التسجيل عبر البوابة.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <a href="https://chat.whatsapp.com/Kdt9QVnMsmW2GguggFDuvs" target="_blank" class="w-full py-2.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-90 transition shadow-sm">
+              <i data-lucide="users" class="w-4 h-4"></i>
+              <span>انضمام إلى المجموعة</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- مجموعة التوجيه الطلابي (أخوات) (افتراضي) -->
+        <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between opacity-80 shadow-sm">
+          <div class="space-y-2">
+            <span class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400">توجيه الطالبات</span>
+            <h4 class="font-bold text-sm text-slate-900 dark:text-white">مجموعة التوجيه الطلابي (أخوات)</h4>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              المجموعة الخاصة بالطالبات للإرشاد الأكاديمي، نصائح المواد، ومساعدة الطالبات المستجدات.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <button disabled class="w-full py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 font-bold text-xs flex items-center justify-center gap-2 cursor-not-allowed">
+              <i data-lucide="clock" class="w-4 h-4"></i>
+              <span>الرابط قيد التحديث قريباً</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. شبكة ممثلي الكليات والاختصاصات (تتحدث تلقائياً من Google Sheets) -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i data-lucide="user-check" class="w-4 h-4 text-gold-500"></i>
+          <span>ممثلو الاختصاصات للتواصل المباشر (واتساب)</span>
+        </h3>
+        <span class="text-[11px] text-slate-400 font-medium">فرع صور</span>
+      </div>
+
+      <div id="repsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <!-- هندسة الميكانيك -->
+        <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm">
+          <div class="space-y-1">
+            <span class="text-[10px] font-bold text-gold-500">كلية الهندسة</span>
+            <h4 class="font-bold text-xs text-slate-900 dark:text-white">مسؤول هندسة الميكانيك</h4>
+            <p class="text-xs font-mono text-slate-600 dark:text-slate-300" dir="ltr">+961 71 336 458</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <a href="https://wa.me/96171336458?text=مرحبا زميلي، أنا طالب في الجامعة وعندي استفسار بخصوص اختصاص الهندسة الميكانيكية" target="_blank" class="w-full py-2 rounded-lg bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+              <span>مراسلة عبر واتساب</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- هندسة الكمبيوتر -->
+        <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm">
+          <div class="space-y-1">
+            <span class="text-[10px] font-bold text-gold-500">كلية الهندسة</span>
+            <h4 class="font-bold text-xs text-slate-900 dark:text-white">مسؤول هندسة الكمبيوتر</h4>
+            <p class="text-xs font-mono text-slate-600 dark:text-slate-300" dir="ltr">+961 3 945 021</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <a href="https://wa.me/9613945021?text=مرحبا زميلي، أنا طالب في الجامعة وعندي استفسار بخصوص اختصاص هندسة الكمبيوتر" target="_blank" class="w-full py-2 rounded-lg bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+              <span>مراسلة عبر واتساب</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- هندسة الاتصالات -->
+        <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm">
+          <div class="space-y-1">
+            <span class="text-[10px] font-bold text-gold-500">كلية الهندسة</span>
+            <h4 class="font-bold text-xs text-slate-900 dark:text-white">مسؤول هندسة الاتصالات</h4>
+            <p class="text-xs font-mono text-slate-600 dark:text-slate-300" dir="ltr">+961 81 604 305</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <a href="https://wa.me/96181604305?text=مرحبا زميلي، أنا طالب في الجامعة وعندي استفسار بخصوص اختصاص هندسة الاتصالات" target="_blank" class="w-full py-2 rounded-lg bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+              <span>مراسلة عبر واتساب</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- هندسة الكهرباء -->
+        <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between opacity-75 shadow-sm">
+          <div class="space-y-1">
+            <span class="text-[10px] font-bold text-gold-500">كلية الهندسة</span>
+            <h4 class="font-bold text-xs text-slate-900 dark:text-white">مسؤول هندسة الكهرباء</h4>
+            <p class="text-xs text-slate-400">قيد التحديث</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <button disabled class="w-full py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1.5 cursor-not-allowed">
+              <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+              <span>الرقم قريباً</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- علوم الحاسوب -->
+        <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between opacity-75 shadow-sm">
+          <div class="space-y-1">
+            <span class="text-[10px] font-bold text-blue-500">كلية العلوم</span>
+            <h4 class="font-bold text-xs text-slate-900 dark:text-white">مسؤول علوم الحاسوب (CS)</h4>
+            <p class="text-xs text-slate-400">قيد التحديث</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <button disabled class="w-full py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1.5 cursor-not-allowed">
+              <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+              <span>الرقم قريباً</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- كلية الصيدلة -->
+        <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between opacity-75 shadow-sm">
+          <div class="space-y-1">
+            <span class="text-[10px] font-bold text-teal-500">كلية الصيدلة</span>
+            <h4 class="font-bold text-xs text-slate-900 dark:text-white">مسؤول كلية الصيدلة</h4>
+            <p class="text-xs text-slate-400">قيد التحديث</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <button disabled class="w-full py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1.5 cursor-not-allowed">
+              <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+              <span>الرقم قريباً</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- الهندسة الطبية -->
+        <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between opacity-75 shadow-sm sm:col-span-2 lg:col-span-2">
+          <div class="space-y-1">
+            <span class="text-[10px] font-bold text-rose-500">كلية الهندسة</span>
+            <h4 class="font-bold text-xs text-slate-900 dark:text-white">مسؤول الهندسة الطبية (Biomedical)</h4>
+            <p class="text-xs text-slate-400">قيد التحديث</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <button disabled class="w-full py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1.5 cursor-not-allowed">
+              <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+              <span>الرقم قريباً</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== القائمة الجانبية (SLIDE-OVER MENU) ==================== -->
+  <div id="menuOverlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <aside id="sidebar" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0c1427] border-l border-slate-200 dark:border-clubNavy-borderDark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
+    
+    <div>
+      <!-- رأس القائمة -->
+      <div class="p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
+        <div>
+          <h2 class="font-bold text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">الوصول السريع لكافة الخدمات</p>
+        </div>
+        <button id="closeMenuBtn" aria-label="إغلاق القائمة" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-red-500">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- قائمة الروابط الرئيسية -->
+      <nav class="p-4 space-y-1.5">
+        
+        <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
+          <span>الرئيسية (الأنشطة والإعلانات)</span>
+        </a>
+
+        <a href="scholarship.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="graduation-cap" class="w-4 h-4 text-slate-400"></i>
+          <span>المنح الطلابية (تسجيل مباشر)</span>
+        </a>
+
+        <a href="resources.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="folder-down" class="w-4 h-4 text-slate-400"></i>
+          <div>
+            <p>بنك الموارد الرقمية والامتحانات</p>
+            <p class="text-[10px] text-slate-400 dark:text-slate-500">كتب PDF • نماذج سابقة • ملخصات</p>
+          </div>
+        </a>
+
+        <a href="books.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="book-open" class="w-4 h-4 text-slate-400"></i>
+          <div>
+            <p>استعارة وتبادل الكتب الورقية</p>
+            <p class="text-[10px] text-slate-400 dark:text-slate-500">حجز أو تبرع بالنسخ الفيزيائية</p>
+          </div>
+        </a>
+
+        <a href="faculty.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+          <span>دليل الأساتذة والساعات المكتبية</span>
+        </a>
+
+        <a href="guidance.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          <div>
+            <p>شبكة التوجيه وممثلو الاختصاصات</p>
+            <span class="text-[10px] text-slate-400 dark:text-slate-500">مجموعات الواتساب والتواصل المباشر</span>
+          </div>
+        </a>
+
+      </nav>
+    </div>
+
+    <!-- أسفل القائمة -->
+    <div class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
+      نادي الوفاء — الجامعة اللبنانية الدولية في صور
+    </div>
+
+  </aside>
+
+  <!-- ==================== سكربت التحكم الشامل والسحب اللحظي ==================== -->
+  <script>
+    lucide.createIcons();
+
+    // 1. رابط الـ Web App الخاص بك في Google Apps Script
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
+
+    // 2. دالة جلب وعرض بيانات التوجيه الحية من صفحة "التوجيه_والتواصل" في Google Sheets
+    async function fetchLiveGuidance() {
+      if (!SCRIPT_URL) return;
+      try {
+        const response = await fetch(SCRIPT_URL);
+        const data = await response.json();
+
+        if (data.guidance && Array.isArray(data.guidance) && data.guidance.length > 0) {
+          const groups = data.guidance.filter(item => String(item['النوع'] || '').trim() === 'مجموعة');
+          const reps = data.guidance.filter(item => String(item['النوع'] || '').trim() === 'مسؤول');
+
+          // أ) تحديث بطاقات المجموعات الرسمية
+          if (groups.length > 0) {
+            const groupsGrid = document.getElementById('groupsGrid');
+            if (groupsGrid) {
+              groupsGrid.innerHTML = groups.map(g => {
+                const name = g['الاسم أو الصفة'] || 'مجموعة رسمية';
+                const tag = g['الكلية أو الاختصاص'] || 'قناة إعلانية';
+                const link = g['رابط الواتساب'] || '';
+                const status = String(g['الحالة'] || '').trim();
+                const isActive = status === 'فعال' && link !== '';
+
+                const actionBtn = isActive
+                  ? `<a href="${link}" target="_blank" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition shadow-sm">
+                       <i data-lucide="external-link" class="w-4 h-4"></i>
+                       <span>انضمام إلى المجموعة</span>
+                     </a>`
+                  : `<button disabled class="w-full py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 font-bold text-xs flex items-center justify-center gap-2 cursor-not-allowed">
+                       <i data-lucide="clock" class="w-4 h-4"></i>
+                       <span>الرابط قيد التحديث قريباً</span>
+                     </button>`;
+
+                const cardOpacity = isActive ? '' : 'opacity-80';
+
+                return `
+                  <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}">
+                    <div class="space-y-2">
+                      <span class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">${tag}</span>
+                      <h4 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h4>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        القناة الرسمية المخصصة للتواصل، الإعلانات الأكاديمية ومساعدة الطلاب في حرم الجامعة.
+                      </p>
+                    </div>
+                    <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800">
+                      ${actionBtn}
+                    </div>
+                  </div>
+                `;
+              }).join('');
+            }
+          }
+
+          // ب) تحديث بطاقات ممثلي الكليات والاختصاصات
+          if (reps.length > 0) {
+            const repsGrid = document.getElementById('repsGrid');
+            if (repsGrid) {
+              repsGrid.innerHTML = reps.map(r => {
+                const name = r['الاسم أو الصفة'] || 'مسؤول اختصاص';
+                const faculty = r['الكلية أو الاختصاص'] || 'كلية الهندسة';
+                const phone = String(r['رقم الهاتف'] || '').trim();
+                const link = r['رابط الواتساب'] || (phone && !phone.includes('تحديث') ? `https://wa.me/${phone.replace(/[^0-9]/g, '')}` : '');
+                const status = String(r['الحالة'] || '').trim();
+                const isActive = status === 'فعال' && phone !== '' && !phone.includes('تحديث');
+
+                const actionBtn = isActive
+                  ? `<a href="${link}" target="_blank" class="w-full py-2 rounded-lg bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                       <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                       <span>مراسلة عبر واتساب</span>
+                     </a>`
+                  : `<button disabled class="w-full py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1.5 cursor-not-allowed">
+                       <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                       <span>الرقم قريباً</span>
+                     </button>`;
+
+                const phoneText = isActive
+                  ? `<p class="text-xs font-mono text-slate-600 dark:text-slate-300" dir="ltr">${phone}</p>`
+                  : `<p class="text-xs text-slate-400">قيد التحديث</p>`;
+
+                const cardOpacity = isActive ? '' : 'opacity-75';
+
+                return `
+                  <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}">
+                    <div class="space-y-1">
+                      <span class="text-[10px] font-bold text-gold-500">${faculty}</span>
+                      <h4 class="font-bold text-xs text-slate-900 dark:text-white">${name}</h4>
+                      ${phoneText}
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                      ${actionBtn}
+                    </div>
+                  </div>
+                `;
+              }).join('');
+            }
+          }
+
+          lucide.createIcons();
+        }
+      } catch (err) {
+        console.warn("جاري استخدام بيانات التوجيه المحلية لتعذر السحب اللحظي:", err);
+      }
+    }
+
+    // استدعاء السحب اللحظي فور فتح الصفحة
+    fetchLiveGuidance();
+
+    // 3. إدارة القائمة الجانبية (Sidebar)
+    const openMenuBtn = document.getElementById('openMenuBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const sidebar = document.getElementById('sidebar');
+
+    function openSidebar() {
+      if (sidebar && menuOverlay) {
+        sidebar.classList.remove('translate-x-full');
+        menuOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      }
+    }
+
+    function closeSidebar() {
+      if (sidebar && menuOverlay) {
+        sidebar.classList.add('translate-x-full');
+        menuOverlay.classList.add('opacity-0', 'pointer-events-none');
+      }
+    }
+
+    if (openMenuBtn) openMenuBtn.addEventListener('click', openSidebar);
+    if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeSidebar);
+    if (menuOverlay) menuOverlay.addEventListener('click', closeSidebar);
+
+    // 4. إدارة التبديل بين المظهر الصباحي والليلي
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIconContainer = document.getElementById('themeIconContainer');
+    const themeText = document.getElementById('themeText');
+    const htmlElement = document.documentElement;
+
+    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+
+    function applyTheme(isDark) {
+      if (isDark) {
+        htmlElement.classList.add('dark');
+        if (themeText) themeText.textContent = 'الليلي';
+        if (themeIconContainer) themeIconContainer.innerHTML = moonSvg;
+      } else {
+        htmlElement.classList.remove('dark');
+        if (themeText) themeText.textContent = 'النهاري';
+        if (themeIconContainer) themeIconContainer.innerHTML = sunSvg;
+      }
+    }
+
+    const savedTheme = localStorage.getItem('clubTheme');
+    applyTheme(savedTheme !== 'light');
+
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+        const isDarkCurrently = htmlElement.classList.contains('dark');
+        const newThemeIsDark = !isDarkCurrently;
+        applyTheme(newThemeIsDark);
+        localStorage.setItem('clubTheme', newThemeIsDark ? 'dark' : 'light');
+      });
+    }
+  </script>
+</body>
+</html>
