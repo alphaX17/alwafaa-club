@@ -101,63 +101,14 @@
         </div>
       </div>
 
-      <!-- شبكة الكتب (يتم ملؤها تلقائياً من Google Sheets) -->
-      <div id="booksGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        <!-- كتاب 1 (افتراضي) -->
-        <div class="book-card p-5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition" data-title="vector mechanics for engineers statics الهندسة ميكانيك">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="px-2.5 py-1 rounded text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">متوفر للاستلام</span>
-              <span class="text-xs text-slate-400 font-mono">كلية الهندسة</span>
-            </div>
-            <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-1">Vector Mechanics for Engineers (Statics)</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400">النسخة المطبوعة - الطبعة الحادية عشرة</p>
-          </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-            <span class="text-[11px] text-slate-400">عدد النسخ: 2</span>
-            <button onclick="openModal('Vector Mechanics for Engineers')" class="px-3.5 py-1.5 rounded-lg bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 text-xs font-bold hover:opacity-90 transition">
-              طلب استعارة
-            </button>
-          </div>
-        </div>
-
-        <!-- كتاب 2 (افتراضي) -->
-        <div class="book-card p-5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition" data-title="principles of marketing kotler إدارة أعمال تسويق">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="px-2.5 py-1 rounded text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">متوفر للاستلام</span>
-              <span class="text-xs text-slate-400 font-mono">كلية إدارة الأعمال</span>
-            </div>
-            <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-1">Principles of Marketing (Kotler)</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400">كتاب ورقي أصلي بحالة ممتازة</p>
-          </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-            <span class="text-[11px] text-slate-400">عدد النسخ: 1</span>
-            <button onclick="openModal('Principles of Marketing')" class="px-3.5 py-1.5 rounded-lg bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 text-xs font-bold hover:opacity-90 transition">
-              طلب استعارة
-            </button>
-          </div>
-        </div>
-
-        <!-- كتاب 3 (افتراضي) -->
-        <div class="book-card p-5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between opacity-75" data-title="calculus early transcendentals رياضيات كالكولاس تفاضل وتكامل">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="px-2.5 py-1 rounded text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">مُعار حالياً</span>
-              <span class="text-xs text-slate-400 font-mono">العلوم والآداب</span>
-            </div>
-            <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-1">Calculus: Early Transcendentals</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400">المرجع الجامعي لمادتي كالكولاس 1 و 2</p>
-          </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-            <span class="text-[11px] text-slate-400">يعود قريباً</span>
-            <button disabled class="px-3.5 py-1.5 rounded-lg bg-slate-300 dark:bg-slate-800 text-slate-500 text-xs font-bold cursor-not-allowed">
-              غير متاح
-            </button>
-          </div>
-        </div>
-
+      <!-- شبكة الكتب (يتم ملؤها فورياً عبر الكاش لمنع وميض البيانات القديمة) -->
+      <div id="booksGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[220px]"></div>
+      
+      <!-- رسالة في حال عدم تطابق البحث -->
+      <div id="noBooksResults" class="hidden text-center py-12">
+        <i data-lucide="book-x" class="w-12 h-12 mx-auto text-slate-400 mb-3 opacity-60"></i>
+        <h3 class="text-sm font-bold text-slate-700 dark:text-slate-300">لم يتم العثور على أي كتاب مطابق</h3>
+        <p class="text-xs text-slate-400 mt-1">تأكد من كتابة الاسم بدقة أو تصفح باقي القائمة.</p>
       </div>
     </section>
 
@@ -216,7 +167,7 @@
           <h3 class="font-bold text-sm text-slate-900 dark:text-white">تأكيد حجز استعارة كتاب</h3>
           <p id="modalBookName" class="text-xs text-gold-500 font-semibold mt-0.5"></p>
         </div>
-        <button onclick="closeModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500">
+        <button onclick="closeModal()" aria-label="إغلاق" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500 transition">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
@@ -253,9 +204,7 @@
   <div id="menuOverlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
   <aside id="sidebar" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0c1427] border-l border-slate-200 dark:border-clubNavy-borderDark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
-    
     <div>
-      <!-- رأس القائمة -->
       <div class="p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
         <div>
           <h2 class="font-bold text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
@@ -266,19 +215,15 @@
         </button>
       </div>
 
-      <!-- قائمة الروابط الرئيسية -->
       <nav class="p-4 space-y-1.5">
-        
         <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
           <span>الرئيسية (الأنشطة والإعلانات)</span>
         </a>
-
         <a href="scholarship.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="graduation-cap" class="w-4 h-4 text-slate-400"></i>
           <span>المنح الطلابية (تسجيل مباشر)</span>
         </a>
-
         <a href="resources.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="folder-down" class="w-4 h-4 text-slate-400"></i>
           <div>
@@ -286,7 +231,6 @@
             <p class="text-[10px] text-slate-400 dark:text-slate-500">كتب PDF • نماذج سابقة • ملخصات</p>
           </div>
         </a>
-
         <a href="books.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
           <i data-lucide="book-open" class="w-4 h-4"></i>
           <div>
@@ -294,12 +238,10 @@
             <p class="text-[10px] text-slate-400 dark:text-slate-500">حجز أو تبرع بالنسخ الفيزيائية</p>
           </div>
         </a>
-
         <a href="faculty.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
           <span>دليل الأساتذة والساعات المكتبية</span>
         </a>
-
         <a href="guidance.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="message-circle" class="w-4 h-4 text-slate-400"></i>
           <div>
@@ -307,83 +249,107 @@
             <span class="text-[10px] text-slate-400 dark:text-slate-500">مجموعات الواتساب والتواصل المباشر</span>
           </div>
         </a>
-
       </nav>
     </div>
 
-    <!-- أسفل القائمة -->
     <div class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
       نادي الوفاء — الجامعة اللبنانية الدولية في صور
     </div>
-
   </aside>
 
   <!-- ==================== سكربت التحكم الشامل والسحب اللحظي ==================== -->
   <script>
     lucide.createIcons();
 
-    // 1. رابط الـ Web App الخاص بك في Google Apps Script
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
+    let booksData = [];
 
-    // 2. دالة جلب وعرض الكتب الحية من صفحة "قائمة_الكتب" في Google Sheets
+    // دالة رسم بطاقات الكتب على الشاشة
+    function renderBooks(booksList) {
+      const grid = document.getElementById('booksGrid');
+      if (!grid) return;
+
+      if (!booksList || booksList.length === 0) {
+        grid.innerHTML = `<div class="col-span-full py-16 text-center text-xs text-slate-400">لا توجد كتب مسجلة حالياً في قاعدة البيانات.</div>`;
+        return;
+      }
+
+      grid.innerHTML = booksList.map(book => {
+        const title = book['عنوان الكتاب'] || '';
+        const faculty = book['الكلية'] || 'الجامعة اللبنانية الدولية';
+        const desc = book['الوصف والطبعة'] || 'النسخة المطبوعة المعتمدة';
+        const copies = book['عدد النسخ'] || '1';
+        const status = String(book['الحالة'] || '').trim();
+
+        const isAvailable = status.includes('متوفر') || status === '';
+
+        const badgeMarkup = isAvailable
+          ? `<span class="px-2.5 py-1 rounded text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">متوفر للاستلام</span>`
+          : `<span class="px-2.5 py-1 rounded text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">مُعار حالياً</span>`;
+
+        const escapedTitle = title.replace(/'/g, "\\'");
+        const actionBtn = isAvailable
+          ? `<button onclick="openModal('${escapedTitle}')" class="px-3.5 py-1.5 rounded-lg bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 text-xs font-bold hover:opacity-90 transition">طلب استعارة</button>`
+          : `<button disabled class="px-3.5 py-1.5 rounded-lg bg-slate-300 dark:bg-slate-800 text-slate-500 text-xs font-bold cursor-not-allowed">غير متاح</button>`;
+
+        const copiesText = isAvailable ? `عدد النسخ: ${copies}` : 'يعود قريباً';
+        const cardOpacity = isAvailable ? '' : 'opacity-75';
+
+        return `
+          <div class="book-card p-5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition ${cardOpacity}" data-title="${title.toLowerCase()} ${faculty.toLowerCase()}">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                ${badgeMarkup}
+                <span class="text-xs text-slate-400 font-mono">${faculty}</span>
+              </div>
+              <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-1">${title}</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">${desc}</p>
+            </div>
+            <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[11px] text-slate-400">${copiesText}</span>
+              ${actionBtn}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+      filterBooks();
+    }
+
+    // جلب بيانات الكتب مع التسريع الفوري (localStorage)
     async function fetchLiveBooks() {
+      // 1. قراءة الكاش المحلي وعرضه فوراً في جزء من الثانية (0 ثوانٍ)
+      const cached = localStorage.getItem('nadi_books_cache');
+      if (cached) {
+        try {
+          booksData = JSON.parse(cached);
+          renderBooks(booksData);
+        } catch (e) {
+          console.warn("خطأ في قراءة كاش الكتب:", e);
+        }
+      }
+
       if (!SCRIPT_URL) return;
+
+      // 2. السحب من Google Sheets بالخلفية وتحديث الكاش
       try {
         const response = await fetch(SCRIPT_URL);
         const data = await response.json();
 
-        if (data.books && Array.isArray(data.books) && data.books.length > 0) {
-          const grid = document.getElementById('booksGrid');
-          if (grid) {
-            grid.innerHTML = data.books.map(book => {
-              const title = book['عنوان الكتاب'] || '';
-              const faculty = book['الكلية'] || 'الجامعة اللبنانية الدولية';
-              const desc = book['الوصف والطبعة'] || 'النسخة المطبوعة المعتمدة';
-              const copies = book['عدد النسخ'] || '1';
-              const status = String(book['الحالة'] || '').trim();
-
-              const isAvailable = status.includes('متوفر') || status === '';
-
-              const badgeMarkup = isAvailable
-                ? `<span class="px-2.5 py-1 rounded text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">متوفر للاستلام</span>`
-                : `<span class="px-2.5 py-1 rounded text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">مُعار حالياً</span>`;
-
-              const actionBtn = isAvailable
-                ? `<button onclick="openModal('${title.replace(/'/g, "\\'")}')" class="px-3.5 py-1.5 rounded-lg bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 text-xs font-bold hover:opacity-90 transition">طلب استعارة</button>`
-                : `<button disabled class="px-3.5 py-1.5 rounded-lg bg-slate-300 dark:bg-slate-800 text-slate-500 text-xs font-bold cursor-not-allowed">غير متاح</button>`;
-
-              const copiesText = isAvailable ? `عدد النسخ: ${copies}` : 'يعود قريباً';
-              const cardOpacity = isAvailable ? '' : 'opacity-75';
-
-              return `
-                <div class="book-card p-5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition ${cardOpacity}" data-title="${title.toLowerCase()} ${faculty.toLowerCase()}">
-                  <div>
-                    <div class="flex items-center justify-between mb-3">
-                      ${badgeMarkup}
-                      <span class="text-xs text-slate-400 font-mono">${faculty}</span>
-                    </div>
-                    <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-1">${title}</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">${desc}</p>
-                  </div>
-                  <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                    <span class="text-[11px] text-slate-400">${copiesText}</span>
-                    ${actionBtn}
-                  </div>
-                </div>
-              `;
-            }).join('');
-            lucide.createIcons();
-          }
+        if (data.books && Array.isArray(data.books)) {
+          booksData = data.books;
+          renderBooks(booksData);
+          localStorage.setItem('nadi_books_cache', JSON.stringify(booksData));
         }
       } catch (err) {
-        console.warn("جاري استخدام بيانات الكتب المحلية لتعذر السحب اللحظي:", err);
+        console.warn("جاري استخدام البيانات المحفوظة لتعذر السحب اللحظي:", err);
       }
     }
 
-    // استدعاء السحب اللحظي فور فتح الصفحة
     fetchLiveBooks();
 
-    // 3. إدارة القائمة الجانبية (Sidebar)
+    // إدارة القائمة الجانبية (Sidebar)
     const openMenuBtn = document.getElementById('openMenuBtn');
     const closeMenuBtn = document.getElementById('closeMenuBtn');
     const menuOverlay = document.getElementById('menuOverlay');
@@ -407,7 +373,7 @@
     if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeSidebar);
     if (menuOverlay) menuOverlay.addEventListener('click', closeSidebar);
 
-    // 4. إدارة التبديل بين المظهر الصباحي والليلي
+    // إدارة التبديل بين المظهر الصباحي والليلي
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const themeIconContainer = document.getElementById('themeIconContainer');
     const themeText = document.getElementById('themeText');
@@ -440,7 +406,7 @@
       });
     }
 
-    // 5. تبديل الأقسام (استعارة / تبرع)
+    // تبديل الأقسام (استعارة / تبرع)
     const tabBorrow = document.getElementById('tabBorrow');
     const tabDonate = document.getElementById('tabDonate');
     const borrowSection = document.getElementById('borrowSection');
@@ -466,7 +432,7 @@
       });
     }
 
-    // 6. نافذة حجز الاستعارة وإرسال البيانات إلى Google Sheets
+    // نافذة حجز الاستعارة
     const borrowModal = document.getElementById('borrowModal');
     const modalBookName = document.getElementById('modalBookName');
     const borrowForm = document.getElementById('borrowForm');
@@ -530,7 +496,7 @@
       });
     }
 
-    // 7. نموذج تسجيل التبرع وإرسال البيانات إلى Google Sheets
+    // نموذج تسجيل التبرع بكتاب
     const donateForm = document.getElementById('donateForm');
     const donateSuccess = document.getElementById('donateSuccess');
 
@@ -572,23 +538,37 @@
       });
     }
 
-    // 8. بحث الكتب الفوري التفاعلي (يعمل مع الكتب الثابتة والديناميكية)
+    // بحث الكتب الفوري
     const bookSearchInput = document.getElementById('bookSearchInput');
+    const noBooksResults = document.getElementById('noBooksResults');
+
+    function filterBooks() {
+      const query = bookSearchInput ? bookSearchInput.value.toLowerCase().trim() : '';
+      const cards = document.querySelectorAll('.book-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const title = card.getAttribute('data-title') || '';
+        const cardText = card.innerText.toLowerCase();
+        if (!query || title.includes(query) || cardText.includes(query)) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (noBooksResults) {
+        if (visibleCount === 0 && cards.length > 0) {
+          noBooksResults.classList.remove('hidden');
+        } else {
+          noBooksResults.classList.add('hidden');
+        }
+      }
+    }
 
     if (bookSearchInput) {
-      bookSearchInput.addEventListener('input', () => {
-        const query = bookSearchInput.value.toLowerCase().trim();
-        const cards = document.querySelectorAll('.book-card');
-        cards.forEach(card => {
-          const title = card.getAttribute('data-title') || '';
-          const cardText = card.innerText.toLowerCase();
-          if (!query || title.includes(query) || cardText.includes(query)) {
-            card.classList.remove('hidden');
-          } else {
-            card.classList.add('hidden');
-          }
-        });
-      });
+      bookSearchInput.addEventListener('input', filterBooks);
     }
   </script>
 </body>
