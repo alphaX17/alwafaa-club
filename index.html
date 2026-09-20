@@ -387,90 +387,103 @@
       });
     }
 
-    // ==================== 3. ربط وسحب البيانات الحية من Google Sheets ====================
-    // استبدل الرابط أدناه بالرابط الذي نسخته من نشر Google Apps Script (ينتهي بـ /exec)
+  // ==================== 3. ربط وسحب البيانات الحية بتسريع فوري ====================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
 
+    function renderHomePage(data) {
+      if (!data) return;
+
+      // أ) تحديث شريط الإعلانات العاجلة
+      if (data.announcement) {
+        const sec = document.getElementById('announcementSection');
+        const txt = document.getElementById('announcementText');
+        const btn = document.getElementById('announcementBtn');
+        const btnTxt = document.getElementById('announcementBtnText');
+
+        if (data.announcement.active === false) {
+          if (sec) sec.classList.add('hidden');
+        } else {
+          if (sec) sec.classList.remove('hidden');
+          if (txt && data.announcement.text) {
+            txt.innerHTML = `<strong class="text-gold-600 dark:text-gold-400">إعلان هام:</strong> ${data.announcement.text}`;
+          }
+          if (btn && data.announcement.btnLink) {
+            btn.setAttribute('href', data.announcement.btnLink);
+          }
+          if (btnTxt && data.announcement.btnText) {
+            btnTxt.textContent = data.announcement.btnText;
+          }
+        }
+      }
+
+      // ب) تحديث كروت الأنشطة والفعاليات
+      if (data.activities && Array.isArray(data.activities) && data.activities.length > 0) {
+        const homeActivities = data.activities.filter(act => String(act['عرض في الرئيسية'] || '').trim() === 'نعم');
+        if (homeActivities.length > 0) {
+          const grid = document.getElementById('activitiesGrid');
+          if (grid) {
+            grid.innerHTML = homeActivities.slice(0, 6).map(act => {
+              const title = act['العنوان'] || '';
+              const date = act['التاريخ'] || '';
+              const cat = act['التصنيف'] || 'نشاط جامعي';
+              const desc = act['الوصف المختصر'] || '';
+              const img = act['رابط الصورة'] || '';
+
+              const imgMarkup = img 
+                ? `<img src="${img}" alt="${title}" class="w-full h-full object-cover">`
+                : `<div class="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+                     <i data-lucide="image" class="w-10 h-10 opacity-40"></i>
+                   </div>`;
+
+              return `
+                <article class="rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200">
+                  <div>
+                    <div class="h-44 relative flex items-center justify-center overflow-hidden">
+                      ${imgMarkup}
+                      <span class="absolute top-3 right-3 px-2.5 py-1 rounded bg-clubNavy-light text-white text-[11px] font-bold shadow-sm">${cat}</span>
+                    </div>
+                    <div class="p-5">
+                      <h4 class="font-bold text-base text-slate-900 dark:text-white mb-2">${title}</h4>
+                      <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-300">${desc}</p>
+                    </div>
+                  </div>
+                  <div class="px-5 py-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                    <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${date}</span>
+                    <a href="archive.html" class="text-gold-600 dark:text-gold-400 font-bold hover:underline flex items-center gap-1">
+                      <span>التفاصيل</span>
+                      <i data-lucide="arrow-left" class="w-3 h-3"></i>
+                    </a>
+                  </div>
+                </article>
+              `;
+            }).join('');
+            lucide.createIcons();
+          }
+        }
+      }
+    }
+
     async function fetchLiveHomeData() {
+      // 1. قراءة البيانات المخزنة محلياً وعرضها في جزء من الثانية
+      const cached = localStorage.getItem('nadi_home_cache');
+      if (cached) {
+        try {
+          renderHomePage(JSON.parse(cached));
+        } catch (e) {
+          console.warn("خطأ في قراءة الكاش:", e);
+        }
+      }
+
       if (!SCRIPT_URL) return;
+
+      // 2. فحص وتحديث البيانات من Google Sheets في الخلفية بصمت
       try {
         const response = await fetch(SCRIPT_URL);
-        const data = await response.json();
-
-        // أ) تحديث شريط الإعلانات العاجلة تلقائياً
-        if (data.announcement) {
-          const sec = document.getElementById('announcementSection');
-          const txt = document.getElementById('announcementText');
-          const btn = document.getElementById('announcementBtn');
-          const btnTxt = document.getElementById('announcementBtnText');
-
-          if (data.announcement.active === false) {
-            if (sec) sec.classList.add('hidden');
-          } else {
-            if (sec) sec.classList.remove('hidden');
-            if (txt && data.announcement.text) {
-              txt.innerHTML = `<strong class="text-gold-600 dark:text-gold-400">إعلان هام:</strong> ${data.announcement.text}`;
-            }
-            if (btn && data.announcement.btnLink) {
-              btn.setAttribute('href', data.announcement.btnLink);
-            }
-            if (btnTxt && data.announcement.btnText) {
-              btnTxt.textContent = data.announcement.btnText;
-            }
-          }
-        }
-
-        // ب) تحديث كروت الأنشطة والفعاليات في الصفحة الرئيسية
-        if (data.activities && Array.isArray(data.activities) && data.activities.length > 0) {
-          const homeActivities = data.activities.filter(act => {
-            const show = String(act['عرض في الرئيسية'] || '').trim();
-            return show === 'نعم';
-          });
-
-          if (homeActivities.length > 0) {
-            const grid = document.getElementById('activitiesGrid');
-            if (grid) {
-              grid.innerHTML = homeActivities.slice(0, 6).map(act => {
-                const title = act['العنوان'] || '';
-                const date = act['التاريخ'] || '';
-                const cat = act['التصنيف'] || 'نشاط جامعي';
-                const desc = act['الوصف المختصر'] || '';
-                const img = act['رابط الصورة'] || '';
-
-                const imgMarkup = img 
-                  ? `<img src="${img}" alt="${title}" class="w-full h-full object-cover">`
-                  : `<div class="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400">
-                       <i data-lucide="image" class="w-10 h-10 opacity-40"></i>
-                     </div>`;
-
-                return `
-                  <article class="rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200">
-                    <div>
-                      <div class="h-44 relative flex items-center justify-center overflow-hidden">
-                        ${imgMarkup}
-                        <span class="absolute top-3 right-3 px-2.5 py-1 rounded bg-clubNavy-light text-white text-[11px] font-bold shadow-sm">${cat}</span>
-                      </div>
-                      <div class="p-5">
-                        <h4 class="font-bold text-base text-slate-900 dark:text-white mb-2">${title}</h4>
-                        <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-300">${desc}</p>
-                      </div>
-                    </div>
-                    <div class="px-5 py-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                      <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${date}</span>
-                      <a href="archive.html" class="text-gold-600 dark:text-gold-400 font-bold hover:underline flex items-center gap-1">
-                        <span>التفاصيل</span>
-                        <i data-lucide="arrow-left" class="w-3 h-3"></i>
-                      </a>
-                    </div>
-                  </article>
-                `;
-              }).join('');
-              lucide.createIcons();
-            }
-          }
-        }
+        const freshData = await response.json();
+        renderHomePage(freshData);
+        localStorage.setItem('nadi_home_cache', JSON.stringify(freshData));
       } catch (err) {
-        console.warn("جاري استخدام البيانات الأساسية لتعذر الاتصال بقاعدة البيانات اللحظية:", err);
+        console.warn("تعذر الاتصال بالجدول:", err);
       }
     }
 
