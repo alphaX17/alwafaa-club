@@ -168,7 +168,7 @@
           <button id="tabFacultyManage" onclick="switchFacultySubTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
             <i data-lucide="list-filter" class="w-4 h-4"></i>
             <span>إدارة وتعديل الأساتذة المسجلين</span>
-            <span id="facultyCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">0</span>
+            <span id="facultyCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
           </button>
         </div>
 
@@ -271,15 +271,15 @@
               <h3 class="text-base font-bold text-slate-900 dark:text-white">قائمة الأساتذة والإداريين المسجلين</h3>
               <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">يمكنك تعديل أي بيانات بالضغط على القلم ✏️ أو حذف الأستاذ بالضغط على ❌</p>
             </div>
-            <button onclick="fetchLiveFacultyData()" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
+            <button onclick="fetchLiveFacultyData(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
               <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-              <span>تحديث القائمة</span>
+              <span>تحديث السحب من الخادم</span>
             </button>
           </div>
 
           <!-- قائمة الأساتذة -->
-          <div id="facultyListContainer" class="space-y-3">
-            <div class="py-12 text-center text-xs text-slate-400">جاري تحميل الأساتذة من قاعدة البيانات...</div>
+          <div id="facultyListContainer" class="space-y-3 min-h-[140px]">
+            <div class="py-12 text-center text-xs text-slate-400">جاري فحص البيانات...</div>
           </div>
         </section>
 
@@ -399,7 +399,7 @@
     </div>
   </div>
 
-  <!-- ==================== السكربت البرمجي الشامل ==================== -->
+  <!-- ==================== السكربت البرمجي الشامل بتسريع الذاكرة الفوري ==================== -->
   <script>
     lucide.createIcons();
 
@@ -437,7 +437,88 @@
 
     applyAdminTheme(localStorage.getItem('clubTheme') !== 'light');
 
-    // 2. إدارة تسجيل الدخول
+    // 2. دالة رسم قائمة الأساتذة في اللوحة وتحديث العداد
+    function renderAdminFacultyCards(list) {
+      const container = document.getElementById('facultyListContainer');
+      const badge = document.getElementById('facultyCountBadge');
+      if (!container) return;
+
+      if (badge) badge.textContent = list.length;
+
+      if (!list || list.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا يوجد أي أساتذة مسجلين حالياً في قاعدة البيانات.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map((doc, index) => {
+        const name = doc['الاسم'] || 'بدون اسم';
+        const college = doc['الكلية أو القسم'] || 'الهيئة التعليمية';
+        const title = doc['الاختصاص أو الصفة'] || '';
+        const role = doc['الصفة الوظيفية'] || 'عضو هيئة تعليمية';
+        const email = doc['البريد الإلكتروني'] || '';
+
+        return `
+          <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${college}</span>
+                <span class="text-[11px] text-slate-400 font-medium">${role}</span>
+              </div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400">${title} • <span class="font-mono text-slate-600 dark:text-slate-300">${email}</span></p>
+            </div>
+
+            <!-- أزرار التعديل والحذف -->
+            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
+              <button onclick="openEditModal(${index})" title="تعديل بيانات الدكتور" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                <span>تعديل</span>
+              </button>
+              <button onclick="openDeleteModal(${index})" title="حذف الدكتور من الموقع" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>حذف</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // 3. جلب وعرض بيانات الأساتذة مع التسريع الفوري (localStorage)
+    async function fetchLiveFacultyData(forceFresh = false) {
+      // أ) قراءة الكاش وعرض العداد والقائمة فوراً في 0 ثانية
+      const cached = localStorage.getItem('nadi_faculty_cache');
+      if (cached && !forceFresh) {
+        try {
+          liveFacultyList = JSON.parse(cached);
+          renderAdminFacultyCards(liveFacultyList);
+        } catch (e) {
+          console.warn("خطأ في قراءة كاش الأساتذة في الأدمن:", e);
+        }
+      }
+
+      if (!SCRIPT_URL) return;
+
+      // ب) السحب الحي بالخلفية وتحديث الكاش
+      try {
+        const res = await fetch(SCRIPT_URL);
+        const data = await res.json();
+        if (data.faculty && Array.isArray(data.faculty)) {
+          liveFacultyList = data.faculty;
+          renderAdminFacultyCards(liveFacultyList);
+          localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
+        }
+      } catch (err) {
+        if (!cached) {
+          const container = document.getElementById('facultyListContainer');
+          if (container) container.innerHTML = `<div class="py-8 text-center text-xs text-rose-500">تعذر جلب البيانات من الخادم، تأكد من اتصال الإنترنت.</div>`;
+        }
+      }
+    }
+
+    // 4. إدارة جلسة تسجيل الدخول
     const loginGate = document.getElementById('loginGate');
     const adminDashboard = document.getElementById('adminDashboard');
     const loginForm = document.getElementById('loginForm');
@@ -451,6 +532,7 @@
         loginGate.classList.add('hidden');
         adminDashboard.classList.remove('hidden');
         if (welcomeAdmin) welcomeAdmin.textContent = `المشرف النشط: ${activeAdmin}`;
+        // استدعاء فوري لعرض الدكاترة فور تسجيل الدخول دون انتظار ثانية واحدة
         fetchLiveFacultyData();
         lucide.createIcons();
       } else {
@@ -485,7 +567,7 @@
 
     checkAuth();
 
-    // 3. تبديل التبويبات الداخلية في قسم الأساتذة (إضافة / إدارة)
+    // 5. تبديل التبويبات الداخلية في قسم الأساتذة (إضافة / إدارة)
     function switchFacultySubTab(tab) {
       const addView = document.getElementById('facultyAddView');
       const manageView = document.getElementById('facultyManageView');
@@ -521,64 +603,7 @@
     setupCollegeCategorySync('facCollegeSelect', 'facCategoryCode');
     setupCollegeCategorySync('editCollegeSelect', 'editCategoryCode');
 
-    // 4. جلب وعرض قائمة الأساتذة الحالية
-    async function fetchLiveFacultyData() {
-      const container = document.getElementById('facultyListContainer');
-      const badge = document.getElementById('facultyCountBadge');
-      if (!container) return;
-
-      try {
-        const res = await fetch(SCRIPT_URL);
-        const data = await res.json();
-        liveFacultyList = data.faculty || [];
-
-        if (badge) badge.textContent = liveFacultyList.length;
-
-        if (liveFacultyList.length === 0) {
-          container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا يوجد أي أساتذة مسجلين حالياً في قاعدة البيانات.</div>`;
-          return;
-        }
-
-        container.innerHTML = liveFacultyList.map((doc, index) => {
-          const name = doc['الاسم'] || 'بدون اسم';
-          const college = doc['الكلية أو القسم'] || 'الهيئة التعليمية';
-          const title = doc['الاختصاص أو الصفة'] || '';
-          const role = doc['الصفة الوظيفية'] || 'عضو هيئة تعليمية';
-          const email = doc['البريد الإلكتروني'] || '';
-
-          return `
-            <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
-              <div>
-                <div class="flex items-center gap-2 mb-1">
-                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${college}</span>
-                  <span class="text-[11px] text-slate-400 font-medium">${role}</span>
-                </div>
-                <h4 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h4>
-                <p class="text-xs text-slate-500 dark:text-slate-400">${title} • <span class="font-mono text-slate-600 dark:text-slate-300">${email}</span></p>
-              </div>
-
-              <!-- أزرار التعديل والحذف -->
-              <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
-                <button onclick="openEditModal(${index})" title="تعديل بيانات الدكتور" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition">
-                  <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
-                  <span>تعديل</span>
-                </button>
-                <button onclick="openDeleteModal(${index})" title="حذف الدكتور من الموقع" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
-                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                  <span>حذف</span>
-                </button>
-              </div>
-            </div>
-          `;
-        }).join('');
-
-        lucide.createIcons();
-      } catch (err) {
-        container.innerHTML = `<div class="py-8 text-center text-xs text-rose-500">تعذر جلب البيانات، تأكد من اتصال الإنترنت.</div>`;
-      }
-    }
-
-    // 5. إضافة أستاذ جديد
+    // 6. إضافة أستاذ جديد
     const facultyForm = document.getElementById('facultyForm');
     const submitFacultyBtn = document.getElementById('submitFacultyBtn');
     const facultySuccessMsg = document.getElementById('facultySuccessMsg');
@@ -591,18 +616,34 @@
         submitFacultyBtn.disabled = true;
         submitFacultyBtn.innerHTML = `<span>جاري الإرسال والحفظ...</span>`;
 
+        const newDoc = {
+          'الاسم': document.getElementById('facName').value.trim(),
+          'الكلية أو القسم': document.getElementById('facCollegeSelect').value,
+          'التصنيف البرمجي': document.getElementById('facCategoryCode').value,
+          'الاختصاص أو الصفة': document.getElementById('facTitle').value.trim(),
+          'الصفة الوظيفية': document.getElementById('facRoleTag').value,
+          'البريد الإلكتروني': document.getElementById('facEmail').value.trim(),
+          'مكان المكتب': document.getElementById('facRoom').value.trim(),
+          'الساعات المكتبية': document.getElementById('facHours').value.trim()
+        };
+
         const payload = {
           action: "add_faculty",
           adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف",
-          name: document.getElementById('facName').value.trim(),
-          college: document.getElementById('facCollegeSelect').value,
-          category: document.getElementById('facCategoryCode').value,
-          title: document.getElementById('facTitle').value.trim(),
-          roleTag: document.getElementById('facRoleTag').value,
-          email: document.getElementById('facEmail').value.trim(),
-          room: document.getElementById('facRoom').value.trim(),
-          hours: document.getElementById('facHours').value.trim()
+          name: newDoc['الاسم'],
+          college: newDoc['الكلية أو القسم'],
+          category: newDoc['التصنيف البرمجي'],
+          title: newDoc['الاختصاص أو الصفة'],
+          roleTag: newDoc['الصفة الوظيفية'],
+          email: newDoc['البريد الإلكتروني'],
+          room: newDoc['مكان المكتب'],
+          hours: newDoc['الساعات المكتبية']
         };
+
+        // تحديث الكاش محلياً فوراً لمنح استجابة فورية فائقة
+        liveFacultyList.push(newDoc);
+        localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
+        renderAdminFacultyCards(liveFacultyList);
 
         try {
           await fetch(SCRIPT_URL, {
@@ -618,8 +659,8 @@
 
           setTimeout(() => {
             if (facultySuccessMsg) facultySuccessMsg.classList.add('hidden');
-            fetchLiveFacultyData();
-          }, 3000);
+            fetchLiveFacultyData(true);
+          }, 2500);
         } catch (err) {
           alert('تعذر إتمام الإرسال، تأكد من اتصالك.');
         } finally {
@@ -630,7 +671,7 @@
       });
     }
 
-    // 6. نافذة الحذف والتأكيد
+    // 7. نافذة الحذف والتأكيد
     const deleteModal = document.getElementById('deleteModal');
     const deleteDoctorName = document.getElementById('deleteDoctorName');
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
@@ -657,12 +698,19 @@
         confirmDeleteBtn.disabled = true;
         confirmDeleteBtn.innerHTML = `<span>جاري الحذف...</span>`;
 
+        const deletedTarget = facultyToDelete;
         const payload = {
           action: "delete_faculty",
-          email: facultyToDelete['البريد الإلكتروني'] || "",
-          name: facultyToDelete['الاسم'] || "",
+          email: deletedTarget['البريد الإلكتروني'] || "",
+          name: deletedTarget['الاسم'] || "",
           adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف"
         };
+
+        // حذف محلي فوري (0 ثوانٍ)
+        liveFacultyList = liveFacultyList.filter(item => item !== deletedTarget);
+        localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
+        renderAdminFacultyCards(liveFacultyList);
+        closeDeleteModal();
 
         try {
           await fetch(SCRIPT_URL, {
@@ -672,9 +720,8 @@
             body: JSON.stringify(payload)
           });
 
-          closeDeleteModal();
           setTimeout(() => {
-            fetchLiveFacultyData();
+            fetchLiveFacultyData(true);
           }, 1500);
         } catch (err) {
           alert('تعذر إتمام عملية الحذف، يرجى المحاولة لاحقاً.');
@@ -686,7 +733,7 @@
       });
     }
 
-    // 7. نافذة التعديل والحفظ
+    // 8. نافذة التعديل والحفظ
     const editModal = document.getElementById('editModal');
     const editFacultyForm = document.getElementById('editFacultyForm');
     const saveEditBtn = document.getElementById('saveEditBtn');
@@ -724,19 +771,42 @@
         saveEditBtn.disabled = true;
         saveEditBtn.innerHTML = `<span>جاري حفظ التعديل...</span>`;
 
+        const originalEmail = document.getElementById('editOriginalEmail').value;
+        const updatedDoc = {
+          'الاسم': document.getElementById('editName').value.trim(),
+          'الكلية أو القسم': document.getElementById('editCollegeSelect').value,
+          'التصنيف البرمجي': document.getElementById('editCategoryCode').value,
+          'الاختصاص أو الصفة': document.getElementById('editTitle').value.trim(),
+          'الصفة الوظيفية': document.getElementById('editRoleTag').value,
+          'البريد الإلكتروني': document.getElementById('editEmail').value.trim(),
+          'مكان المكتب': document.getElementById('editRoom').value.trim(),
+          'الساعات المكتبية': document.getElementById('editHours').value.trim()
+        };
+
         const payload = {
           action: "edit_faculty",
-          originalEmail: document.getElementById('editOriginalEmail').value,
-          name: document.getElementById('editName').value.trim(),
-          college: document.getElementById('editCollegeSelect').value,
-          category: document.getElementById('editCategoryCode').value,
-          title: document.getElementById('editTitle').value.trim(),
-          roleTag: document.getElementById('editRoleTag').value,
-          email: document.getElementById('editEmail').value.trim(),
-          room: document.getElementById('editRoom').value.trim(),
-          hours: document.getElementById('editHours').value.trim(),
+          originalEmail: originalEmail,
+          name: updatedDoc['الاسم'],
+          college: updatedDoc['الكلية أو القسم'],
+          category: updatedDoc['التصنيف البرمجي'],
+          title: updatedDoc['الاختصاص أو الصفة'],
+          roleTag: updatedDoc['الصفة الوظيفية'],
+          email: updatedDoc['البريد الإلكتروني'],
+          room: updatedDoc['مكان المكتب'],
+          hours: updatedDoc['الساعات المكتبية'],
           adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف"
         };
+
+        // تحديث محلي فوري (0 ثوانٍ)
+        liveFacultyList = liveFacultyList.map(doc => {
+          if ((doc['البريد الإلكتروني'] || '') === originalEmail) {
+            return { ...doc, ...updatedDoc };
+          }
+          return doc;
+        });
+        localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
+        renderAdminFacultyCards(liveFacultyList);
+        closeEditModal();
 
         try {
           await fetch(SCRIPT_URL, {
@@ -746,9 +816,8 @@
             body: JSON.stringify(payload)
           });
 
-          closeEditModal();
           setTimeout(() => {
-            fetchLiveFacultyData();
+            fetchLiveFacultyData(true);
           }, 1500);
         } catch (err) {
           alert('تعذر حفظ التعديلات.');
