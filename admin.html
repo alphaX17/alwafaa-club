@@ -103,11 +103,43 @@
       </div>
 
       <div class="flex items-center gap-3">
+        <!-- زر جرس الإشعارات العائم مع العداد الأحمر -->
+        <div class="relative">
+          <button id="notifBellBtn" onclick="toggleNotifPanel()" class="relative p-2 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-slate-700 dark:text-slate-200 transition" title="طلبات وتبرعات الكتب">
+            <i data-lucide="bell" class="w-4 h-4"></i>
+            <span id="notifBellBadge" class="hidden absolute -top-1 -right-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-rose-600 text-white min-w-[18px] text-center leading-none">0</span>
+          </button>
+
+          <!-- اللوحة المنبثقة للإشعارات العائمة -->
+          <div id="notifPanel" class="hidden absolute left-0 mt-2 w-80 sm:w-96 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl p-4 z-50 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+              <div class="flex items-center gap-2">
+                <i data-lucide="inbox" class="w-4 h-4 text-gold-500"></i>
+                <h4 class="font-bold text-xs text-slate-900 dark:text-white">طلبات وتبرعات الكتب الواردة</h4>
+              </div>
+              <button onclick="toggleNotifPanel()" class="p-1 rounded text-slate-400 hover:text-slate-600 dark:hover:text-white"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+            </div>
+
+            <!-- قائمة الطلبات داخل الجرس -->
+            <div id="notifListContainer" class="max-h-72 overflow-y-auto space-y-2 custom-scrollbar">
+              <div class="py-6 text-center text-xs text-slate-400">لا توجد طلبات جديدة حالياً.</div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 dark:border-slate-800 text-center">
+              <button onclick="goToBookRequestsTab()" class="text-[11px] font-bold text-gold-500 hover:underline">
+                الانتقال إلى تبويب إدارة الطلبات الكامل
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- زر المظهر -->
         <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
           <span class="themeIconContainer flex items-center justify-center"></span>
           <span class="themeText">الليلي</span>
         </button>
 
+        <!-- زر تسجيل الخروج -->
         <button onclick="openLogoutModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-600 dark:text-rose-400 text-xs font-bold transition">
           <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
           <span>خروج</span>
@@ -137,13 +169,14 @@
             <span>التوجيه والمجموعات</span>
           </button>
 
-          <!-- 4. قسم الكتب الورقية (مفعل بالكامل الآن) -->
-          <button id="navBooksBtn" onclick="switchMainSection('books')" class="nav-main-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">
-            <i data-lucide="book-open" class="w-4 h-4"></i>
-            <span>مكتبة الكتب الورقية</span>
+          <button id="navBooksBtn" onclick="switchMainSection('books')" class="nav-main-tab w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="book-open" class="w-4 h-4"></i>
+              <span>مكتبة الكتب الورقية</span>
+            </div>
+            <span id="navBookBadge" class="hidden px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-rose-600 text-white">0</span>
           </button>
 
-          <!-- 5. الأنشطة والفعاليات -->
           <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته في الخطوة التالية">
             <i data-lucide="calendar" class="w-4 h-4"></i>
             <span>الأنشطة والفعاليات (قريباً)</span>
@@ -477,7 +510,7 @@
             </div>
           </section>
 
-          <!-- شاشة إدارة جهات التواصل (تم إزالة زر فتح الواتساب والإبقاء على تعديل وحذف فقط) -->
+          <!-- شاشة إدارة جهات التواصل -->
           <section id="guidanceManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
               <div>
@@ -498,7 +531,7 @@
 
         <!-- ==================== القسم الرابع: مكتبة الكتب الورقية ==================== -->
         <div id="sectionBooks" class="hidden space-y-6">
-          <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit">
+          <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit flex-wrap">
             <button id="tabBookAdd" onclick="switchBookSubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
               <i data-lucide="book-plus" class="w-4 h-4"></i>
               <span>إضافة كتاب جديد</span>
@@ -508,9 +541,15 @@
               <span>إدارة وتعديل الكتب</span>
               <span id="bookCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
             </button>
+            <!-- التبويب الثالث الجديد لإدارة الطلبات والتبرعات -->
+            <button id="tabBookRequests" onclick="switchBookSubTab('requests')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
+              <i data-lucide="inbox" class="w-4 h-4"></i>
+              <span>إدارة الطلبات والتبرعات</span>
+              <span id="bookRequestsCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-rose-500/20 text-rose-500 font-mono">0</span>
+            </button>
           </div>
 
-          <!-- شاشة إضافة كتاب جديد -->
+          <!-- 1. شاشة إضافة كتاب جديد -->
           <section id="bookAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
             <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
               <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
@@ -577,7 +616,7 @@
             </div>
           </section>
 
-          <!-- شاشة إدارة الكتب -->
+          <!-- 2. شاشة إدارة وتعديل الكتب -->
           <section id="bookManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
               <div>
@@ -592,6 +631,24 @@
 
             <div id="bookListContainer" class="space-y-3 min-h-[140px]">
               <div class="py-12 text-center text-xs text-slate-400">جاري فحص مكتبة الكتب...</div>
+            </div>
+          </section>
+
+          <!-- 3. شاشة إدارة الطلبات والتبرعات الواردة (مع زر الحذف المباشر X) -->
+          <section id="bookRequestsView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+              <div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">طلبات الاستعارة والتبرعات بالكتب</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">يمكنك مراجعة تفاصيل طلبات الطلاب وحذف الطلب المكتمل فورياً بالضغط على علامة الإلغاء.</p>
+              </div>
+              <button onclick="fetchLiveBookRequests(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>تحديث الطلبات</span>
+              </button>
+            </div>
+
+            <div id="bookRequestsTableContainer" class="space-y-3 min-h-[140px]">
+              <div class="py-12 text-center text-xs text-slate-400">جاري تحميل الطلبات والتبرعات...</div>
             </div>
           </section>
         </div>
@@ -906,7 +963,7 @@
     </div>
   </div>
 
-  <!-- ==================== نوافذ قسم الكتب الورقية (حذف وتعديل) ==================== -->
+  <!-- ==================== نوافذ قسم الكتب الورقية ==================== -->
   <div id="deleteBookModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="w-full max-w-md p-6 rounded-3xl border border-rose-500/30 bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
       <div class="flex items-center gap-3 text-rose-500">
@@ -990,7 +1047,7 @@
     </div>
   </div>
 
-  <!-- ==================== السكربت البرمجي الشامل ==================== -->
+  <!-- ==================== السكربت البرمجي الشامل بتسريع الذاكرة ==================== -->
   <script>
     lucide.createIcons();
 
@@ -1008,6 +1065,8 @@
 
     let liveBooksList = [];
     let bookToDelete = null;
+
+    let liveBookRequestsList = [];
 
     function generateSmartWhatsAppLink(phone) {
       if (!phone) return "";
@@ -1054,7 +1113,23 @@
 
     applyAdminTheme(localStorage.getItem('clubTheme') !== 'light');
 
-    // 2. التنقل بين الأقسام الرئيسية (Sidebar Navigation)
+    // 2. التحكم في قائمة جرس الإشعارات العائمة
+    function toggleNotifPanel() {
+      const panel = document.getElementById('notifPanel');
+      if (!panel) return;
+      panel.classList.toggle('hidden');
+    }
+
+    // إغلاق لوحة الإشعارات عند النقر خارجها
+    document.addEventListener('click', (e) => {
+      const panel = document.getElementById('notifPanel');
+      const btn = document.getElementById('notifBellBtn');
+      if (panel && btn && !panel.contains(e.target) && !btn.contains(e.target)) {
+        panel.classList.add('hidden');
+      }
+    });
+
+    // 3. التنقل بين الأقسام الرئيسية (Sidebar Navigation)
     function switchMainSection(section) {
       const secFaculty = document.getElementById('sectionFaculty');
       const secResources = document.getElementById('sectionResources');
@@ -1066,8 +1141,8 @@
       const btnGuidance = document.getElementById('navGuidanceBtn');
       const btnBooks = document.getElementById('navBooksBtn');
 
-      const defaultBtnClass = "nav-main-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition";
-      const activeBtnClass = "nav-main-tab active w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition";
+      const defaultBtnClass = "nav-main-tab w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition";
+      const activeBtnClass = "nav-main-tab active w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition";
 
       secFaculty.classList.add('hidden');
       secResources.classList.add('hidden');
@@ -1095,11 +1170,12 @@
         secBooks.classList.remove('hidden');
         btnBooks.className = activeBtnClass;
         fetchLiveBooksData();
+        fetchLiveBookRequests();
       }
       lucide.createIcons();
     }
 
-    // 3. إدارة جلسة تسجيل الدخول وتأكيد الخروج
+    // 4. إدارة جلسة تسجيل الدخول وتأكيد الخروج
     const loginGate = document.getElementById('loginGate');
     const adminDashboard = document.getElementById('adminDashboard');
     const loginForm = document.getElementById('loginForm');
@@ -1141,6 +1217,7 @@
         fetchLiveResourcesData();
         fetchLiveGuidanceData();
         fetchLiveBooksData();
+        fetchLiveBookRequests();
         lucide.createIcons();
       } else {
         loginGate.classList.remove('hidden');
@@ -1783,7 +1860,7 @@
       });
     }
 
-    // ==================== دوال قسم شبكة التوجيه والتواصل (تمت إزالة زر فتح الواتساب) ====================
+    // ==================== دوال قسم شبكة التوجيه والتواصل ====================
     function switchGuidanceSubTab(tab) {
       const addView = document.getElementById('guidanceAddView');
       const manageView = document.getElementById('guidanceManageView');
@@ -2129,22 +2206,43 @@
     function switchBookSubTab(tab) {
       const addView = document.getElementById('bookAddView');
       const manageView = document.getElementById('bookManageView');
+      const requestsView = document.getElementById('bookRequestsView');
+
       const tabAdd = document.getElementById('tabBookAdd');
       const tabManage = document.getElementById('tabBookManage');
+      const tabRequests = document.getElementById('tabBookRequests');
+
+      const activeClasses = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
+      const inactiveClasses = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
+
+      addView.classList.add('hidden');
+      manageView.classList.add('hidden');
+      requestsView.classList.add('hidden');
+
+      tabAdd.className = inactiveClasses;
+      tabManage.className = inactiveClasses;
+      tabRequests.className = inactiveClasses;
 
       if (tab === 'add') {
         addView.classList.remove('hidden');
-        manageView.classList.add('hidden');
-        tabAdd.className = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
-        tabManage.className = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
-      } else {
-        addView.classList.add('hidden');
+        tabAdd.className = activeClasses;
+      } else if (tab === 'manage') {
         manageView.classList.remove('hidden');
-        tabManage.className = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
-        tabAdd.className = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
+        tabManage.className = activeClasses;
         fetchLiveBooksData();
+      } else if (tab === 'requests') {
+        requestsView.classList.remove('hidden');
+        tabRequests.className = activeClasses;
+        fetchLiveBookRequests();
       }
       lucide.createIcons();
+    }
+
+    function goToBookRequestsTab() {
+      const panel = document.getElementById('notifPanel');
+      if (panel) panel.classList.add('hidden');
+      switchMainSection('books');
+      switchBookSubTab('requests');
     }
 
     function renderAdminBookCards(list) {
@@ -2411,6 +2509,185 @@
           lucide.createIcons();
         }
       });
+    }
+
+    // ==================== دوال إدارة طلبات وتبرعات الكتب الفورية ====================
+    function updateBookBadges(count) {
+      const bellBadge = document.getElementById('notifBellBadge');
+      const reqBadge = document.getElementById('bookRequestsCountBadge');
+      const navBadge = document.getElementById('navBookBadge');
+
+      if (bellBadge) {
+        bellBadge.textContent = count;
+        if (count > 0) {
+          bellBadge.classList.remove('hidden');
+        } else {
+          bellBadge.classList.add('hidden');
+        }
+      }
+
+      if (reqBadge) reqBadge.textContent = count;
+      if (navBadge) {
+        navBadge.textContent = count;
+        if (count > 0) {
+          navBadge.classList.remove('hidden');
+        } else {
+          navBadge.classList.add('hidden');
+        }
+      }
+    }
+
+    function renderBookRequests(list) {
+      updateBookBadges(list.length);
+
+      // 1. رسم القائمة داخل لوحة جرس الإشعارات العائمة
+      const notifContainer = document.getElementById('notifListContainer');
+      if (notifContainer) {
+        if (!list || list.length === 0) {
+          notifContainer.innerHTML = `<div class="py-6 text-center text-xs text-slate-400">لا توجد طلبات جديدة حالياً.</div>`;
+        } else {
+          notifContainer.innerHTML = list.slice(0, 6).map((req, idx) => {
+            const type = req['نوع الطلب'] || 'طلب استعارة';
+            const name = req['الاسم الكامل'] || 'طالب';
+            const book = req['عنوان الكتاب / المقرر'] || 'كتاب';
+            const time = req['تاريخ الإرسال'] || '';
+            const phone = req['رقم الهاتف'] || '';
+            const studentId = req['رقم الملف ID'] || '';
+
+            const isDonate = type.includes('تبرع');
+            const typeBadgeColor = isDonate 
+              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" 
+              : "bg-amber-500/10 text-amber-600 dark:text-amber-400";
+
+            return `
+              <div class="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-[#111b33] flex items-center justify-between gap-2 hover:border-gold-500/30 transition text-xs">
+                <div class="space-y-0.5 overflow-hidden">
+                  <div class="flex items-center gap-1.5">
+                    <span class="px-2 py-0.5 rounded text-[9px] font-bold ${typeBadgeColor}">${type}</span>
+                    <span class="text-[10px] text-slate-400 truncate">${time}</span>
+                  </div>
+                  <h5 class="font-bold text-slate-900 dark:text-white truncate">${book}</h5>
+                  <p class="text-[11px] text-slate-400 truncate">${name} • ${phone}</p>
+                </div>
+                <!-- زر الحذف الفوري X -->
+                <button onclick="deleteBookRequestDirect('${time}', '${studentId}', '${book}')" class="shrink-0 p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-600 text-rose-500 hover:text-white transition" title="حذف الطلب فوراً">
+                  <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // 2. رسم القائمة داخل تبويب إدارة الطلبات والتبرعات
+      const tableContainer = document.getElementById('bookRequestsTableContainer');
+      if (tableContainer) {
+        if (!list || list.length === 0) {
+          tableContainer.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد طلبات استعارة أو تبرعات مسجلة حالياً في قاعدة البيانات.</div>`;
+        } else {
+          tableContainer.innerHTML = list.map(req => {
+            const type = req['نوع الطلب'] || 'طلب استعارة';
+            const name = req['الاسم الكامل'] || 'طالب';
+            const studentId = req['رقم الملف ID'] || 'غير محدد';
+            const phone = req['رقم الهاتف'] || '';
+            const book = req['عنوان الكتاب / المقرر'] || 'كتاب';
+            const time = req['تاريخ الإرسال'] || '';
+
+            const isDonate = type.includes('تبرع');
+            const typeBadgeColor = isDonate 
+              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" 
+              : "bg-amber-500/10 text-amber-600 dark:text-amber-400";
+
+            const cleanPhone = phone.replace(/[^0-9]/g, '');
+            const waMsg = encodeURIComponent(`السلام عليكم زميلي ${name}، بخصوص ${type} لكتاب (${book}) عبر نادي الوفاء:`);
+            const waLink = cleanPhone ? `https://wa.me/${cleanPhone}?text=${waMsg}` : '';
+
+            return `
+              <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded text-[10px] font-bold ${typeBadgeColor}">${type}</span>
+                    <span class="text-[11px] text-slate-400 font-mono">${time}</span>
+                  </div>
+                  <h4 class="font-bold text-sm text-slate-900 dark:text-white">${book}</h4>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">
+                    الطالب: <strong class="text-slate-700 dark:text-slate-200">${name}</strong> • الملف: <span class="font-mono">${studentId}</span>
+                  </p>
+                </div>
+                <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                  ${waLink ? `
+                    <a href="${waLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-600/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition" title="مراسلة الطالب">
+                      <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                      <span>واتساب</span>
+                    </a>
+                  ` : ''}
+                  <!-- زر الحذف الفوري بدون نافذة تأكيد -->
+                  <button onclick="deleteBookRequestDirect('${time}', '${studentId}', '${book}')" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition" title="حذف الطلب فوراً">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                    <span>إلغاء الطلب</span>
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      lucide.createIcons();
+    }
+
+    async function fetchLiveBookRequests(forceFresh = false) {
+      const cached = localStorage.getItem('nadi_book_requests_cache');
+      if (cached && !forceFresh) {
+        try {
+          liveBookRequestsList = JSON.parse(cached);
+          renderBookRequests(liveBookRequestsList);
+        } catch (e) {}
+      }
+
+      if (!SCRIPT_URL) return;
+
+      try {
+        const res = await fetch(SCRIPT_URL);
+        const data = await res.json();
+        if (data.bookRequests && Array.isArray(data.bookRequests)) {
+          liveBookRequestsList = data.bookRequests;
+          renderBookRequests(liveBookRequestsList);
+          localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
+        }
+      } catch (err) {}
+    }
+
+    // الحذف الفوري المباشر لطلب استعارة أو تبرع
+    async function deleteBookRequestDirect(timestamp, studentId, bookTitle) {
+      // 1. حذف محلي فوري وتحديث العداد في 0 ثانية
+      liveBookRequestsList = liveBookRequestsList.filter(item => {
+        const t = String(item['تاريخ الإرسال'] || '').trim();
+        const id = String(item['رقم الملف ID'] || '').trim();
+        const b = String(item['عنوان الكتاب / المقرر'] || '').trim();
+        return !(t === timestamp || (id === studentId && b === bookTitle));
+      });
+
+      localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
+      renderBookRequests(liveBookRequestsList);
+
+      // 2. إرسال أمر الحذف إلى Google Sheets في الخلفية
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "delete_book_request",
+            timestamp: timestamp,
+            studentId: studentId,
+            bookTitle: bookTitle,
+            adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف"
+          })
+        });
+      } catch (e) {
+        console.warn("خطأ في المزامنة بالخلفية لحذف الطلب:", e);
+      }
     }
   </script>
 </body>
