@@ -6,7 +6,6 @@
   <title>دليل الأساتذة والإدارة | نادي الوفاء</title>
   <link rel="icon" type="image/png" href="logo.png">
   
-  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -34,6 +33,9 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    .custom-scrollbar::-webkit-scrollbar { height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden">
@@ -76,21 +78,24 @@
   <!-- ==================== المحتوى الرئيسي ==================== -->
   <main class="max-w-7xl mx-auto px-4 lg:px-8 py-8 space-y-6">
 
-    <!-- شريط البحث والتصفية -->
+    <!-- شريط البحث والتصفية المتطابق مع الكليات الـ 5 -->
     <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-4">
       
-      <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
-        <div class="relative w-full sm:w-80">
-          <input id="searchInput" type="text" placeholder="ابحث باسم الدكتور أو الاختصاص..." class="w-full text-xs p-3 pr-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+      <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+        <div class="relative w-full md:w-80">
+          <input id="searchInput" type="text" placeholder="ابحث باسم الدكتور، المادة أو الاختصاص..." class="w-full text-xs p-3 pr-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
           <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3.5 right-3"></i>
         </div>
 
-        <div class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0" id="filterContainer">
-          <button class="filter-btn active px-3 py-1.5 rounded-lg text-xs font-bold border transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 border-transparent" data-category="all">الكل</button>
-          <button class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="engineering">الهندسة</button>
-          <button class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="math">الرياضيات والعلوم</button>
-          <button class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="english">اللغات</button>
-          <button class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="admin">الإدارة</button>
+        <!-- أزرار الفرز لجميع كليات الجامعة الـ 5 + الإدارة -->
+        <div class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 custom-scrollbar" id="filterContainer">
+          <button class="filter-btn active shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 border-transparent" data-category="all">الكل</button>
+          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="engineering">كلية الهندسة</button>
+          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="business">إدارة الأعمال</button>
+          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="arts_sciences">الفنون والعلوم</button>
+          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="education">التربية واللغات</button>
+          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="pharmacy">كلية الصيدلة</button>
+          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="admin">الجهاز الإداري</button>
         </div>
       </div>
 
@@ -103,7 +108,7 @@
     <div id="noFacultyResults" class="hidden text-center py-16">
       <i data-lucide="user-x" class="w-12 h-12 mx-auto text-slate-400 mb-3 opacity-60"></i>
       <h3 class="text-sm font-bold text-slate-700 dark:text-slate-300">لم يتم العثور على أي نتيجة مطابقة</h3>
-      <p class="text-xs text-slate-400 mt-1">تأكد من كتابة الاسم بدقة أو اختر قسماً آخر من الأعلى.</p>
+      <p class="text-xs text-slate-400 mt-1">تأكد من كتابة الاسم بدقة أو اختر كلية أخرى من الأعلى.</p>
     </div>
 
   </main>
@@ -114,7 +119,6 @@
   <aside id="sidebar" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0c1427] border-l border-slate-200 dark:border-clubNavy-borderDark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
     
     <div>
-      <!-- رأس القائمة -->
       <div class="p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
         <div>
           <h2 class="font-bold text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
@@ -125,9 +129,7 @@
         </button>
       </div>
 
-      <!-- قائمة الروابط الرئيسية -->
       <nav class="p-4 space-y-1.5">
-        
         <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
           <span>الرئيسية (الأنشطة والإعلانات)</span>
@@ -166,15 +168,12 @@
             <span class="text-[10px] text-slate-400 dark:text-slate-500">مجموعات الواتساب والتواصل المباشر</span>
           </div>
         </a>
-
       </nav>
     </div>
 
-    <!-- أسفل القائمة -->
     <div class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
       نادي الوفاء — الجامعة اللبنانية الدولية في صور
     </div>
-
   </aside>
 
   <!-- ==================== سكربت التحكم الشامل والسحب اللحظي ==================== -->
@@ -183,6 +182,95 @@
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
     let facultyData = [];
+
+    // محرك الفرز الذكي الشامل لجميع اختصاصات الجامعة الـ 5 + الإدارة
+    function detectCollegeCategory(college = '', title = '', rawCat = '') {
+      const combined = `${college} ${title} ${rawCat}`.toLowerCase();
+
+      // 1. كلية الصيدلة (School of Pharmacy)
+      if (combined.includes('pharmacy') || combined.includes('صيدل') || combined.includes('pre-pharmacy')) {
+        return {
+          code: 'pharmacy',
+          badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+        };
+      }
+
+      // 2. الجهاز الإداري والمكتبة (Administration)
+      if (combined.includes('admin') || combined.includes('إدار') || combined.includes('ادار') || 
+          combined.includes('مكتبة') || combined.includes('library') || combined.includes('شؤون') || 
+          combined.includes('تسجيل') || combined.includes('registrar') || combined.includes('سمرة') || 
+          (combined.includes('مالية') && !combined.includes('concentration'))) {
+        return {
+          code: 'admin',
+          badgeColor: 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
+        };
+      }
+
+      // 3. كلية إدارة الأعمال (School of Business)
+      if (combined.includes('business') || combined.includes('أعمال') || combined.includes('اعمال') || 
+          combined.includes('account') || combined.includes('محاسب') || combined.includes('economic') || 
+          combined.includes('اقتصاد') || combined.includes('finance') || combined.includes('مالي') || 
+          combined.includes('tourism') || combined.includes('hotel') || combined.includes('فندق') || 
+          combined.includes('سياح') || combined.includes('market') || combined.includes('تسويق') || 
+          combined.includes('mis') || combined.includes('management')) {
+        return {
+          code: 'business',
+          badgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+        };
+      }
+
+      // 4. كلية التربية واللغات (School of Education)
+      if (combined.includes('education') || combined.includes('تربي') || combined.includes('tefl') || 
+          combined.includes('translation') || combined.includes('ترجم') || combined.includes('interpretation') || 
+          combined.includes('childhood') || combined.includes('طفول') || combined.includes('english') || 
+          combined.includes('إنجليز') || combined.includes('انكليز') || combined.includes('لغات')) {
+        return {
+          code: 'education',
+          badgeColor: 'bg-purple-500/10 text-purple-600 dark:text-purple-400'
+        };
+      }
+
+      // 5. كلية الهندسة (School of Engineering)
+      if (combined.includes('engineer') || combined.includes('هندس') || combined.includes('mech') || 
+          combined.includes('ميكانيك') || combined.includes('civil') || combined.includes('مدني') || 
+          combined.includes('survey') || combined.includes('مساح') || combined.includes('electric') || 
+          combined.includes('كهرب') || combined.includes('communicat') && combined.includes('eng') || 
+          combined.includes('اتصال') && combined.includes('هندس') || combined.includes('industr') || 
+          combined.includes('صناع') || combined.includes('electron') || combined.includes('إلكترون') || 
+          combined.includes('biomedical eng')) {
+        return {
+          code: 'engineering',
+          badgeColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+        };
+      }
+
+      // 6. كلية الفنون والعلوم (School of Arts and Sciences)
+      // تشمل: فنون التواصل، الصحافة، الإعلان، CS, IT, كيمياء، بيولوجيا، رياضيات، فيزياء، تغذية، تصميم
+      if (combined.includes('art') || combined.includes('science') || combined.includes('فنون') || 
+          combined.includes('علوم') || combined.includes('computer science') || combined.includes('cs') || 
+          combined.includes('حاسوب') || combined.includes('information tech') || combined.includes('it') || 
+          combined.includes('advertis') || combined.includes('إعلان') || combined.includes('اعلان') || 
+          combined.includes('journalism') || combined.includes('صحاف') || combined.includes('public relation') || 
+          combined.includes('علاقات عام') || combined.includes('radio') || combined.includes('television') || 
+          combined.includes('تلفزيون') || combined.includes('graphic') || combined.includes('جرافيك') || 
+          combined.includes('interior') || combined.includes('ديكور') || combined.includes('تغذية') || 
+          combined.includes('nutrition') || combined.includes('diet') || combined.includes('food') || 
+          combined.includes('math') || combined.includes('رياضيات') || combined.includes('physic') || 
+          combined.includes('فيزياء') || combined.includes('chemist') || combined.includes('كيمياء') || 
+          combined.includes('biolog') || combined.includes('بيولوجيا') || combined.includes('biochem') || 
+          combined.includes('biomedical science')) {
+        return {
+          code: 'arts_sciences',
+          badgeColor: 'bg-teal-500/10 text-teal-600 dark:text-teal-400'
+        };
+      }
+
+      // افتراضي (إذا لم يتم التعرف)
+      return {
+        code: 'arts_sciences',
+        badgeColor: 'bg-slate-500/10 text-slate-600 dark:text-slate-400'
+      };
+    }
 
     // دالة رسم بطاقات الأساتذة على الشاشة
     function renderFaculty(list) {
@@ -199,24 +287,20 @@
         const college = item['الكلية أو القسم'] || 'الهيئة التعليمية';
         const title = item['الاختصاص أو الصفة'] || '';
         const email = item['البريد الإلكتروني'] || '';
-        const category = String(item['التصنيف البرمجي'] || 'engineering').trim().toLowerCase();
+        const rawCat = item['التصنيف البرمجي'] || '';
 
-        let badgeColor = "bg-blue-500/10 text-blue-600 dark:text-blue-400";
-        let roleTag = "عضو هيئة تعليمية";
+        // الفحص الذكي للكلية واللون
+        const detection = detectCollegeCategory(college, title, rawCat);
+        const catCode = detection.code;
+        const badgeColor = detection.badgeColor;
 
-        if (category === 'math') {
-          badgeColor = "bg-amber-500/10 text-amber-600 dark:text-amber-400";
-        } else if (category === 'english') {
-          badgeColor = "bg-purple-500/10 text-purple-600 dark:text-purple-400";
-        } else if (category === 'admin') {
-          badgeColor = "bg-rose-500/10 text-rose-600 dark:text-rose-400";
-          roleTag = "الجهاز الإداري";
-        }
+        // قراءة الشارة الثانية المخصصة من عمود "الصفة الوظيفية" الجديد
+        const roleTag = item['الصفة الوظيفية'] || (catCode === 'admin' ? 'الجهاز الإداري' : 'عضو هيئة تعليمية');
 
         const escapedEmail = email.replace(/'/g, "\\'");
 
         return `
-          <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="${category}">
+          <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="${catCode}">
             <div>
               <div class="flex items-center justify-between mb-2">
                 <span class="px-2.5 py-1 rounded text-[11px] font-bold ${badgeColor}">${college}</span>
