@@ -33,6 +33,9 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    .custom-scrollbar::-webkit-scrollbar { height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden">
@@ -75,7 +78,7 @@
   <!-- ==================== المحتوى الأساسي ==================== -->
   <main class="max-w-7xl mx-auto px-4 lg:px-8 py-8">
 
-    <!-- بنر تعريفي مع شريط البحث -->
+    <!-- بنر تعريفي مع شريط البحث والفرز للكليات والمواد -->
     <div class="p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm mb-8">
       <div class="max-w-2xl">
         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border border-gold-500/30 bg-gold-500/10 text-gold-600 dark:text-gold-400 mb-2.5">
@@ -84,23 +87,26 @@
         </span>
         <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">أرشيف الامتحانات والمراجع الأكاديمية</h2>
         <p class="mt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-          ابحث باسم المادة، الرمز (Course Code)، أو نوع الملف للوصول إلى النماذج النصفية والنهائية السابقة والملخصات المعتمدة.
+          ابحث باسم المادة، الرمز (Course Code)، أو الكلية للوصول المباشر إلى النماذج النصفية والنهائية السابقة والملخصات المعتمدة.
         </p>
       </div>
 
       <!-- حقل البحث السريع -->
       <div class="mt-5 relative">
         <i data-lucide="search" class="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-        <input id="searchInput" type="text" placeholder="ابحث باسم المادة أو الرمز (مثال: MATH 200, MECH, CSC)..." class="w-full text-xs py-3 pr-10 pl-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition">
+        <input id="searchInput" type="text" placeholder="ابحث باسم المادة أو الرمز (مثال: MATH 200, MECH, CSC, BIO, FIN)..." class="w-full text-xs py-3 pr-10 pl-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition">
       </div>
 
-      <!-- أزرار التصنيف والفلترة -->
-      <div class="flex flex-wrap gap-2 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
-        <button class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 transition" data-filter="all">الكل</button>
-        <button class="filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="exam">امتحانات سابقة</button>
-        <button class="filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="summary">ملخصات وسلايدات</button>
-        <button class="filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="eng">كلية الهندسة</button>
-        <button class="filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="math">الرياضيات والعلوم</button>
+      <!-- أزرار التصنيف والفلترة الشاملة -->
+      <div class="flex items-center gap-1.5 overflow-x-auto mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 custom-scrollbar pb-1">
+        <button class="filter-btn active shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 transition" data-filter="all">الكل</button>
+        <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="exam">امتحانات سابقة</button>
+        <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="summary">ملخصات وسلايدات</button>
+        <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="engineering">كلية الهندسة</button>
+        <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="business">إدارة الأعمال</button>
+        <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="arts_sciences">الفنون والعلوم</button>
+        <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="education">التربية واللغات</button>
+        <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="pharmacy">كلية الصيدلة</button>
       </div>
     </div>
 
@@ -122,7 +128,6 @@
   <aside id="sidebar" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0c1427] border-l border-slate-200 dark:border-clubNavy-borderDark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
     
     <div>
-      <!-- رأس القائمة -->
       <div class="p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
         <div>
           <h2 class="font-bold text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
@@ -133,9 +138,7 @@
         </button>
       </div>
 
-      <!-- قائمة الروابط الرئيسية -->
       <nav class="p-4 space-y-1.5">
-        
         <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
           <span>الرئيسية (الأنشطة والإعلانات)</span>
@@ -174,15 +177,12 @@
             <span class="text-[10px] text-slate-400 dark:text-slate-500">مجموعات الواتساب والتواصل المباشر</span>
           </div>
         </a>
-
       </nav>
     </div>
 
-    <!-- أسفل القائمة -->
     <div class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
       نادي الوفاء — الجامعة اللبنانية الدولية في صور
     </div>
-
   </aside>
 
   <!-- ==================== سكربت التحكم الشامل والسحب اللحظي ==================== -->
@@ -191,6 +191,77 @@
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
     let resourcesData = [];
+
+    // محرك التعرف الذكي على نوع الملف والكلية الشاملة
+    function detectResourceMetadata(faculty = '', type = '', name = '', code = '') {
+      const combined = `${faculty} ${type} ${name} ${code}`.toLowerCase();
+      let categories = [];
+
+      // 1. تصنيف نوع الملف (Exam / Summary)
+      const isExam = combined.includes('امتحان') || combined.includes('دورة') || combined.includes('exam') || 
+                     combined.includes('final') || combined.includes('midterm') || combined.includes('نصفي') || combined.includes('نهائي');
+      const isSummary = combined.includes('ملخص') || combined.includes('سلايد') || combined.includes('summary') || 
+                        combined.includes('شرح') || combined.includes('نوطة') || combined.includes('تلخيص');
+
+      if (isExam) categories.push('exam');
+      if (isSummary) categories.push('summary');
+
+      // 2. تصنيف الكليات الـ 5 المعتمدة
+      // الصيدلة
+      if (combined.includes('pharmacy') || combined.includes('صيدل') || combined.includes('phar')) {
+        categories.push('pharmacy');
+      }
+      // إدارة الأعمال
+      if (combined.includes('business') || combined.includes('أعمال') || combined.includes('اعمال') || 
+          combined.includes('account') || combined.includes('محاسب') || combined.includes('economic') || 
+          combined.includes('اقتصاد') || combined.includes('finance') || combined.includes('مالي') || 
+          combined.includes('tourism') || combined.includes('hotel') || combined.includes('marketing') || 
+          combined.includes('تسويق') || combined.includes('mis') || combined.includes('mgmt') || combined.includes('mktg')) {
+        categories.push('business');
+      }
+      // التربية واللغات
+      if (combined.includes('education') || combined.includes('تربي') || combined.includes('tefl') || 
+          combined.includes('translation') || combined.includes('ترجم') || combined.includes('english') || 
+          combined.includes('إنجليز') || combined.includes('انكليز') || combined.includes('engl')) {
+        categories.push('education');
+      }
+      // الهندسة
+      if (combined.includes('engineer') || combined.includes('هندس') || combined.includes('mech') || 
+          combined.includes('ميكانيك') || combined.includes('civil') || combined.includes('survey') || 
+          combined.includes('electric') || combined.includes('كهرب') || combined.includes('telecom') || 
+          combined.includes('اتصال') || combined.includes('industr') || combined.includes('electron') || 
+          combined.includes('ceng') || combined.includes('eeng') || combined.includes('meng')) {
+        categories.push('engineering');
+      }
+      // الفنون والعلوم (تشمل علوم الحاسوب، التصميم، الرياضيات، العلوم الحيوية والطبية، التغذية)
+      if (combined.includes('art') || combined.includes('science') || combined.includes('فنون') || 
+          combined.includes('علوم') || combined.includes('computer science') || combined.includes('cs') || 
+          combined.includes('csci') || combined.includes('حاسوب') || combined.includes('it') || 
+          combined.includes('graphic') || combined.includes('جرافيك') || combined.includes('advertising') || 
+          combined.includes('إعلان') || combined.includes('journalism') || combined.includes('صحاف') || 
+          combined.includes('radio') || combined.includes('nutrition') || combined.includes('تغذية') || 
+          combined.includes('math') || combined.includes('رياضيات') || combined.includes('phys') || 
+          combined.includes('فيزياء') || combined.includes('chem') || combined.includes('كيمياء') || 
+          combined.includes('biol') || combined.includes('بيولوجيا')) {
+        categories.push('arts_sciences');
+      }
+
+      // تحديد الشارة اللونية المناسبة لنوع الملف (الأحمر للنصفي، البنفسجي للنهائي، الزمردي للملخص)
+      let typeBadgeClass = "bg-blue-500/10 text-blue-600 dark:text-blue-400";
+      const lowerType = type.toLowerCase();
+      if (lowerType.includes('نصفي') || lowerType.includes('midterm')) {
+        typeBadgeClass = "bg-red-500/10 text-red-600 dark:text-red-400";
+      } else if (lowerType.includes('نهائي') || lowerType.includes('final')) {
+        typeBadgeClass = "bg-purple-500/10 text-purple-600 dark:text-purple-400";
+      } else if (isSummary || lowerType.includes('ملخص')) {
+        typeBadgeClass = "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400";
+      }
+
+      return {
+        categories: categories.join(' '),
+        typeBadgeClass: typeBadgeClass
+      };
+    }
 
     // دالة رسم بطاقات الملفات والموارد الأكاديمية
     function renderResources(list) {
@@ -208,46 +279,26 @@
         const faculty = item['الكلية'] || 'عام';
         const type = item['نوع الملف'] || 'ملخص دراسي';
         const link = item['رابط التحميل'] || '#';
+        
+        // قراءة الوصف المخصص من عمود "الوصف" الجديد
+        const desc = item['الوصف'] || `مرجع معتمد لكلية ${faculty} متوفر للتحميل المباشر.`;
 
-        // تحديد التصنيفات البرمجية لتوافق أزرار الفلترة
-        let categoryList = [];
-        const lowerType = type.toLowerCase();
-        const lowerFaculty = faculty.toLowerCase();
-
-        if (lowerType.includes('امتحان') || lowerType.includes('دورة') || lowerType.includes('exam') || lowerType.includes('final') || lowerType.includes('midterm')) {
-          categoryList.push('exam');
-        }
-        if (lowerType.includes('ملخص') || lowerType.includes('سلايد') || lowerType.includes('summary')) {
-          categoryList.push('summary');
-        }
-        if (lowerFaculty.includes('هندس') || lowerFaculty.includes('eng')) {
-          categoryList.push('eng');
-        }
-        if (lowerFaculty.includes('رياضيات') || lowerFaculty.includes('علوم') || lowerFaculty.includes('math') || lowerFaculty.includes('phys')) {
-          categoryList.push('math');
-        }
-
-        const categoryAttr = categoryList.join(' ');
-        const searchMetadata = `${name} ${code} ${faculty} ${type}`.toLowerCase();
-
-        // تحديد ألوان الشارات
-        let typeBadgeClass = "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400";
-        if (categoryList.includes('exam')) {
-          typeBadgeClass = "bg-red-500/10 text-red-600 dark:text-red-400";
-        }
+        // الفحص البرمجي للكلية ونوع الملف
+        const meta = detectResourceMetadata(faculty, type, name, code);
+        const searchMetadata = `${name} ${code} ${faculty} ${type} ${desc}`.toLowerCase();
 
         return `
-          <div class="resource-card rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark p-5 flex flex-col justify-between hover:border-gold-500/50 transition duration-200" data-category="${categoryAttr}" data-name="${searchMetadata}">
+          <div class="resource-card rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark p-5 flex flex-col justify-between hover:border-gold-500/50 transition duration-200" data-category="${meta.categories}" data-name="${searchMetadata}">
             <div>
               <div class="flex items-center justify-between mb-3">
                 <span class="px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold text-[11px] font-mono">${code}</span>
-                <span class="px-2.5 py-1 rounded-md ${typeBadgeClass} font-bold text-[10px]">${type}</span>
+                <span class="px-2.5 py-1 rounded-md ${meta.typeBadgeClass} font-bold text-[10px]">${type}</span>
               </div>
               <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-1.5">${name}</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">مرجع معتمد لكلية ${faculty} متوفر للتحميل المباشر.</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">${desc}</p>
             </div>
             <div class="pt-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <span class="text-[11px] text-slate-400 flex items-center gap-1"><i data-lucide="file-text" class="w-3.5 h-3.5"></i> PDF • سحابي</span>
+              <span class="text-[11px] text-slate-400 flex items-center gap-1"><i data-lucide="file-text" class="w-3.5 h-3.5"></i> PDF • متاح للتحميل</span>
               <a href="${link}" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-200 hover:bg-gold-500 hover:text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-sm">
                 <span>تحميل</span>
                 <i data-lucide="download" class="w-3.5 h-3.5"></i>
@@ -350,7 +401,7 @@
       });
     }
 
-    // نظام البحث والفلترة الفورية للمواد
+    // نظام البحث والفلترة الفورية الشامل
     const searchInput = document.getElementById('searchInput');
     const filterButtons = document.querySelectorAll('.filter-btn');
     const noResults = document.getElementById('noResults');
@@ -393,11 +444,11 @@
     filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         filterButtons.forEach(b => {
-          b.classList.remove('bg-clubNavy-light', 'dark:bg-gold-500', 'text-white', 'dark:text-slate-950', 'font-bold');
+          b.classList.remove('active', 'bg-clubNavy-light', 'dark:bg-gold-500', 'text-white', 'dark:text-slate-950', 'font-bold');
           b.classList.add('bg-slate-100', 'dark:bg-[#131e3a]', 'text-slate-700', 'dark:text-slate-300', 'font-medium');
         });
         btn.classList.remove('bg-slate-100', 'dark:bg-[#131e3a]', 'text-slate-700', 'dark:text-slate-300', 'font-medium');
-        btn.classList.add('bg-clubNavy-light', 'dark:bg-gold-500', 'text-white', 'dark:text-slate-950', 'font-bold');
+        btn.classList.add('active', 'bg-clubNavy-light', 'dark:bg-gold-500', 'text-white', 'dark:text-slate-950', 'font-bold');
 
         currentFilter = btn.getAttribute('data-filter');
         filterResources();
