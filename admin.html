@@ -103,14 +103,14 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <!-- زر جرس الإشعارات العائم مع العداد الأحمر -->
+        <!-- زر جرس الإشعارات مع العداد التفاعلي -->
         <div class="relative">
           <button id="notifBellBtn" onclick="toggleNotifPanel()" class="relative p-2 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-slate-700 dark:text-slate-200 transition" title="طلبات وتبرعات الكتب">
             <i data-lucide="bell" class="w-4 h-4"></i>
             <span id="notifBellBadge" class="hidden absolute -top-1 -right-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-rose-600 text-white min-w-[18px] text-center leading-none">0</span>
           </button>
 
-          <!-- اللوحة المنبثقة للإشعارات العائمة -->
+          <!-- قائمة الإشعارات العائمة -->
           <div id="notifPanel" class="hidden absolute left-0 mt-2 w-80 sm:w-96 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl p-4 z-50 space-y-3">
             <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
               <div class="flex items-center gap-2">
@@ -120,26 +120,23 @@
               <button onclick="toggleNotifPanel()" class="p-1 rounded text-slate-400 hover:text-slate-600 dark:hover:text-white"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
             </div>
 
-            <!-- قائمة الطلبات داخل الجرس -->
             <div id="notifListContainer" class="max-h-72 overflow-y-auto space-y-2 custom-scrollbar">
               <div class="py-6 text-center text-xs text-slate-400">لا توجد طلبات جديدة حالياً.</div>
             </div>
 
             <div class="pt-2 border-t border-slate-100 dark:border-slate-800 text-center">
               <button onclick="goToBookRequestsTab()" class="text-[11px] font-bold text-gold-500 hover:underline">
-                الانتقال إلى تبويب إدارة الطلبات الكامل
+                الانتقال إلى تبويب إدارة الطلبات والتبرعات الكامل
               </button>
             </div>
           </div>
         </div>
 
-        <!-- زر المظهر -->
         <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
           <span class="themeIconContainer flex items-center justify-center"></span>
           <span class="themeText">الليلي</span>
         </button>
 
-        <!-- زر تسجيل الخروج -->
         <button onclick="openLogoutModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-600 dark:text-rose-400 text-xs font-bold transition">
           <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
           <span>خروج</span>
@@ -213,7 +210,6 @@
               <div>
                 <label class="block text-xs font-bold mb-1">الاسم الثلاثي واللقب العلمي *</label>
                 <input id="facName" type="text" required placeholder="مثال: د. أحمد محمد حسين أو أ. هبة حمود" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                <p class="text-[11px] text-slate-400 mt-1">العنوان الرئيسي الذي يظهر بالخط العريض في بطاقة الأستاذ.</p>
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -227,13 +223,11 @@
                     <option value="كلية الصيدلة" data-category="pharmacy">كلية الصيدلة (Pharmacy)</option>
                     <option value="الجهاز الإداري" data-category="admin">الجهاز الإداري والمكتبة (Administration)</option>
                   </select>
-                  <p class="text-[11px] text-slate-400 mt-1">تحدد الشارة الملونة للكلية في أعلى البطاقة.</p>
                 </div>
 
                 <div>
                   <label class="block text-xs font-bold mb-1">التصنيف البرمجي (Auto-Filled) *</label>
                   <input id="facCategoryCode" type="text" readonly value="engineering" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-200/60 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 font-mono focus:outline-none cursor-not-allowed text-left" dir="ltr">
-                  <p class="text-[11px] text-slate-400 mt-1">يُحدد تلقائياً لحماية أزرار الفرز في الموقع من أي أخطاء إملائية.</p>
                 </div>
               </div>
 
@@ -241,7 +235,6 @@
                 <div>
                   <label class="block text-xs font-bold mb-1">الاختصاص الأكاديمي أو المسمى الدقيق *</label>
                   <input id="facTitle" type="text" required placeholder="مثال: دكتوراه هندسة ميكانيكية، منسق الرياضيات..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                  <p class="text-[11px] text-slate-400 mt-1">السطر التوضيحي المكتوب تحت اسم الأستاذ مباشرة.</p>
                 </div>
 
                 <div>
@@ -253,27 +246,23 @@
                     <option value="الدائرة المالية">الدائرة المالية</option>
                     <option value="شؤون الطلاب والتسجيل">شؤون الطلاب والتسجيل</option>
                   </select>
-                  <p class="text-[11px] text-slate-400 mt-1">تظهر كشارة نصية رمادية في الزاوية اليسرى من أعلى الكرت.</p>
                 </div>
               </div>
 
               <div>
                 <label class="block text-xs font-bold mb-1">البريد الإلكتروني الرسمي (LIU Webmail) *</label>
                 <input id="facEmail" type="email" required placeholder="name.lastname@liu.edu.lb" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-                <p class="text-[11px] text-slate-400 mt-1">البريد الذي سيتمكن الطلاب من نسخه بضغطة زر للتواصل الرسمي.</p>
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-xs font-bold mb-1">مكان المكتب (اختياري)</label>
                   <input id="facRoom" type="text" placeholder="مثال: مبنى الهندسة - الطابق 2 - مكتب 204" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                  <p class="text-[11px] text-slate-400 mt-1">إذا تركته فارغاً فلن يظهر له أي أثر على الكرت إطلاقاً.</p>
                 </div>
 
                 <div>
                   <label class="block text-xs font-bold mb-1">الساعات المكتبية المتاحة (اختياري)</label>
                   <input id="facHours" type="text" placeholder="مثال: الإثنين والأربعاء 10:00 - 12:00" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                  <p class="text-[11px] text-slate-400 mt-1">تظهر بجانب أيقونة الساعة لتحديد مواعيد مقابلة الأستاذ للطلاب.</p>
                 </div>
               </div>
 
@@ -284,11 +273,6 @@
                 </button>
               </div>
             </form>
-
-            <div id="facultySuccessMsg" class="hidden p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs flex items-center gap-2">
-              <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0"></i>
-              <span>تم إدراج بيانات الأستاذ بنجاح في Google Sheets، وستظهر فوراً على الموقع الأساسي!</span>
-            </div>
           </section>
 
           <!-- شاشة إدارة الأساتذة -->
@@ -336,13 +320,11 @@
                 <div>
                   <label class="block text-xs font-bold mb-1">اسم المادة أو المقرر الدراسي *</label>
                   <input id="resName" type="text" required placeholder="مثال: تفاضل وتكامل 2 (Calculus II) أو استاتيكا" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                  <p class="text-[11px] text-slate-400 mt-1">الاسم الواضح للمادة الذي يظهر كعنوان رئيسي لبطاقة التحميل.</p>
                 </div>
 
                 <div>
                   <label class="block text-xs font-bold mb-1">رمز المادة الأكاديمي (Course Code) *</label>
                   <input id="resCode" type="text" required placeholder="مثال: MATH 200, MECH 210, CSCI 200" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-                  <p class="text-[11px] text-slate-400 mt-1">الشارة الزرقاء في أعلى الكرت للبحث والفلترة السريعة للمقرر.</p>
                 </div>
               </div>
 
@@ -356,7 +338,6 @@
                     <option value="كلية التربية واللغات">كلية التربية واللغات (Education)</option>
                     <option value="كلية الصيدلة">كلية الصيدلة (Pharmacy)</option>
                   </select>
-                  <p class="text-[11px] text-slate-400 mt-1">تحدد تصنيف المقرر ضمن أزرار الكليات للطلاب.</p>
                 </div>
 
                 <div>
@@ -367,20 +348,17 @@
                     <option value="ملخص دراسي وسلايدات">ملخص دراسي وسلايدات</option>
                     <option value="نماذج وحلول تمارين">نماذج وحلول تمارين</option>
                   </select>
-                  <p class="text-[11px] text-slate-400 mt-1">تحدد الشارة الملونة لنوع الملف في بطاقة المورد.</p>
                 </div>
               </div>
 
               <div>
                 <label class="block text-xs font-bold mb-1">الوصف الأكاديمي المخصص للمحتوى *</label>
                 <input id="resDesc" type="text" required placeholder="مثال: نماذج امتحانات نصفية لسنوات متعددة تشتمل على مسائل التكامل مع سلم التصحيح" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                <p class="text-[11px] text-slate-400 mt-1">نص قصير يشرح للطالب محتوى الملف (عدد الدورات، وجود الحلول، أهمية التلخيص).</p>
               </div>
 
               <div>
                 <label class="block text-xs font-bold mb-1">رابط التحميل المباشر (Google Drive / Cloud Link) *</label>
                 <input id="resLink" type="url" required placeholder="https://drive.google.com/file/d/..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-                <p class="text-[11px] text-slate-400 mt-1">تأكد أن رابط ملف الـ Drive مضبوط على وضع المشاركة مع أي شخص لديه الرابط.</p>
               </div>
 
               <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
@@ -390,11 +368,6 @@
                 </button>
               </div>
             </form>
-
-            <div id="resourceSuccessMsg" class="hidden p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs flex items-center gap-2">
-              <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0"></i>
-              <span>تم إدراج المورد بنجاح في Google Sheets، وأصبح متاحاً للتحميل في الموقع الأساسي!</span>
-            </div>
           </section>
 
           <!-- شاشة إدارة الموارد -->
@@ -409,7 +382,6 @@
                 <span>تحديث السحب من الخادم</span>
               </button>
             </div>
-
             <div id="resourceListContainer" class="space-y-3 min-h-[140px]">
               <div class="py-12 text-center text-xs text-slate-400">جاري فحص ملفات الموارد...</div>
             </div>
@@ -448,13 +420,11 @@
                     <option value="ممثل أو مندوب اختصاص">ممثل أو مندوب اختصاص</option>
                     <option value="مرشد أكاديمي للفرع">مرشد أكاديمي للفرع</option>
                   </select>
-                  <p class="text-[11px] text-slate-400 mt-1">تحديد طبيعة البطاقة وما إذا كانت رابط مجموعة عامة أو جهة تواصل فردية.</p>
                 </div>
 
                 <div>
                   <label class="block text-xs font-bold mb-1">الاسم أو الصفة المعتمدة *</label>
                   <input id="guiName" type="text" required placeholder="مثال: مجموعة طلاب الهندسة الميكانيكية أو الزميل يوسف قاسم" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                  <p class="text-[11px] text-slate-400 mt-1">العنوان الرئيسي البارز الذي يظهر في أعلى بطاقة التواصل للطلاب.</p>
                 </div>
               </div>
 
@@ -462,7 +432,6 @@
                 <div>
                   <label class="block text-xs font-bold mb-1">الكلية أو الاختصاص المشمول *</label>
                   <input id="guiMajor" type="text" required placeholder="مثال: كلية الهندسة - ميكانيك أو عام لكافة الطلاب" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                  <p class="text-[11px] text-slate-400 mt-1">الكلية أو القسم المخصص له هذا الرابط لفلترة وتصنيف البطاقات.</p>
                 </div>
 
                 <div>
@@ -472,7 +441,6 @@
                     <option value="المجموعة ممتلئة حالياً">المجموعة ممتلئة حالياً</option>
                     <option value="قيد التحديث قريباً">قيد التحديث قريباً</option>
                   </select>
-                  <p class="text-[11px] text-slate-400 mt-1">الشارة التي توضح للطالب مدى جاهزية الرابط لاستقبال أعضاء جدد.</p>
                 </div>
               </div>
 
@@ -480,20 +448,17 @@
                 <div>
                   <label class="block text-xs font-bold mb-1">رابط دعوة المجموعة (اختياري بحال توفر رقم هاتف)</label>
                   <input id="guiLink" type="url" placeholder="https://chat.whatsapp.com/..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-                  <p class="text-[11px] text-slate-400 mt-1">خاص بمجموعات الواتساب العامة. اتركه فارغاً إذا كنت تضيف مندوباً برقم هاتفه.</p>
                 </div>
 
                 <div>
                   <label class="block text-xs font-bold mb-1">رقم هاتف المندوب (اختياري بحال توفر رابط مجموعة)</label>
                   <input id="guiPhone" type="tel" placeholder="مثال: 70123456 أو 03123456" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-                  <p class="text-[11px] text-slate-400 mt-1">سيتم تلقائياً تحويله إلى رابط محادثة واتساب مباشر مزود برسالة ترحيبية جاهزة للطالب.</p>
                 </div>
               </div>
 
               <div>
                 <label class="block text-xs font-bold mb-1">الوصف والمهام المخصصة *</label>
                 <input id="guiDesc" type="text" required placeholder="مثال: مجموعة رسمية لتبادل الملاحظات، الجداول الدراسية، والتواصل الأكاديمي المباشر" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                <p class="text-[11px] text-slate-400 mt-1">توضيح مختصر لأهداف المجموعة أو نوع المساعدة التي يقدمها المندوب.</p>
               </div>
 
               <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
@@ -503,11 +468,6 @@
                 </button>
               </div>
             </form>
-
-            <div id="guidanceSuccessMsg" class="hidden p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs flex items-center gap-2">
-              <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0"></i>
-              <span>تم إدراج جهة التواصل بنجاح في Google Sheets، وأصبحت متاحة للطلاب على الموقع الأساسي!</span>
-            </div>
           </section>
 
           <!-- شاشة إدارة جهات التواصل -->
@@ -522,7 +482,6 @@
                 <span>تحديث السحب من الخادم</span>
               </button>
             </div>
-
             <div id="guidanceListContainer" class="space-y-3 min-h-[140px]">
               <div class="py-12 text-center text-xs text-slate-400">جاري فحص شبكة التوجيه...</div>
             </div>
@@ -541,7 +500,6 @@
               <span>إدارة وتعديل الكتب</span>
               <span id="bookCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
             </button>
-            <!-- التبويب الثالث الجديد لإدارة الطلبات والتبرعات -->
             <button id="tabBookRequests" onclick="switchBookSubTab('requests')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
               <i data-lucide="inbox" class="w-4 h-4"></i>
               <span>إدارة الطلبات والتبرعات</span>
@@ -549,7 +507,7 @@
             </button>
           </div>
 
-          <!-- 1. شاشة إضافة كتاب جديد -->
+          <!-- 1. شاشة إضافة كتاب جديد يدوي -->
           <section id="bookAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
             <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
               <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
@@ -561,7 +519,6 @@
               <div>
                 <label class="block text-xs font-bold mb-1">عنوان الكتاب أو المرجع الأكاديمي *</label>
                 <input id="bookTitle" type="text" required placeholder="مثال: كتاب الفيزياء الجامعية PHY 200 أو أساسيات الإدارة" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                <p class="text-[11px] text-slate-400 mt-1">الاسم الرئيسي للكتاب الذي يبحث عنه الطلاب في صفحة الكتب الورقية.</p>
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -575,7 +532,6 @@
                     <option value="كلية الصيدلة">كلية الصيدلة (Pharmacy)</option>
                     <option value="الجامعة اللبنانية الدولية">عام لكافة الكليات</option>
                   </select>
-                  <p class="text-[11px] text-slate-400 mt-1">لتصنيف الكتاب ضمن أزرار الفرز السريع لكليات الجامعة.</p>
                 </div>
 
                 <div>
@@ -584,7 +540,6 @@
                     <option value="متوفر للاستلام">متوفر للاستلام (متاح للطلب المباشر)</option>
                     <option value="مُعار حالياً">مُعار حالياً (غير متاح حالياً)</option>
                   </select>
-                  <p class="text-[11px] text-slate-400 mt-1">تتحكم في تفعيل أو تعطيل زر طلب الاستعارة لبطاقة الكتاب.</p>
                 </div>
               </div>
 
@@ -592,13 +547,11 @@
                 <div>
                   <label class="block text-xs font-bold mb-1">الوصف والطبعة المعتمدة *</label>
                   <input id="bookDesc" type="text" required placeholder="مثال: الطبعة السادسة، معتمد لمقرر PHY 200 بحالة ممتازة" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                  <p class="text-[11px] text-slate-400 mt-1">توضيح رقم الطبعة والمقرر التابع له للمساعدة في اختيار النسخة الصحيحة.</p>
                 </div>
 
                 <div>
                   <label class="block text-xs font-bold mb-1">عدد النسخ المتوفرة حالياً *</label>
                   <input id="bookCopies" type="number" min="0" required value="1" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-                  <p class="text-[11px] text-slate-400 mt-1">الرقم الذي يظهر أسفل الكرت (إذا كان صفر يتحول الكتاب تلقائياً إلى معار).</p>
                 </div>
               </div>
 
@@ -609,11 +562,6 @@
                 </button>
               </div>
             </form>
-
-            <div id="bookSuccessMsg" class="hidden p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs flex items-center gap-2">
-              <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0"></i>
-              <span>تم إدراج الكتاب بنجاح في Google Sheets، وأصبح متاحاً للطلاب على الموقع الأساسي!</span>
-            </div>
           </section>
 
           <!-- 2. شاشة إدارة وتعديل الكتب -->
@@ -628,18 +576,17 @@
                 <span>تحديث السحب من الخادم</span>
               </button>
             </div>
-
             <div id="bookListContainer" class="space-y-3 min-h-[140px]">
               <div class="py-12 text-center text-xs text-slate-400">جاري فحص مكتبة الكتب...</div>
             </div>
           </section>
 
-          <!-- 3. شاشة إدارة الطلبات والتبرعات الواردة (مع زر الحذف المباشر X) -->
+          <!-- 3. شاشة إدارة الطلبات والتبرعات مع الخيارات الثلاثة (قبول، تعديل، رفض) -->
           <section id="bookRequestsView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
               <div>
                 <h3 class="text-base font-bold text-slate-900 dark:text-white">طلبات الاستعارة والتبرعات بالكتب</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">يمكنك مراجعة تفاصيل طلبات الطلاب وحذف الطلب المكتمل فورياً بالضغط على علامة الإلغاء.</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">يمكنك قبول التبرع ونشره مباشرة، أو تعديل تفاصيله قبل النشر، أو رفضه وحذفه فورياً.</p>
               </div>
               <button onclick="fetchLiveBookRequests(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
                 <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
@@ -1047,6 +994,71 @@
     </div>
   </div>
 
+  <!-- ==================== نافذة تعديل ونشر التبرع الجديد (DONATION APPROVAL MODAL) ==================== -->
+  <div id="editDonationModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white">مراجعة وتعديل بيانات التبرع قبل النشر</h3>
+          <p class="text-[11px] text-slate-400">سيتم إدراج الكتاب مباشرة في مكتبة الموقع وحذف الطلب من قائمة الانتظار</p>
+        </div>
+        <button onclick="closeEditDonationModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <form id="editDonationForm" class="space-y-4 text-xs">
+        <!-- بيانات مخفية لتحديد الطلب المراد حذفه بعد النشر -->
+        <input id="donOriginalTimestamp" type="hidden">
+        <input id="donOriginalStudentId" type="hidden">
+        <input id="donOriginalRequestTitle" type="hidden">
+
+        <div>
+          <label class="block font-bold mb-1">عنوان الكتاب أو المرجع *</label>
+          <input id="donPublishTitle" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">الكلية التابع لها *</label>
+            <select id="donPublishCollege" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="كلية الهندسة">كلية الهندسة (Engineering)</option>
+              <option value="كلية إدارة الأعمال">كلية إدارة الأعمال (Business)</option>
+              <option value="كلية الفنون والعلوم">كلية الفنون والعلوم (Arts & Sciences)</option>
+              <option value="كلية التربية واللغات">كلية التربية واللغات (Education)</option>
+              <option value="كلية الصيدلة">كلية الصيدلة (Pharmacy)</option>
+              <option value="الجامعة اللبنانية الدولية">عام لكافة الكليات</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold mb-1">حالة التوفر للاستلام *</label>
+            <select id="donPublishStatus" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="متوفر للاستلام">متوفر للاستلام</option>
+              <option value="مُعار حالياً">مُعار حالياً</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">الوصف، المقرر والطبعة *</label>
+            <input id="donPublishDesc" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block font-bold mb-1">عدد النسخ المتوفرة *</label>
+            <input id="donPublishCopies" type="number" min="1" required value="1" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeEditDonationModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">إلغاء</button>
+          <button id="submitDonationApprovalBtn" type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex items-center gap-1.5 shadow-md">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            <span>تأكيد ونشر بالمكتبة فوراً</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- ==================== السكربت البرمجي الشامل بتسريع الذاكرة ==================== -->
   <script>
     lucide.createIcons();
@@ -1067,6 +1079,7 @@
     let bookToDelete = null;
 
     let liveBookRequestsList = [];
+    let currentDonationToEdit = null;
 
     function generateSmartWhatsAppLink(phone) {
       if (!phone) return "";
@@ -1082,6 +1095,35 @@
       }
       const defaultMessage = encodeURIComponent("السلام عليكم ورحمة الله، أتواصل معك عبر منصة نادي الوفاء للاستفسار الأكاديمي والتوجيه.");
       return `https://wa.me/${cleaned}?text=${defaultMessage}`;
+    }
+
+    // دالة تحليل نص تفاصيل التبرع المركب واستخراج الحقول
+    function parseDonationInfo(rawText = '') {
+      let title = rawText;
+      let college = 'الجامعة اللبنانية الدولية';
+      let desc = 'نسخة مقدمة عبر مبادرة التبرع بالكتب';
+
+      if (rawText.includes('(المقرر:')) {
+        const parts = rawText.split('(المقرر:');
+        title = parts[0].trim();
+        const detailsPart = parts[1] ? parts[1].replace(')', '').trim() : '';
+        const segments = detailsPart.split('|').map(s => s.trim());
+
+        let courseInfo = segments[0] || '';
+        segments.forEach(seg => {
+          if (seg.startsWith('الكلية:')) {
+            college = seg.replace('الكلية:', '').trim();
+          } else if (seg.startsWith('الطبعة:')) {
+            desc = seg.replace('الطبعة:', '').trim();
+          }
+        });
+
+        if (desc === 'نسخة مقدمة عبر مبادرة التبرع بالكتب') {
+          desc = `معتمد لمقرر ${courseInfo} - بحالة ممتازة`;
+        }
+      }
+
+      return { title, college, desc };
     }
 
     // 1. نظام المظهر (Dark / Light)
@@ -1113,14 +1155,13 @@
 
     applyAdminTheme(localStorage.getItem('clubTheme') !== 'light');
 
-    // 2. التحكم في قائمة جرس الإشعارات العائمة
+    // 2. التحكم في قائمة جرس الإشعارات
     function toggleNotifPanel() {
       const panel = document.getElementById('notifPanel');
       if (!panel) return;
       panel.classList.toggle('hidden');
     }
 
-    // إغلاق لوحة الإشعارات عند النقر خارجها
     document.addEventListener('click', (e) => {
       const panel = document.getElementById('notifPanel');
       const btn = document.getElementById('notifBellBtn');
@@ -1129,7 +1170,7 @@
       }
     });
 
-    // 3. التنقل بين الأقسام الرئيسية (Sidebar Navigation)
+    // 3. التنقل بين الأقسام الرئيسية
     function switchMainSection(section) {
       const secFaculty = document.getElementById('sectionFaculty');
       const secResources = document.getElementById('sectionResources');
@@ -1347,7 +1388,6 @@
 
     const facultyForm = document.getElementById('facultyForm');
     const submitFacultyBtn = document.getElementById('submitFacultyBtn');
-    const facultySuccessMsg = document.getElementById('facultySuccessMsg');
 
     if (facultyForm) {
       facultyForm.addEventListener('submit', async (e) => {
@@ -1392,14 +1432,9 @@
             body: JSON.stringify(payload)
           });
 
-          if (facultySuccessMsg) facultySuccessMsg.classList.remove('hidden');
           facultyForm.reset();
           document.getElementById('facCategoryCode').value = "engineering";
-
-          setTimeout(() => {
-            if (facultySuccessMsg) facultySuccessMsg.classList.add('hidden');
-            fetchLiveFacultyData(true);
-          }, 2500);
+          setTimeout(() => { fetchLiveFacultyData(true); }, 2000);
         } catch (err) {
           alert('تعذر إتمام الإرسال، تأكد من اتصالك.');
         } finally {
@@ -1594,7 +1629,6 @@
         const code = res['رمز المادة'] || 'COURSE';
         const college = res['الكلية'] || 'عام';
         const type = res['نوع الملف'] || 'ملخص دراسي';
-        const link = res['رابط التحميل'] || '#';
         const desc = res['الوصف'] || '';
 
         let typeBadgeColor = "bg-blue-500/10 text-blue-600 dark:text-blue-400";
@@ -1658,7 +1692,6 @@
 
     const resourceForm = document.getElementById('resourceForm');
     const submitResourceBtn = document.getElementById('submitResourceBtn');
-    const resourceSuccessMsg = document.getElementById('resourceSuccessMsg');
 
     if (resourceForm) {
       resourceForm.addEventListener('submit', async (e) => {
@@ -1698,14 +1731,8 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
-
-          if (resourceSuccessMsg) resourceSuccessMsg.classList.remove('hidden');
           resourceForm.reset();
-
-          setTimeout(() => {
-            if (resourceSuccessMsg) resourceSuccessMsg.classList.add('hidden');
-            fetchLiveResourcesData(true);
-          }, 2500);
+          setTimeout(() => { fetchLiveResourcesData(true); }, 2000);
         } catch (err) {
           alert('تعذر إتمام الإرسال، يرجى مراجعة اتصال الإنترنت.');
         } finally {
@@ -1960,7 +1987,6 @@
 
     const guidanceForm = document.getElementById('guidanceForm');
     const submitGuidanceBtn = document.getElementById('submitGuidanceBtn');
-    const guidanceSuccessMsg = document.getElementById('guidanceSuccessMsg');
 
     if (guidanceForm) {
       guidanceForm.addEventListener('submit', async (e) => {
@@ -1987,7 +2013,6 @@
           'النوع': document.getElementById('guiTypeSelect').value,
           'الاسم أو الصفة': document.getElementById('guiName').value.trim(),
           'الكلية أو الاختصاص': document.getElementById('guiMajor').value.trim(),
-          'حالة': document.getElementById('guiStatusSelect').value,
           'الحالة': document.getElementById('guiStatusSelect').value,
           'رابط الواتساب': finalLink,
           'رقم الهاتف': inputPhone,
@@ -2017,14 +2042,8 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
-
-          if (guidanceSuccessMsg) guidanceSuccessMsg.classList.remove('hidden');
           guidanceForm.reset();
-
-          setTimeout(() => {
-            if (guidanceSuccessMsg) guidanceSuccessMsg.classList.add('hidden');
-            fetchLiveGuidanceData(true);
-          }, 2500);
+          setTimeout(() => { fetchLiveGuidanceData(true); }, 2000);
         } catch (err) {
           alert('تعذر إتمام الإرسال، يرجى مراجعة اتصال الإنترنت.');
         } finally {
@@ -2319,7 +2338,6 @@
 
     const bookForm = document.getElementById('bookForm');
     const submitBookBtn = document.getElementById('submitBookBtn');
-    const bookSuccessMsg = document.getElementById('bookSuccessMsg');
 
     if (bookForm) {
       bookForm.addEventListener('submit', async (e) => {
@@ -2357,15 +2375,9 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
-
-          if (bookSuccessMsg) bookSuccessMsg.classList.remove('hidden');
           bookForm.reset();
           document.getElementById('bookCopies').value = "1";
-
-          setTimeout(() => {
-            if (bookSuccessMsg) bookSuccessMsg.classList.add('hidden');
-            fetchLiveBooksData(true);
-          }, 2500);
+          setTimeout(() => { fetchLiveBooksData(true); }, 2000);
         } catch (err) {
           alert('تعذر إتمام الإرسال، يرجى مراجعة اتصال الإنترنت.');
         } finally {
@@ -2511,7 +2523,7 @@
       });
     }
 
-    // ==================== دوال إدارة طلبات وتبرعات الكتب الفورية ====================
+    // ==================== دوال إدارة الطلبات والتبرعات الذكية ====================
     function updateBookBadges(count) {
       const bellBadge = document.getElementById('notifBellBadge');
       const reqBadge = document.getElementById('bookRequestsCountBadge');
@@ -2540,7 +2552,7 @@
     function renderBookRequests(list) {
       updateBookBadges(list.length);
 
-      // 1. رسم القائمة داخل لوحة جرس الإشعارات العائمة
+      // 1. القائمة داخل جرس الإشعارات
       const notifContainer = document.getElementById('notifListContainer');
       if (notifContainer) {
         if (!list || list.length === 0) {
@@ -2560,7 +2572,7 @@
               : "bg-amber-500/10 text-amber-600 dark:text-amber-400";
 
             return `
-              <div class="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-[#111b33] flex items-center justify-between gap-2 hover:border-gold-500/30 transition text-xs">
+              <div class="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-[#111b33] flex items-center justify-between gap-2 text-xs">
                 <div class="space-y-0.5 overflow-hidden">
                   <div class="flex items-center gap-1.5">
                     <span class="px-2 py-0.5 rounded text-[9px] font-bold ${typeBadgeColor}">${type}</span>
@@ -2569,8 +2581,7 @@
                   <h5 class="font-bold text-slate-900 dark:text-white truncate">${book}</h5>
                   <p class="text-[11px] text-slate-400 truncate">${name} • ${phone}</p>
                 </div>
-                <!-- زر الحذف الفوري X -->
-                <button onclick="deleteBookRequestDirect('${time}', '${studentId}', '${book}')" class="shrink-0 p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-600 text-rose-500 hover:text-white transition" title="حذف الطلب فوراً">
+                <button onclick="deleteBookRequestDirect('${time}', '${studentId}', '${book}')" class="shrink-0 p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-600 text-rose-500 hover:text-white transition" title="حذف الطلب">
                   <i data-lucide="x" class="w-3.5 h-3.5"></i>
                 </button>
               </div>
@@ -2579,18 +2590,18 @@
         }
       }
 
-      // 2. رسم القائمة داخل تبويب إدارة الطلبات والتبرعات
+      // 2. القائمة داخل تبويب إدارة الطلبات والتبرعات مع خيارات (قبول، تعديل، رفض)
       const tableContainer = document.getElementById('bookRequestsTableContainer');
       if (tableContainer) {
         if (!list || list.length === 0) {
           tableContainer.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد طلبات استعارة أو تبرعات مسجلة حالياً في قاعدة البيانات.</div>`;
         } else {
-          tableContainer.innerHTML = list.map(req => {
+          tableContainer.innerHTML = list.map((req, index) => {
             const type = req['نوع الطلب'] || 'طلب استعارة';
             const name = req['الاسم الكامل'] || 'طالب';
             const studentId = req['رقم الملف ID'] || 'غير محدد';
             const phone = req['رقم الهاتف'] || '';
-            const book = req['عنوان الكتاب / المقرر'] || 'كتاب';
+            const bookRaw = req['عنوان الكتاب / المقرر'] || 'كتاب';
             const time = req['تاريخ الإرسال'] || '';
 
             const isDonate = type.includes('تبرع');
@@ -2599,8 +2610,41 @@
               : "bg-amber-500/10 text-amber-600 dark:text-amber-400";
 
             const cleanPhone = phone.replace(/[^0-9]/g, '');
-            const waMsg = encodeURIComponent(`السلام عليكم زميلي ${name}، بخصوص ${type} لكتاب (${book}) عبر نادي الوفاء:`);
+            const waMsg = encodeURIComponent(`السلام عليكم زميلي ${name}، بخصوص ${type} لكتاب (${bookRaw}) عبر نادي الوفاء:`);
             const waLink = cleanPhone ? `https://wa.me/${cleanPhone}?text=${waMsg}` : '';
+
+            // إذا كان الطلب تبرع: نوفر خيارات (قبول ونشر مباشر، تعديل ونشر، رفض)
+            let actionButtonsMarkup = '';
+            if (isDonate) {
+              actionButtonsMarkup = `
+                <button onclick="approveDonationDirect(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 transition shadow-sm" title="قبول ونشر في المكتبة فوراً">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                  <span>قبول ونشر</span>
+                </button>
+                <button onclick="openEditDonationModal(${index})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="تعديل ونشر في المكتبة">
+                  <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                  <span>تعديل</span>
+                </button>
+                <button onclick="deleteBookRequestDirect('${time}', '${studentId}', '${bookRaw}')" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white text-xs font-bold flex items-center gap-1 transition" title="رفض الطلب وإلغاؤه">
+                  <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                  <span>رفض</span>
+                </button>
+              `;
+            } else {
+              // إذا كان طلب استعارة عادي: واتساب وزر إلغاء
+              actionButtonsMarkup = `
+                ${waLink ? `
+                  <a href="${waLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-600/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition" title="مراسلة الطالب">
+                    <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                    <span>واتساب</span>
+                  </a>
+                ` : ''}
+                <button onclick="deleteBookRequestDirect('${time}', '${studentId}', '${bookRaw}')" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition" title="إلغاء الطلب">
+                  <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                  <span>إلغاء</span>
+                </button>
+              `;
+            }
 
             return `
               <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
@@ -2609,23 +2653,13 @@
                     <span class="px-2.5 py-0.5 rounded text-[10px] font-bold ${typeBadgeColor}">${type}</span>
                     <span class="text-[11px] text-slate-400 font-mono">${time}</span>
                   </div>
-                  <h4 class="font-bold text-sm text-slate-900 dark:text-white">${book}</h4>
+                  <h4 class="font-bold text-sm text-slate-900 dark:text-white">${bookRaw}</h4>
                   <p class="text-xs text-slate-500 dark:text-slate-400">
-                    الطالب: <strong class="text-slate-700 dark:text-slate-200">${name}</strong> • الملف: <span class="font-mono">${studentId}</span>
+                    الطالب المتبرع/المستعير: <strong class="text-slate-700 dark:text-slate-200">${name}</strong> • الملف: <span class="font-mono">${studentId}</span> • الهاتف: <span class="font-mono">${phone}</span>
                   </p>
                 </div>
-                <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
-                  ${waLink ? `
-                    <a href="${waLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-600/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition" title="مراسلة الطالب">
-                      <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-                      <span>واتساب</span>
-                    </a>
-                  ` : ''}
-                  <!-- زر الحذف الفوري بدون نافذة تأكيد -->
-                  <button onclick="deleteBookRequestDirect('${time}', '${studentId}', '${book}')" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition" title="حذف الطلب فوراً">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                    <span>إلغاء الطلب</span>
-                  </button>
+                <div class="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap">
+                  ${actionButtonsMarkup}
                 </div>
               </div>
             `;
@@ -2658,9 +2692,155 @@
       } catch (err) {}
     }
 
-    // الحذف الفوري المباشر لطلب استعارة أو تبرع
+    // 1. القبول والنشر المباشر للتبرع
+    async function approveDonationDirect(index) {
+      const req = liveBookRequestsList[index];
+      if (!req) return;
+
+      const rawBook = req['عنوان الكتاب / المقرر'] || '';
+      const parsed = parseDonationInfo(rawBook);
+      const time = req['تاريخ الإرسال'] || '';
+      const studentId = req['رقم الملف ID'] || '';
+
+      const newBook = {
+        'عنوان الكتاب': parsed.title,
+        'الكلية': parsed.college,
+        'الوصف والطبعة': parsed.desc,
+        'عدد النسخ': '1',
+        'الحالة': 'متوفر للاستلام'
+      };
+
+      // تحديث محلي فوري فائق السرعة
+      liveBooksList.push(newBook);
+      localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
+      renderAdminBookCards(liveBooksList);
+
+      liveBookRequestsList = liveBookRequestsList.filter((_, i) => i !== index);
+      localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
+      renderBookRequests(liveBookRequestsList);
+
+      // إرسال الاعتماد إلى السكربت بالخلفية
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "approve_book_donation",
+            title: newBook['عنوان الكتاب'],
+            college: newBook['الكلية'],
+            desc: newBook['الوصف والطبعة'],
+            copies: newBook['عدد النسخ'],
+            status: newBook['الحالة'],
+            timestamp: time,
+            studentId: studentId,
+            originalRequestTitle: rawBook,
+            adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف"
+          })
+        });
+      } catch (e) {
+        console.warn("خطأ في مزامنة قبول التبرع:", e);
+      }
+    }
+
+    // 2. التعديل قبل النشر
+    const editDonationModal = document.getElementById('editDonationModal');
+    const editDonationForm = document.getElementById('editDonationForm');
+    const submitDonationApprovalBtn = document.getElementById('submitDonationApprovalBtn');
+
+    function openEditDonationModal(index) {
+      currentDonationToEdit = liveBookRequestsList[index];
+      if (!currentDonationToEdit) return;
+
+      const rawBook = currentDonationToEdit['عنوان الكتاب / المقرر'] || '';
+      const parsed = parseDonationInfo(rawBook);
+
+      document.getElementById('donOriginalTimestamp').value = currentDonationToEdit['تاريخ الإرسال'] || '';
+      document.getElementById('donOriginalStudentId').value = currentDonationToEdit['رقم الملف ID'] || '';
+      document.getElementById('donOriginalRequestTitle').value = rawBook;
+
+      document.getElementById('donPublishTitle').value = parsed.title;
+      document.getElementById('donPublishCollege').value = parsed.college;
+      document.getElementById('donPublishDesc').value = parsed.desc;
+      document.getElementById('donPublishCopies').value = "1";
+      document.getElementById('donPublishStatus').value = "متوفر للاستلام";
+
+      editDonationModal.classList.remove('hidden');
+      editDonationModal.classList.add('flex');
+    }
+
+    function closeEditDonationModal() {
+      currentDonationToEdit = null;
+      editDonationModal.classList.add('hidden');
+      editDonationModal.classList.remove('flex');
+    }
+
+    if (editDonationForm) {
+      editDonationForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const originalText = submitDonationApprovalBtn.innerHTML;
+        submitDonationApprovalBtn.disabled = true;
+        submitDonationApprovalBtn.innerHTML = `<span>جاري النشر بالمكتبة...</span>`;
+
+        const time = document.getElementById('donOriginalTimestamp').value;
+        const studentId = document.getElementById('donOriginalStudentId').value;
+        const originalRequestTitle = document.getElementById('donOriginalRequestTitle').value;
+
+        const newBook = {
+          'عنوان الكتاب': document.getElementById('donPublishTitle').value.trim(),
+          'الكلية': document.getElementById('donPublishCollege').value,
+          'الوصف والطبعة': document.getElementById('donPublishDesc').value.trim(),
+          'عدد النسخ': document.getElementById('donPublishCopies').value.trim(),
+          'الحالة': document.getElementById('donPublishStatus').value
+        };
+
+        // تحديث محلي فوري
+        liveBooksList.push(newBook);
+        localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
+        renderAdminBookCards(liveBooksList);
+
+        liveBookRequestsList = liveBookRequestsList.filter(item => {
+          const t = String(item['تاريخ الإرسال'] || '').trim();
+          const id = String(item['رقم الملف ID'] || '').trim();
+          const b = String(item['عنوان الكتاب / المقرر'] || '').trim();
+          return !(t === time || (id === studentId && b === originalRequestTitle));
+        });
+        localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
+        renderBookRequests(liveBookRequestsList);
+
+        closeEditDonationModal();
+
+        // إرسال الاعتماد والتعديل إلى Google Sheets
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "approve_book_donation",
+              title: newBook['عنوان الكتاب'],
+              college: newBook['الكلية'],
+              desc: newBook['الوصف والطبعة'],
+              copies: newBook['عدد النسخ'],
+              status: newBook['الحالة'],
+              timestamp: time,
+              studentId: studentId,
+              originalRequestTitle: originalRequestTitle,
+              adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف"
+            })
+          });
+        } catch (err) {
+          alert('تعذر استكمال النشر.');
+        } finally {
+          submitDonationApprovalBtn.disabled = false;
+          submitDonationApprovalBtn.innerHTML = originalText;
+          lucide.createIcons();
+        }
+      });
+    }
+
+    // 3. رفض الطلب / الحذف المباشر (زر X)
     async function deleteBookRequestDirect(timestamp, studentId, bookTitle) {
-      // 1. حذف محلي فوري وتحديث العداد في 0 ثانية
       liveBookRequestsList = liveBookRequestsList.filter(item => {
         const t = String(item['تاريخ الإرسال'] || '').trim();
         const id = String(item['رقم الملف ID'] || '').trim();
@@ -2671,7 +2851,6 @@
       localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
       renderBookRequests(liveBookRequestsList);
 
-      // 2. إرسال أمر الحذف إلى Google Sheets في الخلفية
       try {
         await fetch(SCRIPT_URL, {
           method: "POST",
@@ -2686,7 +2865,7 @@
           })
         });
       } catch (e) {
-        console.warn("خطأ في المزامنة بالخلفية لحذف الطلب:", e);
+        console.warn("خطأ في المزامنة لحذف الطلب:", e);
       }
     }
   </script>
