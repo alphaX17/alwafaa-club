@@ -42,8 +42,6 @@
 
   <!-- ==================== 1. بوابة تسجيل الدخول المقفلة (LOGIN GATE) ==================== -->
   <div id="loginGate" class="min-h-screen flex flex-col items-center justify-center p-4 relative">
-    
-    <!-- زر تبديل المظهر في شاشة القفل -->
     <div class="absolute top-5 left-5">
       <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark text-xs font-semibold shadow-sm">
         <span class="themeIconContainer flex items-center"></span>
@@ -52,7 +50,6 @@
     </div>
 
     <div class="w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-2xl space-y-6">
-      
       <div class="text-center space-y-2">
         <img src="logo.png" alt="نادي الوفاء" class="w-16 h-16 mx-auto object-contain mb-2">
         <h1 class="text-xl font-black text-slate-900 dark:text-white">بوابة مشرفي منصة نادي الوفاء</h1>
@@ -93,7 +90,6 @@
   <!-- ==================== 2. لوحة التحكم المركزية (ADMIN DASHBOARD) ==================== -->
   <div id="adminDashboard" class="hidden min-h-screen flex flex-col">
 
-    <!-- الشريط العلوي للوحة المشرفين -->
     <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <img src="logo.png" alt="شعار النادي" class="w-9 h-9 object-contain">
@@ -107,13 +103,11 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <!-- زر تبديل الوضع الليلي / النهاري -->
         <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
           <span class="themeIconContainer flex items-center justify-center"></span>
           <span class="themeText">الليلي</span>
         </button>
 
-        <!-- زر تسجيل الخروج -->
         <button id="logoutBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-600 dark:text-rose-400 text-xs font-bold transition">
           <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
           <span>خروج</span>
@@ -121,35 +115,37 @@
       </div>
     </header>
 
-    <!-- مساحة العمل الرئيسية -->
     <div class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8 flex flex-col md:flex-row gap-6">
 
-      <!-- القائمة الجانبية للتنقل بين الأقسام -->
+      <!-- القائمة الجانبية للتنقل بين الأقسام الرئيسية -->
       <aside class="w-full md:w-64 shrink-0 space-y-2">
         <div class="p-3 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark space-y-1">
           <span class="px-3 py-1 block text-[10px] font-bold text-slate-400 uppercase tracking-wider">الأقسام المتاحة</span>
           
-          <button class="nav-tab active w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition" data-target="facultySection">
+          <!-- 1. زر قسم الأساتذة -->
+          <button id="navFacultyBtn" onclick="switchMainSection('faculty')" class="nav-main-tab active w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition">
             <i data-lucide="users" class="w-4 h-4"></i>
             <span>دليل الأساتذة والإدارة</span>
           </button>
 
-          <button class="nav-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته لاحقاً">
+          <!-- 2. زر قسم الموارد الرقمية والامتحانات (تم تفعيله) -->
+          <button id="navResourcesBtn" onclick="switchMainSection('resources')" class="nav-main-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">
             <i data-lucide="folder-down" class="w-4 h-4"></i>
-            <span>الموارد والامتحانات (قريباً)</span>
+            <span>الموارد والامتحانات</span>
           </button>
 
-          <button class="nav-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته لاحقاً">
+          <!-- الأقسام القادمة خطوة بخطوة -->
+          <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته في الخطوة التالية">
             <i data-lucide="message-circle" class="w-4 h-4"></i>
             <span>التوجيه والمجموعات (قريباً)</span>
           </button>
 
-          <button class="nav-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته لاحقاً">
+          <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته في الخطوة التالية">
             <i data-lucide="book-open" class="w-4 h-4"></i>
             <span>الكتب الورقية (قريباً)</span>
           </button>
 
-          <button class="nav-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته لاحقاً">
+          <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته في الخطوة التالية">
             <i data-lucide="calendar" class="w-4 h-4"></i>
             <span>الأنشطة والفعاليات (قريباً)</span>
           </button>
@@ -159,155 +155,254 @@
       <!-- حاوية المحتوى والنماذج -->
       <main class="flex-1 space-y-6">
 
-        <!-- تبويبات داخلية لقسم الأساتذة: إضافة جديدة / عرض وتعديل الأساتذة -->
-        <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit">
-          <button id="tabFacultyAdd" onclick="switchFacultySubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i>
-            <span>إضافة أستاذ جديد</span>
-          </button>
-          <button id="tabFacultyManage" onclick="switchFacultySubTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
-            <i data-lucide="list-filter" class="w-4 h-4"></i>
-            <span>إدارة وتعديل الأساتذة المسجلين</span>
-            <span id="facultyCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
-          </button>
-        </div>
-
-        <!-- 1. شاشة إضافة أستاذ جديد -->
-        <section id="facultyAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
-          <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
-            <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
-            <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة أستاذ جديد أو موظف إداري</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              املأ البيانات التالية ليتم إدراجها فورياً في تبويب "الأساتذة" وعرضها على واجهة الموقع الأساسية للطلاب.
-            </p>
-          </div>
-
-          <form id="facultyForm" class="space-y-5">
-            <div>
-              <label class="block text-xs font-bold mb-1">الاسم الثلاثي واللقب العلمي *</label>
-              <input id="facName" type="text" required placeholder="مثال: د. أحمد محمد حسين أو أ. هبة حمود" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-              <p class="text-[11px] text-slate-400 mt-1">العنوان الرئيسي الذي يظهر بالخط العريض في بطاقة الأستاذ.</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-bold mb-1">الكلية الأساسية أو القسم *</label>
-                <select id="facCollegeSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                  <option value="كلية الهندسة" data-category="engineering">كلية الهندسة (Engineering)</option>
-                  <option value="كلية إدارة الأعمال" data-category="business">كلية إدارة الأعمال (Business)</option>
-                  <option value="كلية الفنون والعلوم" data-category="arts_sciences">كلية الفنون والعلوم (Arts & Sciences)</option>
-                  <option value="كلية التربية واللغات" data-category="education">كلية التربية واللغات (Education)</option>
-                  <option value="كلية الصيدلة" data-category="pharmacy">كلية الصيدلة (Pharmacy)</option>
-                  <option value="الجهاز الإداري" data-category="admin">الجهاز الإداري والمكتبة (Administration)</option>
-                </select>
-                <p class="text-[11px] text-slate-400 mt-1">تحدد الشارة الملونة للكلية في أعلى البطاقة.</p>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold mb-1">التصنيف البرمجي (Auto-Filled) *</label>
-                <input id="facCategoryCode" type="text" readonly value="engineering" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-200/60 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 font-mono focus:outline-none cursor-not-allowed text-left" dir="ltr">
-                <p class="text-[11px] text-slate-400 mt-1">يُحدد تلقائياً لحماية أزرار الفرز في الموقع من أي أخطاء إملائية.</p>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-bold mb-1">الاختصاص الأكاديمي أو المسمى الدقيق *</label>
-                <input id="facTitle" type="text" required placeholder="مثال: دكتوراه هندسة ميكانيكية، منسق الرياضيات..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                <p class="text-[11px] text-slate-400 mt-1">السطر التوضيحي المكتوب تحت اسم الأستاذ مباشرة.</p>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold mb-1">الصفة الوظيفية (الشارة العلوية الثانية) *</label>
-                <select id="facRoleTag" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                  <option value="عضو هيئة تعليمية">عضو هيئة تعليمية</option>
-                  <option value="رئيس قسم">رئيس قسم</option>
-                  <option value="إدارة المكتبة">إدارة المكتبة</option>
-                  <option value="الدائرة المالية">الدائرة المالية</option>
-                  <option value="شؤون الطلاب والتسجيل">شؤون الطلاب والتسجيل</option>
-                </select>
-                <p class="text-[11px] text-slate-400 mt-1">تظهر كشارة نصية رمادية في الزاوية اليسرى من أعلى الكرت.</p>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold mb-1">البريد الإلكتروني الرسمي (LIU Webmail) *</label>
-              <input id="facEmail" type="email" required placeholder="name.lastname@liu.edu.lb" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-              <p class="text-[11px] text-slate-400 mt-1">البريد الذي سيتمكن الطلاب من نسخه بضغطة زر واحدة للتواصل الرسمي.</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-bold mb-1">مكان المكتب (اختياري)</label>
-                <input id="facRoom" type="text" placeholder="مثال: مبنى الهندسة - الطابق 2 - مكتب 204" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                <p class="text-[11px] text-slate-400 mt-1">إذا تركته فارغاً فلن يظهر له أي أثر على الكرت إطلاقاً.</p>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold mb-1">الساعات المكتبية المتاحة (اختياري)</label>
-                <input id="facHours" type="text" placeholder="مثال: الإثنين والأربعاء 10:00 - 12:00" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                <p class="text-[11px] text-slate-400 mt-1">تظهر بجانب أيقونة الساعة لتحديد مواعيد مقابلة الأستاذ للطلاب.</p>
-              </div>
-            </div>
-
-            <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
-              <button id="submitFacultyBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
-                <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                <span>إدراج في قاعدة البيانات فوراً</span>
-              </button>
-            </div>
-          </form>
-
-          <div id="facultySuccessMsg" class="hidden p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs flex items-center gap-2">
-            <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0"></i>
-            <span>تم إدراج بيانات الأستاذ بنجاح في Google Sheets، وستظهر فوراً على الموقع الأساسي!</span>
-          </div>
-        </section>
-
-        <!-- 2. شاشة إدارة وتعديل وحذف الأساتذة الحالية -->
-        <section id="facultyManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-            <div>
-              <h3 class="text-base font-bold text-slate-900 dark:text-white">قائمة الأساتذة والإداريين المسجلين</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">يمكنك تعديل أي بيانات بالضغط على القلم ✏️ أو حذف الأستاذ بالضغط على ❌</p>
-            </div>
-            <button onclick="fetchLiveFacultyData(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
-              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-              <span>تحديث السحب من الخادم</span>
+        <!-- ==================== القسم الأول: دليل الأساتذة والإدارة ==================== -->
+        <div id="sectionFaculty" class="space-y-6">
+          <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit">
+            <button id="tabFacultyAdd" onclick="switchFacultySubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i>
+              <span>إضافة أستاذ جديد</span>
+            </button>
+            <button id="tabFacultyManage" onclick="switchFacultySubTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
+              <i data-lucide="list-filter" class="w-4 h-4"></i>
+              <span>إدارة وتعديل الأساتذة</span>
+              <span id="facultyCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
             </button>
           </div>
 
-          <!-- قائمة الأساتذة -->
-          <div id="facultyListContainer" class="space-y-3 min-h-[140px]">
-            <div class="py-12 text-center text-xs text-slate-400">جاري فحص البيانات...</div>
+          <!-- شاشة إضافة أستاذ -->
+          <section id="facultyAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
+              <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة أستاذ جديد أو موظف إداري</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">املأ البيانات التالية ليتم إدراجها فورياً في تبويب "الأساتذة" وعرضها على واجهة الموقع للطلاب.</p>
+            </div>
+
+            <form id="facultyForm" class="space-y-5">
+              <div>
+                <label class="block text-xs font-bold mb-1">الاسم الثلاثي واللقب العلمي *</label>
+                <input id="facName" type="text" required placeholder="مثال: د. أحمد محمد حسين أو أ. هبة حمود" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                <p class="text-[11px] text-slate-400 mt-1">العنوان الرئيسي الذي يظهر بالخط العريض في بطاقة الأستاذ.</p>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">الكلية الأساسية أو القسم *</label>
+                  <select id="facCollegeSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                    <option value="كلية الهندسة" data-category="engineering">كلية الهندسة (Engineering)</option>
+                    <option value="كلية إدارة الأعمال" data-category="business">كلية إدارة الأعمال (Business)</option>
+                    <option value="كلية الفنون والعلوم" data-category="arts_sciences">كلية الفنون والعلوم (Arts & Sciences)</option>
+                    <option value="كلية التربية واللغات" data-category="education">كلية التربية واللغات (Education)</option>
+                    <option value="كلية الصيدلة" data-category="pharmacy">كلية الصيدلة (Pharmacy)</option>
+                    <option value="الجهاز الإداري" data-category="admin">الجهاز الإداري والمكتبة (Administration)</option>
+                  </select>
+                  <p class="text-[11px] text-slate-400 mt-1">تحدد الشارة الملونة للكلية في أعلى البطاقة.</p>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold mb-1">التصنيف البرمجي (Auto-Filled) *</label>
+                  <input id="facCategoryCode" type="text" readonly value="engineering" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-200/60 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 font-mono focus:outline-none cursor-not-allowed text-left" dir="ltr">
+                  <p class="text-[11px] text-slate-400 mt-1">يُحدد تلقائياً لحماية أزرار الفرز في الموقع من أي أخطاء إملائية.</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">الاختصاص الأكاديمي أو المسمى الدقيق *</label>
+                  <input id="facTitle" type="text" required placeholder="مثال: دكتوراه هندسة ميكانيكية، منسق الرياضيات..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                  <p class="text-[11px] text-slate-400 mt-1">السطر التوضيحي المكتوب تحت اسم الأستاذ مباشرة.</p>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold mb-1">الصفة الوظيفية (الشارة العلوية الثانية) *</label>
+                  <select id="facRoleTag" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                    <option value="عضو هيئة تعليمية">عضو هيئة تعليمية</option>
+                    <option value="رئيس قسم">رئيس قسم</option>
+                    <option value="إدارة المكتبة">إدارة المكتبة</option>
+                    <option value="الدائرة المالية">الدائرة المالية</option>
+                    <option value="شؤون الطلاب والتسجيل">شؤون الطلاب والتسجيل</option>
+                  </select>
+                  <p class="text-[11px] text-slate-400 mt-1">تظهر كشارة نصية رمادية في الزاوية اليسرى من أعلى الكرت.</p>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1">البريد الإلكتروني الرسمي (LIU Webmail) *</label>
+                <input id="facEmail" type="email" required placeholder="name.lastname@liu.edu.lb" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+                <p class="text-[11px] text-slate-400 mt-1">البريد الذي سيتمكن الطلاب من نسخه بضغطة زر للتواصل الرسمي.</p>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">مكان المكتب (اختياري)</label>
+                  <input id="facRoom" type="text" placeholder="مثال: مبنى الهندسة - الطابق 2 - مكتب 204" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                  <p class="text-[11px] text-slate-400 mt-1">إذا تركته فارغاً فلن يظهر له أي أثر على الكرت إطلاقاً.</p>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold mb-1">الساعات المكتبية المتاحة (اختياري)</label>
+                  <input id="facHours" type="text" placeholder="مثال: الإثنين والأربعاء 10:00 - 12:00" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                  <p class="text-[11px] text-slate-400 mt-1">تظهر بجانب أيقونة الساعة لتحديد مواعيد مقابلة الأستاذ للطلاب.</p>
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                <button id="submitFacultyBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                  <span>إدراج في قاعدة البيانات فوراً</span>
+                </button>
+              </div>
+            </form>
+
+            <div id="facultySuccessMsg" class="hidden p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs flex items-center gap-2">
+              <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0"></i>
+              <span>تم إدراج بيانات الأستاذ بنجاح في Google Sheets، وستظهر فوراً على الموقع الأساسي!</span>
+            </div>
+          </section>
+
+          <!-- شاشة إدارة الأساتذة -->
+          <section id="facultyManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+              <div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">قائمة الأساتذة والإداريين المسجلين</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">يمكنك تعديل أي بيانات بالضغط على القلم ✏️ أو حذف الأستاذ بالضغط على ❌</p>
+              </div>
+              <button onclick="fetchLiveFacultyData(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>تحديث السحب من الخادم</span>
+              </button>
+            </div>
+            <div id="facultyListContainer" class="space-y-3 min-h-[140px]">
+              <div class="py-12 text-center text-xs text-slate-400">جاري فحص البيانات...</div>
+            </div>
+          </section>
+        </div>
+
+        <!-- ==================== القسم الثاني: بنك الموارد والامتحانات ==================== -->
+        <div id="sectionResources" class="hidden space-y-6">
+          <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit">
+            <button id="tabResourceAdd" onclick="switchResourceSubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
+              <i data-lucide="file-plus" class="w-4 h-4"></i>
+              <span>إضافة ملف أو امتحان جديد</span>
+            </button>
+            <button id="tabResourceManage" onclick="switchResourceSubTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
+              <i data-lucide="files" class="w-4 h-4"></i>
+              <span>إدارة وتعديل الملفات</span>
+              <span id="resourceCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
+            </button>
           </div>
-        </section>
+
+          <!-- 1. شاشة إضافة مورد جديد -->
+          <section id="resourceAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
+              <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة امتحان أو ملخص دراسي لبنك الموارد</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">املأ تفاصيل المقرر الدراسي ورابط التحميل ليتمكن الطلاب من تحميله فورياً وبشكل مجاني.</p>
+            </div>
+
+            <form id="resourceForm" class="space-y-5">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">اسم المادة أو المقرر الدراسي *</label>
+                  <input id="resName" type="text" required placeholder="مثال: تفاضل وتكامل 2 (Calculus II) أو استاتيكا" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                  <p class="text-[11px] text-slate-400 mt-1">الاسم الواضح للمادة الذي يظهر كعنوان رئيسي لبطاقة التحميل.</p>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold mb-1">رمز المادة الأكاديمي (Course Code) *</label>
+                  <input id="resCode" type="text" required placeholder="مثال: MATH 200, MECH 210, CSCI 200" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+                  <p class="text-[11px] text-slate-400 mt-1">الشارة الزرقاء في أعلى الكرت للبحث والفلترة السريعة للمقرر.</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">الكلية المعتمدة للمقرر *</label>
+                  <select id="resCollegeSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                    <option value="كلية الهندسة">كلية الهندسة (Engineering)</option>
+                    <option value="كلية إدارة الأعمال">كلية إدارة الأعمال (Business)</option>
+                    <option value="كلية الفنون والعلوم">كلية الفنون والعلوم (Arts & Sciences)</option>
+                    <option value="كلية التربية واللغات">كلية التربية واللغات (Education)</option>
+                    <option value="كلية الصيدلة">كلية الصيدلة (Pharmacy)</option>
+                  </select>
+                  <p class="text-[11px] text-slate-400 mt-1">تحدد تصنيف المقرر ضمن أزرار الكليات للطلاب.</p>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold mb-1">نوع الملف والتصنيف *</label>
+                  <select id="resTypeSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                    <option value="امتحان نصفي (Midterm)">امتحان نصفي (Midterm) — شارة حمراء</option>
+                    <option value="امتحان نهائي (Final)">امتحان نهائي (Final) — شارة بنفسجية</option>
+                    <option value="ملخص دراسي وسلايدات">ملخص دراسي وسلايدات — شارة خضراء</option>
+                    <option value="نماذج وحلول تمارين">نماذج وحلول تمارين</option>
+                  </select>
+                  <p class="text-[11px] text-slate-400 mt-1">تحدد الشارة الملونة لنوع الملف في بطاقة المورد.</p>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1">الوصف الأكاديمي المخصص للمحتوى *</label>
+                <input id="resDesc" type="text" required placeholder="مثال: نماذج امتحانات نصفية لسنوات متعددة تشتمل على مسائل التكامل مع سلم التصحيح" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                <p class="text-[11px] text-slate-400 mt-1">نص قصير يشرح للطالب محتوى الملف (عدد الدورات، وجود الحلول، أهمية التلخيص).</p>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1">رابط التحميل المباشر (Google Drive / Cloud Link) *</label>
+                <input id="resLink" type="url" required placeholder="https://drive.google.com/file/d/..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+                <p class="text-[11px] text-slate-400 mt-1">تأكد أن رابط ملف الـ Drive مضبوط على "أي شخص لديه الرابط يمكنه المشاهدة والتحميل".</p>
+              </div>
+
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                <button id="submitResourceBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                  <span>إدراج المورد في قاعدة البيانات فوراً</span>
+                </button>
+              </div>
+            </form>
+
+            <div id="resourceSuccessMsg" class="hidden p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs flex items-center gap-2">
+              <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0"></i>
+              <span>تم إدراج المورد بنجاح في Google Sheets، وأصبح متاحاً للتحميل في الموقع الأساسي!</span>
+            </div>
+          </section>
+
+          <!-- 2. شاشة إدارة وتعديل وحذف الموارد الحالية -->
+          <section id="resourceManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+              <div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">قائمة الموارد والامتحانات المسجلة</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">يمكنك تعديل أي مورد بالضغط على ✏️ أو حذفه بالضغط على ❌</p>
+              </div>
+              <button onclick="fetchLiveResourcesData(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>تحديث السحب من الخادم</span>
+              </button>
+            </div>
+
+            <div id="resourceListContainer" class="space-y-3 min-h-[140px]">
+              <div class="py-12 text-center text-xs text-slate-400">جاري فحص ملفات الموارد...</div>
+            </div>
+          </section>
+        </div>
 
       </main>
     </div>
   </div>
 
-  <!-- ==================== نافذة تأكيد الحذف المنبثقة (DELETE MODAL) ==================== -->
+  <!-- ==================== نافذة تأكيد حذف الأستاذ ==================== -->
   <div id="deleteModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="w-full max-w-md p-6 rounded-3xl border border-rose-500/30 bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
       <div class="flex items-center gap-3 text-rose-500">
-        <div class="p-2.5 rounded-xl bg-rose-500/10">
-          <i data-lucide="alert-triangle" class="w-6 h-6"></i>
-        </div>
+        <div class="p-2.5 rounded-xl bg-rose-500/10"><i data-lucide="alert-triangle" class="w-6 h-6"></i></div>
         <div>
           <h3 class="font-bold text-sm text-slate-900 dark:text-white">تأكيد حذف الأستاذ نهائياً</h3>
-          <p class="text-[11px] text-slate-400">هذا الإجراء سيقوم بإزالة السطر من Google Sheets فوراً</p>
+          <p class="text-[11px] text-slate-400">سيتم حذف السطر من جدول Google Sheets فوراً</p>
         </div>
       </div>
-
       <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-        هل أنت متأكد من رغبتك في حذف: <strong id="deleteDoctorName" class="text-rose-500 font-bold"></strong> من الموقع وقاعدة البيانات؟
+        هل أنت متأكد من رغبتك في حذف: <strong id="deleteDoctorName" class="text-rose-500 font-bold"></strong>؟
       </p>
-
       <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
-        <button onclick="closeDeleteModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition">
-          إلغاء
-        </button>
+        <button onclick="closeDeleteModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition">إلغاء</button>
         <button id="confirmDeleteBtn" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 transition shadow-md">
           <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
           <span>نعم، حذف نهائي</span>
@@ -316,7 +411,7 @@
     </div>
   </div>
 
-  <!-- ==================== نافذة التعديل المنبثقة (EDIT MODAL) ==================== -->
+  <!-- ==================== نافذة تعديل بيانات الأستاذ ==================== -->
   <div id="editModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
     <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
@@ -324,29 +419,25 @@
           <h3 class="font-bold text-sm text-slate-900 dark:text-white">تعديل بيانات الأستاذ</h3>
           <p class="text-[11px] text-slate-400">سيتم تحديث المعلومات مباشرة في Google Sheets والموقع</p>
         </div>
-        <button onclick="closeEditModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
+        <button onclick="closeEditModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
 
       <form id="editFacultyForm" class="space-y-4 text-xs">
         <input id="editOriginalEmail" type="hidden">
-
         <div>
           <label class="block font-bold mb-1">الاسم الكامل *</label>
           <input id="editName" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
         </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block font-bold mb-1">الكلية الأساسية *</label>
             <select id="editCollegeSelect" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-              <option value="كلية الهندسة" data-category="engineering">كلية الهندسة (Engineering)</option>
-              <option value="كلية إدارة الأعمال" data-category="business">كلية إدارة الأعمال (Business)</option>
-              <option value="كلية الفنون والعلوم" data-category="arts_sciences">كلية الفنون والعلوم (Arts & Sciences)</option>
-              <option value="كلية التربية واللغات" data-category="education">كلية التربية واللغات (Education)</option>
-              <option value="كلية الصيدلة" data-category="pharmacy">كلية الصيدلة (Pharmacy)</option>
-              <option value="الجهاز الإداري" data-category="admin">الجهاز الإداري والمكتبة (Administration)</option>
+              <option value="كلية الهندسة" data-category="engineering">كلية الهندسة</option>
+              <option value="كلية إدارة الأعمال" data-category="business">كلية إدارة الأعمال</option>
+              <option value="كلية الفنون والعلوم" data-category="arts_sciences">كلية الفنون والعلوم</option>
+              <option value="كلية التربية واللغات" data-category="education">كلية التربية واللغات</option>
+              <option value="كلية الصيدلة" data-category="pharmacy">كلية الصيدلة</option>
+              <option value="الجهاز الإداري" data-category="admin">الجهاز الإداري</option>
             </select>
           </div>
           <div>
@@ -354,10 +445,9 @@
             <input id="editCategoryCode" type="text" readonly class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-200/50 dark:bg-slate-800/80 text-slate-500 font-mono text-left" dir="ltr">
           </div>
         </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold mb-1">المسمى الأكاديمي الدقيق *</label>
+            <label class="block font-bold mb-1">المسمى الأكاديمي *</label>
             <input id="editTitle" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
           </div>
           <div>
@@ -371,12 +461,10 @@
             </select>
           </div>
         </div>
-
         <div>
           <label class="block font-bold mb-1">البريد الإلكتروني الرسمي *</label>
           <input id="editEmail" type="email" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
         </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block font-bold mb-1">مكان المكتب (اختياري)</label>
@@ -387,7 +475,6 @@
             <input id="editHours" type="text" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
           </div>
         </div>
-
         <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
           <button type="button" onclick="closeEditModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">إلغاء</button>
           <button id="saveEditBtn" type="submit" class="px-5 py-2 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold flex items-center gap-1.5 shadow-md">
@@ -399,14 +486,110 @@
     </div>
   </div>
 
-  <!-- ==================== السكربت البرمجي الشامل بتسريع الذاكرة الفوري ==================== -->
+  <!-- ==================== نافذة تأكيد حذف المورد (DELETE RESOURCE MODAL) ==================== -->
+  <div id="deleteResourceModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="w-full max-w-md p-6 rounded-3xl border border-rose-500/30 bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
+      <div class="flex items-center gap-3 text-rose-500">
+        <div class="p-2.5 rounded-xl bg-rose-500/10"><i data-lucide="alert-triangle" class="w-6 h-6"></i></div>
+        <div>
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white">تأكيد حذف الملف من بنك الموارد</h3>
+          <p class="text-[11px] text-slate-400">سيتم إزالة الملف فورياً من Google Sheets ومن الموقع</p>
+        </div>
+      </div>
+      <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        هل أنت متأكد من حذف المقرر: <strong id="deleteResourceName" class="text-rose-500 font-bold"></strong>؟
+      </p>
+      <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+        <button onclick="closeDeleteResourceModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition">إلغاء</button>
+        <button id="confirmDeleteResourceBtn" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 transition shadow-md">
+          <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          <span>نعم، حذف نهائي</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== نافذة تعديل بيانات المورد (EDIT RESOURCE MODAL) ==================== -->
+  <div id="editResourceModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white">تعديل تفاصيل الملف والمقرر</h3>
+          <p class="text-[11px] text-slate-400">سيتم تحديث الملف مباشرة في Google Sheets وواجهة الموقع</p>
+        </div>
+        <button onclick="closeEditResourceModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <form id="editResourceForm" class="space-y-4 text-xs">
+        <input id="editOriginalResourceCode" type="hidden">
+        <input id="editOriginalResourceLink" type="hidden">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">اسم المقرر الدراسي *</label>
+            <input id="editResName" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block font-bold mb-1">رمز المادة (Course Code) *</label>
+            <input id="editResCode" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">الكلية الأساسية *</label>
+            <select id="editResCollegeSelect" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="كلية الهندسة">كلية الهندسة (Engineering)</option>
+              <option value="كلية إدارة الأعمال">كلية إدارة الأعمال (Business)</option>
+              <option value="كلية الفنون والعلوم">كلية الفنون والعلوم (Arts & Sciences)</option>
+              <option value="كلية التربية واللغات">كلية التربية واللغات (Education)</option>
+              <option value="كلية الصيدلة">كلية الصيدلة (Pharmacy)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold mb-1">نوع الملف والتصنيف *</label>
+            <select id="editResTypeSelect" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="امتحان نصفي (Midterm)">امتحان نصفي (Midterm)</option>
+              <option value="امتحان نهائي (Final)">امتحان نهائي (Final)</option>
+              <option value="ملخص دراسي وسلايدات">ملخص دراسي وسلايدات</option>
+              <option value="نماذج وحلول تمارين">نماذج وحلول تمارين</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold mb-1">الوصف الأكاديمي للمحتوى *</label>
+          <input id="editResDesc" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+        </div>
+
+        <div>
+          <label class="block font-bold mb-1">رابط التحميل المباشر *</label>
+          <input id="editResLink" type="url" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeEditResourceModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">إلغاء</button>
+          <button id="saveEditResourceBtn" type="submit" class="px-5 py-2 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold flex items-center gap-1.5 shadow-md">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            <span>حفظ التعديلات</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== السكربت البرمجي الشامل ==================== -->
   <script>
     lucide.createIcons();
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
     const ADMIN_SECRET_KEY = "wafaa2026";
+
     let liveFacultyList = [];
     let facultyToDelete = null;
+
+    let liveResourcesList = [];
+    let resourceToDelete = null;
 
     // 1. نظام المظهر (Dark / Light)
     const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
@@ -437,88 +620,30 @@
 
     applyAdminTheme(localStorage.getItem('clubTheme') !== 'light');
 
-    // 2. دالة رسم قائمة الأساتذة في اللوحة وتحديث العداد
-    function renderAdminFacultyCards(list) {
-      const container = document.getElementById('facultyListContainer');
-      const badge = document.getElementById('facultyCountBadge');
-      if (!container) return;
+    // 2. التنقل بين الأقسام الرئيسية (Sidebar Navigation)
+    function switchMainSection(section) {
+      const secFaculty = document.getElementById('sectionFaculty');
+      const secResources = document.getElementById('sectionResources');
+      const btnFaculty = document.getElementById('navFacultyBtn');
+      const btnResources = document.getElementById('navResourcesBtn');
 
-      if (badge) badge.textContent = list.length;
-
-      if (!list || list.length === 0) {
-        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا يوجد أي أساتذة مسجلين حالياً في قاعدة البيانات.</div>`;
-        return;
+      if (section === 'faculty') {
+        secFaculty.classList.remove('hidden');
+        secResources.classList.add('hidden');
+        btnFaculty.className = "nav-main-tab active w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition";
+        btnResources.className = "nav-main-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition";
+        fetchLiveFacultyData();
+      } else if (section === 'resources') {
+        secFaculty.classList.add('hidden');
+        secResources.classList.remove('hidden');
+        btnResources.className = "nav-main-tab active w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition";
+        btnFaculty.className = "nav-main-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition";
+        fetchLiveResourcesData();
       }
-
-      container.innerHTML = list.map((doc, index) => {
-        const name = doc['الاسم'] || 'بدون اسم';
-        const college = doc['الكلية أو القسم'] || 'الهيئة التعليمية';
-        const title = doc['الاختصاص أو الصفة'] || '';
-        const role = doc['الصفة الوظيفية'] || 'عضو هيئة تعليمية';
-        const email = doc['البريد الإلكتروني'] || '';
-
-        return `
-          <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
-            <div>
-              <div class="flex items-center gap-2 mb-1">
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${college}</span>
-                <span class="text-[11px] text-slate-400 font-medium">${role}</span>
-              </div>
-              <h4 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h4>
-              <p class="text-xs text-slate-500 dark:text-slate-400">${title} • <span class="font-mono text-slate-600 dark:text-slate-300">${email}</span></p>
-            </div>
-
-            <!-- أزرار التعديل والحذف -->
-            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
-              <button onclick="openEditModal(${index})" title="تعديل بيانات الدكتور" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition">
-                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
-                <span>تعديل</span>
-              </button>
-              <button onclick="openDeleteModal(${index})" title="حذف الدكتور من الموقع" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
-                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                <span>حذف</span>
-              </button>
-            </div>
-          </div>
-        `;
-      }).join('');
-
       lucide.createIcons();
     }
 
-    // 3. جلب وعرض بيانات الأساتذة مع التسريع الفوري (localStorage)
-    async function fetchLiveFacultyData(forceFresh = false) {
-      // أ) قراءة الكاش وعرض العداد والقائمة فوراً في 0 ثانية
-      const cached = localStorage.getItem('nadi_faculty_cache');
-      if (cached && !forceFresh) {
-        try {
-          liveFacultyList = JSON.parse(cached);
-          renderAdminFacultyCards(liveFacultyList);
-        } catch (e) {
-          console.warn("خطأ في قراءة كاش الأساتذة في الأدمن:", e);
-        }
-      }
-
-      if (!SCRIPT_URL) return;
-
-      // ب) السحب الحي بالخلفية وتحديث الكاش
-      try {
-        const res = await fetch(SCRIPT_URL);
-        const data = await res.json();
-        if (data.faculty && Array.isArray(data.faculty)) {
-          liveFacultyList = data.faculty;
-          renderAdminFacultyCards(liveFacultyList);
-          localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
-        }
-      } catch (err) {
-        if (!cached) {
-          const container = document.getElementById('facultyListContainer');
-          if (container) container.innerHTML = `<div class="py-8 text-center text-xs text-rose-500">تعذر جلب البيانات من الخادم، تأكد من اتصال الإنترنت.</div>`;
-        }
-      }
-    }
-
-    // 4. إدارة جلسة تسجيل الدخول
+    // 3. إدارة جلسة تسجيل الدخول
     const loginGate = document.getElementById('loginGate');
     const adminDashboard = document.getElementById('adminDashboard');
     const loginForm = document.getElementById('loginForm');
@@ -532,8 +657,9 @@
         loginGate.classList.add('hidden');
         adminDashboard.classList.remove('hidden');
         if (welcomeAdmin) welcomeAdmin.textContent = `المشرف النشط: ${activeAdmin}`;
-        // استدعاء فوري لعرض الدكاترة فور تسجيل الدخول دون انتظار ثانية واحدة
+        // سحب وعرض بيانات القسمين فورياً في جزء من الثانية
         fetchLiveFacultyData();
+        fetchLiveResourcesData();
         lucide.createIcons();
       } else {
         loginGate.classList.remove('hidden');
@@ -567,7 +693,7 @@
 
     checkAuth();
 
-    // 5. تبديل التبويبات الداخلية في قسم الأساتذة (إضافة / إدارة)
+    // ==================== دوال قسم الأساتذة ====================
     function switchFacultySubTab(tab) {
       const addView = document.getElementById('facultyAddView');
       const manageView = document.getElementById('facultyManageView');
@@ -589,7 +715,6 @@
       lucide.createIcons();
     }
 
-    // ربط القائمة المنسدلة بالتصنيف البرمجي التلقائي
     function setupCollegeCategorySync(selectId, targetInputId) {
       const select = document.getElementById(selectId);
       const input = document.getElementById(targetInputId);
@@ -603,7 +728,72 @@
     setupCollegeCategorySync('facCollegeSelect', 'facCategoryCode');
     setupCollegeCategorySync('editCollegeSelect', 'editCategoryCode');
 
-    // 6. إضافة أستاذ جديد
+    function renderAdminFacultyCards(list) {
+      const container = document.getElementById('facultyListContainer');
+      const badge = document.getElementById('facultyCountBadge');
+      if (!container) return;
+      if (badge) badge.textContent = list.length;
+
+      if (!list || list.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا يوجد أي أساتذة مسجلين حالياً في قاعدة البيانات.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map((doc, index) => {
+        const name = doc['الاسم'] || 'بدون اسم';
+        const college = doc['الكلية أو القسم'] || 'الهيئة التعليمية';
+        const title = doc['الاختصاص أو الصفة'] || '';
+        const role = doc['الصفة الوظيفية'] || 'عضو هيئة تعليمية';
+        const email = doc['البريد الإلكتروني'] || '';
+
+        return `
+          <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${college}</span>
+                <span class="text-[11px] text-slate-400 font-medium">${role}</span>
+              </div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400">${title} • <span class="font-mono text-slate-600 dark:text-slate-300">${email}</span></p>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
+              <button onclick="openEditModal(${index})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                <span>تعديل</span>
+              </button>
+              <button onclick="openDeleteModal(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>حذف</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    async function fetchLiveFacultyData(forceFresh = false) {
+      const cached = localStorage.getItem('nadi_faculty_cache');
+      if (cached && !forceFresh) {
+        try {
+          liveFacultyList = JSON.parse(cached);
+          renderAdminFacultyCards(liveFacultyList);
+        } catch (e) {}
+      }
+
+      if (!SCRIPT_URL) return;
+
+      try {
+        const res = await fetch(SCRIPT_URL);
+        const data = await res.json();
+        if (data.faculty && Array.isArray(data.faculty)) {
+          liveFacultyList = data.faculty;
+          renderAdminFacultyCards(liveFacultyList);
+          localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
+        }
+      } catch (err) {}
+    }
+
     const facultyForm = document.getElementById('facultyForm');
     const submitFacultyBtn = document.getElementById('submitFacultyBtn');
     const facultySuccessMsg = document.getElementById('facultySuccessMsg');
@@ -612,7 +802,6 @@
       facultyForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const originalBtnText = submitFacultyBtn.innerHTML;
-
         submitFacultyBtn.disabled = true;
         submitFacultyBtn.innerHTML = `<span>جاري الإرسال والحفظ...</span>`;
 
@@ -630,7 +819,7 @@
         const payload = {
           action: "add_faculty",
           adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف",
-          name: newDoc['الاسم'],
+          ...newDoc,
           college: newDoc['الكلية أو القسم'],
           category: newDoc['التصنيف البرمجي'],
           title: newDoc['الاختصاص أو الصفة'],
@@ -640,7 +829,6 @@
           hours: newDoc['الساعات المكتبية']
         };
 
-        // تحديث الكاش محلياً فوراً لمنح استجابة فورية فائقة
         liveFacultyList.push(newDoc);
         localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
         renderAdminFacultyCards(liveFacultyList);
@@ -671,7 +859,6 @@
       });
     }
 
-    // 7. نافذة الحذف والتأكيد
     const deleteModal = document.getElementById('deleteModal');
     const deleteDoctorName = document.getElementById('deleteDoctorName');
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
@@ -679,7 +866,6 @@
     function openDeleteModal(index) {
       facultyToDelete = liveFacultyList[index];
       if (!facultyToDelete) return;
-
       deleteDoctorName.textContent = facultyToDelete['الاسم'];
       deleteModal.classList.remove('hidden');
       deleteModal.classList.add('flex');
@@ -706,7 +892,6 @@
           adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف"
         };
 
-        // حذف محلي فوري (0 ثوانٍ)
         liveFacultyList = liveFacultyList.filter(item => item !== deletedTarget);
         localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
         renderAdminFacultyCards(liveFacultyList);
@@ -719,12 +904,9 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
-
-          setTimeout(() => {
-            fetchLiveFacultyData(true);
-          }, 1500);
+          setTimeout(() => { fetchLiveFacultyData(true); }, 1500);
         } catch (err) {
-          alert('تعذر إتمام عملية الحذف، يرجى المحاولة لاحقاً.');
+          alert('تعذر إتمام عملية الحذف.');
         } finally {
           confirmDeleteBtn.disabled = false;
           confirmDeleteBtn.innerHTML = originalText;
@@ -733,7 +915,6 @@
       });
     }
 
-    // 8. نافذة التعديل والحفظ
     const editModal = document.getElementById('editModal');
     const editFacultyForm = document.getElementById('editFacultyForm');
     const saveEditBtn = document.getElementById('saveEditBtn');
@@ -745,7 +926,6 @@
       document.getElementById('editOriginalEmail').value = doc['البريد الإلكتروني'] || "";
       document.getElementById('editName').value = doc['الاسم'] || "";
       document.getElementById('editCollegeSelect').value = doc['الكلية أو القسم'] || "كلية الهندسة";
-      
       const selOption = document.getElementById('editCollegeSelect').options[document.getElementById('editCollegeSelect').selectedIndex];
       document.getElementById('editCategoryCode').value = selOption ? selOption.getAttribute('data-category') : 'engineering';
 
@@ -797,7 +977,6 @@
           adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف"
         };
 
-        // تحديث محلي فوري (0 ثوانٍ)
         liveFacultyList = liveFacultyList.map(doc => {
           if ((doc['البريد الإلكتروني'] || '') === originalEmail) {
             return { ...doc, ...updatedDoc };
@@ -815,15 +994,323 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
-
-          setTimeout(() => {
-            fetchLiveFacultyData(true);
-          }, 1500);
+          setTimeout(() => { fetchLiveFacultyData(true); }, 1500);
         } catch (err) {
           alert('تعذر حفظ التعديلات.');
         } finally {
           saveEditBtn.disabled = false;
           saveEditBtn.innerHTML = originalText;
+          lucide.createIcons();
+        }
+      });
+    }
+
+    // ==================== دوال قسم الموارد والامتحانات ====================
+    function switchResourceSubTab(tab) {
+      const addView = document.getElementById('resourceAddView');
+      const manageView = document.getElementById('resourceManageView');
+      const tabAdd = document.getElementById('tabResourceAdd');
+      const tabManage = document.getElementById('tabResourceManage');
+
+      if (tab === 'add') {
+        addView.classList.remove('hidden');
+        manageView.classList.add('hidden');
+        tabAdd.className = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
+        tabManage.className = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
+      } else {
+        addView.classList.add('hidden');
+        manageView.classList.remove('hidden');
+        tabManage.className = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
+        tabAdd.className = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
+        fetchLiveResourcesData();
+      }
+      lucide.createIcons();
+    }
+
+    function renderAdminResourceCards(list) {
+      const container = document.getElementById('resourceListContainer');
+      const badge = document.getElementById('resourceCountBadge');
+      if (!container) return;
+      if (badge) badge.textContent = list.length;
+
+      if (!list || list.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد ملفات أو امتحانات مسجلة حالياً في قاعدة البيانات.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map((res, index) => {
+        const name = res['اسم المادة'] || 'مقرر دراسي';
+        const code = res['رمز المادة'] || 'COURSE';
+        const college = res['الكلية'] || 'عام';
+        const type = res['نوع الملف'] || 'ملخص دراسي';
+        const link = res['رابط التحميل'] || '#';
+        const desc = res['الوصف'] || '';
+
+        // شارة نوع الملف
+        let typeBadgeColor = "bg-blue-500/10 text-blue-600 dark:text-blue-400";
+        const lowType = type.toLowerCase();
+        if (lowType.includes('نصفي') || lowType.includes('midterm')) {
+          typeBadgeColor = "bg-red-500/10 text-red-600 dark:text-red-400";
+        } else if (lowType.includes('نهائي') || lowType.includes('final')) {
+          typeBadgeColor = "bg-purple-500/10 text-purple-600 dark:text-purple-400";
+        } else if (lowType.includes('ملخص')) {
+          typeBadgeColor = "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400";
+        }
+
+        return `
+          <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-blue-500/10 text-blue-600 dark:text-blue-400">${code}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${typeBadgeColor}">${type}</span>
+                <span class="text-[11px] text-slate-400">${college}</span>
+              </div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-xl">${desc}</p>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
+              <a href="${link}" target="_blank" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:text-gold-500 text-slate-600 dark:text-slate-300 text-xs font-bold transition" title="فتح الرابط">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+              </a>
+              <button onclick="openEditResourceModal(${index})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                <span>تعديل</span>
+              </button>
+              <button onclick="openDeleteResourceModal(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>حذف</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    async function fetchLiveResourcesData(forceFresh = false) {
+      const cached = localStorage.getItem('nadi_resources_cache');
+      if (cached && !forceFresh) {
+        try {
+          liveResourcesList = JSON.parse(cached);
+          renderAdminResourceCards(liveResourcesList);
+        } catch (e) {}
+      }
+
+      if (!SCRIPT_URL) return;
+
+      try {
+        const res = await fetch(SCRIPT_URL);
+        const data = await res.json();
+        if (data.resources && Array.isArray(data.resources)) {
+          liveResourcesList = data.resources;
+          renderAdminResourceCards(liveResourcesList);
+          localStorage.setItem('nadi_resources_cache', JSON.stringify(liveResourcesList));
+        }
+      } catch (err) {}
+    }
+
+    // إضافة مورد جديد
+    const resourceForm = document.getElementById('resourceForm');
+    const submitResourceBtn = document.getElementById('submitResourceBtn');
+    const resourceSuccessMsg = document.getElementById('resourceSuccessMsg');
+
+    if (resourceForm) {
+      resourceForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const originalBtnText = submitResourceBtn.innerHTML;
+        submitResourceBtn.disabled = true;
+        submitResourceBtn.innerHTML = `<span>جاري الإرسال والحفظ...</span>`;
+
+        const newResource = {
+          'اسم المادة': document.getElementById('resName').value.trim(),
+          'رمز المادة': document.getElementById('resCode').value.trim().toUpperCase(),
+          'الكلية': document.getElementById('resCollegeSelect').value,
+          'نوع الملف': document.getElementById('resTypeSelect').value,
+          'الوصف': document.getElementById('resDesc').value.trim(),
+          'رابط التحميل': document.getElementById('resLink').value.trim()
+        };
+
+        const payload = {
+          action: "add_resource",
+          adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف",
+          name: newResource['اسم المادة'],
+          code: newResource['رمز المادة'],
+          college: newResource['الكلية'],
+          type: newResource['نوع الملف'],
+          desc: newResource['الوصف'],
+          link: newResource['رابط التحميل']
+        };
+
+        liveResourcesList.push(newResource);
+        localStorage.setItem('nadi_resources_cache', JSON.stringify(liveResourcesList));
+        renderAdminResourceCards(liveResourcesList);
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          if (resourceSuccessMsg) resourceSuccessMsg.classList.remove('hidden');
+          resourceForm.reset();
+
+          setTimeout(() => {
+            if (resourceSuccessMsg) resourceSuccessMsg.classList.add('hidden');
+            fetchLiveResourcesData(true);
+          }, 2500);
+        } catch (err) {
+          alert('تعذر إتمام الإرسال، يرجى مراجعة اتصال الإنترنت.');
+        } finally {
+          submitResourceBtn.disabled = false;
+          submitResourceBtn.innerHTML = originalBtnText;
+          lucide.createIcons();
+        }
+      });
+    }
+
+    // حذف مورد
+    const deleteResourceModal = document.getElementById('deleteResourceModal');
+    const deleteResourceName = document.getElementById('deleteResourceName');
+    const confirmDeleteResourceBtn = document.getElementById('confirmDeleteResourceBtn');
+
+    function openDeleteResourceModal(index) {
+      resourceToDelete = liveResourcesList[index];
+      if (!resourceToDelete) return;
+      deleteResourceName.textContent = `${resourceToDelete['اسم المادة']} (${resourceToDelete['رمز المادة']})`;
+      deleteResourceModal.classList.remove('hidden');
+      deleteResourceModal.classList.add('flex');
+    }
+
+    function closeDeleteResourceModal() {
+      resourceToDelete = null;
+      deleteResourceModal.classList.add('hidden');
+      deleteResourceModal.classList.remove('flex');
+    }
+
+    if (confirmDeleteResourceBtn) {
+      confirmDeleteResourceBtn.addEventListener('click', async () => {
+        if (!resourceToDelete) return;
+        const originalText = confirmDeleteResourceBtn.innerHTML;
+        confirmDeleteResourceBtn.disabled = true;
+        confirmDeleteResourceBtn.innerHTML = `<span>جاري الحذف...</span>`;
+
+        const deletedTarget = resourceToDelete;
+        const payload = {
+          action: "delete_resource",
+          code: deletedTarget['رمز المادة'] || "",
+          name: deletedTarget['اسم المادة'] || "",
+          link: deletedTarget['رابط التحميل'] || "",
+          adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف"
+        };
+
+        liveResourcesList = liveResourcesList.filter(item => item !== deletedTarget);
+        localStorage.setItem('nadi_resources_cache', JSON.stringify(liveResourcesList));
+        renderAdminResourceCards(liveResourcesList);
+        closeDeleteResourceModal();
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          setTimeout(() => { fetchLiveResourcesData(true); }, 1500);
+        } catch (err) {
+          alert('تعذر إتمام عملية الحذف.');
+        } finally {
+          confirmDeleteResourceBtn.disabled = false;
+          confirmDeleteResourceBtn.innerHTML = originalText;
+          lucide.createIcons();
+        }
+      });
+    }
+
+    // تعديل مورد
+    const editResourceModal = document.getElementById('editResourceModal');
+    const editResourceForm = document.getElementById('editResourceForm');
+    const saveEditResourceBtn = document.getElementById('saveEditResourceBtn');
+
+    function openEditResourceModal(index) {
+      const res = liveResourcesList[index];
+      if (!res) return;
+
+      document.getElementById('editOriginalResourceCode').value = res['رمز المادة'] || "";
+      document.getElementById('editOriginalResourceLink').value = res['رابط التحميل'] || "";
+
+      document.getElementById('editResName').value = res['اسم المادة'] || "";
+      document.getElementById('editResCode').value = res['رمز المادة'] || "";
+      document.getElementById('editResCollegeSelect').value = res['الكلية'] || "كلية الهندسة";
+      document.getElementById('editResTypeSelect').value = res['نوع الملف'] || "امتحان نصفي (Midterm)";
+      document.getElementById('editResDesc').value = res['الوصف'] || "";
+      document.getElementById('editResLink').value = res['رابط التحميل'] || "";
+
+      editResourceModal.classList.remove('hidden');
+      editResourceModal.classList.add('flex');
+    }
+
+    function closeEditResourceModal() {
+      editResourceModal.classList.add('hidden');
+      editResourceModal.classList.remove('flex');
+    }
+
+    if (editResourceForm) {
+      editResourceForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const originalText = saveEditResourceBtn.innerHTML;
+        saveEditResourceBtn.disabled = true;
+        saveEditResourceBtn.innerHTML = `<span>جاري حفظ التعديل...</span>`;
+
+        const originalCode = document.getElementById('editOriginalResourceCode').value;
+        const originalLink = document.getElementById('editOriginalResourceLink').value;
+
+        const updatedRes = {
+          'اسم المادة': document.getElementById('editResName').value.trim(),
+          'رمز المادة': document.getElementById('editResCode').value.trim().toUpperCase(),
+          'الكلية': document.getElementById('editResCollegeSelect').value,
+          'نوع الملف': document.getElementById('editResTypeSelect').value,
+          'الوصف': document.getElementById('editResDesc').value.trim(),
+          'رابط التحميل': document.getElementById('editResLink').value.trim()
+        };
+
+        const payload = {
+          action: "edit_resource",
+          originalCode: originalCode,
+          originalLink: originalLink,
+          name: updatedRes['اسم المادة'],
+          code: updatedRes['رمز المادة'],
+          college: updatedRes['الكلية'],
+          type: updatedRes['نوع الملف'],
+          desc: updatedRes['الوصف'],
+          link: updatedRes['رابط التحميل'],
+          adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف"
+        };
+
+        liveResourcesList = liveResourcesList.map(item => {
+          if ((item['رمز المادة'] || '') === originalCode || (item['رابط التحميل'] || '') === originalLink) {
+            return { ...item, ...updatedRes };
+          }
+          return item;
+        });
+        localStorage.setItem('nadi_resources_cache', JSON.stringify(liveResourcesList));
+        renderAdminResourceCards(liveResourcesList);
+        closeEditResourceModal();
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          setTimeout(() => { fetchLiveResourcesData(true); }, 1500);
+        } catch (err) {
+          alert('تعذر حفظ التعديلات.');
+        } finally {
+          saveEditResourceBtn.disabled = false;
+          saveEditResourceBtn.innerHTML = originalText;
           lucide.createIcons();
         }
       });
