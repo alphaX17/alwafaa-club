@@ -87,7 +87,7 @@
       </p>
     </div>
 
-    <!-- 1. مجموعات الواتساب الرسمية (تتحدث تلقائياً من Google Sheets) -->
+    <!-- 1. مجموعات الواتساب الرسمية -->
     <section class="space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -97,63 +97,11 @@
         <span class="text-[11px] text-slate-400 font-medium">واتساب الرسمي</span>
       </div>
 
-      <div id="groupsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-        <!-- مجموعة إعلانات نادي الوفاء الأساسية (افتراضي) -->
-        <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm">
-          <div class="space-y-2">
-            <span class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">القناة المركزية</span>
-            <h4 class="font-bold text-sm text-slate-900 dark:text-white">مجموعة نادي الوفاء الأساسية</h4>
-            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-              القناة الرسمية المخصصة لكافة الإعلانات الأكاديمية، مواعيد التقديم للمنح السنوية، والنشاطات الجامعية.
-            </p>
-          </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <a href="https://chat.whatsapp.com/H5Gvs4LV3OaH7NQsuJpYFx" target="_blank" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition shadow-sm">
-              <i data-lucide="external-link" class="w-4 h-4"></i>
-              <span>انضمام للمجموعة الأساسية</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- مجموعة التوجيه الطلابي (إخوة) (افتراضي) -->
-        <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm">
-          <div class="space-y-2">
-            <span class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">إرشاد واستفسارات</span>
-            <h4 class="font-bold text-sm text-slate-900 dark:text-white">مجموعة التوجيه الطلابي (إخوة)</h4>
-            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-              مساحة تفاعلية للطلاب لطرح التساؤلات حول طبيعة المقررات، الأساتذة، ومشاكل التسجيل عبر البوابة.
-            </p>
-          </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <a href="https://chat.whatsapp.com/Kdt9QVnMsmW2GguggFDuvs" target="_blank" class="w-full py-2.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-90 transition shadow-sm">
-              <i data-lucide="users" class="w-4 h-4"></i>
-              <span>انضمام إلى المجموعة</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- مجموعة التوجيه الطلابي (أخوات) (افتراضي) -->
-        <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between opacity-80 shadow-sm">
-          <div class="space-y-2">
-            <span class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400">توجيه الطالبات</span>
-            <h4 class="font-bold text-sm text-slate-900 dark:text-white">مجموعة التوجيه الطلابي (أخوات)</h4>
-            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-              المجموعة الخاصة بالطالبات للإرشاد الأكاديمي، نصائح المواد، ومساعدة الطالبات المستجدات.
-            </p>
-          </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <button disabled class="w-full py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 font-bold text-xs flex items-center justify-center gap-2 cursor-not-allowed">
-              <i data-lucide="clock" class="w-4 h-4"></i>
-              <span>الرابط قيد التحديث قريباً</span>
-            </button>
-          </div>
-        </div>
-
-      </div>
+      <!-- شبكة المجموعات (يتم ملؤها فورياً عبر الكاش لمنع الوميض) -->
+      <div id="groupsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4 min-h-[160px]"></div>
     </section>
 
-    <!-- 2. شبكة ممثلي الكليات والاختصاصات (تتحدث تلقائياً من Google Sheets) -->
+    <!-- 2. شبكة ممثلي الكليات والاختصاصات -->
     <section class="space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -163,114 +111,8 @@
         <span class="text-[11px] text-slate-400 font-medium">فرع صور</span>
       </div>
 
-      <div id="repsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-
-        <!-- هندسة الميكانيك -->
-        <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold text-gold-500">كلية الهندسة</span>
-            <h4 class="font-bold text-xs text-slate-900 dark:text-white">مسؤول هندسة الميكانيك</h4>
-            <p class="text-xs font-mono text-slate-600 dark:text-slate-300" dir="ltr">+961 71 336 458</p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <a href="https://wa.me/96171336458?text=مرحبا زميلي، أنا طالب في الجامعة وعندي استفسار بخصوص اختصاص الهندسة الميكانيكية" target="_blank" class="w-full py-2 rounded-lg bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
-              <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-              <span>مراسلة عبر واتساب</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- هندسة الكمبيوتر -->
-        <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold text-gold-500">كلية الهندسة</span>
-            <h4 class="font-bold text-xs text-slate-900 dark:text-white">مسؤول هندسة الكمبيوتر</h4>
-            <p class="text-xs font-mono text-slate-600 dark:text-slate-300" dir="ltr">+961 3 945 021</p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <a href="https://wa.me/9613945021?text=مرحبا زميلي، أنا طالب في الجامعة وعندي استفسار بخصوص اختصاص هندسة الكمبيوتر" target="_blank" class="w-full py-2 rounded-lg bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
-              <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-              <span>مراسلة عبر واتساب</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- هندسة الاتصالات -->
-        <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold text-gold-500">كلية الهندسة</span>
-            <h4 class="font-bold text-xs text-slate-900 dark:text-white">مسؤول هندسة الاتصالات</h4>
-            <p class="text-xs font-mono text-slate-600 dark:text-slate-300" dir="ltr">+961 81 604 305</p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <a href="https://wa.me/96181604305?text=مرحبا زميلي، أنا طالب في الجامعة وعندي استفسار بخصوص اختصاص هندسة الاتصالات" target="_blank" class="w-full py-2 rounded-lg bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
-              <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-              <span>مراسلة عبر واتساب</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- هندسة الكهرباء -->
-        <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between opacity-75 shadow-sm">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold text-gold-500">كلية الهندسة</span>
-            <h4 class="font-bold text-xs text-slate-900 dark:text-white">مسؤول هندسة الكهرباء</h4>
-            <p class="text-xs text-slate-400">قيد التحديث</p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <button disabled class="w-full py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1.5 cursor-not-allowed">
-              <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-              <span>الرقم قريباً</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- علوم الحاسوب -->
-        <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between opacity-75 shadow-sm">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold text-blue-500">كلية العلوم</span>
-            <h4 class="font-bold text-xs text-slate-900 dark:text-white">مسؤول علوم الحاسوب (CS)</h4>
-            <p class="text-xs text-slate-400">قيد التحديث</p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <button disabled class="w-full py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1.5 cursor-not-allowed">
-              <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-              <span>الرقم قريباً</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- كلية الصيدلة -->
-        <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between opacity-75 shadow-sm">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold text-teal-500">كلية الصيدلة</span>
-            <h4 class="font-bold text-xs text-slate-900 dark:text-white">مسؤول كلية الصيدلة</h4>
-            <p class="text-xs text-slate-400">قيد التحديث</p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <button disabled class="w-full py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1.5 cursor-not-allowed">
-              <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-              <span>الرقم قريباً</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- الهندسة الطبية -->
-        <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between opacity-75 shadow-sm sm:col-span-2 lg:col-span-2">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold text-rose-500">كلية الهندسة</span>
-            <h4 class="font-bold text-xs text-slate-900 dark:text-white">مسؤول الهندسة الطبية (Biomedical)</h4>
-            <p class="text-xs text-slate-400">قيد التحديث</p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <button disabled class="w-full py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1.5 cursor-not-allowed">
-              <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-              <span>الرقم قريباً</span>
-            </button>
-          </div>
-        </div>
-
-      </div>
+      <!-- شبكة الممثلين (يتم ملؤها فورياً عبر الكاش لمنع الوميض) -->
+      <div id="repsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 min-h-[180px]"></div>
     </section>
 
   </main>
@@ -348,116 +190,138 @@
   <script>
     lucide.createIcons();
 
-    // 1. رابط الـ Web App الخاص بك في Google Apps Script
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
 
-    // 2. دالة جلب وعرض بيانات التوجيه الحية من صفحة "التوجيه_والتواصل" في Google Sheets
+    // دالة رسم بطاقات التوجيه والمجموعات
+    function renderGuidance(guidanceList) {
+      if (!guidanceList || !Array.isArray(guidanceList)) return;
+
+      const groups = guidanceList.filter(item => String(item['النوع'] || '').trim() === 'مجموعة');
+      const reps = guidanceList.filter(item => String(item['النوع'] || '').trim() === 'مسؤول');
+
+      // أ) رسم بطاقات المجموعات الرسمية
+      const groupsGrid = document.getElementById('groupsGrid');
+      if (groupsGrid) {
+        if (groups.length === 0) {
+          groupsGrid.innerHTML = `<div class="col-span-full py-8 text-center text-xs text-slate-400">لا توجد مجموعات مسجلة حالياً.</div>`;
+        } else {
+          groupsGrid.innerHTML = groups.map(g => {
+            const name = g['الاسم أو الصفة'] || 'مجموعة رسمية';
+            const tag = g['الكلية أو الاختصاص'] || 'قناة إعلانية';
+            const link = g['رابط الواتساب'] || '';
+            const status = String(g['الحالة'] || '').trim();
+            const isActive = status === 'فعال' && link !== '';
+
+            const actionBtn = isActive
+              ? `<a href="${link}" target="_blank" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition shadow-sm">
+                   <i data-lucide="external-link" class="w-4 h-4"></i>
+                   <span>انضمام إلى المجموعة</span>
+                 </a>`
+              : `<button disabled class="w-full py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 font-bold text-xs flex items-center justify-center gap-2 cursor-not-allowed">
+                   <i data-lucide="clock" class="w-4 h-4"></i>
+                   <span>الرابط قيد التحديث قريباً</span>
+                 </button>`;
+
+            const cardOpacity = isActive ? '' : 'opacity-80';
+
+            return `
+              <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}">
+                <div class="space-y-2">
+                  <span class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">${tag}</span>
+                  <h4 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h4>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                    القناة الرسمية المخصصة للتواصل، الإعلانات الأكاديمية ومساعدة الطلاب في حرم الجامعة.
+                  </p>
+                </div>
+                <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800">
+                  ${actionBtn}
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // ب) رسم بطاقات ممثلي الكليات والاختصاصات
+      const repsGrid = document.getElementById('repsGrid');
+      if (repsGrid) {
+        if (reps.length === 0) {
+          repsGrid.innerHTML = `<div class="col-span-full py-8 text-center text-xs text-slate-400">لا يوجد ممثلو اختصاصات مسجلون حالياً.</div>`;
+        } else {
+          repsGrid.innerHTML = reps.map(r => {
+            const name = r['الاسم أو الصفة'] || 'مسؤول اختصاص';
+            const faculty = r['الكلية أو الاختصاص'] || 'كلية الهندسة';
+            const phone = String(r['رقم الهاتف'] || '').trim();
+            const link = r['رابط الواتساب'] || (phone && !phone.includes('تحديث') ? `https://wa.me/${phone.replace(/[^0-9]/g, '')}` : '');
+            const status = String(r['الحالة'] || '').trim();
+            const isActive = status === 'فعال' && phone !== '' && !phone.includes('تحديث');
+
+            const actionBtn = isActive
+              ? `<a href="${link}" target="_blank" class="w-full py-2 rounded-lg bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                   <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                   <span>مراسلة عبر واتساب</span>
+                 </a>`
+              : `<button disabled class="w-full py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1.5 cursor-not-allowed">
+                   <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                   <span>الرقم قريباً</span>
+                 </button>`;
+
+            const phoneText = isActive
+              ? `<p class="text-xs font-mono text-slate-600 dark:text-slate-300" dir="ltr">${phone}</p>`
+              : `<p class="text-xs text-slate-400">قيد التحديث</p>`;
+
+            const cardOpacity = isActive ? '' : 'opacity-75';
+
+            return `
+              <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}">
+                <div class="space-y-1">
+                  <span class="text-[10px] font-bold text-gold-500">${faculty}</span>
+                  <h4 class="font-bold text-xs text-slate-900 dark:text-white">${name}</h4>
+                  ${phoneText}
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                  ${actionBtn}
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      lucide.createIcons();
+    }
+
+    // جلب البيانات مع التسريع الفوري (localStorage)
     async function fetchLiveGuidance() {
+      // 1. قراءة الكاش المحلي وعرضه فوراً في جزء من الثانية (0 ثوانٍ)
+      const cached = localStorage.getItem('nadi_guidance_cache');
+      if (cached) {
+        try {
+          renderGuidance(JSON.parse(cached));
+        } catch (e) {
+          console.warn("خطأ في قراءة كاش التوجيه:", e);
+        }
+      }
+
       if (!SCRIPT_URL) return;
+
+      // 2. فحص وتحديث البيانات من Google Sheets بالخلفية بصمت
       try {
         const response = await fetch(SCRIPT_URL);
         const data = await response.json();
 
-        if (data.guidance && Array.isArray(data.guidance) && data.guidance.length > 0) {
-          const groups = data.guidance.filter(item => String(item['النوع'] || '').trim() === 'مجموعة');
-          const reps = data.guidance.filter(item => String(item['النوع'] || '').trim() === 'مسؤول');
-
-          // أ) تحديث بطاقات المجموعات الرسمية
-          if (groups.length > 0) {
-            const groupsGrid = document.getElementById('groupsGrid');
-            if (groupsGrid) {
-              groupsGrid.innerHTML = groups.map(g => {
-                const name = g['الاسم أو الصفة'] || 'مجموعة رسمية';
-                const tag = g['الكلية أو الاختصاص'] || 'قناة إعلانية';
-                const link = g['رابط الواتساب'] || '';
-                const status = String(g['الحالة'] || '').trim();
-                const isActive = status === 'فعال' && link !== '';
-
-                const actionBtn = isActive
-                  ? `<a href="${link}" target="_blank" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition shadow-sm">
-                       <i data-lucide="external-link" class="w-4 h-4"></i>
-                       <span>انضمام إلى المجموعة</span>
-                     </a>`
-                  : `<button disabled class="w-full py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 font-bold text-xs flex items-center justify-center gap-2 cursor-not-allowed">
-                       <i data-lucide="clock" class="w-4 h-4"></i>
-                       <span>الرابط قيد التحديث قريباً</span>
-                     </button>`;
-
-                const cardOpacity = isActive ? '' : 'opacity-80';
-
-                return `
-                  <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}">
-                    <div class="space-y-2">
-                      <span class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">${tag}</span>
-                      <h4 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h4>
-                      <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                        القناة الرسمية المخصصة للتواصل، الإعلانات الأكاديمية ومساعدة الطلاب في حرم الجامعة.
-                      </p>
-                    </div>
-                    <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800">
-                      ${actionBtn}
-                    </div>
-                  </div>
-                `;
-              }).join('');
-            }
-          }
-
-          // ب) تحديث بطاقات ممثلي الكليات والاختصاصات
-          if (reps.length > 0) {
-            const repsGrid = document.getElementById('repsGrid');
-            if (repsGrid) {
-              repsGrid.innerHTML = reps.map(r => {
-                const name = r['الاسم أو الصفة'] || 'مسؤول اختصاص';
-                const faculty = r['الكلية أو الاختصاص'] || 'كلية الهندسة';
-                const phone = String(r['رقم الهاتف'] || '').trim();
-                const link = r['رابط الواتساب'] || (phone && !phone.includes('تحديث') ? `https://wa.me/${phone.replace(/[^0-9]/g, '')}` : '');
-                const status = String(r['الحالة'] || '').trim();
-                const isActive = status === 'فعال' && phone !== '' && !phone.includes('تحديث');
-
-                const actionBtn = isActive
-                  ? `<a href="${link}" target="_blank" class="w-full py-2 rounded-lg bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
-                       <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-                       <span>مراسلة عبر واتساب</span>
-                     </a>`
-                  : `<button disabled class="w-full py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1.5 cursor-not-allowed">
-                       <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                       <span>الرقم قريباً</span>
-                     </button>`;
-
-                const phoneText = isActive
-                  ? `<p class="text-xs font-mono text-slate-600 dark:text-slate-300" dir="ltr">${phone}</p>`
-                  : `<p class="text-xs text-slate-400">قيد التحديث</p>`;
-
-                const cardOpacity = isActive ? '' : 'opacity-75';
-
-                return `
-                  <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}">
-                    <div class="space-y-1">
-                      <span class="text-[10px] font-bold text-gold-500">${faculty}</span>
-                      <h4 class="font-bold text-xs text-slate-900 dark:text-white">${name}</h4>
-                      ${phoneText}
-                    </div>
-                    <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-                      ${actionBtn}
-                    </div>
-                  </div>
-                `;
-              }).join('');
-            }
-          }
-
-          lucide.createIcons();
+        if (data.guidance && Array.isArray(data.guidance)) {
+          renderGuidance(data.guidance);
+          localStorage.setItem('nadi_guidance_cache', JSON.stringify(data.guidance));
         }
       } catch (err) {
-        console.warn("جاري استخدام بيانات التوجيه المحلية لتعذر السحب اللحظي:", err);
+        console.warn("جاري استخدام البيانات المحفوظة لتعذر السحب اللحظي:", err);
       }
     }
 
-    // استدعاء السحب اللحظي فور فتح الصفحة
     fetchLiveGuidance();
 
-    // 3. إدارة القائمة الجانبية (Sidebar)
+    // إدارة القائمة الجانبية (Sidebar)
     const openMenuBtn = document.getElementById('openMenuBtn');
     const closeMenuBtn = document.getElementById('closeMenuBtn');
     const menuOverlay = document.getElementById('menuOverlay');
@@ -481,7 +345,7 @@
     if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeSidebar);
     if (menuOverlay) menuOverlay.addEventListener('click', closeSidebar);
 
-    // 4. إدارة التبديل بين المظهر الصباحي والليلي
+    // إدارة التبديل بين المظهر الصباحي والليلي
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const themeIconContainer = document.getElementById('themeIconContainer');
     const themeText = document.getElementById('themeText');
