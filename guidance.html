@@ -213,6 +213,14 @@
             const status = String(g['الحالة'] || '').trim();
             const isActive = status === 'فعال' && link !== '';
 
+            // قراءة الوصف المخصص من عمود "الوصف" الجديد أو اعتماد النص التلقائي
+            const desc = g['الوصف'] || 'القناة الرسمية المخصصة للتواصل، الإعلانات الأكاديمية ومساعدة الطلاب في حرم الجامعة.';
+
+            // تحديد لون شارة نوع المجموعة كما في التصميم الأصلي
+            let badgeBg = "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400";
+            if (name.includes('إخوة')) badgeBg = "bg-blue-500/10 text-blue-600 dark:text-blue-400";
+            if (name.includes('أخوات')) badgeBg = "bg-purple-500/10 text-purple-600 dark:text-purple-400";
+
             const actionBtn = isActive
               ? `<a href="${link}" target="_blank" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition shadow-sm">
                    <i data-lucide="external-link" class="w-4 h-4"></i>
@@ -228,10 +236,10 @@
             return `
               <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}">
                 <div class="space-y-2">
-                  <span class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">${tag}</span>
+                  <span class="px-2.5 py-0.5 rounded text-[10px] font-bold ${badgeBg}">${tag}</span>
                   <h4 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h4>
                   <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                    القناة الرسمية المخصصة للتواصل، الإعلانات الأكاديمية ومساعدة الطلاب في حرم الجامعة.
+                    ${desc}
                   </p>
                 </div>
                 <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800">
@@ -253,12 +261,24 @@
             const name = r['الاسم أو الصفة'] || 'مسؤول اختصاص';
             const faculty = r['الكلية أو الاختصاص'] || 'كلية الهندسة';
             const phone = String(r['رقم الهاتف'] || '').trim();
-            const link = r['رابط الواتساب'] || (phone && !phone.includes('تحديث') ? `https://wa.me/${phone.replace(/[^0-9]/g, '')}` : '');
             const status = String(r['الحالة'] || '').trim();
             const isActive = status === 'فعال' && phone !== '' && !phone.includes('تحديث');
 
+            // ضبط لون الشارة حسب الكلية كما في التصميم الأصلي
+            let tagColor = "text-gold-500";
+            const lowerFac = faculty.toLowerCase();
+            const lowerName = name.toLowerCase();
+            if (lowerFac.includes('علوم') || lowerName.includes('حاسوب') || lowerName.includes('cs')) tagColor = "text-blue-500";
+            if (lowerFac.includes('صيدلة')) tagColor = "text-teal-500";
+            if (lowerName.includes('طبي') || lowerName.includes('biomedical')) tagColor = "text-rose-500";
+
+            // تجهيز رابط الواتساب مع الرسالة المسبقة الذكية المحددة للاختصاص
+            const cleanPhone = phone.replace(/[^0-9]/g, '');
+            const defaultMsg = encodeURIComponent(`مرحبا زميلي، أنا طالب في الجامعة وعندي استفسار بخصوص ${name}`);
+            const waLink = r['رابط الواتساب'] || (cleanPhone ? `https://wa.me/${cleanPhone}?text=${defaultMsg}` : '');
+
             const actionBtn = isActive
-              ? `<a href="${link}" target="_blank" class="w-full py-2 rounded-lg bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+              ? `<a href="${waLink}" target="_blank" class="w-full py-2 rounded-lg bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
                    <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                    <span>مراسلة عبر واتساب</span>
                  </a>`
@@ -276,7 +296,7 @@
             return `
               <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}">
                 <div class="space-y-1">
-                  <span class="text-[10px] font-bold text-gold-500">${faculty}</span>
+                  <span class="text-[10px] font-bold ${tagColor}">${faculty}</span>
                   <h4 class="font-bold text-xs text-slate-900 dark:text-white">${name}</h4>
                   ${phoneText}
                 </div>
