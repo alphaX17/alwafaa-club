@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بوابة المشرفين | نادي الوفاء - فرع صور</title>
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Tajawal', 'sans-serif'] },
+          colors: {
+            gold: { 400: '#fbbf24', 500: '#d97706', 600: '#b45309' },
+            clubNavy: { light: '#1e3a8a', dark: '#070b14', cardDark: '#111b33', borderDark: '#1e293b' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Tajawal', sans-serif; }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative">
+
+  <!-- ==================== 1. بوابة تسجيل الدخول المقفلة (LOGIN GATE) ==================== -->
+  <div id="loginGate" class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-2xl space-y-6">
+      
+      <div class="text-center space-y-2">
+        <img src="logo.png" alt="نادي الوفاء" class="w-16 h-16 mx-auto object-contain mb-2">
+        <h1 class="text-xl font-black text-slate-900 dark:text-white">بوابة مشرفي منصة نادي الوفاء</h1>
+        <p class="text-xs text-slate-500 dark:text-slate-400">لوحة الإدارة المركزية وتحديث المحتوى — فرع صور</p>
+      </div>
+
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">اسم المشرف الكامل *</label>
+          <input id="adminName" type="text" required placeholder="مثال: يحيى المقبل" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          <p class="text-[10px] text-slate-400 mt-1">يُسجل في سجل العمليات لمتابعة المشرف الذي قام بالإدخال.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">رقم الملف الجامعي (Student ID) *</label>
+          <input id="adminID" type="text" required placeholder="مثال: 42130000" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left" dir="ltr">
+          <p class="text-[10px] text-slate-400 mt-1">المعرف الجامعي الخاص بك للتحقق من هوية المشرف.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">الرمز السري الخاص باللوحة (Admin Key) *</label>
+          <input id="adminKey" type="password" required placeholder="••••••••" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left" dir="ltr">
+          <p class="text-[10px] text-slate-400 mt-1">الرمز المعتمد والموزع على مسؤولي النادي فقط.</p>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-lg mt-2">
+          <i data-lucide="lock-open" class="w-4 h-4"></i>
+          <span>الدخول إلى لوحة التحكم</span>
+        </button>
+      </form>
+
+      <div id="loginError" class="hidden p-3 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs text-center font-medium">
+        البيانات المدخلة أو الرمز السري غير صحيح. يرجى مراجعة إدارة النادي.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 2. لوحة التحكم المركزية (ADMIN DASHBOARD) ==================== -->
+  <div id="adminDashboard" class="hidden min-h-screen flex flex-col">
+
+    <!-- الشريط العلوي للوحة المشرفين -->
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="logo.png" alt="شعار النادي" class="w-9 h-9 object-contain">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-sm font-bold text-slate-900 dark:text-white">لوحة تحكم المشرفين</h2>
+            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20">خاص بالنادي</span>
+          </div>
+          <p id="welcomeAdmin" class="text-[11px] text-slate-400">مرحباً بك في نظام الإدارة</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="logoutBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-600 dark:text-rose-400 text-xs font-bold transition">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          <span>خروج</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- مساحة العمل الرئيسية المقسمة إلى (قائمة جانبية + محتوى النماذج) -->
+    <div class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8 flex flex-col md:flex-row gap-6">
+
+      <!-- القائمة الجانبية للتنقل بين الأقسام -->
+      <aside class="w-full md:w-64 shrink-0 space-y-2">
+        <div class="p-3 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark space-y-1">
+          <span class="px-3 py-1 block text-[10px] font-bold text-slate-400 uppercase tracking-wider">الأقسام المتاحة</span>
+          
+          <button class="nav-tab active w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition" data-target="facultySection">
+            <i data-lucide="users" class="w-4 h-4"></i>
+            <span>دليل الأساتذة والإدارة</span>
+          </button>
+
+          <button class="nav-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته في الخطوة التالية">
+            <i data-lucide="folder-down" class="w-4 h-4"></i>
+            <span>الموارد والامتحانات (قريباً)</span>
+          </button>
+
+          <button class="nav-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته في الخطوة التالية">
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+            <span>التوجيه والمجموعات (قريباً)</span>
+          </button>
+
+          <button class="nav-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته في الخطوة التالية">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+            <span>الكتب الورقية (قريباً)</span>
+          </button>
+
+          <button class="nav-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته في الخطوة التالية">
+            <i data-lucide="calendar" class="w-4 h-4"></i>
+            <span>الأنشطة والفعاليات (قريباً)</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- حاوية المحتوى والنماذج -->
+      <main class="flex-1">
+
+        <!-- ================= نموذج قسم الأساتذة والإدارة ================= -->
+        <section id="facultySection" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
+          
+          <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+            <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
+            <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة أستاذ جديد أو موظف إداري</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              املأ البيانات التالية ليتم إدراجها فورياً في تبويب "الأساتذة" وعرضها على واجهة الموقع الأساسية للطلاب.
+            </p>
+          </div>
+
+          <form id="facultyForm" class="space-y-5">
+            
+            <!-- 1. الاسم واللقب -->
+            <div>
+              <label class="block text-xs font-bold mb-1">الاسم الثلاثي واللقب العلمي *</label>
+              <input id="facName" type="text" required placeholder="مثال: د. أحمد محمد حسين أو أ. هبة حمود" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <p class="text-[11px] text-slate-400 mt-1">العنوان الرئيسي الذي يظهر بالخط العريض في بطاقة الأستاذ.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- 2. الكلية أو القسم (قائمة منسدلة) -->
+              <div>
+                <label class="block text-xs font-bold mb-1">الكلية الأساسية أو القسم *</label>
+                <select id="facCollegeSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                  <option value="كلية الهندسة" data-category="engineering">كلية الهندسة (Engineering)</option>
+                  <option value="كلية إدارة الأعمال" data-category="business">كلية إدارة الأعمال (Business)</option>
+                  <option value="كلية الفنون والعلوم" data-category="arts_sciences">كلية الفنون والعلوم (Arts & Sciences)</option>
+                  <option value="كلية التربية واللغات" data-category="education">كلية التربية واللغات (Education)</option>
+                  <option value="كلية الصيدلة" data-category="pharmacy">كلية الصيدلة (Pharmacy)</option>
+                  <option value="الجهاز الإداري" data-category="admin">الجهاز الإداري والمكتبة (Administration)</option>
+                </select>
+                <p class="text-[11px] text-slate-400 mt-1">تحدد الشارة الملونة للكلية في أعلى البطاقة.</p>
+              </div>
+
+              <!-- 3. التصنيف البرمجي (تلقائي بالكامل لمنع الأخطاء) -->
+              <div>
+                <label class="block text-xs font-bold mb-1">التصنيف البرمجي (Auto-Filled) *</label>
+                <input id="facCategoryCode" type="text" readonly value="engineering" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-200/60 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 font-mono focus:outline-none cursor-not-allowed text-left" dir="ltr">
+                <p class="text-[11px] text-slate-400 mt-1">يُحدد تلقائياً لحماية أزرار الفرز في الموقع من أي أخطاء إملائية.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- 4. الاختصاص أو المنصب الأكاديمي -->
+              <div>
+                <label class="block text-xs font-bold mb-1">الاختصاص الأكاديمي أو المسمى الدقيق *</label>
+                <input id="facTitle" type="text" required placeholder="مثال: دكتوراه هندسة ميكانيكية، منسق الرياضيات..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                <p class="text-[11px] text-slate-400 mt-1">السطر التوضيحي المكتوب تحت اسم الأستاذ مباشرة.</p>
+              </div>
+
+              <!-- 5. الصفة الوظيفية (الشارة الثانية) -->
+              <div>
+                <label class="block text-xs font-bold mb-1">الصفة الوظيفية (الشارة العلوية الثانية) *</label>
+                <select id="facRoleTag" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                  <option value="عضو هيئة تعليمية">عضو هيئة تعليمية</option>
+                  <option value="رئيس قسم">رئيس قسم</option>
+                  <option value="إدارة المكتبة">إدارة المكتبة</option>
+                  <option value="الدائرة المالية">الدائرة المالية</option>
+                  <option value="شؤون الطلاب والتسجيل">شؤون الطلاب والتسجيل</option>
+                </select>
+                <p class="text-[11px] text-slate-400 mt-1">تظهر كشارة نصية رمادية في الزاوية اليسرى من أعلى الكرت.</p>
+              </div>
+            </div>
+
+            <!-- 6. البريد الإلكتروني الرسمي -->
+            <div>
+              <label class="block text-xs font-bold mb-1">البريد الإلكتروني الرسمي (LIU Webmail) *</label>
+              <input id="facEmail" type="email" required placeholder="name.lastname@liu.edu.lb" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+              <p class="text-[11px] text-slate-400 mt-1">البريد الذي سيتمكن الطلاب من نسخه بضغطة زر واحدة للتواصل الرسمي.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- 7. مكان المكتب (اختياري) -->
+              <div>
+                <label class="block text-xs font-bold mb-1">مكان المكتب (اختياري)</label>
+                <input id="facRoom" type="text" placeholder="مثال: مبنى الهندسة - الطابق 2 - مكتب 204" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                <p class="text-[11px] text-slate-400 mt-1">إذا تركته فارغاً فلن يظهر له أي أثر على الكرت إطلاقاً.</p>
+              </div>
+
+              <!-- 8. الساعات المكتبية (اختياري) -->
+              <div>
+                <label class="block text-xs font-bold mb-1">الساعات المكتبية المتاحة (اختياري)</label>
+                <input id="facHours" type="text" placeholder="مثال: الإثنين والأربعاء 10:00 - 12:00" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                <p class="text-[11px] text-slate-400 mt-1">تظهر بجانب أيقونة الساعة لتحديد مواعيد مقابلة الأستاذ للطلاب.</p>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+              <button id="submitFacultyBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>إدراج في قاعدة البيانات فوراً</span>
+              </button>
+            </div>
+
+          </form>
+
+          <!-- تنبيه نجاح الإرسال -->
+          <div id="facultySuccessMsg" class="hidden p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs flex items-center gap-2">
+            <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0"></i>
+            <span>تم إدراج بيانات الأستاذ بنجاح في Google Sheets، وستظهر فوراً على الموقع الأساسي!</span>
+          </div>
+
+        </section>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- ==================== السكربت البرمجي ==================== -->
+  <script>
+    lucide.createIcons();
+
+    // رابط Apps Script الخاص بنادي الوفاء
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
+
+    // كلمة المرور الافتراضية للوحة التحكم (يمكنك تغييرها هنا متى شئت)
+    const ADMIN_SECRET_KEY = "wafaa2026";
+
+    // 1. إدارة تسجيل الدخول وحماية الجلسة
+    const loginGate = document.getElementById('loginGate');
+    const adminDashboard = document.getElementById('adminDashboard');
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const welcomeAdmin = document.getElementById('welcomeAdmin');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    function checkAuth() {
+      const activeAdmin = sessionStorage.getItem('nadi_admin_session');
+      if (activeAdmin) {
+        loginGate.classList.add('hidden');
+        adminDashboard.classList.remove('hidden');
+        if (welcomeAdmin) welcomeAdmin.textContent = `المشرف النشط: ${activeAdmin}`;
+        lucide.createIcons();
+      } else {
+        loginGate.classList.remove('hidden');
+        adminDashboard.classList.add('hidden');
+      }
+    }
+
+    if (loginForm) {
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('adminName').value.trim();
+        const id = document.getElementById('adminID').value.trim();
+        const key = document.getElementById('adminKey').value.trim();
+
+        if (key === ADMIN_SECRET_KEY && name && id) {
+          sessionStorage.setItem('nadi_admin_session', `${name} (${id})`);
+          loginError.classList.add('hidden');
+          checkAuth();
+        } else {
+          loginError.classList.remove('hidden');
+        }
+      });
+    }
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => {
+        sessionStorage.removeItem('nadi_admin_session');
+        checkAuth();
+      });
+    }
+
+    checkAuth();
+
+    // 2. تحديث التصنيف البرمجي تلقائياً عند تغيير الكلية
+    const facCollegeSelect = document.getElementById('facCollegeSelect');
+    const facCategoryCode = document.getElementById('facCategoryCode');
+
+    if (facCollegeSelect && facCategoryCode) {
+      facCollegeSelect.addEventListener('change', () => {
+        const selectedOption = facCollegeSelect.options[facCollegeSelect.selectedIndex];
+        const category = selectedOption.getAttribute('data-category') || 'engineering';
+        facCategoryCode.value = category;
+      });
+    }
+
+    // 3. إرسال نموذج الأستاذ إلى Google Apps Script
+    const facultyForm = document.getElementById('facultyForm');
+    const submitFacultyBtn = document.getElementById('submitFacultyBtn');
+    const facultySuccessMsg = document.getElementById('facultySuccessMsg');
+
+    if (facultyForm) {
+      facultyForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const originalBtnText = submitFacultyBtn.innerHTML;
+
+        submitFacultyBtn.disabled = true;
+        submitFacultyBtn.innerHTML = `<span>جاري الإرسال والحفظ...</span>`;
+
+        const payload = {
+          action: "add_faculty",
+          adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف غير معروف",
+          name: document.getElementById('facName').value.trim(),
+          college: document.getElementById('facCollegeSelect').value,
+          category: document.getElementById('facCategoryCode').value,
+          title: document.getElementById('facTitle').value.trim(),
+          roleTag: document.getElementById('facRoleTag').value,
+          email: document.getElementById('facEmail').value.trim(),
+          room: document.getElementById('facRoom').value.trim(),
+          hours: document.getElementById('facHours').value.trim()
+        };
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          if (facultySuccessMsg) facultySuccessMsg.classList.remove('hidden');
+          facultyForm.reset();
+          facCategoryCode.value = "engineering"; // إعادة ضبط الكود الافتراضي
+
+          setTimeout(() => {
+            if (facultySuccessMsg) facultySuccessMsg.classList.add('hidden');
+          }, 4000);
+        } catch (err) {
+          alert('تعذر إتمام الإرسال، تأكد من اتصال الإنترنت.');
+        } finally {
+          submitFacultyBtn.disabled = false;
+          submitFacultyBtn.innerHTML = originalBtnText;
+          lucide.createIcons();
+        }
+      });
+    }
+  </script>
+</body>
+</html>
