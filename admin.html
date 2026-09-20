@@ -117,36 +117,31 @@
 
     <div class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8 flex flex-col md:flex-row gap-6">
 
-      <!-- القائمة الجانبية للتنقل بين الأقسام الرئيسية -->
+      <!-- القائمة الجانبية -->
       <aside class="w-full md:w-64 shrink-0 space-y-2">
         <div class="p-3 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark space-y-1">
           <span class="px-3 py-1 block text-[10px] font-bold text-slate-400 uppercase tracking-wider">الأقسام المتاحة</span>
           
-          <!-- 1. دليل الأساتذة -->
           <button id="navFacultyBtn" onclick="switchMainSection('faculty')" class="nav-main-tab active w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition">
             <i data-lucide="users" class="w-4 h-4"></i>
             <span>دليل الأساتذة والإدارة</span>
           </button>
 
-          <!-- 2. الموارد والامتحانات -->
           <button id="navResourcesBtn" onclick="switchMainSection('resources')" class="nav-main-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">
             <i data-lucide="folder-down" class="w-4 h-4"></i>
             <span>الموارد والامتحانات</span>
           </button>
 
-          <!-- 3. شبكة التوجيه والتواصل (مفعل بالكامل الآن) -->
           <button id="navGuidanceBtn" onclick="switchMainSection('guidance')" class="nav-main-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">
             <i data-lucide="message-circle" class="w-4 h-4"></i>
             <span>التوجيه والمجموعات</span>
           </button>
 
-          <!-- 4. الكتب الورقية -->
           <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته في الخطوة التالية">
             <i data-lucide="book-open" class="w-4 h-4"></i>
             <span>الكتب الورقية (قريباً)</span>
           </button>
 
-          <!-- 5. الأنشطة والفعاليات -->
           <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته في الخطوة التالية">
             <i data-lucide="calendar" class="w-4 h-4"></i>
             <span>الأنشطة والفعاليات (قريباً)</span>
@@ -405,7 +400,7 @@
             <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
               <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
               <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة مجموعة واتساب أو ممثل اختصاص</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">أدخل معلومات المجموعة الرسمية أو مندوب الدفعة ليتمكن الطلاب من الانضمام والتواصل المباشر.</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">أدخل تفاصيل المجموعة أو المندوب. في حال عدم وجود رابط دعوة لمجموعة، أدخل رقم الهاتف فقط وسيقوم النظام بإنشاء رابط محادثة واتساب مباشر مزود برسالة ترحيبية جاهزة تلقائياً.</p>
             </div>
 
             <form id="guidanceForm" class="space-y-5">
@@ -447,16 +442,18 @@
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- رابط دعوة المجموعة: اختياري وليس إجبارياً -->
                 <div>
-                  <label class="block text-xs font-bold mb-1">رابط الواتساب المباشر (Group Invite / Chat) *</label>
-                  <input id="guiLink" type="url" required placeholder="https://chat.whatsapp.com/... أو https://wa.me/..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-                  <p class="text-[11px] text-slate-400 mt-1">الرابط المباشر الذي ينقل الطالب فوراً للمجموعة أو لبدء محادثة واتساب.</p>
+                  <label class="block text-xs font-bold mb-1">رابط دعوة المجموعة (اختياري بحال توفر رقم هاتف)</label>
+                  <input id="guiLink" type="url" placeholder="https://chat.whatsapp.com/..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+                  <p class="text-[11px] text-slate-400 mt-1">خاص بمجموعات الواتساب العامة. اتركه فارغاً إذا كنت تضيف مندوباً برقم هاتفه.</p>
                 </div>
 
+                <!-- رقم الهاتف: عند إدخاله يتم توليد رابط محادثة مع رسالة ترحيب -->
                 <div>
-                  <label class="block text-xs font-bold mb-1">رقم الهاتف للتواصل المباشر (اختياري)</label>
+                  <label class="block text-xs font-bold mb-1">رقم هاتف المندوب (اختياري بحال توفر رابط مجموعة)</label>
                   <input id="guiPhone" type="tel" placeholder="مثال: 70123456 أو 03123456" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-                  <p class="text-[11px] text-slate-400 mt-1">يُسجل في حال كان هناك مندوب محدد للإجابة عن استفسارات الدفعة.</p>
+                  <p class="text-[11px] text-slate-400 mt-1">سيتم تلقائياً تحويله إلى رابط محادثة واتساب مباشر مزود برسالة ترحيبية جاهزة للطالب.</p>
                 </div>
               </div>
 
@@ -526,7 +523,7 @@
     </div>
   </div>
 
-  <!-- ==================== نوافذ قسم الأساتذة (حذف وتعديل) ==================== -->
+  <!-- ==================== نوافذ قسم الأساتذة ==================== -->
   <div id="deleteModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="w-full max-w-md p-6 rounded-3xl border border-rose-500/30 bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
       <div class="flex items-center gap-3 text-rose-500">
@@ -623,7 +620,7 @@
     </div>
   </div>
 
-  <!-- ==================== نوافذ قسم الموارد (حذف وتعديل) ==================== -->
+  <!-- ==================== نوافذ قسم الموارد ==================== -->
   <div id="deleteResourceModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="w-full max-w-md p-6 rounded-3xl border border-rose-500/30 bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
       <div class="flex items-center gap-3 text-rose-500">
@@ -714,7 +711,7 @@
     </div>
   </div>
 
-  <!-- ==================== نوافذ قسم التوجيه (حذف وتعديل) ==================== -->
+  <!-- ==================== نوافذ قسم التوجيه ==================== -->
   <div id="deleteGuidanceModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="w-full max-w-md p-6 rounded-3xl border border-rose-500/30 bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
       <div class="flex items-center gap-3 text-rose-500">
@@ -784,12 +781,12 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold mb-1">رابط الواتساب المباشر *</label>
-            <input id="editGuiLink" type="url" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+            <label class="block font-bold mb-1">رابط دعوة المجموعة (اختياري)</label>
+            <input id="editGuiLink" type="url" placeholder="https://chat.whatsapp.com/..." class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
           </div>
           <div>
             <label class="block font-bold mb-1">رقم الهاتف للتواصل (اختياري)</label>
-            <input id="editGuiPhone" type="tel" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+            <input id="editGuiPhone" type="tel" placeholder="مثال: 70123456" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
           </div>
         </div>
 
@@ -824,6 +821,23 @@
 
     let liveGuidanceList = [];
     let guidanceToDelete = null;
+
+    // دالة مساعدة لتوليد رابط واتساب ذكي بالصيغة الدولية مع رسالة ترحيبية
+    function generateSmartWhatsAppLink(phone) {
+      if (!phone) return "";
+      let cleaned = phone.replace(/\D/g, ''); // تنظيف الرموز
+      if (cleaned.startsWith('00961')) {
+        cleaned = cleaned.substring(2);
+      } else if (cleaned.startsWith('961')) {
+        // بالصيغة الصحيحة
+      } else if (cleaned.startsWith('0')) {
+        cleaned = '961' + cleaned.substring(1);
+      } else if (cleaned.length === 7 || cleaned.length === 8) {
+        cleaned = '961' + cleaned;
+      }
+      const defaultMessage = encodeURIComponent("السلام عليكم ورحمة الله، أتواصل معك عبر منصة نادي الوفاء للاستفسار الأكاديمي والتوجيه.");
+      return `https://wa.me/${cleaned}?text=${defaultMessage}`;
+    }
 
     // 1. نظام المظهر (Dark / Light)
     const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
@@ -1686,6 +1700,22 @@
     if (guidanceForm) {
       guidanceForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        const inputLink = document.getElementById('guiLink').value.trim();
+        const inputPhone = document.getElementById('guiPhone').value.trim();
+
+        // التحقق الذكي: يجب توفر إما الرابط أو رقم الهاتف على الأقل
+        if (!inputLink && !inputPhone) {
+          alert('يرجى إدخال رابط دعوة المجموعة أو رقم هاتف المندوب على الأقل.');
+          return;
+        }
+
+        // توليد الرابط التلقائي في حال عدم وجود رابط دعوة
+        let finalLink = inputLink;
+        if (!finalLink && inputPhone) {
+          finalLink = generateSmartWhatsAppLink(inputPhone);
+        }
+
         const originalBtnText = submitGuidanceBtn.innerHTML;
         submitGuidanceBtn.disabled = true;
         submitGuidanceBtn.innerHTML = `<span>جاري الإرسال والحفظ...</span>`;
@@ -1696,8 +1726,8 @@
           'الكلية أو الاختصاص': document.getElementById('guiMajor').value.trim(),
           'حالة': document.getElementById('guiStatusSelect').value,
           'الحالة': document.getElementById('guiStatusSelect').value,
-          'رابط الواتساب': document.getElementById('guiLink').value.trim(),
-          'رقم الهاتف': document.getElementById('guiPhone').value.trim(),
+          'رابط الواتساب': finalLink,
+          'رقم الهاتف': inputPhone,
           'الوصف': document.getElementById('guiDesc').value.trim()
         };
 
@@ -1813,7 +1843,15 @@
       document.getElementById('editGuiName').value = item['الاسم أو الصفة'] || "";
       document.getElementById('editGuiMajor').value = item['الكلية أو الاختصاص'] || "";
       document.getElementById('editGuiStatusSelect').value = item['الحالة'] || "فعال ومتاح للانضمام";
-      document.getElementById('editGuiLink').value = item['رابط الواتساب'] || "";
+      
+      const currentLink = item['رابط الواتساب'] || "";
+      // إذا كان الرابط القديم عبارة عن wa.me، نتركه في حقل الهاتف فقط لراحة المشرف
+      if (currentLink.includes('wa.me')) {
+        document.getElementById('editGuiLink').value = "";
+      } else {
+        document.getElementById('editGuiLink').value = currentLink;
+      }
+      
       document.getElementById('editGuiPhone').value = item['رقم الهاتف'] || "";
       document.getElementById('editGuiDesc').value = item['الوصف'] || "";
 
@@ -1829,6 +1867,20 @@
     if (editGuidanceForm) {
       editGuidanceForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        const inputLink = document.getElementById('editGuiLink').value.trim();
+        const inputPhone = document.getElementById('editGuiPhone').value.trim();
+
+        if (!inputLink && !inputPhone) {
+          alert('يرجى إدخال رابط دعوة المجموعة أو رقم هاتف المندوب على الأقل.');
+          return;
+        }
+
+        let finalLink = inputLink;
+        if (!finalLink && inputPhone) {
+          finalLink = generateSmartWhatsAppLink(inputPhone);
+        }
+
         const originalText = saveEditGuidanceBtn.innerHTML;
         saveEditGuidanceBtn.disabled = true;
         saveEditGuidanceBtn.innerHTML = `<span>جاري حفظ التعديل...</span>`;
@@ -1841,8 +1893,8 @@
           'الاسم أو الصفة': document.getElementById('editGuiName').value.trim(),
           'الكلية أو الاختصاص': document.getElementById('editGuiMajor').value.trim(),
           'الحالة': document.getElementById('editGuiStatusSelect').value,
-          'رابط الواتساب': document.getElementById('editGuiLink').value.trim(),
-          'رقم الهاتف': document.getElementById('editGuiPhone').value.trim(),
+          'رابط الواتساب': finalLink,
+          'رقم الهاتف': inputPhone,
           'الوصف': document.getElementById('editGuiDesc').value.trim()
         };
 
