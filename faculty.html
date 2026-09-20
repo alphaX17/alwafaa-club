@@ -94,218 +94,14 @@
 
     </div>
 
-    <!-- شبكة بطاقات الدكاترة والإدارة (تتحدث تلقائياً من Google Sheets) -->
-    <div id="facultyGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+    <!-- شبكة بطاقات الدكاترة والإدارة (يتم ملؤها فورياً عبر الكاش لمنع الوميض) -->
+    <div id="facultyGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 min-h-[200px]"></div>
 
-      <!-- د. هادي نور الدين -->
-      <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="engineering">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="px-2.5 py-1 rounded text-[11px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">كلية الهندسة</span>
-            <span class="text-xs text-slate-400 font-medium">عضو هيئة تعليمية</span>
-          </div>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-white">د. هادي نور الدين</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">هندسة الكمبيوتر والاتصالات</p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-          <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">hadi.noureddine@liu.edu.lb</span>
-          <button onclick="copyEmail('hadi.noureddine@liu.edu.lb', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-            <span>نسخ</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- د. علي أبو خليل -->
-      <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="engineering">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="px-2.5 py-1 rounded text-[11px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">كلية الهندسة</span>
-            <span class="text-xs text-slate-400 font-medium">عضو هيئة تعليمية</span>
-          </div>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-white">د. علي أبو خليل</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">هندسة الكهرباء</p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-          <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">ali.aboukhalil@liu.edu.lb</span>
-          <button onclick="copyEmail('ali.aboukhalil@liu.edu.lb', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-            <span>نسخ</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- د. علي حلال -->
-      <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="engineering">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="px-2.5 py-1 rounded text-[11px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">كلية الهندسة</span>
-            <span class="text-xs text-slate-400 font-medium">عضو هيئة تعليمية</span>
-          </div>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-white">د. علي حلال</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">هندسة الميكانيك</p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-          <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">ali.halal@liu.edu.lb</span>
-          <button onclick="copyEmail('ali.halal@liu.edu.lb', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-            <span>نسخ</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- د. حسن جابر -->
-      <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="engineering">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="px-2.5 py-1 rounded text-[11px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">كلية الهندسة</span>
-            <span class="text-xs text-slate-400 font-medium">عضو هيئة تعليمية</span>
-          </div>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-white">د. حسن جابر</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">هندسة الميكانيك</p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-          <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">hassan.jaber@liu.edu.lb</span>
-          <button onclick="copyEmail('hassan.jaber@liu.edu.lb', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-            <span>نسخ</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- د. إحسان عساكري -->
-      <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="math">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="px-2.5 py-1 rounded text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">العلوم والطب</span>
-            <span class="text-xs text-slate-400 font-medium">عضو هيئة تعليمية</span>
-          </div>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-white">د. إحسان عساكري</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">العلوم الطبية والطب</p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-          <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">ihsan.asakereh@liu.edu.lb</span>
-          <button onclick="copyEmail('ihsan.asakereh@liu.edu.lb', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-            <span>نسخ</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- د. مايا بسام -->
-      <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="math">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="px-2.5 py-1 rounded text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">الرياضيات والعلوم</span>
-            <span class="text-xs text-slate-400 font-medium">عضو هيئة تعليمية</span>
-          </div>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-white">د. مايا بسام</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">قسم الرياضيات (Math)</p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-          <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">maya.bassam@liu.edu.lb</span>
-          <button onclick="copyEmail('maya.bassam@liu.edu.lb', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-            <span>نسخ</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- د. شيراز قاسم -->
-      <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="math">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="px-2.5 py-1 rounded text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">الرياضيات والعلوم</span>
-            <span class="text-xs text-slate-400 font-medium">عضو هيئة تعليمية</span>
-          </div>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-white">د. شيراز قاسم</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">قسم الرياضيات (Math)</p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-          <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">shiraz.kassem@liu.edu.lb</span>
-          <button onclick="copyEmail('shiraz.kassem@liu.edu.lb', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-            <span>نسخ</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- د. علي سرور -->
-      <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="math">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="px-2.5 py-1 rounded text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">الرياضيات والعلوم</span>
-            <span class="text-xs text-slate-400 font-medium">عضو هيئة تعليمية</span>
-          </div>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-white">د. علي سرور</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">قسم الرياضيات (Math)</p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-          <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">ali.srour@liu.edu.lb</span>
-          <button onclick="copyEmail('ali.srour@liu.edu.lb', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-            <span>نسخ</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- أ. علي اللبن -->
-      <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="english">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="px-2.5 py-1 rounded text-[11px] font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400">كلية الآداب واللغات</span>
-            <span class="text-xs text-slate-400 font-medium">عضو هيئة تعليمية</span>
-          </div>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-white">أ. علي اللبن</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">قسم اللغة الإنجليزية</p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-          <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">ali.ellaban@liu.edu.lb</span>
-          <button onclick="copyEmail('ali.ellaban@liu.edu.lb', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-            <span>نسخ</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- أ. هبة حمود -->
-      <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="admin">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="px-2.5 py-1 rounded text-[11px] font-bold bg-rose-500/10 text-rose-600 dark:text-rose-400">الجهاز الإداري</span>
-            <span class="text-xs text-slate-400 font-medium">إدارة المكتبة</span>
-          </div>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-white">أ. هبة حمود</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">أمينة المكتبة الجامعية العامة</p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-          <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">hiba.hammoud@liu.edu.lb</span>
-          <button onclick="copyEmail('hiba.hammoud@liu.edu.lb', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-            <span>نسخ</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- أ. غيا السمرة -->
-      <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="admin">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="px-2.5 py-1 rounded text-[11px] font-bold bg-rose-500/10 text-rose-600 dark:text-rose-400">الجهاز الإداري</span>
-            <span class="text-xs text-slate-400 font-medium">الدائرة المالية</span>
-          </div>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-white">أ. غيا السمرة</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">المسؤولة المالية والإدارية</p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-          <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">gheya.elsamra@liu.edu.lb</span>
-          <button onclick="copyEmail('gheya.elsamra@liu.edu.lb', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-            <span>نسخ</span>
-          </button>
-        </div>
-      </div>
-
+    <!-- رسالة عدم وجود نتائج مطابقة للبحث أو التصفية -->
+    <div id="noFacultyResults" class="hidden text-center py-16">
+      <i data-lucide="user-x" class="w-12 h-12 mx-auto text-slate-400 mb-3 opacity-60"></i>
+      <h3 class="text-sm font-bold text-slate-700 dark:text-slate-300">لم يتم العثور على أي نتيجة مطابقة</h3>
+      <p class="text-xs text-slate-400 mt-1">تأكد من كتابة الاسم بدقة أو اختر قسماً آخر من الأعلى.</p>
     </div>
 
   </main>
@@ -383,73 +179,98 @@
   <script>
     lucide.createIcons();
 
-    // 1. رابط الـ Web App الخاص بك في Google Apps Script
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
+    let facultyData = [];
 
-    // 2. دالة جلب وعرض بيانات الأساتذة الحية من صفحة "الأساتذة" في Google Sheets
+    // دالة رسم بطاقات الأساتذة على الشاشة
+    function renderFaculty(list) {
+      const grid = document.getElementById('facultyGrid');
+      if (!grid) return;
+
+      if (!list || list.length === 0) {
+        grid.innerHTML = `<div class="col-span-full py-16 text-center text-xs text-slate-400">لا توجد بيانات مسجلة حالياً للأساتذة في قاعدة البيانات.</div>`;
+        return;
+      }
+
+      grid.innerHTML = list.map(item => {
+        const name = item['الاسم'] || '';
+        const college = item['الكلية أو القسم'] || 'الهيئة التعليمية';
+        const title = item['الاختصاص أو الصفة'] || '';
+        const email = item['البريد الإلكتروني'] || '';
+        const category = String(item['التصنيف البرمجي'] || 'engineering').trim().toLowerCase();
+
+        let badgeColor = "bg-blue-500/10 text-blue-600 dark:text-blue-400";
+        let roleTag = "عضو هيئة تعليمية";
+
+        if (category === 'math') {
+          badgeColor = "bg-amber-500/10 text-amber-600 dark:text-amber-400";
+        } else if (category === 'english') {
+          badgeColor = "bg-purple-500/10 text-purple-600 dark:text-purple-400";
+        } else if (category === 'admin') {
+          badgeColor = "bg-rose-500/10 text-rose-600 dark:text-rose-400";
+          roleTag = "الجهاز الإداري";
+        }
+
+        const escapedEmail = email.replace(/'/g, "\\'");
+
+        return `
+          <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="${category}">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="px-2.5 py-1 rounded text-[11px] font-bold ${badgeColor}">${college}</span>
+                <span class="text-xs text-slate-400 font-medium">${roleTag}</span>
+              </div>
+              <h3 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${title}</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+              <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">${email}</span>
+              <button onclick="copyEmail('${escapedEmail}', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                <span>نسخ</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+      filterData();
+    }
+
+    // جلب البيانات مع التسريع الفوري (localStorage)
     async function fetchLiveFaculty() {
+      // 1. قراءة الكاش وعرضه فوراً في جزء من الثانية (0 ثوانٍ)
+      const cached = localStorage.getItem('nadi_faculty_cache');
+      if (cached) {
+        try {
+          facultyData = JSON.parse(cached);
+          renderFaculty(facultyData);
+        } catch (e) {
+          console.warn("خطأ في قراءة كاش الأساتذة:", e);
+        }
+      }
+
       if (!SCRIPT_URL) return;
+
+      // 2. فحص وتحديث البيانات من Google Sheets بالخلفية
       try {
         const response = await fetch(SCRIPT_URL);
         const data = await response.json();
 
-        if (data.faculty && Array.isArray(data.faculty) && data.faculty.length > 0) {
-          const grid = document.getElementById('facultyGrid');
-          if (grid) {
-            grid.innerHTML = data.faculty.map(item => {
-              const name = item['الاسم'] || '';
-              const college = item['الكلية أو القسم'] || 'الهيئة التعليمية';
-              const title = item['الاختصاص أو الصفة'] || '';
-              const email = item['البريد الإلكتروني'] || '';
-              const category = String(item['التصنيف البرمجي'] || 'engineering').trim().toLowerCase();
-
-              let badgeColor = "bg-blue-500/10 text-blue-600 dark:text-blue-400";
-              let roleTag = "عضو هيئة تعليمية";
-
-              if (category === 'math') {
-                badgeColor = "bg-amber-500/10 text-amber-600 dark:text-amber-400";
-              } else if (category === 'english') {
-                badgeColor = "bg-purple-500/10 text-purple-600 dark:text-purple-400";
-              } else if (category === 'admin') {
-                badgeColor = "bg-rose-500/10 text-rose-600 dark:text-rose-400";
-                roleTag = "الجهاز الإداري";
-              }
-
-              const escapedEmail = email.replace(/'/g, "\\'");
-
-              return `
-                <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="${category}">
-                  <div>
-                    <div class="flex items-center justify-between mb-2">
-                      <span class="px-2.5 py-1 rounded text-[11px] font-bold ${badgeColor}">${college}</span>
-                      <span class="text-xs text-slate-400 font-medium">${roleTag}</span>
-                    </div>
-                    <h3 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${title}</p>
-                  </div>
-                  <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-                    <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">${email}</span>
-                    <button onclick="copyEmail('${escapedEmail}', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
-                      <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                      <span>نسخ</span>
-                    </button>
-                  </div>
-                </div>
-              `;
-            }).join('');
-            lucide.createIcons();
-            filterData(); // إعادة تطبيق الفلترة على العناصر المسحوبة حياً
-          }
+        if (data.faculty && Array.isArray(data.faculty)) {
+          facultyData = data.faculty;
+          renderFaculty(facultyData);
+          localStorage.setItem('nadi_faculty_cache', JSON.stringify(facultyData));
         }
       } catch (err) {
-        console.warn("جاري استخدام بيانات الأساتذة المحلية لتعذر السحب اللحظي:", err);
+        console.warn("جاري استخدام البيانات المحفوظة لتعذر السحب اللحظي:", err);
       }
     }
 
-    // استدعاء السحب اللحظي فور فتح الصفحة
     fetchLiveFaculty();
 
-    // 3. إدارة القائمة الجانبية (Sidebar)
+    // إدارة القائمة الجانبية (Sidebar)
     const openMenuBtn = document.getElementById('openMenuBtn');
     const closeMenuBtn = document.getElementById('closeMenuBtn');
     const menuOverlay = document.getElementById('menuOverlay');
@@ -473,7 +294,7 @@
     if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeSidebar);
     if (menuOverlay) menuOverlay.addEventListener('click', closeSidebar);
 
-    // 4. إدارة التبديل بين المظهر الصباحي والليلي
+    // إدارة التبديل بين المظهر الصباحي والليلي
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const themeIconContainer = document.getElementById('themeIconContainer');
     const themeText = document.getElementById('themeText');
@@ -506,7 +327,7 @@
       });
     }
 
-    // 5. وظيفة نسخ البريد الإلكتروني بضغطة واحدة
+    // وظيفة نسخ البريد الإلكتروني بضغطة واحدة
     function copyEmail(email, btn) {
       navigator.clipboard.writeText(email).then(() => {
         const originalHTML = btn.innerHTML;
@@ -522,29 +343,40 @@
       });
     }
 
-    // 6. محرك البحث والتصفية المباشر (يدعم البطاقات الثابتة والمسحوبة حياً)
+    // محرك البحث والتصفية الفوري
     const searchInput = document.getElementById('searchInput');
     const filterBtns = document.querySelectorAll('.filter-btn');
+    const noFacultyResults = document.getElementById('noFacultyResults');
 
     function filterData() {
       const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
       const activeBtn = document.querySelector('.filter-btn.active');
       const activeCategory = activeBtn ? activeBtn.getAttribute('data-category') : 'all';
       const facultyCards = document.querySelectorAll('.faculty-card');
+      let visibleCount = 0;
 
       facultyCards.forEach(card => {
         const cardText = card.innerText.toLowerCase();
         const cardCategory = card.getAttribute('data-category');
 
-        const matchesQuery = cardText.includes(query);
+        const matchesQuery = !query || cardText.includes(query);
         const matchesCategory = activeCategory === 'all' || cardCategory === activeCategory;
 
         if (matchesQuery && matchesCategory) {
           card.classList.remove('hidden');
+          visibleCount++;
         } else {
           card.classList.add('hidden');
         }
       });
+
+      if (noFacultyResults) {
+        if (visibleCount === 0 && facultyCards.length > 0) {
+          noFacultyResults.classList.remove('hidden');
+        } else {
+          noFacultyResults.classList.add('hidden');
+        }
+      }
     }
 
     if (searchInput) {
