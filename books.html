@@ -6,7 +6,6 @@
   <title>استعارة وتبرع الكتب الورقية | نادي الوفاء</title>
   <link rel="icon" type="image/png" href="logo.png">
   
-  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -34,6 +33,9 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    .custom-scrollbar::-webkit-scrollbar { height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden">
@@ -93,13 +95,25 @@
     <!-- ================= القسم الأول: استعارة كتاب ================= -->
     <section id="borrowSection" class="space-y-6">
       
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark">
-        <p class="text-xs text-slate-600 dark:text-slate-300">
-          اختر الكتاب الذي تحتاجه واضغط على <strong>طلب استعارة</strong>، ثم أدخل اسمك ورقمك الجامعي ورقم هاتفك لتأكيد الحجز والاستلام داخل حرم الجامعة في صور.
-        </p>
-        <div class="relative w-full sm:w-72">
-          <input id="bookSearchInput" type="text" placeholder="ابحث باسم الكتاب أو الكلية..." class="w-full text-xs p-2.5 pr-8 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3 right-2.5"></i>
+      <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            اختر الكتاب الذي تحتاجه واضغط على <strong>طلب استعارة</strong>، ثم أدخل اسمك ورقمك الجامعي ورقم هاتفك لتأكيد الحجز والاستلام داخل حرم الجامعة في صور.
+          </p>
+          <div class="relative w-full sm:w-80 shrink-0">
+            <input id="bookSearchInput" type="text" placeholder="ابحث باسم الكتاب، المادة أو الكلية..." class="w-full text-xs p-2.5 pr-8 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3 right-2.5"></i>
+          </div>
+        </div>
+
+        <!-- أزرار الفلترة السريعة لكليات الجامعة -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pt-3 border-t border-slate-100 dark:border-slate-800 custom-scrollbar pb-1">
+          <button class="book-filter-btn active shrink-0 px-3 py-1 rounded-lg text-xs font-bold bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 transition" data-filter="all">الكل</button>
+          <button class="book-filter-btn shrink-0 px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="engineering">كلية الهندسة</button>
+          <button class="book-filter-btn shrink-0 px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="business">إدارة الأعمال</button>
+          <button class="book-filter-btn shrink-0 px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="arts_sciences">الفنون والعلوم</button>
+          <button class="book-filter-btn shrink-0 px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="education">التربية واللغات</button>
+          <button class="book-filter-btn shrink-0 px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="pharmacy">كلية الصيدلة</button>
         </div>
       </div>
 
@@ -107,10 +121,10 @@
       <div id="booksGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[220px]"></div>
       
       <!-- رسالة في حال عدم تطابق البحث -->
-      <div id="noBooksResults" class="hidden text-center py-12">
+      <div id="noBooksResults" class="hidden text-center py-16">
         <i data-lucide="book-x" class="w-12 h-12 mx-auto text-slate-400 mb-3 opacity-60"></i>
         <h3 class="text-sm font-bold text-slate-700 dark:text-slate-300">لم يتم العثور على أي كتاب مطابق</h3>
-        <p class="text-xs text-slate-400 mt-1">تأكد من كتابة الاسم بدقة أو تصفح باقي القائمة.</p>
+        <p class="text-xs text-slate-400 mt-1">تأكد من كتابة الاسم بدقة أو اختر كلية أخرى من الأعلى.</p>
       </div>
     </section>
 
@@ -265,6 +279,51 @@
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
     let booksData = [];
+    let currentBookFilter = 'all';
+
+    // محرك الفرز الذكي لكليات الكتب الورقية
+    function detectBookCategory(faculty = '', title = '', desc = '') {
+      const combined = `${faculty} ${title} ${desc}`.toLowerCase();
+
+      // 1. الصيدلة
+      if (combined.includes('pharmacy') || combined.includes('صيدل') || combined.includes('phar')) {
+        return 'pharmacy';
+      }
+      // 2. إدارة الأعمال
+      if (combined.includes('business') || combined.includes('أعمال') || combined.includes('اعمال') || 
+          combined.includes('account') || combined.includes('محاسب') || combined.includes('economic') || 
+          combined.includes('اقتصاد') || combined.includes('finance') || combined.includes('مالي') || 
+          combined.includes('tourism') || combined.includes('hotel') || combined.includes('marketing') || 
+          combined.includes('تسويق') || combined.includes('mis') || combined.includes('management') || combined.includes('إدارة')) {
+        return 'business';
+      }
+      // 3. التربية واللغات
+      if (combined.includes('education') || combined.includes('تربي') || combined.includes('tefl') || 
+          combined.includes('translation') || combined.includes('ترجم') || combined.includes('english') || 
+          combined.includes('إنجليز') || combined.includes('انكليز') || combined.includes('لغات')) {
+        return 'education';
+      }
+      // 4. الهندسة
+      if (combined.includes('engineer') || combined.includes('هندس') || combined.includes('mech') || 
+          combined.includes('ميكانيك') || combined.includes('civil') || combined.includes('مدني') || 
+          combined.includes('electric') || combined.includes('كهرب') || combined.includes('telecom') || 
+          combined.includes('اتصال') || combined.includes('survey') || combined.includes('مساح') || 
+          combined.includes('industr') || combined.includes('صناع') || combined.includes('statics') || combined.includes('dynamics')) {
+        return 'engineering';
+      }
+      // 5. الفنون والعلوم
+      if (combined.includes('art') || combined.includes('science') || combined.includes('فنون') || 
+          combined.includes('علوم') || combined.includes('computer') || combined.includes('cs') || 
+          combined.includes('حاسوب') || combined.includes('it') || combined.includes('graphic') || 
+          combined.includes('جرافيك') || combined.includes('nutrition') || combined.includes('تغذية') || 
+          combined.includes('math') || combined.includes('رياضيات') || combined.includes('calculus') || 
+          combined.includes('phys') || combined.includes('فيزياء') || combined.includes('chem') || 
+          combined.includes('كيمياء') || combined.includes('bio') || combined.includes('بيولوج')) {
+        return 'arts_sciences';
+      }
+
+      return 'arts_sciences';
+    }
 
     // دالة رسم بطاقات الكتب على الشاشة
     function renderBooks(booksList) {
@@ -280,10 +339,14 @@
         const title = book['عنوان الكتاب'] || '';
         const faculty = book['الكلية'] || 'الجامعة اللبنانية الدولية';
         const desc = book['الوصف والطبعة'] || 'النسخة المطبوعة المعتمدة';
-        const copies = book['عدد النسخ'] || '1';
+        const rawCopies = String(book['عدد النسخ'] || '').trim();
+        const copiesNum = parseInt(rawCopies, 10);
         const status = String(book['الحالة'] || '').trim();
 
-        const isAvailable = status.includes('متوفر') || status === '';
+        // فحص التوفر الدقيق: إذا كانت النسخ صفر أو الحالة تفيد بالإعارة يُلغى التوفر فوراً
+        const isAvailable = (!status.includes('معار') && !status.includes('غير متوفر')) && 
+                            (status.includes('متوفر') || status === '') && 
+                            (isNaN(copiesNum) || copiesNum > 0);
 
         const badgeMarkup = isAvailable
           ? `<span class="px-2.5 py-1 rounded text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">متوفر للاستلام</span>`
@@ -294,18 +357,21 @@
           ? `<button onclick="openModal('${escapedTitle}')" class="px-3.5 py-1.5 rounded-lg bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 text-xs font-bold hover:opacity-90 transition">طلب استعارة</button>`
           : `<button disabled class="px-3.5 py-1.5 rounded-lg bg-slate-300 dark:bg-slate-800 text-slate-500 text-xs font-bold cursor-not-allowed">غير متاح</button>`;
 
-        const copiesText = isAvailable ? `عدد النسخ: ${copies}` : 'يعود قريباً';
+        const copiesText = isAvailable ? `عدد النسخ: ${rawCopies || '1'}` : 'يعود قريباً';
         const cardOpacity = isAvailable ? '' : 'opacity-75';
 
+        const categoryCode = detectBookCategory(faculty, title, desc);
+        const searchMetadata = `${title} ${faculty} ${desc} ${categoryCode}`.toLowerCase();
+
         return `
-          <div class="book-card p-5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition ${cardOpacity}" data-title="${title.toLowerCase()} ${faculty.toLowerCase()}">
+          <div class="book-card p-5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition ${cardOpacity}" data-category="${categoryCode}" data-title="${searchMetadata}">
             <div>
               <div class="flex items-center justify-between mb-3">
                 ${badgeMarkup}
                 <span class="text-xs text-slate-400 font-mono">${faculty}</span>
               </div>
               <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-1">${title}</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400">${desc}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">${desc}</p>
             </div>
             <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <span class="text-[11px] text-slate-400">${copiesText}</span>
@@ -540,8 +606,9 @@
       });
     }
 
-    // بحث الكتب الفوري
+    // بحث وفلترة الكتب الشاملة
     const bookSearchInput = document.getElementById('bookSearchInput');
+    const bookFilterBtns = document.querySelectorAll('.book-filter-btn');
     const noBooksResults = document.getElementById('noBooksResults');
 
     function filterBooks() {
@@ -550,9 +617,14 @@
       let visibleCount = 0;
 
       cards.forEach(card => {
-        const title = card.getAttribute('data-title') || '';
+        const titleData = card.getAttribute('data-title') || '';
+        const cat = card.getAttribute('data-category') || '';
         const cardText = card.innerText.toLowerCase();
-        if (!query || title.includes(query) || cardText.includes(query)) {
+
+        const matchesFilter = (currentBookFilter === 'all') || (cat === currentBookFilter);
+        const matchesQuery = !query || titleData.includes(query) || cardText.includes(query);
+
+        if (matchesFilter && matchesQuery) {
           card.classList.remove('hidden');
           visibleCount++;
         } else {
@@ -572,6 +644,20 @@
     if (bookSearchInput) {
       bookSearchInput.addEventListener('input', filterBooks);
     }
+
+    bookFilterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        bookFilterBtns.forEach(b => {
+          b.classList.remove('active', 'bg-clubNavy-light', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'font-bold');
+          b.classList.add('bg-slate-100', 'dark:bg-[#131e3a]', 'text-slate-700', 'dark:text-slate-300', 'font-medium');
+        });
+        btn.classList.remove('bg-slate-100', 'dark:bg-[#131e3a]', 'text-slate-700', 'dark:text-slate-300', 'font-medium');
+        btn.classList.add('active', 'bg-clubNavy-light', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'font-bold');
+
+        currentBookFilter = btn.getAttribute('data-filter');
+        filterBooks();
+      });
+    });
   </script>
 </body>
-</html>
+</html>s
