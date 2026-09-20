@@ -122,26 +122,31 @@
         <div class="p-3 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark space-y-1">
           <span class="px-3 py-1 block text-[10px] font-bold text-slate-400 uppercase tracking-wider">الأقسام المتاحة</span>
           
+          <!-- 1. دليل الأساتذة -->
           <button id="navFacultyBtn" onclick="switchMainSection('faculty')" class="nav-main-tab active w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition">
             <i data-lucide="users" class="w-4 h-4"></i>
             <span>دليل الأساتذة والإدارة</span>
           </button>
 
+          <!-- 2. الموارد والامتحانات -->
           <button id="navResourcesBtn" onclick="switchMainSection('resources')" class="nav-main-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">
             <i data-lucide="folder-down" class="w-4 h-4"></i>
             <span>الموارد والامتحانات</span>
           </button>
 
-          <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته في الخطوة التالية">
+          <!-- 3. شبكة التوجيه والتواصل (مفعل بالكامل الآن) -->
+          <button id="navGuidanceBtn" onclick="switchMainSection('guidance')" class="nav-main-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">
             <i data-lucide="message-circle" class="w-4 h-4"></i>
-            <span>التوجيه والمجموعات (قريباً)</span>
+            <span>التوجيه والمجموعات</span>
           </button>
 
+          <!-- 4. الكتب الورقية -->
           <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته في الخطوة التالية">
             <i data-lucide="book-open" class="w-4 h-4"></i>
             <span>الكتب الورقية (قريباً)</span>
           </button>
 
+          <!-- 5. الأنشطة والفعاليات -->
           <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition opacity-50 cursor-not-allowed" title="سيتم إضافته في الخطوة التالية">
             <i data-lucide="calendar" class="w-4 h-4"></i>
             <span>الأنشطة والفعاليات (قريباً)</span>
@@ -171,7 +176,7 @@
             <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
               <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
               <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة أستاذ جديد أو موظف إداري</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">املأ البيانات التالية ليتم إدراجها فورياً في تبويب "الأساتذة" وعرضها على واجهة الموقع للطلاب.</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">املأ البيانات التالية ليتم إدراجها فورياً في تبويب الأساتذة وعرضها على واجهة الموقع للطلاب.</p>
             </div>
 
             <form id="facultyForm" class="space-y-5">
@@ -288,7 +293,7 @@
             </button>
           </div>
 
-          <!-- شاشة إضافة مورد جديد -->
+          <!-- شاشة إضافة مورد -->
           <section id="resourceAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
             <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
               <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
@@ -381,6 +386,119 @@
           </section>
         </div>
 
+        <!-- ==================== القسم الثالث: شبكة التوجيه والتواصل ==================== -->
+        <div id="sectionGuidance" class="hidden space-y-6">
+          <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit">
+            <button id="tabGuidanceAdd" onclick="switchGuidanceSubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
+              <i data-lucide="user-plus" class="w-4 h-4"></i>
+              <span>إضافة مجموعة أو مندوب</span>
+            </button>
+            <button id="tabGuidanceManage" onclick="switchGuidanceSubTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
+              <i data-lucide="users-2" class="w-4 h-4"></i>
+              <span>إدارة شبكة التواصل</span>
+              <span id="guidanceCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
+            </button>
+          </div>
+
+          <!-- شاشة إضافة جهة تواصل -->
+          <section id="guidanceAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
+              <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة مجموعة واتساب أو ممثل اختصاص</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">أدخل معلومات المجموعة الرسمية أو مندوب الدفعة ليتمكن الطلاب من الانضمام والتواصل المباشر.</p>
+            </div>
+
+            <form id="guidanceForm" class="space-y-5">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">نوع جهة التواصل *</label>
+                  <select id="guiTypeSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                    <option value="مجموعة اختصاص أكاديمي">مجموعة اختصاص أكاديمي</option>
+                    <option value="مجموعة واتساب عامة للإعلانات">مجموعة واتساب عامة للإعلانات</option>
+                    <option value="ممثل أو مندوب اختصاص">ممثل أو مندوب اختصاص</option>
+                    <option value="مرشد أكاديمي للفرع">مرشد أكاديمي للفرع</option>
+                  </select>
+                  <p class="text-[11px] text-slate-400 mt-1">تحديد طبيعة البطاقة وما إذا كانت رابط مجموعة عامة أو جهة تواصل فردية.</p>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold mb-1">الاسم أو الصفة المعتمدة *</label>
+                  <input id="guiName" type="text" required placeholder="مثال: مجموعة طلاب الهندسة الميكانيكية أو الزميل يوسف قاسم" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                  <p class="text-[11px] text-slate-400 mt-1">العنوان الرئيسي البارز الذي يظهر في أعلى بطاقة التواصل للطلاب.</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">الكلية أو الاختصاص المشمول *</label>
+                  <input id="guiMajor" type="text" required placeholder="مثال: كلية الهندسة - ميكانيك أو عام لكافة الطلاب" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                  <p class="text-[11px] text-slate-400 mt-1">الكلية أو القسم المخصص له هذا الرابط لفلترة وتصنيف البطاقات.</p>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold mb-1">حالة المجموعة أو التوفر *</label>
+                  <select id="guiStatusSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                    <option value="فعال ومتاح للانضمام">فعال ومتاح للانضمام</option>
+                    <option value="المجموعة ممتلئة حالياً">المجموعة ممتلئة حالياً</option>
+                    <option value="قيد التحديث قريباً">قيد التحديث قريباً</option>
+                  </select>
+                  <p class="text-[11px] text-slate-400 mt-1">الشارة التي توضح للطالب مدى جاهزية الرابط لاستقبال أعضاء جدد.</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">رابط الواتساب المباشر (Group Invite / Chat) *</label>
+                  <input id="guiLink" type="url" required placeholder="https://chat.whatsapp.com/... أو https://wa.me/..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+                  <p class="text-[11px] text-slate-400 mt-1">الرابط المباشر الذي ينقل الطالب فوراً للمجموعة أو لبدء محادثة واتساب.</p>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold mb-1">رقم الهاتف للتواصل المباشر (اختياري)</label>
+                  <input id="guiPhone" type="tel" placeholder="مثال: 70123456 أو 03123456" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+                  <p class="text-[11px] text-slate-400 mt-1">يُسجل في حال كان هناك مندوب محدد للإجابة عن استفسارات الدفعة.</p>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1">الوصف والمهام المخصصة *</label>
+                <input id="guiDesc" type="text" required placeholder="مثال: مجموعة رسمية لتبادل الملاحظات، الجداول الدراسية، والتواصل الأكاديمي المباشر" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                <p class="text-[11px] text-slate-400 mt-1">توضيح مختصر لأهداف المجموعة أو نوع المساعدة التي يقدمها المندوب.</p>
+              </div>
+
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                <button id="submitGuidanceBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                  <span>إدراج جهة التواصل فوراً</span>
+                </button>
+              </div>
+            </form>
+
+            <div id="guidanceSuccessMsg" class="hidden p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs flex items-center gap-2">
+              <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0"></i>
+              <span>تم إدراج جهة التواصل بنجاح في Google Sheets، وأصبحت متاحة للطلاب على الموقع الأساسي!</span>
+            </div>
+          </section>
+
+          <!-- شاشة إدارة جهات التواصل -->
+          <section id="guidanceManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+              <div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">قائمة مجموعات وممثلي الاختصاصات</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">يمكنك تعديل أي جهة تواصل بالضغط على زر التعديل أو حذفها نهائياً بالضغط على زر الحذف.</p>
+              </div>
+              <button onclick="fetchLiveGuidanceData(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>تحديث السحب من الخادم</span>
+              </button>
+            </div>
+
+            <div id="guidanceListContainer" class="space-y-3 min-h-[140px]">
+              <div class="py-12 text-center text-xs text-slate-400">جاري فحص شبكة التوجيه...</div>
+            </div>
+          </section>
+        </div>
+
       </main>
     </div>
   </div>
@@ -389,23 +507,17 @@
   <div id="logoutModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="w-full max-w-md p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
       <div class="flex items-center gap-3 text-gold-500">
-        <div class="p-2.5 rounded-xl bg-gold-500/10">
-          <i data-lucide="log-out" class="w-6 h-6 text-gold-500"></i>
-        </div>
+        <div class="p-2.5 rounded-xl bg-gold-500/10"><i data-lucide="log-out" class="w-6 h-6 text-gold-500"></i></div>
         <div>
           <h3 class="font-bold text-sm text-slate-900 dark:text-white">تأكيد تسجيل الخروج</h3>
           <p class="text-[11px] text-slate-400">إنهاء جلسة الإشراف الحالية</p>
         </div>
       </div>
-
       <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
         هل أنت متأكد أنك تريد تسجيل الخروج من بوابة المشرفين؟ سيتعين عليك إدخال الرمز السري مجدداً للمتابعة.
       </p>
-
       <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
-        <button onclick="closeLogoutModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition">
-          إلغاء
-        </button>
+        <button onclick="closeLogoutModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition">إلغاء</button>
         <button id="confirmLogoutBtn" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 transition shadow-md">
           <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
           <span>نعم، تسجيل الخروج</span>
@@ -414,7 +526,7 @@
     </div>
   </div>
 
-  <!-- ==================== نافذة تأكيد حذف الأستاذ ==================== -->
+  <!-- ==================== نوافذ قسم الأساتذة (حذف وتعديل) ==================== -->
   <div id="deleteModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="w-full max-w-md p-6 rounded-3xl border border-rose-500/30 bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
       <div class="flex items-center gap-3 text-rose-500">
@@ -437,7 +549,6 @@
     </div>
   </div>
 
-  <!-- ==================== نافذة تعديل بيانات الأستاذ ==================== -->
   <div id="editModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
     <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
@@ -512,7 +623,7 @@
     </div>
   </div>
 
-  <!-- ==================== نافذة تأكيد حذف المورد ==================== -->
+  <!-- ==================== نوافذ قسم الموارد (حذف وتعديل) ==================== -->
   <div id="deleteResourceModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="w-full max-w-md p-6 rounded-3xl border border-rose-500/30 bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
       <div class="flex items-center gap-3 text-rose-500">
@@ -535,7 +646,6 @@
     </div>
   </div>
 
-  <!-- ==================== نافذة تعديل بيانات المورد ==================== -->
   <div id="editResourceModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
     <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
@@ -604,6 +714,101 @@
     </div>
   </div>
 
+  <!-- ==================== نوافذ قسم التوجيه (حذف وتعديل) ==================== -->
+  <div id="deleteGuidanceModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="w-full max-w-md p-6 rounded-3xl border border-rose-500/30 bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
+      <div class="flex items-center gap-3 text-rose-500">
+        <div class="p-2.5 rounded-xl bg-rose-500/10"><i data-lucide="alert-triangle" class="w-6 h-6"></i></div>
+        <div>
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white">تأكيد حذف جهة التواصل</h3>
+          <p class="text-[11px] text-slate-400">سيتم إزالة السطر من جدول Google Sheets فوراً</p>
+        </div>
+      </div>
+      <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        هل أنت متأكد من حذف جهة التواصل: <strong id="deleteGuidanceName" class="text-rose-500 font-bold"></strong>؟
+      </p>
+      <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+        <button onclick="closeDeleteGuidanceModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition">إلغاء</button>
+        <button id="confirmDeleteGuidanceBtn" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 transition shadow-md">
+          <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          <span>نعم، حذف نهائي</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="editGuidanceModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white">تعديل تفاصيل جهة التواصل</h3>
+          <p class="text-[11px] text-slate-400">سيتم تحديث المعلومات مباشرة في Google Sheets والموقع</p>
+        </div>
+        <button onclick="closeEditGuidanceModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <form id="editGuidanceForm" class="space-y-4 text-xs">
+        <input id="editOriginalGuidanceName" type="hidden">
+        <input id="editOriginalGuidanceLink" type="hidden">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">نوع جهة التواصل *</label>
+            <select id="editGuiTypeSelect" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="مجموعة اختصاص أكاديمي">مجموعة اختصاص أكاديمي</option>
+              <option value="مجموعة واتساب عامة للإعلانات">مجموعة واتساب عامة للإعلانات</option>
+              <option value="ممثل أو مندوب اختصاص">ممثل أو مندوب اختصاص</option>
+              <option value="مرشد أكاديمي للفرع">مرشد أكاديمي للفرع</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold mb-1">الاسم أو الصفة المعتمدة *</label>
+            <input id="editGuiName" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">الكلية أو الاختصاص المشمول *</label>
+            <input id="editGuiMajor" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block font-bold mb-1">حالة المجموعة أو التوفر *</label>
+            <select id="editGuiStatusSelect" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="فعال ومتاح للانضمام">فعال ومتاح للانضمام</option>
+              <option value="المجموعة ممتلئة حالياً">المجموعة ممتلئة حالياً</option>
+              <option value="قيد التحديث قريباً">قيد التحديث قريباً</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">رابط الواتساب المباشر *</label>
+            <input id="editGuiLink" type="url" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+          </div>
+          <div>
+            <label class="block font-bold mb-1">رقم الهاتف للتواصل (اختياري)</label>
+            <input id="editGuiPhone" type="tel" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold mb-1">الوصف والمهام المخصصة *</label>
+          <input id="editGuiDesc" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeEditGuidanceModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">إلغاء</button>
+          <button id="saveEditGuidanceBtn" type="submit" class="px-5 py-2 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold flex items-center gap-1.5 shadow-md">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            <span>حفظ التعديلات</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- ==================== السكربت البرمجي الشامل ==================== -->
   <script>
     lucide.createIcons();
@@ -616,6 +821,9 @@
 
     let liveResourcesList = [];
     let resourceToDelete = null;
+
+    let liveGuidanceList = [];
+    let guidanceToDelete = null;
 
     // 1. نظام المظهر (Dark / Light)
     const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
@@ -650,21 +858,35 @@
     function switchMainSection(section) {
       const secFaculty = document.getElementById('sectionFaculty');
       const secResources = document.getElementById('sectionResources');
+      const secGuidance = document.getElementById('sectionGuidance');
+
       const btnFaculty = document.getElementById('navFacultyBtn');
       const btnResources = document.getElementById('navResourcesBtn');
+      const btnGuidance = document.getElementById('navGuidanceBtn');
+
+      const defaultBtnClass = "nav-main-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition";
+      const activeBtnClass = "nav-main-tab active w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition";
+
+      secFaculty.classList.add('hidden');
+      secResources.classList.add('hidden');
+      secGuidance.classList.add('hidden');
+
+      btnFaculty.className = defaultBtnClass;
+      btnResources.className = defaultBtnClass;
+      btnGuidance.className = defaultBtnClass;
 
       if (section === 'faculty') {
         secFaculty.classList.remove('hidden');
-        secResources.classList.add('hidden');
-        btnFaculty.className = "nav-main-tab active w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition";
-        btnResources.className = "nav-main-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition";
+        btnFaculty.className = activeBtnClass;
         fetchLiveFacultyData();
       } else if (section === 'resources') {
-        secFaculty.classList.add('hidden');
         secResources.classList.remove('hidden');
-        btnResources.className = "nav-main-tab active w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition";
-        btnFaculty.className = "nav-main-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition";
+        btnResources.className = activeBtnClass;
         fetchLiveResourcesData();
+      } else if (section === 'guidance') {
+        secGuidance.classList.remove('hidden');
+        btnGuidance.className = activeBtnClass;
+        fetchLiveGuidanceData();
       }
       lucide.createIcons();
     }
@@ -709,6 +931,7 @@
         if (welcomeAdmin) welcomeAdmin.textContent = `المشرف النشط: ${activeAdmin}`;
         fetchLiveFacultyData();
         fetchLiveResourcesData();
+        fetchLiveGuidanceData();
         lucide.createIcons();
       } else {
         loginGate.classList.remove('hidden');
@@ -1349,6 +1572,317 @@
         } finally {
           saveEditResourceBtn.disabled = false;
           saveEditResourceBtn.innerHTML = originalText;
+          lucide.createIcons();
+        }
+      });
+    }
+
+    // ==================== دوال قسم شبكة التوجيه والتواصل ====================
+    function switchGuidanceSubTab(tab) {
+      const addView = document.getElementById('guidanceAddView');
+      const manageView = document.getElementById('guidanceManageView');
+      const tabAdd = document.getElementById('tabGuidanceAdd');
+      const tabManage = document.getElementById('tabGuidanceManage');
+
+      if (tab === 'add') {
+        addView.classList.remove('hidden');
+        manageView.classList.add('hidden');
+        tabAdd.className = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
+        tabManage.className = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
+      } else {
+        addView.classList.add('hidden');
+        manageView.classList.remove('hidden');
+        tabManage.className = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
+        tabAdd.className = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
+        fetchLiveGuidanceData();
+      }
+      lucide.createIcons();
+    }
+
+    function renderAdminGuidanceCards(list) {
+      const container = document.getElementById('guidanceListContainer');
+      const badge = document.getElementById('guidanceCountBadge');
+      if (!container) return;
+      if (badge) badge.textContent = list.length;
+
+      if (!list || list.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد مجموعات أو جهات تواصل مسجلة حالياً في قاعدة البيانات.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map((item, index) => {
+        const type = item['النوع'] || 'مجموعة اختصاص';
+        const name = item['الاسم أو الصفة'] || 'جهة تواصل';
+        const major = item['الكلية أو الاختصاص'] || 'عام';
+        const phone = item['رقم الهاتف'] || '';
+        const link = item['رابط الواتساب'] || '#';
+        const status = item['الحالة'] || 'فعال ومتاح للانضمام';
+        const desc = item['الوصف'] || '';
+
+        let statusBadgeColor = "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400";
+        if (status.includes('ممتلئ') || status.includes('مغلق')) {
+          statusBadgeColor = "bg-amber-500/10 text-amber-600 dark:text-amber-400";
+        } else if (status.includes('تحديث')) {
+          statusBadgeColor = "bg-blue-500/10 text-blue-600 dark:text-blue-400";
+        }
+
+        return `
+          <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gold-500/10 text-gold-600 dark:text-gold-400">${type}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${statusBadgeColor}">${status}</span>
+                <span class="text-[11px] text-slate-400 font-medium">${major}</span>
+              </div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-xl">${desc}</p>
+              ${phone ? `<p class="text-[11px] text-slate-400 font-mono" dir="ltr">الهاتف: ${phone}</p>` : ''}
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
+              <a href="${link}" target="_blank" class="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500 hover:text-white text-xs font-bold transition" title="فتح رابط الواتساب">
+                <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+              </a>
+              <button onclick="openEditGuidanceModal(${index})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                <span>تعديل</span>
+              </button>
+              <button onclick="openDeleteGuidanceModal(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>حذف</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    async function fetchLiveGuidanceData(forceFresh = false) {
+      const cached = localStorage.getItem('nadi_guidance_cache');
+      if (cached && !forceFresh) {
+        try {
+          liveGuidanceList = JSON.parse(cached);
+          renderAdminGuidanceCards(liveGuidanceList);
+        } catch (e) {}
+      }
+
+      if (!SCRIPT_URL) return;
+
+      try {
+        const res = await fetch(SCRIPT_URL);
+        const data = await res.json();
+        if (data.guidance && Array.isArray(data.guidance)) {
+          liveGuidanceList = data.guidance;
+          renderAdminGuidanceCards(liveGuidanceList);
+          localStorage.setItem('nadi_guidance_cache', JSON.stringify(liveGuidanceList));
+        }
+      } catch (err) {}
+    }
+
+    const guidanceForm = document.getElementById('guidanceForm');
+    const submitGuidanceBtn = document.getElementById('submitGuidanceBtn');
+    const guidanceSuccessMsg = document.getElementById('guidanceSuccessMsg');
+
+    if (guidanceForm) {
+      guidanceForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const originalBtnText = submitGuidanceBtn.innerHTML;
+        submitGuidanceBtn.disabled = true;
+        submitGuidanceBtn.innerHTML = `<span>جاري الإرسال والحفظ...</span>`;
+
+        const newGuidance = {
+          'النوع': document.getElementById('guiTypeSelect').value,
+          'الاسم أو الصفة': document.getElementById('guiName').value.trim(),
+          'الكلية أو الاختصاص': document.getElementById('guiMajor').value.trim(),
+          'حالة': document.getElementById('guiStatusSelect').value,
+          'الحالة': document.getElementById('guiStatusSelect').value,
+          'رابط الواتساب': document.getElementById('guiLink').value.trim(),
+          'رقم الهاتف': document.getElementById('guiPhone').value.trim(),
+          'الوصف': document.getElementById('guiDesc').value.trim()
+        };
+
+        const payload = {
+          action: "add_guidance",
+          adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف",
+          type: newGuidance['النوع'],
+          name: newGuidance['الاسم أو الصفة'],
+          major: newGuidance['الكلية أو الاختصاص'],
+          status: newGuidance['الحالة'],
+          link: newGuidance['رابط الواتساب'],
+          phone: newGuidance['رقم الهاتف'],
+          desc: newGuidance['الوصف']
+        };
+
+        liveGuidanceList.push(newGuidance);
+        localStorage.setItem('nadi_guidance_cache', JSON.stringify(liveGuidanceList));
+        renderAdminGuidanceCards(liveGuidanceList);
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          if (guidanceSuccessMsg) guidanceSuccessMsg.classList.remove('hidden');
+          guidanceForm.reset();
+
+          setTimeout(() => {
+            if (guidanceSuccessMsg) guidanceSuccessMsg.classList.add('hidden');
+            fetchLiveGuidanceData(true);
+          }, 2500);
+        } catch (err) {
+          alert('تعذر إتمام الإرسال، يرجى مراجعة اتصال الإنترنت.');
+        } finally {
+          submitGuidanceBtn.disabled = false;
+          submitGuidanceBtn.innerHTML = originalBtnText;
+          lucide.createIcons();
+        }
+      });
+    }
+
+    const deleteGuidanceModal = document.getElementById('deleteGuidanceModal');
+    const deleteGuidanceName = document.getElementById('deleteGuidanceName');
+    const confirmDeleteGuidanceBtn = document.getElementById('confirmDeleteGuidanceBtn');
+
+    function openDeleteGuidanceModal(index) {
+      guidanceToDelete = liveGuidanceList[index];
+      if (!guidanceToDelete) return;
+      deleteGuidanceName.textContent = `${guidanceToDelete['الاسم أو الصفة']} (${guidanceToDelete['الكلية أو الاختصاص']})`;
+      deleteGuidanceModal.classList.remove('hidden');
+      deleteGuidanceModal.classList.add('flex');
+    }
+
+    function closeDeleteGuidanceModal() {
+      guidanceToDelete = null;
+      deleteGuidanceModal.classList.add('hidden');
+      deleteGuidanceModal.classList.remove('flex');
+    }
+
+    if (confirmDeleteGuidanceBtn) {
+      confirmDeleteGuidanceBtn.addEventListener('click', async () => {
+        if (!guidanceToDelete) return;
+        const originalText = confirmDeleteGuidanceBtn.innerHTML;
+        confirmDeleteGuidanceBtn.disabled = true;
+        confirmDeleteGuidanceBtn.innerHTML = `<span>جاري الحذف...</span>`;
+
+        const deletedTarget = guidanceToDelete;
+        const payload = {
+          action: "delete_guidance",
+          name: deletedTarget['الاسم أو الصفة'] || "",
+          link: deletedTarget['رابط الواتساب'] || "",
+          adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف"
+        };
+
+        liveGuidanceList = liveGuidanceList.filter(item => item !== deletedTarget);
+        localStorage.setItem('nadi_guidance_cache', JSON.stringify(liveGuidanceList));
+        renderAdminGuidanceCards(liveGuidanceList);
+        closeDeleteGuidanceModal();
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          setTimeout(() => { fetchLiveGuidanceData(true); }, 1500);
+        } catch (err) {
+          alert('تعذر إتمام عملية الحذف.');
+        } finally {
+          confirmDeleteGuidanceBtn.disabled = false;
+          confirmDeleteGuidanceBtn.innerHTML = originalText;
+          lucide.createIcons();
+        }
+      });
+    }
+
+    const editGuidanceModal = document.getElementById('editGuidanceModal');
+    const editGuidanceForm = document.getElementById('editGuidanceForm');
+    const saveEditGuidanceBtn = document.getElementById('saveEditGuidanceBtn');
+
+    function openEditGuidanceModal(index) {
+      const item = liveGuidanceList[index];
+      if (!item) return;
+
+      document.getElementById('editOriginalGuidanceName').value = item['الاسم أو الصفة'] || "";
+      document.getElementById('editOriginalGuidanceLink').value = item['رابط الواتساب'] || "";
+
+      document.getElementById('editGuiTypeSelect').value = item['النوع'] || "مجموعة اختصاص أكاديمي";
+      document.getElementById('editGuiName').value = item['الاسم أو الصفة'] || "";
+      document.getElementById('editGuiMajor').value = item['الكلية أو الاختصاص'] || "";
+      document.getElementById('editGuiStatusSelect').value = item['الحالة'] || "فعال ومتاح للانضمام";
+      document.getElementById('editGuiLink').value = item['رابط الواتساب'] || "";
+      document.getElementById('editGuiPhone').value = item['رقم الهاتف'] || "";
+      document.getElementById('editGuiDesc').value = item['الوصف'] || "";
+
+      editGuidanceModal.classList.remove('hidden');
+      editGuidanceModal.classList.add('flex');
+    }
+
+    function closeEditGuidanceModal() {
+      editGuidanceModal.classList.add('hidden');
+      editGuidanceModal.classList.remove('flex');
+    }
+
+    if (editGuidanceForm) {
+      editGuidanceForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const originalText = saveEditGuidanceBtn.innerHTML;
+        saveEditGuidanceBtn.disabled = true;
+        saveEditGuidanceBtn.innerHTML = `<span>جاري حفظ التعديل...</span>`;
+
+        const originalName = document.getElementById('editOriginalGuidanceName').value;
+        const originalLink = document.getElementById('editOriginalGuidanceLink').value;
+
+        const updatedGuidance = {
+          'النوع': document.getElementById('editGuiTypeSelect').value,
+          'الاسم أو الصفة': document.getElementById('editGuiName').value.trim(),
+          'الكلية أو الاختصاص': document.getElementById('editGuiMajor').value.trim(),
+          'الحالة': document.getElementById('editGuiStatusSelect').value,
+          'رابط الواتساب': document.getElementById('editGuiLink').value.trim(),
+          'رقم الهاتف': document.getElementById('editGuiPhone').value.trim(),
+          'الوصف': document.getElementById('editGuiDesc').value.trim()
+        };
+
+        const payload = {
+          action: "edit_guidance",
+          originalName: originalName,
+          originalLink: originalLink,
+          type: updatedGuidance['النوع'],
+          name: updatedGuidance['الاسم أو الصفة'],
+          major: updatedGuidance['الكلية أو الاختصاص'],
+          status: updatedGuidance['الحالة'],
+          link: updatedGuidance['رابط الواتساب'],
+          phone: updatedGuidance['رقم الهاتف'],
+          desc: updatedGuidance['الوصف'],
+          adminUser: sessionStorage.getItem('nadi_admin_session') || "مشرف"
+        };
+
+        liveGuidanceList = liveGuidanceList.map(item => {
+          if ((item['الاسم أو الصفة'] || '') === originalName || (item['رابط الواتساب'] || '') === originalLink) {
+            return { ...item, ...updatedGuidance };
+          }
+          return item;
+        });
+        localStorage.setItem('nadi_guidance_cache', JSON.stringify(liveGuidanceList));
+        renderAdminGuidanceCards(liveGuidanceList);
+        closeEditGuidanceModal();
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          setTimeout(() => { fetchLiveGuidanceData(true); }, 1500);
+        } catch (err) {
+          alert('تعذر حفظ التعديلات.');
+        } finally {
+          saveEditGuidanceBtn.disabled = false;
+          saveEditGuidanceBtn.innerHTML = originalText;
           lucide.createIcons();
         }
       });
