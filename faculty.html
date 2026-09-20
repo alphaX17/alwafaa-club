@@ -78,7 +78,7 @@
   <!-- ==================== المحتوى الرئيسي ==================== -->
   <main class="max-w-7xl mx-auto px-4 lg:px-8 py-8 space-y-6">
 
-    <!-- شريط البحث والتصفية المتطابق مع الكليات الـ 5 -->
+    <!-- شريط البحث والتصفية للكليات الـ 5 + الإدارة -->
     <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-4">
       
       <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
@@ -87,7 +87,7 @@
           <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3.5 right-3"></i>
         </div>
 
-        <!-- أزرار الفرز لجميع كليات الجامعة الـ 5 + الإدارة -->
+        <!-- أزرار الفرز -->
         <div class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 custom-scrollbar" id="filterContainer">
           <button class="filter-btn active shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 border-transparent" data-category="all">الكل</button>
           <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="engineering">كلية الهندسة</button>
@@ -101,10 +101,10 @@
 
     </div>
 
-    <!-- شبكة بطاقات الدكاترة والإدارة (يتم ملؤها فورياً عبر الكاش لمنع الوميض) -->
+    <!-- شبكة بطاقات الدكاترة والإدارة -->
     <div id="facultyGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 min-h-[200px]"></div>
 
-    <!-- رسالة عدم وجود نتائج مطابقة للبحث أو التصفية -->
+    <!-- رسالة عدم وجود نتائج -->
     <div id="noFacultyResults" class="hidden text-center py-16">
       <i data-lucide="user-x" class="w-12 h-12 mx-auto text-slate-400 mb-3 opacity-60"></i>
       <h3 class="text-sm font-bold text-slate-700 dark:text-slate-300">لم يتم العثور على أي نتيجة مطابقة</h3>
@@ -117,7 +117,6 @@
   <div id="menuOverlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
   <aside id="sidebar" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0c1427] border-l border-slate-200 dark:border-clubNavy-borderDark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
-    
     <div>
       <div class="p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
         <div>
@@ -134,12 +133,10 @@
           <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
           <span>الرئيسية (الأنشطة والإعلانات)</span>
         </a>
-
         <a href="scholarship.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="graduation-cap" class="w-4 h-4 text-slate-400"></i>
           <span>المنح الطلابية (تسجيل مباشر)</span>
         </a>
-
         <a href="resources.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="folder-down" class="w-4 h-4 text-slate-400"></i>
           <div>
@@ -147,7 +144,6 @@
             <p class="text-[10px] text-slate-400 dark:text-slate-500">كتب PDF • نماذج سابقة • ملخصات</p>
           </div>
         </a>
-
         <a href="books.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="book-open" class="w-4 h-4 text-slate-400"></i>
           <div>
@@ -155,12 +151,10 @@
             <p class="text-[10px] text-slate-400 dark:text-slate-500">حجز أو تبرع بالنسخ الفيزيائية</p>
           </div>
         </a>
-
         <a href="faculty.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
           <i data-lucide="users" class="w-4 h-4"></i>
           <span>دليل الأساتذة والساعات المكتبية</span>
         </a>
-
         <a href="guidance.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="message-circle" class="w-4 h-4 text-slate-400"></i>
           <div>
@@ -183,11 +177,11 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
     let facultyData = [];
 
-    // محرك الفرز الذكي الشامل لجميع اختصاصات الجامعة الـ 5 + الإدارة
+    // محرك الفرز الذكي لجميع اختصاصات الجامعة الـ 5 + الإدارة
     function detectCollegeCategory(college = '', title = '', rawCat = '') {
       const combined = `${college} ${title} ${rawCat}`.toLowerCase();
 
-      // 1. كلية الصيدلة (School of Pharmacy)
+      // 1. كلية الصيدلة
       if (combined.includes('pharmacy') || combined.includes('صيدل') || combined.includes('pre-pharmacy')) {
         return {
           code: 'pharmacy',
@@ -195,7 +189,7 @@
         };
       }
 
-      // 2. الجهاز الإداري والمكتبة (Administration)
+      // 2. الجهاز الإداري والمكتبة
       if (combined.includes('admin') || combined.includes('إدار') || combined.includes('ادار') || 
           combined.includes('مكتبة') || combined.includes('library') || combined.includes('شؤون') || 
           combined.includes('تسجيل') || combined.includes('registrar') || combined.includes('سمرة') || 
@@ -206,7 +200,7 @@
         };
       }
 
-      // 3. كلية إدارة الأعمال (School of Business)
+      // 3. كلية إدارة الأعمال
       if (combined.includes('business') || combined.includes('أعمال') || combined.includes('اعمال') || 
           combined.includes('account') || combined.includes('محاسب') || combined.includes('economic') || 
           combined.includes('اقتصاد') || combined.includes('finance') || combined.includes('مالي') || 
@@ -219,7 +213,7 @@
         };
       }
 
-      // 4. كلية التربية واللغات (School of Education)
+      // 4. كلية التربية واللغات
       if (combined.includes('education') || combined.includes('تربي') || combined.includes('tefl') || 
           combined.includes('translation') || combined.includes('ترجم') || combined.includes('interpretation') || 
           combined.includes('childhood') || combined.includes('طفول') || combined.includes('english') || 
@@ -230,12 +224,12 @@
         };
       }
 
-      // 5. كلية الهندسة (School of Engineering)
+      // 5. كلية الهندسة
       if (combined.includes('engineer') || combined.includes('هندس') || combined.includes('mech') || 
           combined.includes('ميكانيك') || combined.includes('civil') || combined.includes('مدني') || 
           combined.includes('survey') || combined.includes('مساح') || combined.includes('electric') || 
-          combined.includes('كهرب') || combined.includes('communicat') && combined.includes('eng') || 
-          combined.includes('اتصال') && combined.includes('هندس') || combined.includes('industr') || 
+          combined.includes('كهرب') || (combined.includes('communicat') && combined.includes('eng')) || 
+          (combined.includes('اتصال') && combined.includes('هندس')) || combined.includes('industr') || 
           combined.includes('صناع') || combined.includes('electron') || combined.includes('إلكترون') || 
           combined.includes('biomedical eng')) {
         return {
@@ -244,8 +238,7 @@
         };
       }
 
-      // 6. كلية الفنون والعلوم (School of Arts and Sciences)
-      // تشمل: فنون التواصل، الصحافة، الإعلان، CS, IT, كيمياء، بيولوجيا، رياضيات، فيزياء، تغذية، تصميم
+      // 6. كلية الفنون والعلوم
       if (combined.includes('art') || combined.includes('science') || combined.includes('فنون') || 
           combined.includes('علوم') || combined.includes('computer science') || combined.includes('cs') || 
           combined.includes('حاسوب') || combined.includes('information tech') || combined.includes('it') || 
@@ -265,14 +258,13 @@
         };
       }
 
-      // افتراضي (إذا لم يتم التعرف)
       return {
         code: 'arts_sciences',
         badgeColor: 'bg-slate-500/10 text-slate-600 dark:text-slate-400'
       };
     }
 
-    // دالة رسم بطاقات الأساتذة على الشاشة
+    // دالة رسم بطاقات الأساتذة على الشاشة مع دعم الساعات المكتبية الذكي (Hidden إذا كانت فارغة)
     function renderFaculty(list) {
       const grid = document.getElementById('facultyGrid');
       if (!grid) return;
@@ -289,15 +281,35 @@
         const email = item['البريد الإلكتروني'] || '';
         const rawCat = item['التصنيف البرمجي'] || '';
 
-        // الفحص الذكي للكلية واللون
+        // قراءة الساعات المكتبية ومكان المكتب
+        const officeRoom = String(item['مكان المكتب'] || item['المكتب'] || '').trim();
+        const officeHours = String(item['الساعات المكتبية'] || '').trim();
+
         const detection = detectCollegeCategory(college, title, rawCat);
         const catCode = detection.code;
         const badgeColor = detection.badgeColor;
 
-        // قراءة الشارة الثانية المخصصة من عمود "الصفة الوظيفية" الجديد
         const roleTag = item['الصفة الوظيفية'] || (catCode === 'admin' ? 'الجهاز الإداري' : 'عضو هيئة تعليمية');
-
         const escapedEmail = email.replace(/'/g, "\\'");
+
+        // قسم الساعات المكتبية والمكتب: يُبنى فقط إذا كانت هناك بيانات فعلية مدخلة
+        const hasOfficeDetails = officeRoom !== '' || officeHours !== '';
+        const officeDetailsMarkup = hasOfficeDetails ? `
+          <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 space-y-1.5 text-xs">
+            ${officeRoom ? `
+              <div class="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gold-500 shrink-0"></i>
+                <span class="font-medium">${officeRoom}</span>
+              </div>
+            ` : ''}
+            ${officeHours ? `
+              <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-gold-500 shrink-0"></i>
+                <span>${officeHours}</span>
+              </div>
+            ` : ''}
+          </div>
+        ` : '';
 
         return `
           <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="${catCode}">
@@ -308,6 +320,7 @@
               </div>
               <h3 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h3>
               <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${title}</p>
+              ${officeDetailsMarkup}
             </div>
             <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
               <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">${email}</span>
@@ -326,7 +339,6 @@
 
     // جلب البيانات مع التسريع الفوري (localStorage)
     async function fetchLiveFaculty() {
-      // 1. قراءة الكاش وعرضه فوراً في جزء من الثانية (0 ثوانٍ)
       const cached = localStorage.getItem('nadi_faculty_cache');
       if (cached) {
         try {
@@ -339,7 +351,6 @@
 
       if (!SCRIPT_URL) return;
 
-      // 2. فحص وتحديث البيانات من Google Sheets بالخلفية
       try {
         const response = await fetch(SCRIPT_URL);
         const data = await response.json();
