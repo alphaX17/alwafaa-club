@@ -41,7 +41,7 @@
   <header class="sticky top-0 z-40 bg-white/90 dark:bg-[#080e1c]/90 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 transition-colors">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       
-      <!-- الجهة اليمنى: زر القائمة الجانبية (☰) وهوية الصفحة -->
+      <!-- الجهة اليمنى: زر القائمة الجانبية وهوية الصفحة -->
       <div class="flex items-center gap-4">
         <button id="openMenuBtn" aria-label="فتح القائمة" class="p-2.5 rounded-lg bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
           <i data-lucide="menu" class="w-5 h-5"></i>
@@ -98,7 +98,7 @@
         <span class="text-[11px] text-slate-400 font-medium">واتساب الرسمي</span>
       </div>
 
-      <!-- شبكة المجموعات (يتم ملؤها فورياً عبر الكاش لمنع الوميض) -->
+      <!-- شبكة المجموعات -->
       <div id="groupsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4 min-h-[160px]"></div>
     </section>
 
@@ -112,7 +112,7 @@
         <span class="text-[11px] text-slate-400 font-medium">فرع صور</span>
       </div>
 
-      <!-- شبكة الممثلين (يتم ملؤها فورياً عبر الكاش لمنع الوميض) -->
+      <!-- شبكة الممثلين والمرشدين -->
       <div id="repsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 min-h-[180px]"></div>
     </section>
 
@@ -124,7 +124,6 @@
   <aside id="sidebar" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0c1427] border-l border-slate-200 dark:border-clubNavy-borderDark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
     
     <div>
-      <!-- رأس القائمة -->
       <div class="p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
         <div>
           <h2 class="font-bold text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
@@ -135,9 +134,7 @@
         </button>
       </div>
 
-      <!-- قائمة الروابط الرئيسية -->
       <nav class="p-4 space-y-1.5">
-        
         <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
           <span>الرئيسية (الأنشطة والإعلانات)</span>
@@ -176,11 +173,9 @@
             <span class="text-[10px] text-slate-400 dark:text-slate-500">مجموعات الواتساب والتواصل المباشر</span>
           </div>
         </a>
-
       </nav>
     </div>
 
-    <!-- أسفل القائمة -->
     <div class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
       نادي الوفاء — الجامعة اللبنانية الدولية في صور
     </div>
@@ -193,12 +188,21 @@
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
 
-    // دالة رسم بطاقات التوجيه والمجموعات
+    // دالة رسم بطاقات التوجيه والمجموعات بفرز ذكي ومرن
     function renderGuidance(guidanceList) {
       if (!guidanceList || !Array.isArray(guidanceList)) return;
 
-      const groups = guidanceList.filter(item => String(item['النوع'] || '').trim() === 'مجموعة');
-      const reps = guidanceList.filter(item => String(item['النوع'] || '').trim() === 'مسؤول');
+      // فرز المجموعات: أي بطاقة تحتوي في خانة النوع على "مجموعة" أو "قناة" أو "إعلان"
+      const groups = guidanceList.filter(item => {
+        const type = String(item['النوع'] || '').trim().toLowerCase();
+        return type.includes('مجموعة') || type.includes('قناة') || type.includes('إعلان');
+      });
+
+      // فرز الممثلين والمرشدين: أي بطاقة تحتوي على "مسؤول"، "مندوب"، "ممثل"، أو "مرشد"
+      const reps = guidanceList.filter(item => {
+        const type = String(item['النوع'] || '').trim().toLowerCase();
+        return type.includes('مسؤول') || type.includes('مندوب') || type.includes('ممثل') || type.includes('مرشد') || (!type.includes('مجموعة') && !type.includes('قناة'));
+      });
 
       // أ) رسم بطاقات المجموعات الرسمية
       const groupsGrid = document.getElementById('groupsGrid');
@@ -209,17 +213,17 @@
           groupsGrid.innerHTML = groups.map(g => {
             const name = g['الاسم أو الصفة'] || 'مجموعة رسمية';
             const tag = g['الكلية أو الاختصاص'] || 'قناة إعلانية';
-            const link = g['رابط الواتساب'] || '';
+            const link = String(g['رابط الواتساب'] || '').trim();
             const status = String(g['الحالة'] || '').trim();
-            const isActive = status === 'فعال' && link !== '';
 
-            // قراءة الوصف المخصص من عمود "الوصف" الجديد أو اعتماد النص التلقائي
+            const isClosed = status.includes('ممتلئ') || status.includes('مغلق') || status.includes('تحديث');
+            const isActive = !isClosed && link !== '' && link !== '#';
+
             const desc = g['الوصف'] || 'القناة الرسمية المخصصة للتواصل، الإعلانات الأكاديمية ومساعدة الطلاب في حرم الجامعة.';
 
-            // تحديد لون شارة نوع المجموعة كما في التصميم الأصلي
             let badgeBg = "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400";
-            if (name.includes('إخوة')) badgeBg = "bg-blue-500/10 text-blue-600 dark:text-blue-400";
-            if (name.includes('أخوات')) badgeBg = "bg-purple-500/10 text-purple-600 dark:text-purple-400";
+            if (name.includes('إخوة') || tag.includes('إخوة')) badgeBg = "bg-blue-500/10 text-blue-600 dark:text-blue-400";
+            if (name.includes('أخوات') || tag.includes('أخوات')) badgeBg = "bg-purple-500/10 text-purple-600 dark:text-purple-400";
 
             const actionBtn = isActive
               ? `<a href="${link}" target="_blank" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition shadow-sm">
@@ -251,7 +255,7 @@
         }
       }
 
-      // ب) رسم بطاقات ممثلي الكليات والاختصاصات
+      // ب) رسم بطاقات ممثلي الكليات والاختصاصات والمرشدين
       const repsGrid = document.getElementById('repsGrid');
       if (repsGrid) {
         if (reps.length === 0) {
@@ -261,21 +265,29 @@
             const name = r['الاسم أو الصفة'] || 'مسؤول اختصاص';
             const faculty = r['الكلية أو الاختصاص'] || 'كلية الهندسة';
             const phone = String(r['رقم الهاتف'] || '').trim();
+            const rawLink = String(r['رابط الواتساب'] || '').trim();
             const status = String(r['الحالة'] || '').trim();
-            const isActive = status === 'فعال' && phone !== '' && !phone.includes('تحديث');
 
-            // ضبط لون الشارة حسب الكلية كما في التصميم الأصلي
+            const isClosed = status.includes('ممتلئ') || status.includes('مغلق') || status.includes('تحديث');
+
+            // تجهيز رابط الواتساب سواء كان رابطاً مدخلاً أو هاتفاً
+            const cleanPhone = phone.replace(/[^0-9]/g, '');
+            const defaultMsg = encodeURIComponent(`السلام عليكم ورحمة الله، أتواصل معك عبر منصة نادي الوفاء بخصوص ${name}`);
+            const waLink = rawLink || (cleanPhone ? `https://wa.me/${cleanPhone}?text=${defaultMsg}` : '');
+            
+            const hasLink = waLink !== '' && waLink !== '#';
+            const isActive = !isClosed && hasLink;
+
+            // تحديد لون الشارة حسب الكلية
             let tagColor = "text-gold-500";
             const lowerFac = faculty.toLowerCase();
             const lowerName = name.toLowerCase();
             if (lowerFac.includes('علوم') || lowerName.includes('حاسوب') || lowerName.includes('cs')) tagColor = "text-blue-500";
             if (lowerFac.includes('صيدلة')) tagColor = "text-teal-500";
             if (lowerName.includes('طبي') || lowerName.includes('biomedical')) tagColor = "text-rose-500";
-
-            // تجهيز رابط الواتساب مع الرسالة المسبقة الذكية المحددة للاختصاص
-            const cleanPhone = phone.replace(/[^0-9]/g, '');
-            const defaultMsg = encodeURIComponent(`مرحبا زميلي، أنا طالب في الجامعة وعندي استفسار بخصوص ${name}`);
-            const waLink = r['رابط الواتساب'] || (cleanPhone ? `https://wa.me/${cleanPhone}?text=${defaultMsg}` : '');
+            if (lowerFac.includes('هندس') || lowerName.includes('هندس')) tagColor = "text-blue-500";
+            if (lowerFac.includes('إدار') || lowerFac.includes('اعمال') || lowerFac.includes('أعمال') || lowerFac.includes('business')) tagColor = "text-amber-500";
+            if (lowerFac.includes('تربي') || lowerFac.includes('لغات') || lowerFac.includes('education')) tagColor = "text-purple-500";
 
             const actionBtn = isActive
               ? `<a href="${waLink}" target="_blank" class="w-full py-2 rounded-lg bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
@@ -287,9 +299,9 @@
                    <span>الرقم قريباً</span>
                  </button>`;
 
-            const phoneText = isActive
+            const phoneText = phone 
               ? `<p class="text-xs font-mono text-slate-600 dark:text-slate-300" dir="ltr">${phone}</p>`
-              : `<p class="text-xs text-slate-400">قيد التحديث</p>`;
+              : (isActive ? `<p class="text-xs text-emerald-600 dark:text-emerald-400">تواصل مباشر متاح</p>` : `<p class="text-xs text-slate-400">قيد التحديث</p>`);
 
             const cardOpacity = isActive ? '' : 'opacity-75';
 
@@ -314,7 +326,7 @@
 
     // جلب البيانات مع التسريع الفوري (localStorage)
     async function fetchLiveGuidance() {
-      // 1. قراءة الكاش المحلي وعرضه فوراً في جزء من الثانية (0 ثوانٍ)
+      // 1. قراءة الكاش المحلي وعرضه فوراً في 0 ثانية
       const cached = localStorage.getItem('nadi_guidance_cache');
       if (cached) {
         try {
@@ -326,7 +338,7 @@
 
       if (!SCRIPT_URL) return;
 
-      // 2. فحص وتحديث البيانات من Google Sheets بالخلفية بصمت
+      // 2. تحديث البيانات الحية من Google Sheets بالخلفية
       try {
         const response = await fetch(SCRIPT_URL);
         const data = await response.json();
