@@ -100,7 +100,7 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <!-- جرس الإشعارات العائم -->
+        <!-- جرس الإشعارات الذكي -->
         <div class="relative">
           <button id="notifBellBtn" onclick="toggleNotifPanel()" class="relative p-2 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-slate-700 dark:text-slate-200 transition" title="طلبات وتبرعات الكتب">
             <i data-lucide="bell" class="w-4 h-4"></i>
@@ -180,291 +180,6 @@
 
       <!-- مساحة النماذج والمحتوى -->
       <main class="flex-1 space-y-6">
-
-        <!-- 1. دليل الأساتذة -->
-        <div id="sectionFaculty" class="space-y-6">
-          <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit">
-            <button id="tabFacultyAdd" onclick="switchFacultySubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
-              <i data-lucide="plus-circle" class="w-4 h-4"></i>
-              <span>إضافة أستاذ جديد</span>
-            </button>
-            <button id="tabFacultyManage" onclick="switchFacultySubTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
-              <i data-lucide="list-filter" class="w-4 h-4"></i>
-              <span>إدارة وتعديل الأساتذة</span>
-              <span id="facultyCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
-            </button>
-          </div>
-
-          <section id="facultyAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
-            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
-              <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
-              <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة أستاذ جديد أو موظف إداري</h3>
-            </div>
-
-            <form id="facultyForm" class="space-y-5">
-              <div>
-                <label class="block text-xs font-bold mb-1">الاسم الثلاثي واللقب العلمي *</label>
-                <input id="facName" type="text" required placeholder="مثال: د. أحمد محمد حسين أو أ. هبة حمود" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-xs font-bold mb-1">الكلية الأساسية أو القسم *</label>
-                  <select id="facCollegeSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                    <option value="كلية الهندسة" data-category="engineering">كلية الهندسة (Engineering)</option>
-                    <option value="كلية إدارة الأعمال" data-category="business">كلية إدارة الأعمال (Business)</option>
-                    <option value="كلية الفنون والعلوم" data-category="arts_sciences">كلية الفنون والعلوم (Arts & Sciences)</option>
-                    <option value="كلية التربية واللغات" data-category="education">كلية التربية واللغات (Education)</option>
-                    <option value="كلية الصيدلة" data-category="pharmacy">كلية الصيدلة (Pharmacy)</option>
-                    <option value="الجهاز الإداري" data-category="admin">الجهاز الإداري والمكتبة (Administration)</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-xs font-bold mb-1">التصنيف البرمجي (Auto-Filled) *</label>
-                  <input id="facCategoryCode" type="text" readonly value="engineering" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-200/60 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 font-mono focus:outline-none cursor-not-allowed text-left" dir="ltr">
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-xs font-bold mb-1">الاختصاص الأكاديمي أو المسمى الدقيق *</label>
-                  <input id="facTitle" type="text" required placeholder="مثال: دكتوراه هندسة ميكانيكية..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                </div>
-                <div>
-                  <label class="block text-xs font-bold mb-1">الصفة الوظيفية *</label>
-                  <select id="facRoleTag" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                    <option value="عضو هيئة تعليمية">عضو هيئة تعليمية</option>
-                    <option value="رئيس قسم">رئيس قسم</option>
-                    <option value="إدارة المكتبة">إدارة المكتبة</option>
-                    <option value="الدائرة المالية">الدائرة المالية</option>
-                    <option value="شؤون الطلاب والتسجيل">شؤون الطلاب والتسجيل</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold mb-1">البريد الإلكتروني الرسمي *</label>
-                <input id="facEmail" type="email" required placeholder="name.lastname@liu.edu.lb" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-xs font-bold mb-1">مكان المكتب (اختياري)</label>
-                  <input id="facRoom" type="text" placeholder="مثال: مبنى الهندسة - مكتب 204" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                </div>
-                <div>
-                  <label class="block text-xs font-bold mb-1">الساعات المكتبية المتاحة (اختياري)</label>
-                  <input id="facHours" type="text" placeholder="مثال: الإثنين 10:00 - 12:00" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                </div>
-              </div>
-
-              <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
-                <button id="submitFacultyBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
-                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                  <span>إدراج في قاعدة البيانات فوراً</span>
-                </button>
-              </div>
-            </form>
-          </section>
-
-          <section id="facultyManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-              <div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white">قائمة الأساتذة والإداريين المسجلين</h3>
-              </div>
-              <button onclick="fetchLiveFacultyData(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
-                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-                <span>تحديث السحب من الخادم</span>
-              </button>
-            </div>
-            <div id="facultyListContainer" class="space-y-3 min-h-[140px]">
-              <div class="py-12 text-center text-xs text-slate-400">جاري فحص البيانات...</div>
-            </div>
-          </section>
-        </div>
-
-        <!-- 2. الموارد والامتحانات -->
-        <div id="sectionResources" class="hidden space-y-6">
-          <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit">
-            <button id="tabResourceAdd" onclick="switchResourceSubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
-              <i data-lucide="file-plus" class="w-4 h-4"></i>
-              <span>إضافة ملف أو امتحان جديد</span>
-            </button>
-            <button id="tabResourceManage" onclick="switchResourceSubTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
-              <i data-lucide="files" class="w-4 h-4"></i>
-              <span>إدارة وتعديل الملفات</span>
-              <span id="resourceCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
-            </button>
-          </div>
-
-          <section id="resourceAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
-            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
-              <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
-              <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة امتحان أو ملخص دراسي لبنك الموارد</h3>
-            </div>
-
-            <form id="resourceForm" class="space-y-5">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-xs font-bold mb-1">اسم المادة أو المقرر الدراسي *</label>
-                  <input id="resName" type="text" required placeholder="مثال: تفاضل وتكامل 2 (Calculus II)" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                </div>
-                <div>
-                  <label class="block text-xs font-bold mb-1">رمز المادة الأكاديمي (Course Code) *</label>
-                  <input id="resCode" type="text" required placeholder="مثال: MATH 200, MECH 210" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-xs font-bold mb-1">الكلية المعتمدة للمقرر *</label>
-                  <select id="resCollegeSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                    <option value="كلية الهندسة">كلية الهندسة (Engineering)</option>
-                    <option value="كلية إدارة الأعمال">كلية إدارة الأعمال (Business)</option>
-                    <option value="كلية الفنون والعلوم">كلية الفنون والعلوم (Arts & Sciences)</option>
-                    <option value="كلية التربية واللغات">كلية التربية واللغات (Education)</option>
-                    <option value="كلية الصيدلة">كلية الصيدلة (Pharmacy)</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-xs font-bold mb-1">نوع الملف والتصنيف *</label>
-                  <select id="resTypeSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                    <option value="امتحان نصفي (Midterm)">امتحان نصفي (Midterm)</option>
-                    <option value="امتحان نهائي (Final)">امتحان نهائي (Final)</option>
-                    <option value="ملخص دراسي وسلايدات">ملخص دراسي وسلايدات</option>
-                    <option value="نماذج وحلول تمارين">نماذج وحلول تمارين</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold mb-1">الوصف الأكاديمي للمحتوى *</label>
-                <input id="resDesc" type="text" required placeholder="مثال: نماذج امتحانات نصفية مع سلم التصحيح" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold mb-1">رابط التحميل المباشر (Google Drive / Cloud Link) *</label>
-                <input id="resLink" type="url" required placeholder="https://drive.google.com/file/d/..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-              </div>
-
-              <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
-                <button id="submitResourceBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
-                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                  <span>إدراج المورد في قاعدة البيانات فوراً</span>
-                </button>
-              </div>
-            </form>
-          </section>
-
-          <section id="resourceManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-              <div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white">قائمة الموارد والامتحانات المسجلة</h3>
-              </div>
-              <button onclick="fetchLiveResourcesData(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
-                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-                <span>تحديث السحب من الخادم</span>
-              </button>
-            </div>
-            <div id="resourceListContainer" class="space-y-3 min-h-[140px]">
-              <div class="py-12 text-center text-xs text-slate-400">جاري فحص ملفات الموارد...</div>
-            </div>
-          </section>
-        </div>
-
-        <!-- 3. شبكة التوجيه والتواصل -->
-        <div id="sectionGuidance" class="hidden space-y-6">
-          <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit">
-            <button id="tabGuidanceAdd" onclick="switchGuidanceSubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
-              <i data-lucide="user-plus" class="w-4 h-4"></i>
-              <span>إضافة مجموعة أو مندوب</span>
-            </button>
-            <button id="tabGuidanceManage" onclick="switchGuidanceSubTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
-              <i data-lucide="users-2" class="w-4 h-4"></i>
-              <span>إدارة شبكة التواصل</span>
-              <span id="guidanceCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
-            </button>
-          </div>
-
-          <section id="guidanceAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
-            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
-              <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
-              <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة مجموعة واتساب أو ممثل اختصاص</h3>
-            </div>
-
-            <form id="guidanceForm" class="space-y-5">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-xs font-bold mb-1">نوع جهة التواصل *</label>
-                  <select id="guiTypeSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                    <option value="مجموعة اختصاص أكاديمي">مجموعة اختصاص أكاديمي</option>
-                    <option value="مجموعة واتساب عامة للإعلانات">مجموعة واتساب عامة للإعلانات</option>
-                    <option value="ممثل أو مندوب اختصاص">ممثل أو مندوب اختصاص</option>
-                    <option value="مرشد أكاديمي للفرع">مرشد أكاديمي للفرع</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-xs font-bold mb-1">الاسم أو الصفة المعتمدة *</label>
-                  <input id="guiName" type="text" required placeholder="مثال: مجموعة طلاب الهندسة الميكانيكية أو الزميل يوسف قاسم" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-xs font-bold mb-1">الكلية أو الاختصاص المشمول *</label>
-                  <input id="guiMajor" type="text" required placeholder="مثال: كلية الهندسة - ميكانيك" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                </div>
-                <div>
-                  <label class="block text-xs font-bold mb-1">حالة المجموعة أو التوفر *</label>
-                  <select id="guiStatusSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                    <option value="فعال ومتاح للانضمام">فعال ومتاح للانضمام</option>
-                    <option value="المجموعة ممتلئة حالياً">المجموعة ممتلئة حالياً</option>
-                    <option value="قيد التحديث قريباً">قيد التحديث قريباً</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-xs font-bold mb-1">رابط دعوة المجموعة (اختياري بحال توفر رقم هاتف)</label>
-                  <input id="guiLink" type="url" placeholder="https://chat.whatsapp.com/..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-                </div>
-                <div>
-                  <label class="block text-xs font-bold mb-1">رقم هاتف المندوب (اختياري بحال توفر رابط مجموعة)</label>
-                  <input id="guiPhone" type="tel" placeholder="مثال: 70123456" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-                </div>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold mb-1">الوصف والمهام المخصصة *</label>
-                <input id="guiDesc" type="text" required placeholder="مثال: مجموعة رسمية لتبادل الملاحظات الأكاديمية" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-              </div>
-
-              <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
-                <button id="submitGuidanceBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
-                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                  <span>إدراج جهة التواصل فوراً</span>
-                </button>
-              </div>
-            </form>
-          </section>
-
-          <section id="guidanceManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-              <div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white">قائمة مجموعات وممثلي الاختصاصات</h3>
-              </div>
-              <button onclick="fetchLiveGuidanceData(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
-                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-                <span>تحديث السحب من الخادم</span>
-              </button>
-            </div>
-            <div id="guidanceListContainer" class="space-y-3 min-h-[140px]">
-              <div class="py-12 text-center text-xs text-slate-400">جاري فحص شبكة التوجيه...</div>
-            </div>
-          </section>
-        </div>
-
         <!-- 4. مكتبة الكتب الورقية -->
         <div id="sectionBooks" class="hidden space-y-6">
           <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit flex-wrap">
@@ -554,12 +269,11 @@
             </div>
           </section>
 
-          <!-- إدارة الطلبات والتبرعات (مع زر الواتساب المباشر والتفاصيل الموسعة) -->
+          <!-- إدارة الطلبات والتبرعات -->
           <section id="bookRequestsView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
               <div>
                 <h3 class="text-base font-bold text-slate-900 dark:text-white">طلبات الاستعارة والتبرعات بالكتب</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">يمكنك قبول التبرع ونشره مباشرة، أو تعديل تفاصيله، أو مراسلة الطالب عبر واتساب، أو رفض الطلب.</p>
               </div>
               <button onclick="fetchLiveBookRequests(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
                 <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
@@ -734,7 +448,7 @@
 
     applyAdminTheme(localStorage.getItem('clubTheme') !== 'light');
 
-    // جرس الإشعارات الذكي (تصفير النقطة الحمراء بمجرد الفتح)
+    // جرس الإشعارات الذكي
     function toggleNotifPanel() {
       const panel = document.getElementById('notifPanel');
       if (!panel) return;
@@ -912,7 +626,7 @@
       switchBookSubTab('requests');
     }
 
-    // إدارة الكتب الورقية
+    // ==================== إدارة الكتب الورقية ====================
     function renderAdminBookCards(list) {
       const container = document.getElementById('bookListContainer');
       const badge = document.getElementById('bookCountBadge');
@@ -930,11 +644,56 @@
         const desc = book['الوصف والطبعة'] || '';
         const copies = book['عدد النسخ'] || '1';
         const status = String(book['الحالة'] || '').trim();
+        const borrowerName = book['اسم المستعير'] || '';
+        const borrowerPhone = book['رقم هاتف المستعير'] || '';
 
         const isAvailable = status.includes('متوفر') || status === '';
         const statusBadgeColor = isAvailable 
           ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" 
           : "bg-amber-500/10 text-amber-600 dark:text-amber-400";
+          
+        const directWaLink = getDirectWhatsAppChatUrl(borrowerPhone);
+
+        let borrowerInfoHtml = '';
+        if (!isAvailable && borrowerName) {
+            borrowerInfoHtml = `
+            <div class="mt-2 text-xs text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-2">
+                <span class="font-bold text-slate-700 dark:text-slate-300">مُعار إلى:</span> ${borrowerName}
+                ${borrowerPhone ? `• <span class="font-mono" dir="ltr">${borrowerPhone}</span>` : ''}
+            </div>
+            `;
+        }
+        
+        let actionButtonsHtml = '';
+        if (isAvailable) {
+            actionButtonsHtml = `
+              <button onclick="openEditBookModal(${index})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                <span>تعديل</span>
+              </button>
+              <button onclick="openDeleteBookModal(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>حذف</span>
+              </button>
+            `;
+        } else {
+             actionButtonsHtml = `
+              <button onclick="returnBook(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 transition shadow-sm" title="إرجاع الكتاب للمكتبة">
+                <i data-lucide="corner-up-left" class="w-3.5 h-3.5"></i>
+                <span>إلغاء الإعارة (إرجاع)</span>
+              </button>
+              ${directWaLink ? `
+                <a href="${directWaLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition border border-emerald-500/30" title="بدء محادثة واتساب مع المستعير">
+                  <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                  <span>واتساب</span>
+                </a>
+              ` : ''}
+               <button onclick="openDeleteBookModal(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>حذف</span>
+              </button>
+            `;
+        }
 
         return `
           <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
@@ -946,16 +705,10 @@
               </div>
               <h4 class="font-bold text-sm text-slate-900 dark:text-white">${title}</h4>
               <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-xl">${desc}</p>
+              ${borrowerInfoHtml}
             </div>
-            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
-              <button onclick="openEditBookModal(${index})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition">
-                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
-                <span>تعديل</span>
-              </button>
-              <button onclick="openDeleteBookModal(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
-                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                <span>حذف</span>
-              </button>
+            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap">
+              ${actionButtonsHtml}
             </div>
           </div>
         `;
@@ -1026,7 +779,6 @@
             const name = req['الاسم الكامل'] || 'طالب';
             const book = req['عنوان الكتاب / المقرر'] || 'كتاب';
             const time = req['تاريخ الإرسال'] || '';
-            const phone = req['رقم الهاتف'] || '';
 
             const isDonate = type.includes('تبرع');
             const typeBadgeColor = isDonate 
@@ -1041,11 +793,8 @@
                     <span class="text-[10px] text-slate-400 truncate">${time}</span>
                   </div>
                   <h5 class="font-bold text-slate-900 dark:text-white truncate">${book}</h5>
-                  <p class="text-[11px] text-slate-400 truncate">${name} • ${phone}</p>
+                  <p class="text-[11px] text-slate-400 truncate">${name}</p>
                 </div>
-                <button onclick="deleteBookRequestByIndex(${actualIndex})" class="shrink-0 p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-600 text-rose-500 hover:text-white transition" title="حذف الطلب">
-                  <i data-lucide="x" class="w-3.5 h-3.5"></i>
-                </button>
               </div>
             `;
           }).join('');
@@ -1077,7 +826,7 @@
             let actionButtonsMarkup = '';
             if (isDonate) {
               actionButtonsMarkup = `
-                <button onclick="approveDonationByIndex(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 transition shadow-sm" title="قبول ونشر في المكتبة فوراً">
+                <button onclick="approveDonationDirect(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 transition shadow-sm" title="قبول ونشر في المكتبة فوراً">
                   <i data-lucide="check" class="w-3.5 h-3.5"></i>
                   <span>قبول ونشر</span>
                 </button>
@@ -1098,15 +847,19 @@
               `;
             } else {
               actionButtonsMarkup = `
+                <button onclick="approveBorrowDirect(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 transition shadow-sm" title="قبول الاستعارة">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                  <span>قبول</span>
+                </button>
                 ${directWaLink ? `
                   <a href="${directWaLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition border border-emerald-500/30" title="بدء محادثة واتساب مباشرة مع المستعير">
                     <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                     <span>مراسلة واتساب</span>
                   </a>
                 ` : ''}
-                <button onclick="deleteBookRequestByIndex(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition" title="إلغاء الطلب">
+                <button onclick="deleteBookRequestByIndex(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition" title="رفض الطلب">
                   <i data-lucide="x" class="w-3.5 h-3.5"></i>
-                  <span>إلغاء</span>
+                  <span>رفض</span>
                 </button>
               `;
             }
@@ -1120,7 +873,7 @@
                   </div>
                   <h4 class="font-bold text-sm text-slate-900 dark:text-white">${bookRaw}</h4>
                   <p class="text-xs text-slate-600 dark:text-slate-300">
-                    صاحب الطلب: <strong class="text-gold-500 font-bold">${name}</strong> • رقم الهاتف: <span class="font-mono text-slate-700 dark:text-slate-200" dir="ltr">${phone}</span> • رقم الملف: <span class="font-mono text-slate-400">${studentId}</span>
+                    الاسم: <strong class="text-gold-500 font-bold">${name}</strong> • الهاتف: <span class="font-mono text-slate-700 dark:text-slate-200" dir="ltr">${phone}</span> • الملف: <span class="font-mono text-slate-400">${studentId}</span>
                   </p>
                 </div>
                 <div class="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap">
@@ -1135,7 +888,6 @@
       lucide.createIcons();
     }
 
-    // جلب الطلبات اللحظي مع كسر الكاش لمنع التأخير
     async function fetchLiveBookRequests(forceFresh = false) {
       const cached = localStorage.getItem('nadi_book_requests_cache');
       if (cached && !forceFresh) {
@@ -1173,7 +925,7 @@
     });
 
     // 1. قبول ونشر التبرع المباشر
-    async function approveDonationByIndex(index) {
+    async function approveDonationDirect(index) {
       const target = liveBookRequestsList[index];
       if (!target) return;
 
@@ -1188,15 +940,10 @@
         'الحالة': 'متوفر للاستلام'
       };
 
-      // إضافة الكتاب محلياً للمكتبة
-      const alreadyInList = liveBooksList.some(b => (b['عنوان الكتاب'] || '').trim().toLowerCase() === parsed.title.toLowerCase());
-      if (!alreadyInList) {
-        liveBooksList.push(newBook);
-        localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
-        renderAdminBookCards(liveBooksList);
-      }
+      liveBooksList.push(newBook);
+      localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
+      renderAdminBookCards(liveBooksList);
 
-      // حذف الطلب فوراً من الشاشة والذاكرة
       liveBookRequestsList.splice(index, 1);
       localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
       localStorage.setItem('nadi_bell_dismissed_count', String(liveBookRequestsList.length));
@@ -1223,7 +970,99 @@
       } catch (e) {}
     }
 
-    // 2. تعديل ونشر التبرع
+    // 2. قبول الاستعارة
+    async function approveBorrowDirect(index) {
+      const target = liveBookRequestsList[index];
+      if (!target) return;
+
+      const bookTitle = target['عنوان الكتاب / المقرر'] || '';
+      const studentName = target['الاسم الكامل'] || '';
+      const phone = target['رقم الهاتف'] || '';
+
+      // البحث عن الكتاب وتحديث حالته محلياً
+      const bookIndex = liveBooksList.findIndex(b => b['عنوان الكتاب'] === bookTitle);
+      if (bookIndex !== -1) {
+          liveBooksList[bookIndex]['الحالة'] = 'مُعار حالياً';
+          liveBooksList[bookIndex]['اسم المستعير'] = studentName;
+          liveBooksList[bookIndex]['رقم هاتف المستعير'] = phone;
+          localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
+          renderAdminBookCards(liveBooksList);
+      }
+
+      liveBookRequestsList.splice(index, 1);
+      localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
+      localStorage.setItem('nadi_bell_dismissed_count', String(liveBookRequestsList.length));
+      renderBookRequests(liveBookRequestsList);
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "approve_book_borrow",
+            bookTitle: bookTitle,
+            studentName: studentName,
+            phone: phone,
+            studentId: target['رقم الملف ID'] || '',
+            timestamp: target['تاريخ الإرسال'] || ''
+          })
+        });
+      } catch (e) {}
+    }
+
+    // 3. إرجاع الكتاب
+    async function returnBook(index) {
+        const book = liveBooksList[index];
+        if(!book) return;
+
+        const bookTitle = book['عنوان الكتاب'];
+
+        liveBooksList[index]['الحالة'] = 'متوفر للاستلام';
+        liveBooksList[index]['اسم المستعير'] = '';
+        liveBooksList[index]['رقم هاتف المستعير'] = '';
+        localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
+        renderAdminBookCards(liveBooksList);
+
+        try {
+            await fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    action: "return_book",
+                    bookTitle: bookTitle
+                })
+            });
+        } catch(e) {}
+    }
+
+    // 4. حذف أو رفض الطلب (عبر الفهرس)
+    async function deleteBookRequestByIndex(index) {
+      const target = liveBookRequestsList[index];
+      if (!target) return;
+
+      liveBookRequestsList.splice(index, 1);
+      localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
+      localStorage.setItem('nadi_bell_dismissed_count', String(liveBookRequestsList.length));
+      renderBookRequests(liveBookRequestsList);
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "delete_book_request",
+            studentId: target['رقم الملف ID'] || '',
+            phone: target['رقم الهاتف'] || '',
+            bookTitle: target['عنوان الكتاب / المقرر'] || ''
+          })
+        });
+      } catch (e) {}
+    }
+
+    // 5. نافذة تعديل ونشر التبرع
     const editDonationModal = document.getElementById('editDonationModal');
     const editDonationForm = document.getElementById('editDonationForm');
     const submitDonationApprovalBtn = document.getElementById('submitDonationApprovalBtn');
@@ -1309,31 +1148,6 @@
           lucide.createIcons();
         }
       });
-    }
-
-    // 3. حذف ورفض الطلب المباشر عبر المؤشر الرقمي
-    async function deleteBookRequestByIndex(index) {
-      const target = liveBookRequestsList[index];
-      if (!target) return;
-
-      liveBookRequestsList.splice(index, 1);
-      localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
-      localStorage.setItem('nadi_bell_dismissed_count', String(liveBookRequestsList.length));
-      renderBookRequests(liveBookRequestsList);
-
-      try {
-        await fetch(SCRIPT_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            action: "delete_book_request",
-            studentId: target['رقم الملف ID'] || '',
-            phone: target['رقم الهاتف'] || '',
-            bookTitle: target['عنوان الكتاب / المقرر'] || ''
-          })
-        });
-      } catch (e) {}
     }
   </script>
 </body>
