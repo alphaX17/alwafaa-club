@@ -170,6 +170,14 @@
             </div>
             <span id="navBookBadge" class="hidden px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-rose-600 text-white">0</span>
           </button>
+
+          <button id="navActivitiesBtn" onclick="switchMainSection('activities')" class="nav-main-tab w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="calendar" class="w-4 h-4"></i>
+              <span>الأنشطة والفعاليات</span>
+            </div>
+            <span id="navActivityBadge" class="hidden px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-gold-500 text-slate-950 font-mono">0</span>
+          </button>
         </div>
       </aside>
 
@@ -337,7 +345,7 @@
           </section>
         </div>
 
-        <!-- القسم 3: التوجيه والمجموعات -->
+        <!-- القسم 3: التوجيه والمجموعات (أزرار تعديل وحذف فقط) -->
         <div id="sectionGuidance" class="hidden space-y-6">
           <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit flex-wrap">
             <button id="tabGuidanceAdd" onclick="switchGuidanceSubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
@@ -519,7 +527,7 @@
             </div>
           </section>
 
-          <!-- 4. سجل الكتب المستعارة واستردادها (الخانة الرابعة الجديدة) -->
+          <!-- 4. سجل الكتب المستعارة واستردادها (الخانة الرابعة) -->
           <section id="bookLoansView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
               <div>
@@ -533,6 +541,88 @@
             </div>
             <div id="bookLoansContainer" class="space-y-3 min-h-[140px]">
               <div class="py-12 text-center text-xs text-slate-400">جاري فحص الإعارات النشطة...</div>
+            </div>
+          </section>
+        </div>
+
+        <!-- القسم 5: الأنشطة والفعاليات -->
+        <div id="sectionActivities" class="hidden space-y-6">
+          <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit flex-wrap">
+            <button id="tabActivityAdd" onclick="switchActivitySubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
+              <i data-lucide="calendar-plus" class="w-4 h-4"></i>
+              <span>إضافة نشاط جديد</span>
+            </button>
+            <button id="tabActivityManage" onclick="switchActivitySubTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
+              <i data-lucide="calendar" class="w-4 h-4"></i>
+              <span>إدارة الأنشطة والفعاليات</span>
+              <span id="activityCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
+            </button>
+          </div>
+
+          <section id="activityAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <span class="text-xs font-bold text-gold-500">لوحة نشر وتوثيق الفعاليات</span>
+              <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة نشاط أو فعالية جديدة لنادي الوفاء</h3>
+            </div>
+
+            <form id="activityForm" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">عنوان النشاط أو الفعالية *</label>
+                  <input id="actTitle" type="text" required placeholder="مثال: ورشة تدريبية في الذكاء الاصطناعي" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold mb-1">تصنيف ونوع النشاط *</label>
+                  <select id="actCategory" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                    <option value="ورشة عمل تدريبية">ورشة عمل تدريبية (Workshop)</option>
+                    <option value="ندوة أكاديمية وتوعوية">ندوة أكاديمية وتوعوية (Seminar)</option>
+                    <option value="نشاط ثقافي وترفيهي">نشاط ثقافي وترفيهي (Cultural)</option>
+                    <option value="حملة تطوعية واجتماعية">حملة تطوعية واجتماعية (Volunteering)</option>
+                    <option value="معرض أو فعالية طلابية">معرض أو فعالية طلابية (Exhibition)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">تاريخ وموعد النشاط *</label>
+                  <input id="actDate" type="text" required placeholder="مثال: الخميس 15 تشرين الأول 2026 - الساعة 11:00 صباحاً" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold mb-1">مكان النشاط (القاعة أو المنصة) *</label>
+                  <input id="actLocation" type="text" required placeholder="مثال: مسرح الجامعة - فرع صور" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1">رابط صورة البوستر / الغلاف (اختياري)</label>
+                <input id="actImageUrl" type="url" placeholder="https://... رابط صورة مباشر أو اترك فارغاً" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1">شرح وتفاصيل النشاط *</label>
+                <textarea id="actDesc" rows="4" required placeholder="اكتب نبذة شاملة عن النشاط وأهدافه والجهات المشاركة..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 custom-scrollbar"></textarea>
+              </div>
+
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                <button id="submitActBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                  <span>نشر النشاط في المنصة فوراً</span>
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <section id="activityManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+              <h3 class="text-base font-bold text-slate-900 dark:text-white">قائمة الأنشطة والفعاليات المنشورة</h3>
+              <button onclick="fetchLiveActivitiesData(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>تحديث</span>
+              </button>
+            </div>
+            <div id="activityListContainer" class="space-y-3 min-h-[140px]">
+              <div class="py-12 text-center text-xs text-slate-400">جاري تحميل الأنشطة والفعاليات...</div>
             </div>
           </section>
         </div>
@@ -720,6 +810,64 @@
     </div>
   </div>
 
+  <!-- نافذة تعديل النشاط -->
+  <div id="editActivityModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <h3 class="font-bold text-sm text-slate-900 dark:text-white">تعديل بيانات النشاط أو الفعالية</h3>
+        <button onclick="closeEditActivityModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <form id="editActivityForm" class="space-y-4 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">عنوان النشاط *</label>
+            <input id="editActTitle" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block font-bold mb-1">التصنيف *</label>
+            <select id="editActCategory" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="ورشة عمل تدريبية">ورشة عمل تدريبية</option>
+              <option value="ندوة أكاديمية وتوعوية">ندوة أكاديمية وتوعوية</option>
+              <option value="نشاط ثقافي وترفيهي">نشاط ثقافي وترفيهي</option>
+              <option value="حملة تطوعية واجتماعية">حملة تطوعية واجتماعية</option>
+              <option value="معرض أو فعالية طلابية">معرض أو فعالية طلابية</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">التاريخ والموعد *</label>
+            <input id="editActDate" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block font-bold mb-1">المكان والقاعة *</label>
+            <input id="editActLocation" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold mb-1">رابط صورة البوستر</label>
+          <input id="editActImageUrl" type="url" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+        </div>
+
+        <div>
+          <label class="block font-bold mb-1">شرح وتفاصيل الفعالية *</label>
+          <textarea id="editActDesc" rows="3" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 custom-scrollbar"></textarea>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeEditActivityModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">إلغاء</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-gold-500 text-slate-950 font-bold flex items-center gap-1.5 shadow-md hover:bg-gold-600 transition">
+            <i data-lucide="save" class="w-3.5 h-3.5"></i>
+            <span>حفظ التعديلات</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- نافذة الحذف العامة -->
   <div id="deleteModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="w-full max-w-sm p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
@@ -752,13 +900,15 @@
     let liveGuidanceList = [];
     let liveBooksList = [];
     let liveBookRequestsList = [];
+    let liveActivitiesList = [];
     
     let currentEditDonationIndex = -1;
     let currentEditBookIndex = -1;
     let currentEditGuidanceIndex = -1;
+    let currentEditActivityIndex = -1;
     let deleteCallback = null;
 
-    // سجل الطلبات المعالجة لمنع تكرار ظهورها
+    // سجل الطلبات المعالجة لمنع تكرار ظهورها أثناء الفحص التلقائي
     function getHandledRequests() {
       try {
         return JSON.parse(localStorage.getItem('nadi_handled_req_ids') || '[]');
@@ -859,17 +1009,19 @@
       }
     });
 
-    // تبديل الأقسام الرئيسية
+    // تبديل الأقسام الرئيسية الخمسة
     function switchMainSection(section) {
       const secFaculty = document.getElementById('sectionFaculty');
       const secResources = document.getElementById('sectionResources');
       const secGuidance = document.getElementById('sectionGuidance');
       const secBooks = document.getElementById('sectionBooks');
+      const secActivities = document.getElementById('sectionActivities');
 
       const btnFaculty = document.getElementById('navFacultyBtn');
       const btnResources = document.getElementById('navResourcesBtn');
       const btnGuidance = document.getElementById('navGuidanceBtn');
       const btnBooks = document.getElementById('navBooksBtn');
+      const btnActivities = document.getElementById('navActivitiesBtn');
 
       const defaultBtnClass = "nav-main-tab w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition";
       const activeBtnClass = "nav-main-tab active w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition";
@@ -878,11 +1030,13 @@
       secResources.classList.add('hidden');
       secGuidance.classList.add('hidden');
       secBooks.classList.add('hidden');
+      secActivities.classList.add('hidden');
 
       btnFaculty.className = defaultBtnClass;
       btnResources.className = defaultBtnClass;
       btnGuidance.className = defaultBtnClass;
       btnBooks.className = defaultBtnClass;
+      btnActivities.className = defaultBtnClass;
 
       if (section === 'faculty') {
         secFaculty.classList.remove('hidden');
@@ -901,6 +1055,10 @@
         btnBooks.className = activeBtnClass;
         fetchLiveBooksData();
         fetchLiveBookRequests(true);
+      } else if (section === 'activities') {
+        secActivities.classList.remove('hidden');
+        btnActivities.className = activeBtnClass;
+        fetchLiveActivitiesData();
       }
       lucide.createIcons();
     }
@@ -1678,7 +1836,7 @@
         const res = await fetch(`${SCRIPT_URL}?req=books&bust=${Date.now()}`);
         const data = await res.json();
         if (data.books && Array.isArray(data.books)) {
-          // دمج ذكي مع الكاش المحلي لضمان عدم ضياع أسماء المستعرين في حال تأخر الشيت
+          // دمج ذكي مع الكاش المحلي لضمان عدم ضياع أسماء المستعرين في حال تأخر مزامنة الشيت
           const cachedMap = new Map();
           (liveBooksList || []).forEach(b => {
             if (b['عنوان الكتاب']) cachedMap.set(b['عنوان الكتاب'].trim(), b);
@@ -2067,10 +2225,8 @@
       const studentId = target['رقم الملف ID'] || '';
       const reqUniqueId = getRequestNormalizedKey(target);
 
-      // حظر فوري للطلب
       markRequestAsHandled(reqUniqueId);
 
-      // تحديث حالة الكتاب في القائمة محلياً
       const bookIndex = liveBooksList.findIndex(b => (b['عنوان الكتاب'] || '').trim().toLowerCase() === bookTitle.toLowerCase());
       if (bookIndex !== -1) {
         liveBooksList[bookIndex]['الحالة'] = 'مُعار حالياً';
@@ -2104,7 +2260,6 @@
       } catch (e) {}
     }
 
-    // إرجاع الكتاب وشطب اسم المستعير
     async function returnBook(index) {
       const book = liveBooksList[index];
       if (!book) return;
@@ -2247,6 +2402,253 @@
           submitDonationApprovalBtn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i><span>تأكيد ونشر بالمكتبة فوراً</span>`;
           lucide.createIcons();
         }
+      });
+    }
+
+    // ==================== 5. الأنشطة والفعاليات ====================
+    function switchActivitySubTab(tab) {
+      const addView = document.getElementById('activityAddView');
+      const manageView = document.getElementById('activityManageView');
+      const tabAdd = document.getElementById('tabActivityAdd');
+      const tabManage = document.getElementById('tabActivityManage');
+
+      const active = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
+      const inactive = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
+
+      if (tab === 'add') {
+        addView.classList.remove('hidden');
+        manageView.classList.add('hidden');
+        tabAdd.className = active;
+        tabManage.className = inactive;
+      } else {
+        addView.classList.add('hidden');
+        manageView.classList.remove('hidden');
+        tabAdd.className = inactive;
+        tabManage.className = active;
+        fetchLiveActivitiesData();
+      }
+      lucide.createIcons();
+    }
+
+    function renderActivityList(list) {
+      const container = document.getElementById('activityListContainer');
+      const badge = document.getElementById('activityCountBadge');
+      const navBadge = document.getElementById('navActivityBadge');
+      if (!container) return;
+
+      const validList = (list || []).filter(item => {
+        const title = (item['عنوان النشاط'] || item.title || '').trim();
+        return title !== '';
+      });
+
+      liveActivitiesList = validList;
+      if (badge) badge.textContent = validList.length;
+      if (navBadge) {
+        navBadge.textContent = validList.length;
+        navBadge.classList.toggle('hidden', validList.length === 0);
+      }
+
+      if (validList.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد أنشطة أو فعاليات مسجلة حالياً.</div>`;
+        return;
+      }
+
+      container.innerHTML = validList.map((item, idx) => {
+        const title = item['عنوان النشاط'] || item.title || 'نشاط بدون عنوان';
+        const category = item['التصنيف'] || item.category || 'فعالية عامة';
+        const date = item['التاريخ'] || item.date || 'الموعد يحدد لاحقاً';
+        const location = item['المكان'] || item.location || 'حرم فرع صور';
+        const imageUrl = item['رابط الصورة'] || item.imageUrl || '';
+        const desc = item['الوصف'] || item.desc || '';
+
+        const imageThumbHtml = imageUrl ? `
+          <div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
+            <img src="${imageUrl}" alt="${title}" class="w-full h-full object-cover" onerror="this.parentElement.style.display='none'">
+          </div>
+        ` : '';
+
+        return `
+          <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-gold-500/40 transition">
+            <div class="flex items-start gap-3">
+              ${imageThumbHtml}
+              <div class="space-y-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gold-500/10 text-gold-600 dark:text-gold-400">${category}</span>
+                  <span class="text-[11px] text-slate-400 font-mono flex items-center gap-1">
+                    <i data-lucide="clock" class="w-3 h-3"></i>
+                    ${date}
+                  </span>
+                  <span class="text-[11px] text-slate-400 flex items-center gap-1">
+                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                    ${location}
+                  </span>
+                </div>
+                <h4 class="font-bold text-sm text-slate-900 dark:text-white">${title}</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-xl line-clamp-2">${desc}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
+              <button onclick="openEditActivityModal(${idx})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                <span>تعديل</span>
+              </button>
+              <button onclick="deleteActivityItem(${idx})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>حذف</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    async function fetchLiveActivitiesData(forceFresh = false) {
+      const cached = localStorage.getItem('nadi_activities_cache');
+      if (cached && !forceFresh) {
+        try {
+          liveActivitiesList = JSON.parse(cached);
+          renderActivityList(liveActivitiesList);
+        } catch(e) {}
+      }
+      if (!SCRIPT_URL) return;
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=activities&bust=${Date.now()}`);
+        const data = await res.json();
+        if (data.activities && Array.isArray(data.activities)) {
+          liveActivitiesList = data.activities;
+          localStorage.setItem('nadi_activities_cache', JSON.stringify(liveActivitiesList));
+          renderActivityList(liveActivitiesList);
+        }
+      } catch (err) {}
+    }
+
+    const activityForm = document.getElementById('activityForm');
+    if (activityForm) {
+      activityForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('submitActBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>جاري النشر...</span>`;
+
+        const newActivity = {
+          'عنوان النشاط': document.getElementById('actTitle').value.trim(),
+          'التصنيف': document.getElementById('actCategory').value,
+          'التاريخ': document.getElementById('actDate').value.trim(),
+          'المكان': document.getElementById('actLocation').value.trim(),
+          'رابط الصورة': document.getElementById('actImageUrl').value.trim(),
+          'الوصف': document.getElementById('actDesc').value.trim()
+        };
+
+        liveActivitiesList.push(newActivity);
+        localStorage.setItem('nadi_activities_cache', JSON.stringify(liveActivitiesList));
+        renderActivityList(liveActivitiesList);
+
+        activityForm.reset();
+        switchActivitySubTab('manage');
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "add_activity", ...newActivity })
+          });
+        } catch (err) {} finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4"></i><span>نشر النشاط في المنصة فوراً</span>`;
+          lucide.createIcons();
+        }
+      });
+    }
+
+    const editActivityModal = document.getElementById('editActivityModal');
+    const editActivityForm = document.getElementById('editActivityForm');
+
+    function openEditActivityModal(idx) {
+      currentEditActivityIndex = idx;
+      const target = liveActivitiesList[idx];
+      if (!target) return;
+
+      document.getElementById('editActTitle').value = target['عنوان النشاط'] || target.title || '';
+      document.getElementById('editActCategory').value = target['التصنيف'] || target.category || 'ورشة عمل تدريبية';
+      document.getElementById('editActDate').value = target['التاريخ'] || target.date || '';
+      document.getElementById('editActLocation').value = target['المكان'] || target.location || '';
+      document.getElementById('editActImageUrl').value = target['رابط الصورة'] || target.imageUrl || '';
+      document.getElementById('editActDesc').value = target['الوصف'] || target.desc || '';
+
+      if (editActivityModal) {
+        editActivityModal.classList.remove('hidden');
+        editActivityModal.classList.add('flex');
+      }
+    }
+
+    function closeEditActivityModal() {
+      currentEditActivityIndex = -1;
+      if (editActivityModal) {
+        editActivityModal.classList.add('hidden');
+        editActivityModal.classList.remove('flex');
+      }
+    }
+
+    if (editActivityForm) {
+      editActivityForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (currentEditActivityIndex === -1) return;
+
+        const oldTarget = liveActivitiesList[currentEditActivityIndex];
+        const oldTitle = oldTarget ? (oldTarget['عنوان النشاط'] || oldTarget.title || '') : '';
+
+        const updatedActivity = {
+          'عنوان النشاط': document.getElementById('editActTitle').value.trim(),
+          'التصنيف': document.getElementById('editActCategory').value,
+          'التاريخ': document.getElementById('editActDate').value.trim(),
+          'المكان': document.getElementById('editActLocation').value.trim(),
+          'رابط الصورة': document.getElementById('editActImageUrl').value.trim(),
+          'الوصف': document.getElementById('editActDesc').value.trim()
+        };
+
+        liveActivitiesList[currentEditActivityIndex] = { ...liveActivitiesList[currentEditActivityIndex], ...updatedActivity };
+        localStorage.setItem('nadi_activities_cache', JSON.stringify(liveActivitiesList));
+        renderActivityList(liveActivitiesList);
+        closeEditActivityModal();
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "edit_activity",
+              oldTitle: oldTitle,
+              ...updatedActivity
+            })
+          });
+        } catch(err) {}
+      });
+    }
+
+    function deleteActivityItem(idx) {
+      const target = liveActivitiesList[idx];
+      if (!target) return;
+      const targetTitle = target['عنوان النشاط'] || target.title || '';
+
+      openGenericDeleteModal(`هل أنت متأكد من حذف فعالية (${targetTitle}) نهائياً؟`, async () => {
+        liveActivitiesList.splice(idx, 1);
+        localStorage.setItem('nadi_activities_cache', JSON.stringify(liveActivitiesList));
+        renderActivityList(liveActivitiesList);
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "delete_activity",
+              title: targetTitle
+            })
+          });
+        } catch(e) {}
       });
     }
 
