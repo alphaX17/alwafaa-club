@@ -33,7 +33,7 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
   </style>
 
-  <!-- فحص الحماية والجلسة فورا قبل تحميل الصفحة -->
+  <!-- فحص الحماية والجلسة فوراً قبل تحميل الصفحة -->
   <script>
     if (!sessionStorage.getItem('nadi_admin_session')) {
       window.location.replace('admin.html');
@@ -125,17 +125,28 @@
       </button>
     </div>
 
-    <!-- 1. إضافة كتاب جديد -->
+    <!-- 1. نموذج إضافة كتاب جديد المحدث بالكامل -->
     <section id="viewAdd" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
       <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
         <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى ورقة الكتب_المتوفرة</span>
-        <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة مرجع أو كتاب ورقي جديد</h3>
+        <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة مرجع أو كتاب ورقي جديد للمخزون</h3>
       </div>
 
-      <form id="addBookForm" class="space-y-5">
+      <form id="addBookForm" class="space-y-4">
         <div>
           <label class="block text-xs font-bold mb-1">عنوان الكتاب أو المرجع الأكاديمي *</label>
-          <input id="addTitle" type="text" required placeholder="مثال: كتاب الفيزياء الجامعية PHY 200" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          <input id="addTitle" type="text" required placeholder="مثال: Physics for Scientists and Engineers" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold mb-1">اسم المادة أو المقرر الأكاديمي *</label>
+            <input id="addCourseName" type="text" required placeholder="مثال: فيزياء عامة أو Calculus II" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">رمز أو كود المقرر (Course Code) *</label>
+            <input id="addCourseCode" type="text" required placeholder="مثال: PHY 200 أو MATH 210" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono uppercase" dir="ltr">
+          </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -157,8 +168,8 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold mb-1">الوصف والطبعة المعتمدة *</label>
-          <input id="addDesc" type="text" required placeholder="مثال: الطبعة السادسة، بحالة ممتازة" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          <label class="block text-xs font-bold mb-1">الوصف أو الطبعة المعتمدة (اختياري)</label>
+          <input id="addDesc" type="text" placeholder="مثال: الطبعة التاسعة، بحالة ممتازة (يمكن تركه فارغاً)" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
         </div>
 
         <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
@@ -255,7 +266,7 @@
           </div>
         </div>
         <div>
-          <label class="block font-bold mb-1">الوصف والطبعة *</label>
+          <label class="block font-bold mb-1">تفاصيل المقرر والطبعة *</label>
           <input id="editDesc" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
         </div>
         <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
@@ -299,7 +310,7 @@
           </div>
         </div>
         <div>
-          <label class="block font-bold mb-1">الوصف والطبعة *</label>
+          <label class="block font-bold mb-1">الوصف أو الطبعة *</label>
           <input id="donDesc" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
         </div>
         <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
@@ -339,7 +350,6 @@
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
 
-    // المتغيرات المركزية المستقلة
     let liveAvailableBooksList = [];
     let liveLoanedBooksList = [];
     let liveBookRequestsList = [];
@@ -348,13 +358,11 @@
     let currentEditBookIndex = -1;
     let deleteCallback = null;
 
-    // عرض اسم المشرف النشط
     const activeAdmin = sessionStorage.getItem('nadi_admin_session');
     if (activeAdmin) {
       document.getElementById('welcomeAdmin').textContent = `المشرف: ${activeAdmin}`;
     }
 
-    // رابط واتساب مباشر بدون أي رسالة
     function getDirectWhatsAppChatUrl(phoneOrLink) {
       if (!phoneOrLink) return "";
       let str = String(phoneOrLink).trim();
@@ -438,7 +446,7 @@
       }
     });
 
-    // التنقل بين التبويبات الأربعة
+    // تبديل التبويبات
     function switchTab(tab) {
       const views = {
         add: document.getElementById('viewAdd'),
@@ -471,7 +479,7 @@
       lucide.createIcons();
     }
 
-    // نافذة الحذف العامة
+    // الحذف
     const deleteModal = document.getElementById('deleteModal');
     const deleteModalMsg = document.getElementById('deleteModalMsg');
     const confirmDeleteActionBtn = document.getElementById('confirmDeleteActionBtn');
@@ -500,7 +508,7 @@
       });
     }
 
-    // تحديث شارات العدادات
+    // العدادات
     function updateBadgeCounters() {
       const bellBadge = document.getElementById('notifBellBadge');
       const reqBadge = document.getElementById('requestsCountBadge');
@@ -548,7 +556,7 @@
               <div class="flex items-center gap-2">
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${college}</span>
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">متوفر للاستلام</span>
-                <span class="text-[11px] text-slate-400 font-mono">النسخ: ${copies}</span>
+                <span class="text-[11px] text-slate-400 font-mono">النسخ المتاحة: ${copies}</span>
               </div>
               <h4 class="font-bold text-sm text-slate-900 dark:text-white">${title}</h4>
               <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-xl">${desc}</p>
@@ -590,6 +598,7 @@
       } catch(err) {}
     }
 
+    // إدراج كتاب جديد بالبنية المفصلة
     const addBookForm = document.getElementById('addBookForm');
     if (addBookForm) {
       addBookForm.addEventListener('submit', async (e) => {
@@ -598,11 +607,24 @@
         submitBtn.disabled = true;
         submitBtn.innerHTML = `<span>جاري الإدراج...</span>`;
 
+        const title = document.getElementById('addTitle').value.trim();
+        const courseName = document.getElementById('addCourseName').value.trim();
+        const courseCode = document.getElementById('addCourseCode').value.trim().toUpperCase();
+        const college = document.getElementById('addCollege').value;
+        const copies = document.getElementById('addCopies').value.trim();
+        const userDesc = document.getElementById('addDesc').value.trim();
+
+        // تجميع تفاصيل المقرر والطبعة بشكل موحد داخل خانة الوصف
+        let combinedDesc = `مقرر: ${courseName} (${courseCode})`;
+        if (userDesc) {
+          combinedDesc += ` • ${userDesc}`;
+        }
+
         const newBook = {
-          'عنوان الكتاب': document.getElementById('addTitle').value.trim(),
-          'الكلية': document.getElementById('addCollege').value,
-          'الوصف والطبعة': document.getElementById('addDesc').value.trim(),
-          'عدد النسخ': document.getElementById('addCopies').value.trim()
+          'عنوان الكتاب': title,
+          'الكلية': college,
+          'الوصف والطبعة': combinedDesc,
+          'عدد النسخ': copies
         };
 
         liveAvailableBooksList.push(newBook);
@@ -610,6 +632,7 @@
         renderAvailableBooks(liveAvailableBooksList);
 
         addBookForm.reset();
+        document.getElementById('addCopies').value = "1";
         switchTab('manage');
 
         try {
@@ -633,6 +656,7 @@
       });
     }
 
+    // تعديل كتاب في المتوفرة
     const editBookModal = document.getElementById('editBookModal');
     const editBookForm = document.getElementById('editBookForm');
 
@@ -786,7 +810,6 @@
       } catch(err) {}
     }
 
-    // استرداد الكتاب
     async function returnBook(bookTitle) {
       if (!bookTitle) return;
 
@@ -874,7 +897,7 @@
             let actionButtonsMarkup = '';
             if (isDonate) {
               actionButtonsMarkup = `
-                <button onclick="approveDonationDirect(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 transition shadow-sm">
+                <button onclick="approveDonationDirect(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 transition shadow-sm" title="قبول ونشر في الكتب المتوفرة">
                   <i data-lucide="check" class="w-3.5 h-3.5"></i>
                   <span>قبول ونشر</span>
                 </button>
@@ -947,7 +970,6 @@
       } catch(err) {}
     }
 
-    // قبول الاستعارة: ترحيل للكتب المستعارة وحذف من الوارد
     async function approveBorrowDirect(index) {
       const target = liveBookRequestsList[index];
       if (!target) return;
@@ -997,7 +1019,6 @@
       } catch(e) {}
     }
 
-    // قبول التبرع
     async function approveDonationDirect(index) {
       const target = liveBookRequestsList[index];
       if (!target) return;
@@ -1062,7 +1083,6 @@
       } catch(e) {}
     }
 
-    // نافذة تعديل ونشر التبرع
     const editDonationModal = document.getElementById('editDonationModal');
     const editDonationForm = document.getElementById('editDonationForm');
     const submitDonApprovalBtn = document.getElementById('submitDonApprovalBtn');
@@ -1140,12 +1160,10 @@
       });
     }
 
-    // تحديث دوري كل 6 ثوانٍ للطلبات
     setInterval(() => {
       fetchRequests(true);
     }, 6000);
 
-    // التحميل الأولي للبيانات فور الفتح
     fetchAvailableBooks();
     fetchLoanedBooks();
     fetchRequests(true);
