@@ -95,7 +95,7 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <!-- جرس الإشعارات -->
+        <!-- جرس الإشعارات الذكي -->
         <div class="relative">
           <button id="notifBellBtn" onclick="toggleNotifPanel()" class="relative p-2 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-slate-700 dark:text-slate-200 transition" title="طلبات وتبرعات الكتب">
             <i data-lucide="bell" class="w-4 h-4"></i>
@@ -137,7 +137,7 @@
 
     <div class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8 flex flex-col md:flex-row gap-6">
 
-      <!-- القائمة الجانبية -->
+      <!-- القائمة الجانبية الموحدة على اليمين -->
       <aside class="w-full md:w-64 shrink-0 space-y-2">
         <div class="p-3 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark space-y-1">
           <span class="px-3 py-1 block text-[10px] font-bold text-slate-400 uppercase tracking-wider">الأقسام المتاحة</span>
@@ -181,7 +181,7 @@
         </div>
       </aside>
 
-      <!-- مساحة المحتوى -->
+      <!-- مساحة المحتوى الرئيسية -->
       <main class="flex-1 space-y-6">
 
         <!-- القسم 1: دليل الأساتذة -->
@@ -345,7 +345,7 @@
           </section>
         </div>
 
-        <!-- القسم 3: التوجيه والمجموعات (أزرار تعديل وحذف فقط) -->
+        <!-- القسم 3: التوجيه والمجموعات -->
         <div id="sectionGuidance" class="hidden space-y-6">
           <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit flex-wrap">
             <button id="tabGuidanceAdd" onclick="switchGuidanceSubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
@@ -429,7 +429,7 @@
             </button>
             <button id="tabBookManage" onclick="switchBookSubTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
               <i data-lucide="library" class="w-4 h-4"></i>
-              <span>إدارة وتعديل الكتب</span>
+              <span>إدارة الكتب المتوفرة</span>
               <span id="bookCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
             </button>
             <button id="tabBookRequests" onclick="switchBookSubTab('requests')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
@@ -437,7 +437,6 @@
               <span>إدارة الطلبات والتبرعات</span>
               <span id="bookRequestsCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-rose-500/20 text-rose-500 font-mono">0</span>
             </button>
-            <!-- التبويب الرابع: سجل الإعارات والاسترداد -->
             <button id="tabBookLoans" onclick="switchBookSubTab('loans')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
               <i data-lucide="book-check" class="w-4 h-4"></i>
               <span>سجل الإعارات والاسترداد</span>
@@ -445,11 +444,11 @@
             </button>
           </div>
 
-          <!-- 1. إضافة كتاب جديد -->
+          <!-- 1. إضافة كتاب جديد للمتوفرة -->
           <section id="bookAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
             <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
-              <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
-              <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة كتاب ورقي جديد لمكتبة الإعارة</h3>
+              <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى ورقة الكتب_المتوفرة</span>
+              <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة كتاب ورقي جديد للمخزون</h3>
             </div>
 
             <form id="bookForm" class="space-y-5">
@@ -471,52 +470,49 @@
                   </select>
                 </div>
                 <div>
-                  <label class="block text-xs font-bold mb-1">حالة التوفر للاستلام *</label>
-                  <select id="bookStatusSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                    <option value="متوفر للاستلام">متوفر للاستلام</option>
-                    <option value="مُعار حالياً">مُعار حالياً</option>
-                  </select>
+                  <label class="block text-xs font-bold mb-1">عدد النسخ المتوفرة حالياً *</label>
+                  <input id="bookCopies" type="number" min="1" required value="1" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
                 </div>
               </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-xs font-bold mb-1">الوصف والطبعة المعتمدة *</label>
-                  <input id="bookDesc" type="text" required placeholder="مثال: الطبعة السادسة، بحالة ممتازة" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-                </div>
-                <div>
-                  <label class="block text-xs font-bold mb-1">عدد النسخ المتوفرة حالياً *</label>
-                  <input id="bookCopies" type="number" min="0" required value="1" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-                </div>
+              <div>
+                <label class="block text-xs font-bold mb-1">الوصف والطبعة المعتمدة *</label>
+                <input id="bookDesc" type="text" required placeholder="مثال: الطبعة السادسة، بحالة ممتازة" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
               </div>
 
               <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
                 <button id="submitBookBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
                   <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                  <span>إدراج الكتاب في المكتبة فوراً</span>
+                  <span>إدراج في الكتب المتوفرة فوراً</span>
                 </button>
               </div>
             </form>
           </section>
 
-          <!-- 2. إدارة وتعديل الكتب العامة -->
+          <!-- 2. إدارة وتعديل الكتب المتوفرة -->
           <section id="bookManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-              <h3 class="text-base font-bold text-slate-900 dark:text-white">قائمة الكتب والمراجع الورقية المسجلة</h3>
+              <div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">قائمة الكتب المتوفرة في المكتبة</h3>
+                <p class="text-xs text-slate-400 mt-0.5">البيانات الحية المأخوذة من ورقة «الكتب_المتوفرة»</p>
+              </div>
               <button onclick="fetchLiveBooksData(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
                 <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
                 <span>تحديث</span>
               </button>
             </div>
             <div id="bookListContainer" class="space-y-3 min-h-[140px]">
-              <div class="py-12 text-center text-xs text-slate-400">جاري فحص مكتبة الكتب...</div>
+              <div class="py-12 text-center text-xs text-slate-400">جاري فحص الكتب المتوفرة...</div>
             </div>
           </section>
 
           <!-- 3. إدارة الطلبات والتبرعات -->
           <section id="bookRequestsView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-              <h3 class="text-base font-bold text-slate-900 dark:text-white">طلبات الاستعارة والتبرعات بالكتب</h3>
+              <div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">طلبات الاستعارة والتبرعات بالكتب</h3>
+                <p class="text-xs text-slate-400 mt-0.5">الطلبات الواردة في ورقة «الكتب»</p>
+              </div>
               <button onclick="fetchLiveBookRequests(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
                 <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
                 <span>تحديث الطلبات</span>
@@ -527,14 +523,14 @@
             </div>
           </section>
 
-          <!-- 4. سجل الكتب المستعارة واستردادها (الخانة الرابعة) -->
+          <!-- 4. سجل الكتب المستعارة واستردادها -->
           <section id="bookLoansView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
               <div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white">الكتب المعارة حالياً ومتابعة الاسترداد</h3>
-                <p class="text-xs text-slate-400 mt-0.5">يمكنك مراسلة المستعير مباشرة عبر واتساب لطلب استعادة الكتاب أو شطب الإعارة بعد الاسترداد</p>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">سجل الكتب المعارة حالياً</h3>
+                <p class="text-xs text-slate-400 mt-0.5">البيانات الحية المأخوذة من ورقة «الكتب_المستعارة»</p>
               </div>
-              <button onclick="fetchLiveBooksData(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
+              <button onclick="fetchLiveLoansData(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
                 <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
                 <span>تحديث السجل</span>
               </button>
@@ -633,7 +629,6 @@
 
   <!-- ==================== النوافذ المنبثقة ==================== -->
   
-  <!-- نافذة تسجيل الخروج -->
   <div id="logoutModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="w-full max-w-md p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
       <div class="flex items-center gap-3 text-gold-500">
@@ -653,14 +648,12 @@
     </div>
   </div>
 
-  <!-- نافذة تعديل بيانات المرشد -->
   <div id="editGuidanceModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
     <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
         <h3 class="font-bold text-sm text-slate-900 dark:text-white">تعديل بيانات المرشد أو المجموعة</h3>
         <button onclick="closeEditGuidanceModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
-
       <form id="editGuidanceForm" class="space-y-4 text-xs">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
@@ -676,7 +669,6 @@
             </select>
           </div>
         </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block font-bold mb-1">الاسم أو الصفة *</label>
@@ -687,12 +679,10 @@
             <input id="editGuidPhone" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
           </div>
         </div>
-
         <div>
           <label class="block font-bold mb-1">رابط الواتساب *</label>
           <input id="editGuidGroupUrl" type="url" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
         </div>
-
         <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
           <button type="button" onclick="closeEditGuidanceModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">إلغاء</button>
           <button type="submit" class="px-5 py-2 rounded-xl bg-gold-500 text-slate-950 font-bold flex items-center gap-1.5 shadow-md hover:bg-gold-600 transition">
@@ -704,11 +694,11 @@
     </div>
   </div>
 
-  <!-- نافذة تعديل كتاب -->
+  <!-- نافذة تعديل كتاب في المتوفرة -->
   <div id="editBookModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
     <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-        <h3 class="font-bold text-sm text-slate-900 dark:text-white">تعديل بيانات الكتاب المسجل</h3>
+        <h3 class="font-bold text-sm text-slate-900 dark:text-white">تعديل بيانات الكتاب في المخزون</h3>
         <button onclick="closeEditBookModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
       <form id="editBookForm" class="space-y-4 text-xs">
@@ -729,22 +719,13 @@
             </select>
           </div>
           <div>
-            <label class="block font-bold mb-1">حالة التوفر *</label>
-            <select id="editBookStatus" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-              <option value="متوفر للاستلام">متوفر للاستلام</option>
-              <option value="مُعار حالياً">مُعار حالياً</option>
-            </select>
+            <label class="block font-bold mb-1">عدد النسخ المتوفرة *</label>
+            <input id="editBookCopies" type="number" min="1" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 font-mono text-left" dir="ltr">
           </div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block font-bold mb-1">الوصف والطبعة *</label>
-            <input id="editBookDesc" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-          </div>
-          <div>
-            <label class="block font-bold mb-1">عدد النسخ المتوفرة *</label>
-            <input id="editBookCopies" type="number" min="0" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 font-mono text-left" dir="ltr">
-          </div>
+        <div>
+          <label class="block font-bold mb-1">الوصف والطبعة *</label>
+          <input id="editBookDesc" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
         </div>
         <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
           <button type="button" onclick="closeEditBookModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">إلغاء</button>
@@ -782,28 +763,19 @@
             </select>
           </div>
           <div>
-            <label class="block font-bold mb-1">حالة التوفر للاستلام *</label>
-            <select id="donPublishStatus" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-              <option value="متوفر للاستلام">متوفر للاستلام</option>
-              <option value="مُعار حالياً">مُعار حالياً</option>
-            </select>
-          </div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block font-bold mb-1">الوصف والطبعة *</label>
-            <input id="donPublishDesc" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-          </div>
-          <div>
             <label class="block font-bold mb-1">عدد النسخ *</label>
             <input id="donPublishCopies" type="number" min="1" required value="1" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
           </div>
+        </div>
+        <div>
+          <label class="block font-bold mb-1">الوصف والطبعة *</label>
+          <input id="donPublishDesc" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
         </div>
         <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
           <button type="button" onclick="closeEditDonationModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">إلغاء</button>
           <button id="submitDonationApprovalBtn" type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex items-center gap-1.5 shadow-md">
             <i data-lucide="check" class="w-3.5 h-3.5"></i>
-            <span>تأكيد ونشر بالمكتبة فوراً</span>
+            <span>تأكيد ونشر بالمتوفرة فوراً</span>
           </button>
         </div>
       </form>
@@ -817,7 +789,6 @@
         <h3 class="font-bold text-sm text-slate-900 dark:text-white">تعديل بيانات النشاط أو الفعالية</h3>
         <button onclick="closeEditActivityModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
-
       <form id="editActivityForm" class="space-y-4 text-xs">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
@@ -835,7 +806,6 @@
             </select>
           </div>
         </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block font-bold mb-1">التاريخ والموعد *</label>
@@ -846,17 +816,14 @@
             <input id="editActLocation" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
           </div>
         </div>
-
         <div>
           <label class="block font-bold mb-1">رابط صورة البوستر</label>
           <input id="editActImageUrl" type="url" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
         </div>
-
         <div>
           <label class="block font-bold mb-1">شرح وتفاصيل الفعالية *</label>
           <textarea id="editActDesc" rows="3" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 custom-scrollbar"></textarea>
         </div>
-
         <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
           <button type="button" onclick="closeEditActivityModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">إلغاء</button>
           <button type="submit" class="px-5 py-2 rounded-xl bg-gold-500 text-slate-950 font-bold flex items-center gap-1.5 shadow-md hover:bg-gold-600 transition">
@@ -898,7 +865,8 @@
     let liveFacultyList = [];
     let liveResourcesList = [];
     let liveGuidanceList = [];
-    let liveBooksList = [];
+    let liveAvailableBooksList = [];
+    let liveLoanedBooksList = [];
     let liveBookRequestsList = [];
     let liveActivitiesList = [];
     
@@ -908,7 +876,7 @@
     let currentEditActivityIndex = -1;
     let deleteCallback = null;
 
-    // سجل الطلبات المعالجة لمنع تكرار ظهورها أثناء الفحص التلقائي
+    // سجل حظر الطلبات المعالجة محلياً
     function getHandledRequests() {
       try {
         return JSON.parse(localStorage.getItem('nadi_handled_req_ids') || '[]');
@@ -927,9 +895,7 @@
     function getDirectWhatsAppChatUrl(phoneOrLink) {
       if (!phoneOrLink) return "";
       let str = String(phoneOrLink).trim();
-      if (str.includes("wa.me/") || str.includes("chat.whatsapp.com/")) {
-        return str;
-      }
+      if (str.includes("wa.me/") || str.includes("chat.whatsapp.com/")) return str;
       let cleaned = str.replace(/\D/g, '');
       if (cleaned.startsWith('00961')) cleaned = cleaned.substring(5);
       else if (cleaned.startsWith('961')) cleaned = cleaned.substring(3);
@@ -1054,6 +1020,7 @@
         secBooks.classList.remove('hidden');
         btnBooks.className = activeBtnClass;
         fetchLiveBooksData();
+        fetchLiveLoansData();
         fetchLiveBookRequests(true);
       } else if (section === 'activities') {
         secActivities.classList.remove('hidden');
@@ -1645,7 +1612,7 @@
       });
     }
 
-    // ==================== 4. مكتبة الكتب الورقية ====================
+    // ==================== 4. مكتبة الكتب الورقية (المنظومة الثلاثية) ====================
     function switchBookSubTab(tab) {
       const addView = document.getElementById('bookAddView');
       const manageView = document.getElementById('bookManageView');
@@ -1684,7 +1651,7 @@
       } else if (tab === 'loans') {
         loansView.classList.remove('hidden');
         tabLoans.className = activeClasses;
-        fetchLiveBooksData();
+        fetchLiveLoansData();
       }
       lucide.createIcons();
     }
@@ -1696,15 +1663,15 @@
       switchBookSubTab('requests');
     }
 
-    // عرض قائمة الكتب العامة
-    function renderAdminBookCards(list) {
+    // 1. عرض ورقة «الكتب_المتوفرة»
+    function renderAvailableBooks(list) {
       const container = document.getElementById('bookListContainer');
       const badge = document.getElementById('bookCountBadge');
       if (!container) return;
       if (badge) badge.textContent = list.length;
 
       if (!list || list.length === 0) {
-        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد كتب مسجلة حالياً في قاعدة البيانات.</div>`;
+        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد كتب مسجلة حالياً في ورقة الكتب_المتوفرة.</div>`;
         return;
       }
 
@@ -1713,36 +1680,17 @@
         const college = book['الكلية'] || 'عام';
         const desc = book['الوصف والطبعة'] || '';
         const copies = book['عدد النسخ'] || '1';
-        const status = String(book['الحالة'] || '').trim();
-        const borrowerName = book['اسم المستعير'] || '';
-        const borrowerPhone = book['رقم هاتف المستعير'] || '';
-
-        const isAvailable = status.includes('متوفر') || status === '';
-        const statusBadgeColor = isAvailable 
-          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" 
-          : "bg-amber-500/10 text-amber-600 dark:text-amber-400";
-
-        let borrowerInfoHtml = '';
-        if (!isAvailable && borrowerName) {
-          borrowerInfoHtml = `
-            <div class="mt-2 text-xs text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-2">
-              <span class="font-bold text-slate-700 dark:text-slate-300">مُعار إلى:</span> ${borrowerName}
-              ${borrowerPhone ? `• <span class="font-mono" dir="ltr">${borrowerPhone}</span>` : ''}
-            </div>
-          `;
-        }
 
         return `
           <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
             <div class="space-y-1">
               <div class="flex items-center gap-2">
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${college}</span>
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${statusBadgeColor}">${status || 'متوفر للاستلام'}</span>
-                <span class="text-[11px] text-slate-400 font-mono">النسخ: ${copies}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">متوفر للاستلام</span>
+                <span class="text-[11px] text-slate-400 font-mono">النسخ المتاحة: ${copies}</span>
               </div>
               <h4 class="font-bold text-sm text-slate-900 dark:text-white">${title}</h4>
               <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-xl">${desc}</p>
-              ${borrowerInfoHtml}
             </div>
             <div class="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap">
               <button onclick="openEditBookModal(${index})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition">
@@ -1760,32 +1708,25 @@
       lucide.createIcons();
     }
 
-    // عرض التبويب الرابع: سجل الإعارات النشطة والاسترداد
-    function renderBookLoans(list) {
+    // 2. عرض ورقة «الكتب_المستعارة»
+    function renderLoanedBooks(list) {
       const container = document.getElementById('bookLoansContainer');
       const badge = document.getElementById('bookLoansCountBadge');
       if (!container) return;
+      if (badge) badge.textContent = list.length;
 
-      const loanedBooks = (list || []).map((book, originalIndex) => ({ book, originalIndex }))
-        .filter(item => {
-          const status = String(item.book['الحالة'] || '').trim();
-          const borrower = String(item.book['اسم المستعير'] || '').trim();
-          return status.includes('مُعار') || borrower !== '';
-        });
-
-      if (badge) badge.textContent = loanedBooks.length;
-
-      if (loanedBooks.length === 0) {
-        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد إعارات نشطة حالياً، كافة الكتب متوفرة في المكتبة.</div>`;
+      if (!list || list.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد إعارات نشطة مسجلة حالياً في ورقة الكتب_المستعارة.</div>`;
         return;
       }
 
-      container.innerHTML = loanedBooks.map(({ book, originalIndex }) => {
-        const title = book['عنوان الكتاب'] || 'بدون عنوان';
-        const college = book['الكلية'] || 'عام';
-        const borrowerName = book['اسم المستعير'] || 'طالب مستعير';
-        const borrowerPhone = book['رقم هاتف المستعير'] || '';
-        const borrowerId = book['رقم ملف المستعير'] || book['رقم الملف ID'] || '';
+      container.innerHTML = list.map((item, index) => {
+        const title = item['عنوان الكتاب'] || 'بدون عنوان';
+        const college = item['الكلية'] || 'عام';
+        const borrowerName = item['اسم المستعير'] || 'طالب مستعير';
+        const borrowerPhone = item['رقم هاتف المستعير'] || '';
+        const borrowerId = item['رقم ملف المستعير'] || '';
+        const loanDate = item['تاريخ الاستعارة'] || '';
         const directWaLink = getDirectWhatsAppChatUrl(borrowerPhone);
 
         return `
@@ -1794,6 +1735,7 @@
               <div class="flex items-center gap-2">
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">مُعار حالياً</span>
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${college}</span>
+                ${loanDate ? `<span class="text-[11px] text-slate-400 font-mono">${loanDate}</span>` : ''}
               </div>
               <h4 class="font-bold text-sm text-slate-900 dark:text-white">${title}</h4>
               <p class="text-xs text-slate-600 dark:text-slate-300">
@@ -1809,7 +1751,7 @@
                   <span>مراسلة للاسترداد</span>
                 </a>
               ` : ''}
-              <button onclick="returnBook(${originalIndex})" class="px-3.5 py-2 rounded-xl bg-clubNavy-light hover:bg-clubNavy-light/90 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-slate-950 text-xs font-bold flex items-center gap-1.5 transition shadow-sm" title="إرجاع الكتاب للمكتبة وحذف اسم المستعير">
+              <button onclick="returnBook('${title}')" class="px-3.5 py-2 rounded-xl bg-clubNavy-light hover:bg-clubNavy-light/90 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-slate-950 text-xs font-bold flex items-center gap-1.5 transition shadow-sm" title="إرجاع الكتاب للمكتبة وحذفه من المستعارة">
                 <i data-lucide="corner-up-left" class="w-3.5 h-3.5"></i>
                 <span>تأكيد الاسترداد (إرجاع)</span>
               </button>
@@ -1820,50 +1762,53 @@
       lucide.createIcons();
     }
 
+    // جلب بيانات الكتب المتوفرة
     async function fetchLiveBooksData(forceFresh = false) {
-      const cached = localStorage.getItem('nadi_books_cache');
+      const cached = localStorage.getItem('nadi_avail_books_cache');
       if (cached && !forceFresh) {
         try {
-          liveBooksList = JSON.parse(cached);
-          renderAdminBookCards(liveBooksList);
-          renderBookLoans(liveBooksList);
+          liveAvailableBooksList = JSON.parse(cached);
+          renderAvailableBooks(liveAvailableBooksList);
         } catch (e) {}
       }
 
       if (!SCRIPT_URL) return;
 
       try {
-        const res = await fetch(`${SCRIPT_URL}?req=books&bust=${Date.now()}`);
+        const res = await fetch(`${SCRIPT_URL}?req=availableBooks&bust=${Date.now()}`);
         const data = await res.json();
-        if (data.books && Array.isArray(data.books)) {
-          // دمج ذكي مع الكاش المحلي لضمان عدم ضياع أسماء المستعرين في حال تأخر مزامنة الشيت
-          const cachedMap = new Map();
-          (liveBooksList || []).forEach(b => {
-            if (b['عنوان الكتاب']) cachedMap.set(b['عنوان الكتاب'].trim(), b);
-          });
-
-          liveBooksList = data.books.map(serverBook => {
-            const title = (serverBook['عنوان الكتاب'] || '').trim();
-            const local = cachedMap.get(title);
-            if (local && local['الحالة'] === 'مُعار حالياً' && (!serverBook['اسم المستعير'] || serverBook['اسم المستعير'] === '')) {
-              return {
-                ...serverBook,
-                'الحالة': 'مُعار حالياً',
-                'اسم المستعير': local['اسم المستعير'],
-                'رقم هاتف المستعير': local['رقم هاتف المستعير'],
-                'رقم ملف المستعير': local['رقم ملف المستعير'] || ''
-              };
-            }
-            return serverBook;
-          });
-
-          renderAdminBookCards(liveBooksList);
-          renderBookLoans(liveBooksList);
-          localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
+        if (data.availableBooks && Array.isArray(data.availableBooks)) {
+          liveAvailableBooksList = data.availableBooks;
+          renderAvailableBooks(liveAvailableBooksList);
+          localStorage.setItem('nadi_avail_books_cache', JSON.stringify(liveAvailableBooksList));
         }
       } catch (err) {}
     }
 
+    // جلب بيانات الكتب المستعارة
+    async function fetchLiveLoansData(forceFresh = false) {
+      const cached = localStorage.getItem('nadi_loans_cache');
+      if (cached && !forceFresh) {
+        try {
+          liveLoanedBooksList = JSON.parse(cached);
+          renderLoanedBooks(liveLoanedBooksList);
+        } catch (e) {}
+      }
+
+      if (!SCRIPT_URL) return;
+
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=loanedBooks&bust=${Date.now()}`);
+        const data = await res.json();
+        if (data.loanedBooks && Array.isArray(data.loanedBooks)) {
+          liveLoanedBooksList = data.loanedBooks;
+          renderLoanedBooks(liveLoanedBooksList);
+          localStorage.setItem('nadi_loans_cache', JSON.stringify(liveLoanedBooksList));
+        }
+      } catch (err) {}
+    }
+
+    // إضافة كتاب إلى الكتب المتوفرة
     const bookForm = document.getElementById('bookForm');
     if (bookForm) {
       bookForm.addEventListener('submit', async (e) => {
@@ -1875,15 +1820,13 @@
         const newBook = {
           'عنوان الكتاب': document.getElementById('bookTitle').value.trim(),
           'الكلية': document.getElementById('bookCollegeSelect').value,
-          'الحالة': document.getElementById('bookStatusSelect').value,
           'الوصف والطبعة': document.getElementById('bookDesc').value.trim(),
           'عدد النسخ': document.getElementById('bookCopies').value.trim()
         };
 
-        liveBooksList.push(newBook);
-        localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
-        renderAdminBookCards(liveBooksList);
-        renderBookLoans(liveBooksList);
+        liveAvailableBooksList.push(newBook);
+        localStorage.setItem('nadi_avail_books_cache', JSON.stringify(liveAvailableBooksList));
+        renderAvailableBooks(liveAvailableBooksList);
 
         bookForm.reset();
         switchBookSubTab('manage');
@@ -1893,29 +1836,35 @@
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "add_book", ...newBook })
+            body: JSON.stringify({
+              action: "add_book",
+              title: newBook['عنوان الكتاب'],
+              college: newBook['الكلية'],
+              desc: newBook['الوصف والطبعة'],
+              copies: newBook['عدد النسخ']
+            })
           });
         } catch (err) {} finally {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4"></i><span>إدراج الكتاب في المكتبة فوراً</span>`;
+          submitBtn.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4"></i><span>إدراج في الكتب المتوفرة فوراً</span>`;
           lucide.createIcons();
         }
       });
     }
 
+    // تعديل كتاب في المتوفرة
     const editBookModal = document.getElementById('editBookModal');
     const editBookForm = document.getElementById('editBookForm');
 
     function openEditBookModal(idx) {
       currentEditBookIndex = idx;
-      const target = liveBooksList[idx];
+      const target = liveAvailableBooksList[idx];
       if (!target) return;
 
       document.getElementById('editBookTitle').value = target['عنوان الكتاب'] || '';
       document.getElementById('editBookCollege').value = target['الكلية'] || 'كلية الهندسة';
-      document.getElementById('editBookStatus').value = target['الحالة'] || 'متوفر للاستلام';
-      document.getElementById('editBookDesc').value = target['الوصف والطبعة'] || '';
       document.getElementById('editBookCopies').value = target['عدد النسخ'] || '1';
+      document.getElementById('editBookDesc').value = target['الوصف والطبعة'] || '';
 
       if (editBookModal) {
         editBookModal.classList.remove('hidden');
@@ -1936,18 +1885,19 @@
         e.preventDefault();
         if (currentEditBookIndex === -1) return;
 
+        const oldTarget = liveAvailableBooksList[currentEditBookIndex];
+        const oldTitle = oldTarget ? (oldTarget['عنوان الكتاب'] || '') : '';
+
         const updated = {
           'عنوان الكتاب': document.getElementById('editBookTitle').value.trim(),
           'الكلية': document.getElementById('editBookCollege').value,
-          'الحالة': document.getElementById('editBookStatus').value,
-          'الوصف والطبعة': document.getElementById('editBookDesc').value.trim(),
-          'عدد النسخ': document.getElementById('editBookCopies').value.trim()
+          'عدد النسخ': document.getElementById('editBookCopies').value.trim(),
+          'الوصف والطبعة': document.getElementById('editBookDesc').value.trim()
         };
 
-        liveBooksList[currentEditBookIndex] = { ...liveBooksList[currentEditBookIndex], ...updated };
-        localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
-        renderAdminBookCards(liveBooksList);
-        renderBookLoans(liveBooksList);
+        liveAvailableBooksList[currentEditBookIndex] = { ...liveAvailableBooksList[currentEditBookIndex], ...updated };
+        localStorage.setItem('nadi_avail_books_cache', JSON.stringify(liveAvailableBooksList));
+        renderAvailableBooks(liveAvailableBooksList);
         closeEditBookModal();
 
         try {
@@ -1955,20 +1905,26 @@
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "edit_book", ...updated })
+            body: JSON.stringify({
+              action: "edit_book",
+              originalTitle: oldTitle,
+              title: updated['عنوان الكتاب'],
+              college: updated['الكلية'],
+              desc: updated['الوصف والطبعة'],
+              copies: updated['عدد النسخ']
+            })
           });
         } catch(err) {}
       });
     }
 
     function deleteBookItem(idx) {
-      const target = liveBooksList[idx];
+      const target = liveAvailableBooksList[idx];
       if (!target) return;
-      openGenericDeleteModal(`هل أنت متأكد من حذف كتاب (${target['عنوان الكتاب']}) من المكتبة نهائياً؟`, async () => {
-        liveBooksList.splice(idx, 1);
-        localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
-        renderAdminBookCards(liveBooksList);
-        renderBookLoans(liveBooksList);
+      openGenericDeleteModal(`هل أنت متأكد من حذف كتاب (${target['عنوان الكتاب']}) من الكتب المتوفرة نهائياً؟`, async () => {
+        liveAvailableBooksList.splice(idx, 1);
+        localStorage.setItem('nadi_avail_books_cache', JSON.stringify(liveAvailableBooksList));
+        renderAvailableBooks(liveAvailableBooksList);
         try {
           await fetch(SCRIPT_URL, {
             method: "POST",
@@ -1980,7 +1936,7 @@
       });
     }
 
-    // ==================== إدارة الطلبات والتبرعات ====================
+    // 3. إدارة ورقة «الكتب» (الطلبات والتبرعات)
     function updateBookBadges(totalCount) {
       const bellBadge = document.getElementById('notifBellBadge');
       const reqBadge = document.getElementById('bookRequestsCountBadge');
@@ -2072,38 +2028,38 @@
             let actionButtonsMarkup = '';
             if (isDonate) {
               actionButtonsMarkup = `
-                <button onclick="approveDonationDirect(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 transition shadow-sm" title="قبول ونشر في المكتبة فوراً">
+                <button onclick="approveDonationDirect(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 transition shadow-sm" title="قبول ونشر في الكتب المتوفرة">
                   <i data-lucide="check" class="w-3.5 h-3.5"></i>
                   <span>قبول ونشر</span>
                 </button>
-                <button onclick="openEditDonationModal(${index})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="تعديل تفاصيل الكتاب قبل النشر">
+                <button onclick="openEditDonationModal(${index})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="تعديل التفاصيل قبل النشر">
                   <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                   <span>تعديل</span>
                 </button>
                 ${directWaLink ? `
-                  <a href="${directWaLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition border border-emerald-500/30" title="بدء محادثة واتساب مباشرة مع المتبرع">
+                  <a href="${directWaLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition border border-emerald-500/30">
                     <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                     <span>واتساب</span>
                   </a>
                 ` : ''}
-                <button onclick="deleteBookRequestByIndex(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white text-xs font-bold flex items-center gap-1 transition" title="رفض الطلب وإلغاؤه">
+                <button onclick="deleteBookRequestByIndex(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white text-xs font-bold flex items-center gap-1 transition">
                   <i data-lucide="x" class="w-3.5 h-3.5"></i>
                   <span>رفض</span>
                 </button>
               `;
             } else {
               actionButtonsMarkup = `
-                <button onclick="approveBorrowDirect(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 transition shadow-sm" title="قبول الاستعارة">
+                <button onclick="approveBorrowDirect(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 transition shadow-sm" title="قبول ونقل للكتب المستعارة">
                   <i data-lucide="check" class="w-3.5 h-3.5"></i>
                   <span>قبول</span>
                 </button>
                 ${directWaLink ? `
-                  <a href="${directWaLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition border border-emerald-500/30" title="بدء محادثة واتساب مباشرة مع المستعير">
+                  <a href="${directWaLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition border border-emerald-500/30">
                     <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                     <span>واتساب</span>
                   </a>
                 ` : ''}
-                <button onclick="deleteBookRequestByIndex(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition" title="رفض الطلب">
+                <button onclick="deleteBookRequestByIndex(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
                   <i data-lucide="x" class="w-3.5 h-3.5"></i>
                   <span>رفض</span>
                 </button>
@@ -2160,61 +2116,7 @@
       } catch (err) {}
     }
 
-    setInterval(() => {
-      if (sessionStorage.getItem('nadi_admin_session')) {
-        fetchLiveBookRequests(true);
-      }
-    }, 6000);
-
-    async function approveDonationDirect(index) {
-      const target = liveBookRequestsList[index];
-      if (!target) return;
-
-      const rawBook = target['عنوان الكتاب / المقرر'] || '';
-      const parsed = parseDonationInfo(rawBook);
-      const reqUniqueId = getRequestNormalizedKey(target);
-
-      markRequestAsHandled(reqUniqueId);
-
-      const newBook = {
-        'عنوان الكتاب': parsed.title,
-        'الكلية': parsed.college,
-        'الوصف والطبعة': parsed.desc,
-        'عدد النسخ': '1',
-        'الحالة': 'متوفر للاستلام'
-      };
-
-      liveBooksList.push(newBook);
-      localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
-      renderAdminBookCards(liveBooksList);
-      renderBookLoans(liveBooksList);
-
-      liveBookRequestsList.splice(index, 1);
-      localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
-      localStorage.setItem('nadi_bell_dismissed_count', String(liveBookRequestsList.length));
-      renderBookRequests(liveBookRequestsList);
-
-      try {
-        await fetch(SCRIPT_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            action: "approve_book_donation",
-            title: newBook['عنوان الكتاب'],
-            college: newBook['الكلية'],
-            desc: newBook['الوصف والطبعة'],
-            copies: newBook['عدد النسخ'],
-            status: newBook['الحالة'],
-            studentId: target['رقم الملف ID'] || '',
-            phone: target['رقم الهاتف'] || '',
-            originalRequestTitle: rawBook,
-            timestamp: target['تاريخ الإرسال'] || ''
-          })
-        });
-      } catch (e) {}
-    }
-
+    // قبول الاستعارة ونقلها إلى الكتب_المستعارة
     async function approveBorrowDirect(index) {
       const target = liveBookRequestsList[index];
       if (!target) return;
@@ -2225,18 +2127,30 @@
       const studentId = target['رقم الملف ID'] || '';
       const reqUniqueId = getRequestNormalizedKey(target);
 
+      // حظر محلي فوري لمنع وميض الطلب
       markRequestAsHandled(reqUniqueId);
 
-      const bookIndex = liveBooksList.findIndex(b => (b['عنوان الكتاب'] || '').trim().toLowerCase() === bookTitle.toLowerCase());
-      if (bookIndex !== -1) {
-        liveBooksList[bookIndex]['الحالة'] = 'مُعار حالياً';
-        liveBooksList[bookIndex]['اسم المستعير'] = studentName;
-        liveBooksList[bookIndex]['رقم هاتف المستعير'] = phone;
-        liveBooksList[bookIndex]['رقم ملف المستعير'] = studentId;
-        localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
-        renderAdminBookCards(liveBooksList);
-        renderBookLoans(liveBooksList);
+      // نقل فوري للكتاب من المتوفرة إلى المستعارة محلياً
+      const availIndex = liveAvailableBooksList.findIndex(b => (b['عنوان الكتاب'] || '').trim().toLowerCase() === bookTitle.toLowerCase());
+      let college = "عام";
+      if (availIndex !== -1) {
+        college = liveAvailableBooksList[availIndex]['الكلية'] || 'عام';
+        liveAvailableBooksList.splice(availIndex, 1);
+        localStorage.setItem('nadi_avail_books_cache', JSON.stringify(liveAvailableBooksList));
+        renderAvailableBooks(liveAvailableBooksList);
       }
+
+      const newLoan = {
+        'عنوان الكتاب': bookTitle,
+        'الكلية': college,
+        'اسم المستعير': studentName,
+        'رقم هاتف المستعير': phone,
+        'رقم ملف المستعير': studentId,
+        'تاريخ الاستعارة': 'الآن'
+      };
+      liveLoanedBooksList.push(newLoan);
+      localStorage.setItem('nadi_loans_cache', JSON.stringify(liveLoanedBooksList));
+      renderLoanedBooks(liveLoanedBooksList);
 
       liveBookRequestsList.splice(index, 1);
       localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
@@ -2254,25 +2168,33 @@
             studentName: studentName,
             phone: phone,
             studentId: studentId,
-            timestamp: target['تاريخ الإرسال'] || ''
+            college: college
           })
         });
       } catch (e) {}
     }
 
-    async function returnBook(index) {
-      const book = liveBooksList[index];
-      if (!book) return;
+    // استرداد الكتاب وإعادته إلى الكتب_المتوفرة
+    async function returnBook(bookTitle) {
+      if (!bookTitle) return;
 
-      const bookTitle = book['عنوان الكتاب'];
+      const loanIndex = liveLoanedBooksList.findIndex(b => (b['عنوان الكتاب'] || '').trim().toLowerCase() === String(bookTitle).trim().toLowerCase());
+      let college = "عام";
+      if (loanIndex !== -1) {
+        college = liveLoanedBooksList[loanIndex]['الكلية'] || 'عام';
+        liveLoanedBooksList.splice(loanIndex, 1);
+        localStorage.setItem('nadi_loans_cache', JSON.stringify(liveLoanedBooksList));
+        renderLoanedBooks(liveLoanedBooksList);
+      }
 
-      liveBooksList[index]['الحالة'] = 'متوفر للاستلام';
-      liveBooksList[index]['اسم المستعير'] = '';
-      liveBooksList[index]['رقم هاتف المستعير'] = '';
-      liveBooksList[index]['رقم ملف المستعير'] = '';
-      localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
-      renderAdminBookCards(liveBooksList);
-      renderBookLoans(liveBooksList);
+      liveAvailableBooksList.push({
+        'عنوان الكتاب': bookTitle,
+        'الكلية': college,
+        'الوصف والطبعة': 'نسخة مستردة بحالة ممتازة',
+        'عدد النسخ': '1'
+      });
+      localStorage.setItem('nadi_avail_books_cache', JSON.stringify(liveAvailableBooksList));
+      renderAvailableBooks(liveAvailableBooksList);
 
       try {
         await fetch(SCRIPT_URL, {
@@ -2285,6 +2207,50 @@
           })
         });
       } catch(e) {}
+    }
+
+    // قبول التبرع وإضافته إلى الكتب_المتوفرة
+    async function approveDonationDirect(index) {
+      const target = liveBookRequestsList[index];
+      if (!target) return;
+
+      const rawBook = target['عنوان الكتاب / المقرر'] || '';
+      const parsed = parseDonationInfo(rawBook);
+      const reqUniqueId = getRequestNormalizedKey(target);
+
+      markRequestAsHandled(reqUniqueId);
+
+      liveAvailableBooksList.push({
+        'عنوان الكتاب': parsed.title,
+        'الكلية': parsed.college,
+        'الوصف والطبعة': parsed.desc,
+        'عدد النسخ': '1'
+      });
+      localStorage.setItem('nadi_avail_books_cache', JSON.stringify(liveAvailableBooksList));
+      renderAvailableBooks(liveAvailableBooksList);
+
+      liveBookRequestsList.splice(index, 1);
+      localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
+      localStorage.setItem('nadi_bell_dismissed_count', String(liveBookRequestsList.length));
+      renderBookRequests(liveBookRequestsList);
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "approve_book_donation",
+            title: parsed.title,
+            college: parsed.college,
+            desc: parsed.desc,
+            copies: "1",
+            studentId: target['رقم الملف ID'] || '',
+            phone: target['رقم الهاتف'] || '',
+            originalRequestTitle: rawBook
+          })
+        });
+      } catch (e) {}
     }
 
     async function deleteBookRequestByIndex(index) {
@@ -2330,7 +2296,6 @@
       document.getElementById('donPublishCollege').value = parsed.college;
       document.getElementById('donPublishDesc').value = parsed.desc;
       document.getElementById('donPublishCopies').value = "1";
-      document.getElementById('donPublishStatus').value = "متوفر للاستلام";
 
       editDonationModal.classList.remove('hidden');
       editDonationModal.classList.add('flex');
@@ -2360,17 +2325,12 @@
           'عنوان الكتاب': document.getElementById('donPublishTitle').value.trim(),
           'الكلية': document.getElementById('donPublishCollege').value,
           'الوصف والطبعة': document.getElementById('donPublishDesc').value.trim(),
-          'عدد النسخ': document.getElementById('donPublishCopies').value.trim(),
-          'الحالة': document.getElementById('donPublishStatus').value
+          'عدد النسخ': document.getElementById('donPublishCopies').value.trim()
         };
 
-        const alreadyInList = liveBooksList.some(b => (b['عنوان الكتاب'] || '').trim().toLowerCase() === newBook['عنوان الكتاب'].toLowerCase());
-        if (!alreadyInList) {
-          liveBooksList.push(newBook);
-          localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
-          renderAdminBookCards(liveBooksList);
-          renderBookLoans(liveBooksList);
-        }
+        liveAvailableBooksList.push(newBook);
+        localStorage.setItem('nadi_avail_books_cache', JSON.stringify(liveAvailableBooksList));
+        renderAvailableBooks(liveAvailableBooksList);
 
         liveBookRequestsList.splice(currentEditDonationIndex, 1);
         localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
@@ -2390,20 +2350,25 @@
               college: newBook['الكلية'],
               desc: newBook['الوصف والطبعة'],
               copies: newBook['عدد النسخ'],
-              status: newBook['الحالة'],
               studentId: target['رقم الملف ID'] || '',
               phone: target['رقم الهاتف'] || '',
-              originalRequestTitle: target['عنوان الكتاب / المقرر'] || '',
-              timestamp: target['تاريخ الإرسال'] || ''
+              originalRequestTitle: target['عنوان الكتاب / المقرر'] || ''
             })
           });
         } catch (err) {} finally {
           submitDonationApprovalBtn.disabled = false;
-          submitDonationApprovalBtn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i><span>تأكيد ونشر بالمكتبة فوراً</span>`;
+          submitDonationApprovalBtn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i><span>تأكيد ونشر بالمتوفرة فوراً</span>`;
           lucide.createIcons();
         }
       });
     }
+
+    // فحص دوري كل 6 ثوانٍ
+    setInterval(() => {
+      if (sessionStorage.getItem('nadi_admin_session')) {
+        fetchLiveBookRequests(true);
+      }
+    }, 6000);
 
     // ==================== 5. الأنشطة والفعاليات ====================
     function switchActivitySubTab(tab) {
@@ -2436,10 +2401,7 @@
       const navBadge = document.getElementById('navActivityBadge');
       if (!container) return;
 
-      const validList = (list || []).filter(item => {
-        const title = (item['عنوان النشاط'] || item.title || '').trim();
-        return title !== '';
-      });
+      const validList = (list || []).filter(item => (item['عنوان النشاط'] || item.title || '').trim() !== '');
 
       liveActivitiesList = validList;
       if (badge) badge.textContent = validList.length;
