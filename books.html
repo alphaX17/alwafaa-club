@@ -28,11 +28,6 @@
   </script>
   <style>
     body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
-    .gold-gradient-text {
-      background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
     .custom-scrollbar::-webkit-scrollbar { height: 5px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
@@ -44,7 +39,6 @@
   <header class="sticky top-0 z-40 bg-white/90 dark:bg-[#080e1c]/90 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 transition-colors">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       
-      <!-- الجهة اليمنى: القائمة الجانبية والشعار -->
       <div class="flex items-center gap-4">
         <button id="openMenuBtn" aria-label="فتح القائمة" class="p-2.5 rounded-lg bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
           <i data-lucide="menu" class="w-5 h-5"></i>
@@ -59,7 +53,6 @@
         </div>
       </div>
 
-      <!-- الجهة اليسرى: محول المظهر -->
       <div class="flex items-center gap-3">
         <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
           <span id="themeIconContainer" class="flex items-center justify-center"></span>
@@ -78,7 +71,6 @@
   <!-- ==================== المحتوى الرئيسي ==================== -->
   <main class="max-w-7xl mx-auto px-4 lg:px-8 py-8">
 
-    <!-- أزرار التبديل بين (استعارة كتاب متوفر) و (تقديم / تبرع بكتاب) -->
     <div class="flex justify-center mb-8">
       <div class="inline-flex p-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#0c1427]">
         <button id="tabBorrow" class="px-5 py-2 rounded-lg text-xs font-bold transition bg-white dark:bg-clubNavy-light text-slate-900 dark:text-white shadow-sm flex items-center gap-2">
@@ -106,7 +98,6 @@
           </div>
         </div>
 
-        <!-- أزرار الفلترة السريعة لكليات الجامعة -->
         <div class="flex items-center gap-1.5 overflow-x-auto pt-3 border-t border-slate-100 dark:border-slate-800 custom-scrollbar pb-1">
           <button class="book-filter-btn active shrink-0 px-3 py-1 rounded-lg text-xs font-bold bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 transition" data-filter="all">الكل</button>
           <button class="book-filter-btn shrink-0 px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="engineering">كلية الهندسة</button>
@@ -120,7 +111,6 @@
       <!-- شبكة الكتب -->
       <div id="booksGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[220px]"></div>
       
-      <!-- رسالة في حال عدم تطابق البحث -->
       <div id="noBooksResults" class="hidden text-center py-16">
         <i data-lucide="book-x" class="w-12 h-12 mx-auto text-slate-400 mb-3 opacity-60"></i>
         <h3 class="text-sm font-bold text-slate-700 dark:text-slate-300">لم يتم العثور على أي كتاب مطابق</h3>
@@ -143,44 +133,35 @@
         </div>
 
         <form id="donateForm" class="space-y-4">
-          <!-- 1. بيانات الطالب المتبرع -->
           <div>
             <label class="block text-xs font-bold mb-1">الاسم الثلاثي الكامل *</label>
             <input id="donatorName" type="text" required placeholder="اسمك الثلاثي الكامل" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-            <p class="text-[11px] text-slate-400 mt-1">الاسم الكامل لتوثيق المساهمة والتواصل المباشر معك.</p>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold mb-1">رقم الملف الجامعي (Student ID) *</label>
               <input id="donatorId" type="text" required placeholder="مثال: 42130000" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left" dir="ltr">
-              <p class="text-[11px] text-slate-400 mt-1">المعرف الجامعي الخاص بك لتأكيد الهوية الطلابية.</p>
             </div>
             <div>
               <label class="block text-xs font-bold mb-1">رقم الهاتف (واتساب) *</label>
               <input id="donatorPhone" type="tel" required placeholder="مثال: 70xxxxxx أو 03xxxxxx" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-              <p class="text-[11px] text-slate-400 mt-1">للتنسيق معك حول موعد ومكان استلام الكتاب داخل الجامعة.</p>
             </div>
           </div>
 
-          <!-- 2. بيانات الكتاب والمقرر الأكاديمي -->
           <div>
             <label class="block text-xs font-bold mb-1">عنوان الكتاب أو المرجع الأكاديمي *</label>
             <input id="donatedBookTitle" type="text" required placeholder="مثال: University Physics with Modern Physics أو مبادئ المحاسبة" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-            <p class="text-[11px] text-slate-400 mt-1">العنوان الرسمي المكتوب على غلاف الكتاب.</p>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold mb-1">اسم المادة أو المقرر الدراسي *</label>
               <input id="donatedCourseName" type="text" required placeholder="مثال: فيزياء 1 أو تفاضل وتكامل 2" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-              <p class="text-[11px] text-slate-400 mt-1">المادة التي يُدرّس فيها هذا الكتاب في الجامعة.</p>
             </div>
-            <!-- تم تعديل كود المادة ليصبح إلزامياً وإجبارياً بالكامل -->
             <div>
               <label class="block text-xs font-bold mb-1">رمز أو كود المادة (Course Code) *</label>
-              <input id="donatedCourseCode" type="text" required placeholder="مثال: PHY 200, MATH 200, MECH 210" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
-              <p class="text-[11px] text-slate-400 mt-1">كود المادة المعتمد باللغة الإنجليزية لربط الكتاب بالمقرر بدقة.</p>
+              <input id="donatedCourseCode" type="text" required placeholder="مثال: PHY 200, MATH 200, MECH 210" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono uppercase" dir="ltr">
             </div>
           </div>
 
@@ -195,13 +176,10 @@
                 <option value="كلية الصيدلة">كلية الصيدلة (Pharmacy)</option>
                 <option value="عام لكافة الكليات">عام لكافة الكليات</option>
               </select>
-              <p class="text-[11px] text-slate-400 mt-1">لتصنيف الكتاب وعرضه للطلاب المستفيدين منه.</p>
             </div>
-            <!-- الوصف أو الطبعة هو الحقل الوحيد غير الضروري والاختياري -->
             <div>
-              <label class="block text-xs font-bold mb-1">الوصف أو الطبعة المعتمدة (غير ضروري)</label>
-              <input id="donatedBookDesc" type="text" placeholder="مثال: الطبعة الثالثة عشر، بحالة ممتازة مع حلول" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-              <p class="text-[11px] text-slate-400 mt-1">رقم الطبعة أو ملاحظات حول حالة النسخة إن توفرت.</p>
+              <label class="block text-xs font-bold mb-1">الوصف أو الطبعة المعتمدة (اختياري)</label>
+              <input id="donatedBookDesc" type="text" placeholder="مثال: الطبعة الثالثة عشر، بحالة ممتازة" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
             </div>
           </div>
 
@@ -213,7 +191,7 @@
 
         <div id="donateSuccess" class="hidden mt-4 p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs flex items-center gap-2.5">
           <i data-lucide="check-circle-2" class="w-5 h-5 shrink-0"></i>
-          <span>تم تسجيل بيانات الكتاب بنجاح، شكراً لمبادرتك الكريمة لدعم زملائك الطلاب! سنتواصل معك عبر واتساب قريباً.</span>
+          <span>تم تسجيل بيانات الكتاب بنجاح، شكراً لمبادرتك الكريمة! سنتواصل معك عبر واتساب قريباً.</span>
         </div>
       </div>
     </section>
@@ -261,7 +239,7 @@
     </div>
   </div>
 
-  <!-- ==================== القائمة الجانبية ==================== -->
+  <!-- القائمة الجانبية -->
   <div id="menuOverlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
   <aside id="sidebar" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0c1427] border-l border-slate-200 dark:border-clubNavy-borderDark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
@@ -318,7 +296,7 @@
     </div>
   </aside>
 
-  <!-- ==================== السكربت البرمجي الشامل ==================== -->
+  <!-- ==================== السكربت البرمجي ==================== -->
   <script>
     lucide.createIcons();
 
@@ -329,38 +307,21 @@
     function detectBookCategory(faculty = '', title = '', desc = '') {
       const combined = `${faculty} ${title} ${desc}`.toLowerCase();
 
-      if (combined.includes('pharmacy') || combined.includes('صيدل') || combined.includes('phar')) {
-        return 'pharmacy';
-      }
+      if (combined.includes('pharmacy') || combined.includes('صيدل') || combined.includes('phar')) return 'pharmacy';
       if (combined.includes('business') || combined.includes('أعمال') || combined.includes('اعمال') || 
           combined.includes('account') || combined.includes('محاسب') || combined.includes('economic') || 
           combined.includes('اقتصاد') || combined.includes('finance') || combined.includes('مالي') || 
-          combined.includes('tourism') || combined.includes('hotel') || combined.includes('marketing') || 
-          combined.includes('تسويق') || combined.includes('mis') || combined.includes('management') || combined.includes('إدارة')) {
-        return 'business';
-      }
+          combined.includes('tourism') || combined.includes('marketing') || combined.includes('تسويق') || 
+          combined.includes('mis') || combined.includes('management') || combined.includes('إدارة')) return 'business';
       if (combined.includes('education') || combined.includes('تربي') || combined.includes('tefl') || 
           combined.includes('translation') || combined.includes('ترجم') || combined.includes('english') || 
-          combined.includes('إنجليز') || combined.includes('انكليز') || combined.includes('لغات')) {
-        return 'education';
-      }
+          combined.includes('إنجليز') || combined.includes('انكليز') || combined.includes('لغات')) return 'education';
       if (combined.includes('engineer') || combined.includes('هندس') || combined.includes('mech') || 
           combined.includes('ميكانيك') || combined.includes('civil') || combined.includes('مدني') || 
           combined.includes('electric') || combined.includes('كهرب') || combined.includes('telecom') || 
           combined.includes('اتصال') || combined.includes('survey') || combined.includes('مساح') || 
-          combined.includes('industr') || combined.includes('صناع') || combined.includes('statics') || combined.includes('dynamics')) {
-        return 'engineering';
-      }
-      if (combined.includes('art') || combined.includes('science') || combined.includes('فنون') || 
-          combined.includes('علوم') || combined.includes('computer') || combined.includes('cs') || 
-          combined.includes('حاسوب') || combined.includes('it') || combined.includes('graphic') || 
-          combined.includes('جرافيك') || combined.includes('nutrition') || combined.includes('تغذية') || 
-          combined.includes('math') || combined.includes('رياضيات') || combined.includes('calculus') || 
-          combined.includes('phys') || combined.includes('فيزياء') || combined.includes('chem') || 
-          combined.includes('كيمياء') || combined.includes('bio') || combined.includes('بيولوج')) {
-        return 'arts_sciences';
-      }
-
+          combined.includes('industr') || combined.includes('صناع') || combined.includes('statics') || combined.includes('dynamics')) return 'engineering';
+      
       return 'arts_sciences';
     }
 
@@ -369,7 +330,7 @@
       if (!grid) return;
 
       if (!booksList || booksList.length === 0) {
-        grid.innerHTML = `<div class="col-span-full py-16 text-center text-xs text-slate-400">لا توجد كتب مسجلة حالياً في قاعدة البيانات.</div>`;
+        grid.innerHTML = `<div class="col-span-full py-16 text-center text-xs text-slate-400">لا توجد كتب متوفرة حالياً في المكتبة.</div>`;
         return;
       }
 
@@ -422,8 +383,9 @@
       filterBooks();
     }
 
+    // جلب البيانات الحية متطابقاً مع ورقة الكتب_المتوفرة
     async function fetchLiveBooks() {
-      const cached = localStorage.getItem('nadi_books_cache');
+      const cached = localStorage.getItem('nadi_avail_books_cache') || localStorage.getItem('nadi_books_cache');
       if (cached) {
         try {
           booksData = JSON.parse(cached);
@@ -434,12 +396,15 @@
       if (!SCRIPT_URL) return;
 
       try {
-        const response = await fetch(SCRIPT_URL);
+        const response = await fetch(`${SCRIPT_URL}?req=availableBooks&bust=${Date.now()}`);
         const data = await response.json();
 
-        if (data.books && Array.isArray(data.books)) {
-          booksData = data.books;
+        // قراءة مفتاح الكتب_المتوفرة الجديد مع التوافق التام
+        const list = data.availableBooks || data.books;
+        if (list && Array.isArray(list)) {
+          booksData = list;
           renderBooks(booksData);
+          localStorage.setItem('nadi_avail_books_cache', JSON.stringify(booksData));
           localStorage.setItem('nadi_books_cache', JSON.stringify(booksData));
         }
       } catch (err) {}
@@ -477,8 +442,8 @@
     const themeText = document.getElementById('themeText');
     const htmlElement = document.documentElement;
 
-    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
-    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
 
     function applyTheme(isDark) {
       if (isDark) {
@@ -585,7 +550,7 @@
             closeModal();
           }, 2000);
         } catch (err) {
-          alert('تعذر تسجيل الحجز، يرجى التواصل عبر واتساب.');
+          alert('تعذر تسجيل الحجز، يرجى المحاولة لاحقاً.');
         } finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalBtnText;
@@ -594,7 +559,7 @@
       });
     }
 
-    // نموذج تسجيل التبرع مع كود المادة الإلزامي
+    // نموذج التبرع
     const donateForm = document.getElementById('donateForm');
     const donateSuccess = document.getElementById('donateSuccess');
     const submitDonateBtn = document.getElementById('submitDonateBtn');
@@ -616,7 +581,6 @@
         const college = document.getElementById('donatedCollege').value;
         const bookDesc = document.getElementById('donatedBookDesc').value.trim();
 
-        // تجميع التفاصيل لضمان ظهورها بشكل موحد في الشيت ولوحة الإشعارات
         const detailedBookInfo = `${bookTitle} (المقرر: ${courseName} - ${courseCode} | الكلية: ${college}${bookDesc ? ' | الطبعة: ' + bookDesc : ''})`;
 
         const payload = {
@@ -652,7 +616,7 @@
       });
     }
 
-    // بحث وفلترة الكتب
+    // فلترة وبحث الكتب
     const bookSearchInput = document.getElementById('bookSearchInput');
     const bookFilterBtns = document.querySelectorAll('.book-filter-btn');
     const noBooksResults = document.getElementById('noBooksResults');
