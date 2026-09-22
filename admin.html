@@ -1,9 +1,1195 @@
-function renderGuidanceList(list) {
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بوابة المشرفين | نادي الوفاء - فرع صور</title>
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Tajawal', 'sans-serif'] },
+          colors: {
+            gold: { 400: '#fbbf24', 500: '#d97706', 600: '#b45309' },
+            clubNavy: { light: '#1e3a8a', dark: '#070b14', cardDark: '#111b33', borderDark: '#1e293b' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+    .custom-scrollbar::-webkit-scrollbar { height: 5px; width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative">
+
+  <!-- ==================== 1. بوابة تسجيل الدخول ==================== -->
+  <div id="loginGate" class="min-h-screen flex flex-col items-center justify-center p-4 relative">
+    <div class="absolute top-5 left-5">
+      <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark text-xs font-semibold shadow-sm">
+        <span class="themeIconContainer flex items-center"></span>
+        <span class="themeText">الليلي</span>
+      </button>
+    </div>
+
+    <div class="w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-2xl space-y-6">
+      <div class="text-center space-y-2">
+        <img src="logo.png" alt="نادي الوفاء" class="w-16 h-16 mx-auto object-contain mb-2">
+        <h1 class="text-xl font-black text-slate-900 dark:text-white">بوابة مشرفي منصة نادي الوفاء</h1>
+        <p class="text-xs text-slate-500 dark:text-slate-400">لوحة الإدارة المركزية وتحديث المحتوى — فرع صور</p>
+      </div>
+
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">اسم المشرف الثلاثي *</label>
+          <input id="adminName" type="text" required placeholder="الاسم الثلاثي للمشرف المعتمد" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">رقم الملف الجامعي (Student ID) *</label>
+          <input id="adminID" type="text" required placeholder="مثال: 42130000" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left" dir="ltr">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">الرمز السري الخاص باللوحة (Admin Key) *</label>
+          <input id="adminKey" type="password" required placeholder="••••••••" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left" dir="ltr">
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-lg mt-2">
+          <i data-lucide="lock-open" class="w-4 h-4"></i>
+          <span>الدخول إلى لوحة التحكم</span>
+        </button>
+      </form>
+
+      <div id="loginError" class="hidden p-3 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs text-center font-medium">
+        البيانات المدخلة أو الرمز السري غير صحيح. يرجى مراجعة إدارة النادي.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 2. لوحة التحكم المركزية ==================== -->
+  <div id="adminDashboard" class="hidden min-h-screen flex flex-col">
+
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="logo.png" alt="شعار النادي" class="w-9 h-9 object-contain">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-sm font-bold text-slate-900 dark:text-white">لوحة تحكم المشرفين</h2>
+            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20">خاص بالنادي</span>
+          </div>
+          <p id="welcomeAdmin" class="text-[11px] text-slate-400">مرحباً بك في نظام الإدارة</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- جرس الإشعارات -->
+        <div class="relative">
+          <button id="notifBellBtn" onclick="toggleNotifPanel()" class="relative p-2 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-slate-700 dark:text-slate-200 transition" title="طلبات وتبرعات الكتب">
+            <i data-lucide="bell" class="w-4 h-4"></i>
+            <span id="notifBellBadge" class="hidden absolute -top-1 -right-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-rose-600 text-white min-w-[18px] text-center leading-none shadow-sm">0</span>
+          </button>
+
+          <div id="notifPanel" class="hidden absolute left-0 mt-2 w-80 sm:w-96 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl p-4 z-50 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+              <div class="flex items-center gap-2">
+                <i data-lucide="inbox" class="w-4 h-4 text-gold-500"></i>
+                <h4 class="font-bold text-xs text-slate-900 dark:text-white">طلبات وتبرعات الكتب الواردة</h4>
+              </div>
+              <button onclick="toggleNotifPanel()" class="p-1 rounded text-slate-400 hover:text-slate-600 dark:hover:text-white"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+            </div>
+
+            <div id="notifListContainer" class="max-h-72 overflow-y-auto space-y-2 custom-scrollbar">
+              <div class="py-6 text-center text-xs text-slate-400">لا توجد طلبات جديدة حالياً.</div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 dark:border-slate-800 text-center">
+              <button onclick="goToBookRequestsTab()" class="text-[11px] font-bold text-gold-500 hover:underline">
+                الانتقال إلى تبويب إدارة الطلبات والتبرعات الكامل
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
+          <span class="themeIconContainer flex items-center justify-center"></span>
+          <span class="themeText">الليلي</span>
+        </button>
+
+        <button onclick="openLogoutModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-600 dark:text-rose-400 text-xs font-bold transition">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          <span>خروج</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8 flex flex-col md:flex-row gap-6">
+
+      <!-- القائمة الجانبية -->
+      <aside class="w-full md:w-64 shrink-0 space-y-2">
+        <div class="p-3 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark space-y-1">
+          <span class="px-3 py-1 block text-[10px] font-bold text-slate-400 uppercase tracking-wider">الأقسام المتاحة</span>
+          
+          <button id="navFacultyBtn" onclick="switchMainSection('faculty')" class="nav-main-tab active w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition">
+            <i data-lucide="users" class="w-4 h-4"></i>
+            <span>دليل الأساتذة والإدارة</span>
+          </button>
+
+          <button id="navResourcesBtn" onclick="switchMainSection('resources')" class="nav-main-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">
+            <i data-lucide="folder-down" class="w-4 h-4"></i>
+            <span>الموارد والامتحانات</span>
+          </button>
+
+          <button id="navGuidanceBtn" onclick="switchMainSection('guidance')" class="nav-main-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+            <span>التوجيه والمجموعات</span>
+          </button>
+
+          <button id="navBooksBtn" onclick="switchMainSection('books')" class="nav-main-tab w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="book-open" class="w-4 h-4"></i>
+              <span>مكتبة الكتب الورقية</span>
+            </div>
+            <span id="navBookBadge" class="hidden px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-rose-600 text-white">0</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- مساحة المحتوى -->
+      <main class="flex-1 space-y-6">
+
+        <!-- القسم 1: دليل الأساتذة -->
+        <div id="sectionFaculty" class="space-y-6">
+          <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit flex-wrap">
+            <button id="tabFacultyAdd" onclick="switchFacultySubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
+              <i data-lucide="user-plus" class="w-4 h-4"></i>
+              <span>إضافة أستاذ جديد</span>
+            </button>
+            <button id="tabFacultyManage" onclick="switchFacultySubTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
+              <i data-lucide="users" class="w-4 h-4"></i>
+              <span>إدارة قائمة الأساتذة</span>
+              <span id="facultyCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
+            </button>
+          </div>
+
+          <section id="facultyAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <span class="text-xs font-bold text-gold-500">سجل الهيئة التدريسية والإدارية</span>
+              <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة أستاذ أو مسؤول إداري جديد</h3>
+            </div>
+
+            <form id="facultyForm" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">الاسم الكامل مع اللقب *</label>
+                  <input id="facName" type="text" required placeholder="مثال: د. حسن الموسوي" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold mb-1">الكلية / القسم الأكاديمي *</label>
+                  <select id="facCollege" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                    <option value="كلية الهندسة">كلية الهندسة (Engineering)</option>
+                    <option value="كلية إدارة الأعمال">كلية إدارة الأعمال (Business)</option>
+                    <option value="كلية الفنون والعلوم">كلية الفنون والعلوم (Arts & Sciences)</option>
+                    <option value="كلية التربية واللغات">كلية التربية واللغات (Education)</option>
+                    <option value="كلية الصيدلة">كلية الصيدلة (Pharmacy)</option>
+                    <option value="الإدارة وشؤون الطلاب">الإدارة وشؤون الطلاب</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">البريد الإلكتروني الجامعي الرسمي *</label>
+                  <input id="facEmail" type="email" required placeholder="name@liu.edu.lb" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold mb-1">المكتب والقاعة (Location)</label>
+                  <input id="facOffice" type="text" placeholder="مثال: Block A - Room 204" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1">الساعات المكتبية المعتمدة (Office Hours) *</label>
+                <input id="facHours" type="text" required placeholder="مثال: الإثنين والأربعاء 10:00 - 12:00" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              </div>
+
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                <button type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                  <span>إدراج في دليل الأساتذة فوراً</span>
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <section id="facultyManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+              <h3 class="text-base font-bold text-slate-900 dark:text-white">الأساتذة المسجلون في الدليل</h3>
+              <button onclick="fetchLiveFacultyData(true)" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>تحديث</span>
+              </button>
+            </div>
+            <div id="facultyListContainer" class="space-y-3 min-h-[140px]">
+              <div class="py-12 text-center text-xs text-slate-400">جاري فحص قائمة الأساتذة...</div>
+            </div>
+          </section>
+        </div>
+
+        <!-- القسم 2: الموارد والامتحانات -->
+        <div id="sectionResources" class="hidden space-y-6">
+          <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit flex-wrap">
+            <button id="tabResourceAdd" onclick="switchResourceSubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
+              <i data-lucide="file-plus" class="w-4 h-4"></i>
+              <span>إضافة ملف جديد</span>
+            </button>
+            <button id="tabResourceManage" onclick="switchResourceSubTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
+              <i data-lucide="folder-open" class="w-4 h-4"></i>
+              <span>إدارة الموارد والامتحانات</span>
+              <span id="resourceCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
+            </button>
+          </div>
+
+          <section id="resourceAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <span class="text-xs font-bold text-gold-500">بنك الامتحانات والملخصات الرقمية</span>
+              <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">رفع رابط ملخص أو نموذج امتحان رسمي</h3>
+            </div>
+
+            <form id="resourceForm" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">اسم المادة والمقرر *</label>
+                  <input id="resTitle" type="text" required placeholder="مثال: MATH 210 - Calculus II" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold mb-1">الكلية التابع لها المقرر *</label>
+                  <select id="resCollege" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                    <option value="كلية الهندسة">كلية الهندسة</option>
+                    <option value="كلية إدارة الأعمال">كلية إدارة الأعمال</option>
+                    <option value="كلية الفنون والعلوم">كلية الفنون والعلوم</option>
+                    <option value="كلية التربية واللغات">كلية التربية واللغات</option>
+                    <option value="كلية الصيدلة">كلية الصيدلة</option>
+                    <option value="عام لكافة الكليات">متطلب عام (General)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">نوع المورد الأكاديمي *</label>
+                  <select id="resType" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                    <option value="امتحان نصفي (Midterm)">امتحان نصفي (Midterm)</option>
+                    <option value="امتحان نهائي (Final)">امتحان نهائي (Final)</option>
+                    <option value="ملخص شامل (Summary)">ملخص شامل (Summary)</option>
+                    <option value="سلايدات المقرر (Slides)">سلايدات المقرر (Slides)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold mb-1">الفصل والسنة الدراسية *</label>
+                  <input id="resTerm" type="text" required placeholder="مثال: Fall 2025-2026" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 font-mono" dir="ltr">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1">رابط التحميل المباشر أو Google Drive *</label>
+                <input id="resLink" type="url" required placeholder="https://drive.google.com/..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+              </div>
+
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                <button type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                  <span>نشر المورد في بنك الامتحانات</span>
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <section id="resourceManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+              <h3 class="text-base font-bold text-slate-900 dark:text-white">الملخصات والامتحانات المنشورة</h3>
+              <button onclick="fetchLiveResourcesData(true)" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>تحديث</span>
+              </button>
+            </div>
+            <div id="resourceListContainer" class="space-y-3 min-h-[140px]">
+              <div class="py-12 text-center text-xs text-slate-400">جاري تحميل الموارد...</div>
+            </div>
+          </section>
+        </div>
+
+        <!-- القسم 3: التوجيه والمجموعات (مطابق تماماً لجدول الشيت) -->
+        <div id="sectionGuidance" class="hidden space-y-6">
+          <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit flex-wrap">
+            <button id="tabGuidanceAdd" onclick="switchGuidanceSubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
+              <i data-lucide="message-square-plus" class="w-4 h-4"></i>
+              <span>إضافة مرشد أو تخصص</span>
+            </button>
+            <button id="tabGuidanceManage" onclick="switchGuidanceSubTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
+              <i data-lucide="network" class="w-4 h-4"></i>
+              <span>إدارة شبكة التوجيه</span>
+              <span id="guidanceCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
+            </button>
+          </div>
+
+          <section id="guidanceAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <span class="text-xs font-bold text-gold-500">شبكة التواصل والتوجيه الأكاديمي</span>
+              <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة مرشد أكاديمي أو رابط واتساب</h3>
+            </div>
+
+            <form id="guidanceForm" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">الكلية أو الاختصاص *</label>
+                  <input id="guidMajor" type="text" required placeholder="مثال: الهندسة الميكانيكية" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold mb-1">النوع أو الصفة *</label>
+                  <select id="guidType" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                    <option value="مرشد أكاديمي للفرع">مرشد أكاديمي للفرع</option>
+                    <option value="ممثل اختصاص">ممثل اختصاص</option>
+                    <option value="مجموعة واتساب رسمية">مجموعة واتساب رسمية</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">الاسم أو الصفة *</label>
+                  <input id="guidLeader" type="text" required placeholder="مثال: يحيى المقبل" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold mb-1">رقم الهاتف *</label>
+                  <input id="guidPhone" type="text" required placeholder="مثال: 71336458" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1">رابط الواتساب (مجموعة أو محادثة) *</label>
+                <input id="guidGroupUrl" type="url" required placeholder="https://wa.me/..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+              </div>
+
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                <button type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                  <span>إدراج في دليل التوجيه</span>
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <section id="guidanceManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+              <h3 class="text-base font-bold text-slate-900 dark:text-white">المرشدون والمجموعات المسجلة</h3>
+              <button onclick="fetchLiveGuidanceData(true)" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>تحديث</span>
+              </button>
+            </div>
+            <div id="guidanceListContainer" class="space-y-3 min-h-[140px]">
+              <div class="py-12 text-center text-xs text-slate-400">جاري تحميل البيانات...</div>
+            </div>
+          </section>
+        </div>
+
+        <!-- القسم 4: مكتبة الكتب -->
+        <div id="sectionBooks" class="hidden space-y-6">
+          <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit flex-wrap">
+            <button id="tabBookAdd" onclick="switchBookSubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
+              <i data-lucide="book-plus" class="w-4 h-4"></i>
+              <span>إضافة كتاب جديد</span>
+            </button>
+            <button id="tabBookManage" onclick="switchBookSubTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
+              <i data-lucide="library" class="w-4 h-4"></i>
+              <span>إدارة وتعديل الكتب</span>
+              <span id="bookCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
+            </button>
+            <button id="tabBookRequests" onclick="switchBookSubTab('requests')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
+              <i data-lucide="inbox" class="w-4 h-4"></i>
+              <span>إدارة الطلبات والتبرعات</span>
+              <span id="bookRequestsCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-rose-500/20 text-rose-500 font-mono">0</span>
+            </button>
+          </div>
+
+          <section id="bookAddView" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى Google Sheets</span>
+              <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة كتاب ورقي جديد لمكتبة الإعارة</h3>
+            </div>
+
+            <form id="bookForm" class="space-y-5">
+              <div>
+                <label class="block text-xs font-bold mb-1">عنوان الكتاب أو المرجع الأكاديمي *</label>
+                <input id="bookTitle" type="text" required placeholder="مثال: كتاب الفيزياء الجامعية PHY 200" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">الكلية التابع لها المقرر *</label>
+                  <select id="bookCollegeSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                    <option value="كلية الهندسة">كلية الهندسة (Engineering)</option>
+                    <option value="كلية إدارة الأعمال">كلية إدارة الأعمال (Business)</option>
+                    <option value="كلية الفنون والعلوم">كلية الفنون والعلوم (Arts & Sciences)</option>
+                    <option value="كلية التربية واللغات">كلية التربية واللغات (Education)</option>
+                    <option value="كلية الصيدلة">كلية الصيدلة (Pharmacy)</option>
+                    <option value="الجامعة اللبنانية الدولية">عام لكافة الكليات</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold mb-1">حالة التوفر للاستلام *</label>
+                  <select id="bookStatusSelect" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                    <option value="متوفر للاستلام">متوفر للاستلام</option>
+                    <option value="مُعار حالياً">مُعار حالياً</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold mb-1">الوصف والطبعة المعتمدة *</label>
+                  <input id="bookDesc" type="text" required placeholder="مثال: الطبعة السادسة، بحالة ممتازة" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold mb-1">عدد النسخ المتوفرة حالياً *</label>
+                  <input id="bookCopies" type="number" min="0" required value="1" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                <button id="submitBookBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                  <span>إدراج الكتاب في المكتبة فوراً</span>
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <section id="bookManageView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+              <h3 class="text-base font-bold text-slate-900 dark:text-white">قائمة الكتب والمراجع الورقية المسجلة</h3>
+              <button onclick="fetchLiveBooksData(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>تحديث</span>
+              </button>
+            </div>
+            <div id="bookListContainer" class="space-y-3 min-h-[140px]">
+              <div class="py-12 text-center text-xs text-slate-400">جاري فحص مكتبة الكتب...</div>
+            </div>
+          </section>
+
+          <section id="bookRequestsView" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+              <h3 class="text-base font-bold text-slate-900 dark:text-white">طلبات الاستعارة والتبرعات بالكتب</h3>
+              <button onclick="fetchLiveBookRequests(true)" class="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>تحديث الطلبات</span>
+              </button>
+            </div>
+            <div id="bookRequestsTableContainer" class="space-y-3 min-h-[140px]">
+              <div class="py-12 text-center text-xs text-slate-400">جاري تحميل الطلبات...</div>
+            </div>
+          </section>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ==================== النوافذ المنبثقة ==================== -->
+  <div id="logoutModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="w-full max-w-md p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
+      <div class="flex items-center gap-3 text-gold-500">
+        <div class="p-2.5 rounded-xl bg-gold-500/10"><i data-lucide="log-out" class="w-6 h-6 text-gold-500"></i></div>
+        <h3 class="font-bold text-sm text-slate-900 dark:text-white">تأكيد تسجيل الخروج</h3>
+      </div>
+      <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        هل أنت متأكد من إنهاء جلسة المشرف وتسجيل الخروج؟
+      </p>
+      <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+        <button onclick="closeLogoutModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">إلغاء</button>
+        <button id="confirmLogoutBtn" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-md">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          <span>نعم، خروج</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="editBookModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <h3 class="font-bold text-sm text-slate-900 dark:text-white">تعديل بيانات الكتاب المسجل</h3>
+        <button onclick="closeEditBookModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <form id="editBookForm" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold mb-1">عنوان الكتاب أو المرجع *</label>
+          <input id="editBookTitle" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">الكلية *</label>
+            <select id="editBookCollege" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="كلية الهندسة">كلية الهندسة</option>
+              <option value="كلية إدارة الأعمال">كلية إدارة الأعمال</option>
+              <option value="كلية الفنون والعلوم">كلية الفنون والعلوم</option>
+              <option value="كلية التربية واللغات">كلية التربية واللغات</option>
+              <option value="كلية الصيدلة">كلية الصيدلة</option>
+              <option value="الجامعة اللبنانية الدولية">عام لكافة الكليات</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold mb-1">حالة التوفر *</label>
+            <select id="editBookStatus" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="متوفر للاستلام">متوفر للاستلام</option>
+              <option value="مُعار حالياً">مُعار حالياً</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">الوصف والطبعة *</label>
+            <input id="editBookDesc" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block font-bold mb-1">عدد النسخ المتوفرة *</label>
+            <input id="editBookCopies" type="number" min="0" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 font-mono text-left" dir="ltr">
+          </div>
+        </div>
+        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeEditBookModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">إلغاء</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-gold-500 text-slate-950 font-bold flex items-center gap-1.5 shadow-md">
+            <i data-lucide="save" class="w-3.5 h-3.5"></i>
+            <span>حفظ التعديلات</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="editDonationModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <h3 class="font-bold text-sm text-slate-900 dark:text-white">مراجعة وتعديل بيانات التبرع قبل النشر</h3>
+        <button onclick="closeEditDonationModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <form id="editDonationForm" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold mb-1">عنوان الكتاب أو المرجع *</label>
+          <input id="donPublishTitle" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">الكلية التابع لها *</label>
+            <select id="donPublishCollege" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="كلية الهندسة">كلية الهندسة</option>
+              <option value="كلية إدارة الأعمال">كلية إدارة الأعمال</option>
+              <option value="كلية الفنون والعلوم">كلية الفنون والعلوم</option>
+              <option value="كلية التربية واللغات">كلية التربية واللغات</option>
+              <option value="كلية الصيدلة">كلية الصيدلة</option>
+              <option value="الجامعة اللبنانية الدولية">عام لكافة الكليات</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold mb-1">حالة التوفر للاستلام *</label>
+            <select id="donPublishStatus" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="متوفر للاستلام">متوفر للاستلام</option>
+              <option value="مُعار حالياً">مُعار حالياً</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">الوصف والطبعة *</label>
+            <input id="donPublishDesc" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block font-bold mb-1">عدد النسخ *</label>
+            <input id="donPublishCopies" type="number" min="1" required value="1" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+          </div>
+        </div>
+        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeEditDonationModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">إلغاء</button>
+          <button id="submitDonationApprovalBtn" type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex items-center gap-1.5 shadow-md">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            <span>تأكيد ونشر بالمكتبة فوراً</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="deleteModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="w-full max-w-sm p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
+      <div class="flex items-center gap-3 text-rose-500">
+        <div class="p-2.5 rounded-xl bg-rose-500/10"><i data-lucide="trash-2" class="w-6 h-6"></i></div>
+        <h3 class="font-bold text-sm text-slate-900 dark:text-white">تأكيد الحذف</h3>
+      </div>
+      <p id="deleteModalMsg" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        هل أنت متأكد من حذف هذا السجل نهائياً؟
+      </p>
+      <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+        <button onclick="closeDeleteModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">إلغاء</button>
+        <button id="confirmDeleteActionBtn" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-md">
+          <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          <span>حذف نهائي</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== السكربت البرمجي ==================== -->
+  <script>
+    lucide.createIcons();
+
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
+    const ADMIN_SECRET_KEY = "wafaa2026";
+
+    let liveFacultyList = [];
+    let liveResourcesList = [];
+    let liveGuidanceList = [];
+    let liveBooksList = [];
+    let liveBookRequestsList = [];
+    
+    let currentEditDonationIndex = -1;
+    let currentEditBookIndex = -1;
+    let deleteCallback = null;
+
+    function getDirectWhatsAppChatUrl(phoneOrLink) {
+      if (!phoneOrLink) return "";
+      if (String(phoneOrLink).includes("wa.me") || String(phoneOrLink).includes("chat.whatsapp.com")) {
+        return phoneOrLink;
+      }
+      let cleaned = String(phoneOrLink).replace(/\D/g, '');
+      if (cleaned.startsWith('00961')) cleaned = cleaned.substring(5);
+      else if (cleaned.startsWith('961')) cleaned = cleaned.substring(3);
+      else if (cleaned.startsWith('0')) cleaned = cleaned.substring(1);
+      return cleaned ? `https://wa.me/961${cleaned}` : "";
+    }
+
+    function parseDonationInfo(rawText = '') {
+      let title = rawText;
+      let college = 'الجامعة اللبنانية الدولية';
+      let desc = 'نسخة مقدمة عبر مبادرة التبرع بالكتب';
+
+      if (rawText.includes('(المقرر:')) {
+        const parts = rawText.split('(المقرر:');
+        title = parts[0].trim();
+        const detailsPart = parts[1] ? parts[1].replace(')', '').trim() : '';
+        const segments = detailsPart.split('|').map(s => s.trim());
+
+        let courseInfo = segments[0] || '';
+        segments.forEach(seg => {
+          if (seg.startsWith('الكلية:')) college = seg.replace('الكلية:', '').trim();
+          else if (seg.startsWith('الطبعة:')) desc = seg.replace('الطبعة:', '').trim();
+        });
+
+        if (desc === 'نسخة مقدمة عبر مبادرة التبرع بالكتب') {
+          desc = `معتمد لمقرر ${courseInfo} - بحالة ممتازة`;
+        }
+      }
+      return { title, college, desc };
+    }
+
+    // إدارة المظهر
+    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+
+    function applyAdminTheme(isDark) {
+      const html = document.documentElement;
+      const icons = document.querySelectorAll('.themeIconContainer');
+      const texts = document.querySelectorAll('.themeText');
+      if (isDark) {
+        html.classList.add('dark');
+        icons.forEach(i => i.innerHTML = moonSvg);
+        texts.forEach(t => t.textContent = 'الليلي');
+      } else {
+        html.classList.remove('dark');
+        icons.forEach(i => i.innerHTML = sunSvg);
+        texts.forEach(t => t.textContent = 'النهاري');
+      }
+    }
+
+    function toggleTheme() {
+      const isDarkCurrently = document.documentElement.classList.contains('dark');
+      const newTheme = !isDarkCurrently;
+      applyAdminTheme(newTheme);
+      localStorage.setItem('clubTheme', newTheme ? 'dark' : 'light');
+    }
+
+    applyAdminTheme(localStorage.getItem('clubTheme') !== 'light');
+
+    // الإشعارات
+    function toggleNotifPanel() {
+      const panel = document.getElementById('notifPanel');
+      if (!panel) return;
+      const isOpening = panel.classList.contains('hidden');
+      panel.classList.toggle('hidden');
+      if (isOpening) {
+        localStorage.setItem('nadi_bell_dismissed_count', String(liveBookRequestsList.length));
+        updateBookBadges(liveBookRequestsList.length);
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      const panel = document.getElementById('notifPanel');
+      const btn = document.getElementById('notifBellBtn');
+      if (panel && btn && !panel.contains(e.target) && !btn.contains(e.target)) {
+        panel.classList.add('hidden');
+      }
+    });
+
+    // تبديل الأقسام الرئيسية
+    function switchMainSection(section) {
+      const secFaculty = document.getElementById('sectionFaculty');
+      const secResources = document.getElementById('sectionResources');
+      const secGuidance = document.getElementById('sectionGuidance');
+      const secBooks = document.getElementById('sectionBooks');
+
+      const btnFaculty = document.getElementById('navFacultyBtn');
+      const btnResources = document.getElementById('navResourcesBtn');
+      const btnGuidance = document.getElementById('navGuidanceBtn');
+      const btnBooks = document.getElementById('navBooksBtn');
+
+      const defaultBtnClass = "nav-main-tab w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition";
+      const activeBtnClass = "nav-main-tab active w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 transition";
+
+      secFaculty.classList.add('hidden');
+      secResources.classList.add('hidden');
+      secGuidance.classList.add('hidden');
+      secBooks.classList.add('hidden');
+
+      btnFaculty.className = defaultBtnClass;
+      btnResources.className = defaultBtnClass;
+      btnGuidance.className = defaultBtnClass;
+      btnBooks.className = defaultBtnClass;
+
+      if (section === 'faculty') {
+        secFaculty.classList.remove('hidden');
+        btnFaculty.className = activeBtnClass;
+        fetchLiveFacultyData();
+      } else if (section === 'resources') {
+        secResources.classList.remove('hidden');
+        btnResources.className = activeBtnClass;
+        fetchLiveResourcesData();
+      } else if (section === 'guidance') {
+        secGuidance.classList.remove('hidden');
+        btnGuidance.className = activeBtnClass;
+        fetchLiveGuidanceData();
+      } else if (section === 'books') {
+        secBooks.classList.remove('hidden');
+        btnBooks.className = activeBtnClass;
+        fetchLiveBooksData();
+        fetchLiveBookRequests(true);
+      }
+      lucide.createIcons();
+    }
+
+    // تسجيل الدخول
+    const loginGate = document.getElementById('loginGate');
+    const adminDashboard = document.getElementById('adminDashboard');
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const welcomeAdmin = document.getElementById('welcomeAdmin');
+
+    const logoutModal = document.getElementById('logoutModal');
+    const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+
+    function openLogoutModal() {
+      if (logoutModal) {
+        logoutModal.classList.remove('hidden');
+        logoutModal.classList.add('flex');
+      }
+    }
+
+    function closeLogoutModal() {
+      if (logoutModal) {
+        logoutModal.classList.add('hidden');
+        logoutModal.classList.remove('flex');
+      }
+    }
+
+    if (confirmLogoutBtn) {
+      confirmLogoutBtn.addEventListener('click', () => {
+        sessionStorage.removeItem('nadi_admin_session');
+        closeLogoutModal();
+        checkAuth();
+      });
+    }
+
+    function checkAuth() {
+      const activeAdmin = sessionStorage.getItem('nadi_admin_session');
+      if (activeAdmin) {
+        loginGate.classList.add('hidden');
+        adminDashboard.classList.remove('hidden');
+        if (welcomeAdmin) welcomeAdmin.textContent = `المشرف النشط: ${activeAdmin}`;
+        switchMainSection('faculty');
+      } else {
+        loginGate.classList.remove('hidden');
+        adminDashboard.classList.add('hidden');
+      }
+    }
+
+    if (loginForm) {
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('adminName').value.trim();
+        const id = document.getElementById('adminID').value.trim();
+        const key = document.getElementById('adminKey').value.trim();
+
+        if (key === ADMIN_SECRET_KEY && name && id) {
+          sessionStorage.setItem('nadi_admin_session', `${name} (${id})`);
+          loginError.classList.add('hidden');
+          checkAuth();
+        } else {
+          loginError.classList.remove('hidden');
+        }
+      });
+    }
+
+    // نافذة الحذف العامة
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteModalMsg = document.getElementById('deleteModalMsg');
+    const confirmDeleteActionBtn = document.getElementById('confirmDeleteActionBtn');
+
+    function openGenericDeleteModal(msg, onConfirm) {
+      if (deleteModalMsg) deleteModalMsg.textContent = msg;
+      deleteCallback = onConfirm;
+      if (deleteModal) {
+        deleteModal.classList.remove('hidden');
+        deleteModal.classList.add('flex');
+      }
+    }
+
+    function closeDeleteModal() {
+      deleteCallback = null;
+      if (deleteModal) {
+        deleteModal.classList.add('hidden');
+        deleteModal.classList.remove('flex');
+      }
+    }
+
+    if (confirmDeleteActionBtn) {
+      confirmDeleteActionBtn.addEventListener('click', () => {
+        if (typeof deleteCallback === 'function') deleteCallback();
+        closeDeleteModal();
+      });
+    }
+
+    // ==================== الأساتذة ====================
+    function switchFacultySubTab(tab) {
+      const addView = document.getElementById('facultyAddView');
+      const manageView = document.getElementById('facultyManageView');
+      const tabAdd = document.getElementById('tabFacultyAdd');
+      const tabManage = document.getElementById('tabFacultyManage');
+
+      const active = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
+      const inactive = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
+
+      if (tab === 'add') {
+        addView.classList.remove('hidden');
+        manageView.classList.add('hidden');
+        tabAdd.className = active;
+        tabManage.className = inactive;
+      } else {
+        addView.classList.add('hidden');
+        manageView.classList.remove('hidden');
+        tabAdd.className = inactive;
+        tabManage.className = active;
+        fetchLiveFacultyData();
+      }
+      lucide.createIcons();
+    }
+
+    function renderFacultyList(list) {
+      const container = document.getElementById('facultyListContainer');
+      const badge = document.getElementById('facultyCountBadge');
+      if (!container) return;
+      if (badge) badge.textContent = list.length;
+
+      if (!list || list.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد بيانات مسجلة في دليل الأساتذة.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map((fac, idx) => {
+        const name = fac['الاسم واللقب'] || fac.name || 'أستاذ';
+        const col = fac['الكلية'] || fac.college || 'عام';
+        const email = fac['البريد الجامعي'] || fac.email || '';
+        const office = fac['المكتب'] || fac.office || 'غير محدد';
+        const hours = fac['الساعات المكتبية'] || fac.hours || 'عند التنسيق المسبق';
+
+        return `
+          <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${col}</span>
+                <span class="text-[11px] text-slate-400 font-mono">${office}</span>
+              </div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                البريد: <span class="font-mono text-slate-700 dark:text-slate-200" dir="ltr">${email}</span> • الساعات: ${hours}
+              </p>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
+              <button onclick="deleteFacultyItem(${idx})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>حذف</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    async function fetchLiveFacultyData(forceFresh = false) {
+      const cached = localStorage.getItem('nadi_faculty_cache');
+      if (cached && !forceFresh) {
+        try {
+          liveFacultyList = JSON.parse(cached);
+          renderFacultyList(liveFacultyList);
+        } catch(e) {}
+      }
+      if (!SCRIPT_URL) return;
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=faculty&bust=${Date.now()}`);
+        const data = await res.json();
+        if (data.faculty && Array.isArray(data.faculty)) {
+          liveFacultyList = data.faculty;
+          localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
+          renderFacultyList(liveFacultyList);
+        }
+      } catch (err) {}
+    }
+
+    const facultyForm = document.getElementById('facultyForm');
+    if (facultyForm) {
+      facultyForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newFac = {
+          'الاسم واللقب': document.getElementById('facName').value.trim(),
+          'الكلية': document.getElementById('facCollege').value,
+          'البريد الجامعي': document.getElementById('facEmail').value.trim(),
+          'المكتب': document.getElementById('facOffice').value.trim(),
+          'الساعات المكتبية': document.getElementById('facHours').value.trim()
+        };
+
+        liveFacultyList.push(newFac);
+        localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
+        renderFacultyList(liveFacultyList);
+        facultyForm.reset();
+        switchFacultySubTab('manage');
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "add_faculty", ...newFac })
+          });
+        } catch(err) {}
+      });
+    }
+
+    function deleteFacultyItem(idx) {
+      const target = liveFacultyList[idx];
+      if (!target) return;
+      openGenericDeleteModal(`هل أنت متأكد من حذف الأستاذ (${target['الاسم واللقب'] || target.name}) من الدليل؟`, async () => {
+        liveFacultyList.splice(idx, 1);
+        localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
+        renderFacultyList(liveFacultyList);
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "delete_faculty", name: target['الاسم واللقب'] || target.name, email: target['البريد الجامعي'] || target.email })
+          });
+        } catch(e) {}
+      });
+    }
+
+    // ==================== الموارد والامتحانات ====================
+    function switchResourceSubTab(tab) {
+      const addView = document.getElementById('resourceAddView');
+      const manageView = document.getElementById('resourceManageView');
+      const tabAdd = document.getElementById('tabResourceAdd');
+      const tabManage = document.getElementById('tabResourceManage');
+
+      const active = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
+      const inactive = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
+
+      if (tab === 'add') {
+        addView.classList.remove('hidden');
+        manageView.classList.add('hidden');
+        tabAdd.className = active;
+        tabManage.className = inactive;
+      } else {
+        addView.classList.add('hidden');
+        manageView.classList.remove('hidden');
+        tabAdd.className = inactive;
+        tabManage.className = active;
+        fetchLiveResourcesData();
+      }
+      lucide.createIcons();
+    }
+
+    function renderResourceList(list) {
+      const container = document.getElementById('resourceListContainer');
+      const badge = document.getElementById('resourceCountBadge');
+      if (!container) return;
+      if (badge) badge.textContent = list.length;
+
+      if (!list || list.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد موارد أكاديمية مرفوعة حالياً.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map((resItem, idx) => {
+        const title = resItem['اسم المادة'] || resItem.title || 'مقرر';
+        const col = resItem['الكلية'] || resItem.college || 'عام';
+        const type = resItem['نوع المورد'] || resItem.type || 'ملف';
+        const term = resItem['الفصل'] || resItem.term || '';
+        const link = resItem['رابط التحميل'] || resItem.link || '#';
+
+        return `
+          <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">${type}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${col}</span>
+                <span class="text-[11px] text-slate-400 font-mono">${term}</span>
+              </div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white">${title}</h4>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
+              <a href="${link}" target="_blank" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="فتح الرابط">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                <span>معاينة</span>
+              </a>
+              <button onclick="deleteResourceItem(${idx})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>حذف</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    async function fetchLiveResourcesData(forceFresh = false) {
+      const cached = localStorage.getItem('nadi_resources_cache');
+      if (cached && !forceFresh) {
+        try {
+          liveResourcesList = JSON.parse(cached);
+          renderResourceList(liveResourcesList);
+        } catch(e) {}
+      }
+      if (!SCRIPT_URL) return;
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=resources&bust=${Date.now()}`);
+        const data = await res.json();
+        if (data.resources && Array.isArray(data.resources)) {
+          liveResourcesList = data.resources;
+          localStorage.setItem('nadi_resources_cache', JSON.stringify(liveResourcesList));
+          renderResourceList(liveResourcesList);
+        }
+      } catch (err) {}
+    }
+
+    const resourceForm = document.getElementById('resourceForm');
+    if (resourceForm) {
+      resourceForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newRes = {
+          'اسم المادة': document.getElementById('resTitle').value.trim(),
+          'الكلية': document.getElementById('resCollege').value,
+          'نوع المورد': document.getElementById('resType').value,
+          'الفصل': document.getElementById('resTerm').value.trim(),
+          'رابط التحميل': document.getElementById('resLink').value.trim()
+        };
+
+        liveResourcesList.push(newRes);
+        localStorage.setItem('nadi_resources_cache', JSON.stringify(liveResourcesList));
+        renderResourceList(liveResourcesList);
+        resourceForm.reset();
+        switchResourceSubTab('manage');
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "add_resource", ...newRes })
+          });
+        } catch(err) {}
+      });
+    }
+
+    function deleteResourceItem(idx) {
+      const target = liveResourcesList[idx];
+      if (!target) return;
+      openGenericDeleteModal(`هل أنت متأكد من حذف مورد (${target['اسم المادة'] || target.title})؟`, async () => {
+        liveResourcesList.splice(idx, 1);
+        localStorage.setItem('nadi_resources_cache', JSON.stringify(liveResourcesList));
+        renderResourceList(liveResourcesList);
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "delete_resource", title: target['اسم المادة'] || target.title, link: target['رابط التحميل'] || target.link })
+          });
+        } catch(e) {}
+      });
+    }
+
+    // ==================== التوجيه والمجموعات ====================
+    function switchGuidanceSubTab(tab) {
+      const addView = document.getElementById('guidanceAddView');
+      const manageView = document.getElementById('guidanceManageView');
+      const tabAdd = document.getElementById('tabGuidanceAdd');
+      const tabManage = document.getElementById('tabGuidanceManage');
+
+      const active = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
+      const inactive = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
+
+      if (tab === 'add') {
+        addView.classList.remove('hidden');
+        manageView.classList.add('hidden');
+        tabAdd.className = active;
+        tabManage.className = inactive;
+      } else {
+        addView.classList.add('hidden');
+        manageView.classList.remove('hidden');
+        tabAdd.className = inactive;
+        tabManage.className = active;
+        fetchLiveGuidanceData();
+      }
+      lucide.createIcons();
+    }
+
+    function renderGuidanceList(list) {
       const container = document.getElementById('guidanceListContainer');
       const badge = document.getElementById('guidanceCountBadge');
       if (!container) return;
 
-      // مطابقة المفاتيح الحقيقية الموجودة في Google Sheets
       const validList = (list || []).filter(item => {
         const major = (item['الكلية أو الاختصاص'] || item['التخصص'] || '').trim();
         const name = (item['الاسم أو الصفة'] || item['مسؤول التخصص'] || '').trim();
@@ -20,7 +1206,6 @@ function renderGuidanceList(list) {
       }
 
       container.innerHTML = validList.map((item, idx) => {
-        // قراءة القيم حسب ترويسة الجدول في الشيت
         const major = item['الكلية أو الاختصاص'] || item['التخصص'] || 'عام';
         const type = item['النوع'] || 'توجيه طلابي';
         const leader = item['الاسم أو الصفة'] || item['مسؤول التخصص'] || 'مسؤول التخصص';
@@ -61,7 +1246,55 @@ function renderGuidanceList(list) {
       lucide.createIcons();
     }
 
-    // إرسال الحذف بالبيانات الحقيقية المطابقة للشيت
+    async function fetchLiveGuidanceData(forceFresh = false) {
+      const cached = localStorage.getItem('nadi_guidance_cache');
+      if (cached && !forceFresh) {
+        try {
+          liveGuidanceList = JSON.parse(cached);
+          renderGuidanceList(liveGuidanceList);
+        } catch(e) {}
+      }
+      if (!SCRIPT_URL) return;
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=guidance&bust=${Date.now()}`);
+        const data = await res.json();
+        if (data.guidance && Array.isArray(data.guidance)) {
+          liveGuidanceList = data.guidance;
+          localStorage.setItem('nadi_guidance_cache', JSON.stringify(liveGuidanceList));
+          renderGuidanceList(liveGuidanceList);
+        }
+      } catch (err) {}
+    }
+
+    const guidanceForm = document.getElementById('guidanceForm');
+    if (guidanceForm) {
+      guidanceForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newGuid = {
+          'النوع': document.getElementById('guidType').value,
+          'الاسم أو الصفة': document.getElementById('guidLeader').value.trim(),
+          'الكلية أو الاختصاص': document.getElementById('guidMajor').value.trim(),
+          'رقم الهاتف': document.getElementById('guidPhone').value.trim(),
+          'رابط الواتساب': document.getElementById('guidGroupUrl').value.trim()
+        };
+
+        liveGuidanceList.push(newGuid);
+        localStorage.setItem('nadi_guidance_cache', JSON.stringify(liveGuidanceList));
+        renderGuidanceList(liveGuidanceList);
+        guidanceForm.reset();
+        switchGuidanceSubTab('manage');
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "add_guidance", ...newGuid })
+          });
+        } catch(err) {}
+      });
+    }
+
     function deleteGuidanceItem(idx) {
       const target = liveGuidanceList[idx];
       if (!target) return;
@@ -82,7 +1315,6 @@ function renderGuidanceList(list) {
               action: "delete_guidance",
               major: targetMajor,
               name: targetName,
-              // إرسال المفاتيح بالصيغتين لضمان مطابقة شرط الحذف في Apps Script
               "الكلية أو الاختصاص": targetMajor,
               "الاسم أو الصفة": targetName
             })
@@ -90,3 +1322,670 @@ function renderGuidanceList(list) {
         } catch(e) {}
       });
     }
+
+    // ==================== مكتبة الكتب ====================
+    function switchBookSubTab(tab) {
+      const addView = document.getElementById('bookAddView');
+      const manageView = document.getElementById('bookManageView');
+      const requestsView = document.getElementById('bookRequestsView');
+
+      const tabAdd = document.getElementById('tabBookAdd');
+      const tabManage = document.getElementById('tabBookManage');
+      const tabRequests = document.getElementById('tabBookRequests');
+
+      const activeClasses = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
+      const inactiveClasses = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
+
+      addView.classList.add('hidden');
+      manageView.classList.add('hidden');
+      requestsView.classList.add('hidden');
+
+      tabAdd.className = inactiveClasses;
+      tabManage.className = inactiveClasses;
+      tabRequests.className = inactiveClasses;
+
+      if (tab === 'add') {
+        addView.classList.remove('hidden');
+        tabAdd.className = activeClasses;
+      } else if (tab === 'manage') {
+        manageView.classList.remove('hidden');
+        tabManage.className = activeClasses;
+        fetchLiveBooksData();
+      } else if (tab === 'requests') {
+        requestsView.classList.remove('hidden');
+        tabRequests.className = activeClasses;
+        fetchLiveBookRequests(true);
+      }
+      lucide.createIcons();
+    }
+
+    function goToBookRequestsTab() {
+      const panel = document.getElementById('notifPanel');
+      if (panel) panel.classList.add('hidden');
+      switchMainSection('books');
+      switchBookSubTab('requests');
+    }
+
+    function renderAdminBookCards(list) {
+      const container = document.getElementById('bookListContainer');
+      const badge = document.getElementById('bookCountBadge');
+      if (!container) return;
+      if (badge) badge.textContent = list.length;
+
+      if (!list || list.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد كتب مسجلة حالياً في قاعدة البيانات.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map((book, index) => {
+        const title = book['عنوان الكتاب'] || 'بدون عنوان';
+        const college = book['الكلية'] || 'عام';
+        const desc = book['الوصف والطبعة'] || '';
+        const copies = book['عدد النسخ'] || '1';
+        const status = String(book['الحالة'] || '').trim();
+        const borrowerName = book['اسم المستعير'] || '';
+        const borrowerPhone = book['رقم هاتف المستعير'] || '';
+
+        const isAvailable = status.includes('متوفر') || status === '';
+        const statusBadgeColor = isAvailable 
+          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" 
+          : "bg-amber-500/10 text-amber-600 dark:text-amber-400";
+          
+        const directWaLink = getDirectWhatsAppChatUrl(borrowerPhone);
+
+        let borrowerInfoHtml = '';
+        if (!isAvailable && borrowerName) {
+          borrowerInfoHtml = `
+            <div class="mt-2 text-xs text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-2">
+              <span class="font-bold text-slate-700 dark:text-slate-300">مُعار إلى:</span> ${borrowerName}
+              ${borrowerPhone ? `• <span class="font-mono" dir="ltr">${borrowerPhone}</span>` : ''}
+            </div>
+          `;
+        }
+        
+        let actionButtonsHtml = '';
+        if (isAvailable) {
+          actionButtonsHtml = `
+            <button onclick="openEditBookModal(${index})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition">
+              <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+              <span>تعديل</span>
+            </button>
+            <button onclick="deleteBookItem(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>حذف</span>
+            </button>
+          `;
+        } else {
+          actionButtonsHtml = `
+            <button onclick="returnBook(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 transition shadow-sm" title="إرجاع الكتاب للمكتبة">
+              <i data-lucide="corner-up-left" class="w-3.5 h-3.5"></i>
+              <span>إلغاء الإعارة (إرجاع)</span>
+            </button>
+            ${directWaLink ? `
+              <a href="${directWaLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition border border-emerald-500/30" title="بدء محادثة واتساب مع المستعير">
+                <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                <span>واتساب</span>
+              </a>
+            ` : ''}
+            <button onclick="deleteBookItem(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>حذف</span>
+            </button>
+          `;
+        }
+
+        return `
+          <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${college}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${statusBadgeColor}">${status || 'متوفر للاستلام'}</span>
+                <span class="text-[11px] text-slate-400 font-mono">النسخ: ${copies}</span>
+              </div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white">${title}</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-xl">${desc}</p>
+              ${borrowerInfoHtml}
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap">
+              ${actionButtonsHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    async function fetchLiveBooksData(forceFresh = false) {
+      const cached = localStorage.getItem('nadi_books_cache');
+      if (cached && !forceFresh) {
+        try {
+          liveBooksList = JSON.parse(cached);
+          renderAdminBookCards(liveBooksList);
+        } catch (e) {}
+      }
+
+      if (!SCRIPT_URL) return;
+
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=books&bust=${Date.now()}`);
+        const data = await res.json();
+        if (data.books && Array.isArray(data.books)) {
+          liveBooksList = data.books;
+          renderAdminBookCards(liveBooksList);
+          localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
+        }
+      } catch (err) {}
+    }
+
+    const bookForm = document.getElementById('bookForm');
+    if (bookForm) {
+      bookForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('submitBookBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>جاري الإدراج...</span>`;
+
+        const newBook = {
+          'عنوان الكتاب': document.getElementById('bookTitle').value.trim(),
+          'الكلية': document.getElementById('bookCollegeSelect').value,
+          'الحالة': document.getElementById('bookStatusSelect').value,
+          'الوصف والطبعة': document.getElementById('bookDesc').value.trim(),
+          'عدد النسخ': document.getElementById('bookCopies').value.trim()
+        };
+
+        liveBooksList.push(newBook);
+        localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
+        renderAdminBookCards(liveBooksList);
+
+        bookForm.reset();
+        switchBookSubTab('manage');
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "add_book", ...newBook })
+          });
+        } catch (err) {} finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4"></i><span>إدراج الكتاب في المكتبة فوراً</span>`;
+          lucide.createIcons();
+        }
+      });
+    }
+
+    const editBookModal = document.getElementById('editBookModal');
+    const editBookForm = document.getElementById('editBookForm');
+
+    function openEditBookModal(idx) {
+      currentEditBookIndex = idx;
+      const target = liveBooksList[idx];
+      if (!target) return;
+
+      document.getElementById('editBookTitle').value = target['عنوان الكتاب'] || '';
+      document.getElementById('editBookCollege').value = target['الكلية'] || 'كلية الهندسة';
+      document.getElementById('editBookStatus').value = target['الحالة'] || 'متوفر للاستلام';
+      document.getElementById('editBookDesc').value = target['الوصف والطبعة'] || '';
+      document.getElementById('editBookCopies').value = target['عدد النسخ'] || '1';
+
+      if (editBookModal) {
+        editBookModal.classList.remove('hidden');
+        editBookModal.classList.add('flex');
+      }
+    }
+
+    function closeEditBookModal() {
+      currentEditBookIndex = -1;
+      if (editBookModal) {
+        editBookModal.classList.add('hidden');
+        editBookModal.classList.remove('flex');
+      }
+    }
+
+    if (editBookForm) {
+      editBookForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (currentEditBookIndex === -1) return;
+
+        const updated = {
+          'عنوان الكتاب': document.getElementById('editBookTitle').value.trim(),
+          'الكلية': document.getElementById('editBookCollege').value,
+          'الحالة': document.getElementById('editBookStatus').value,
+          'الوصف والطبعة': document.getElementById('editBookDesc').value.trim(),
+          'عدد النسخ': document.getElementById('editBookCopies').value.trim()
+        };
+
+        liveBooksList[currentEditBookIndex] = { ...liveBooksList[currentEditBookIndex], ...updated };
+        localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
+        renderAdminBookCards(liveBooksList);
+        closeEditBookModal();
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "edit_book", ...updated })
+          });
+        } catch(err) {}
+      });
+    }
+
+    function deleteBookItem(idx) {
+      const target = liveBooksList[idx];
+      if (!target) return;
+      openGenericDeleteModal(`هل أنت متأكد من حذف كتاب (${target['عنوان الكتاب']}) من المكتبة نهائياً؟`, async () => {
+        liveBooksList.splice(idx, 1);
+        localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
+        renderAdminBookCards(liveBooksList);
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "delete_book", title: target['عنوان الكتاب'] })
+          });
+        } catch(e) {}
+      });
+    }
+
+    // ==================== إدارة الطلبات ====================
+    function updateBookBadges(totalCount) {
+      const bellBadge = document.getElementById('notifBellBadge');
+      const reqBadge = document.getElementById('bookRequestsCountBadge');
+      const navBadge = document.getElementById('navBookBadge');
+
+      const dismissedCount = parseInt(localStorage.getItem('nadi_bell_dismissed_count') || '0', 10);
+      const unseenCount = Math.max(0, totalCount - dismissedCount);
+
+      if (bellBadge) {
+        if (unseenCount > 0) {
+          bellBadge.textContent = unseenCount;
+          bellBadge.classList.remove('hidden');
+        } else {
+          bellBadge.classList.add('hidden');
+        }
+      }
+
+      if (reqBadge) reqBadge.textContent = totalCount;
+      if (navBadge) {
+        navBadge.textContent = totalCount;
+        navBadge.classList.toggle('hidden', totalCount === 0);
+      }
+    }
+
+    function renderBookRequests(list) {
+      updateBookBadges(list.length);
+
+      const notifContainer = document.getElementById('notifListContainer');
+      if (notifContainer) {
+        if (!list || list.length === 0) {
+          notifContainer.innerHTML = `<div class="py-6 text-center text-xs text-slate-400">لا توجد طلبات جديدة حالياً.</div>`;
+        } else {
+          const reversed = [...list].reverse();
+          notifContainer.innerHTML = reversed.slice(0, 8).map((req) => {
+            const type = req['نوع الطلب'] || 'طلب استعارة';
+            const name = req['الاسم الكامل'] || 'طالب';
+            const book = req['عنوان الكتاب / المقرر'] || 'كتاب';
+            const time = req['تاريخ الإرسال'] || '';
+
+            const isDonate = type.includes('تبرع');
+            const typeBadgeColor = isDonate 
+              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" 
+              : "bg-amber-500/10 text-amber-600 dark:text-amber-400";
+
+            return `
+              <div class="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-[#111b33] flex items-center justify-between gap-2 text-xs">
+                <div class="space-y-0.5 overflow-hidden">
+                  <div class="flex items-center gap-1.5">
+                    <span class="px-2 py-0.5 rounded text-[9px] font-bold ${typeBadgeColor}">${type}</span>
+                    <span class="text-[10px] text-slate-400 truncate">${time}</span>
+                  </div>
+                  <h5 class="font-bold text-slate-900 dark:text-white truncate">${book}</h5>
+                  <p class="text-[11px] text-slate-400 truncate">${name}</p>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      const tableContainer = document.getElementById('bookRequestsTableContainer');
+      if (tableContainer) {
+        if (!list || list.length === 0) {
+          tableContainer.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد طلبات استعارة أو تبرعات مسجلة حالياً في قاعدة البيانات.</div>`;
+        } else {
+          tableContainer.innerHTML = list.map((req, index) => {
+            const type = req['نوع الطلب'] || 'طلب استعارة';
+            const name = req['الاسم الكامل'] || 'طالب';
+            const studentId = req['رقم الملف ID'] || 'غير محدد';
+            const phone = req['رقم الهاتف'] || '';
+            const bookRaw = req['عنوان الكتاب / المقرر'] || 'كتاب';
+            const time = req['تاريخ الإرسال'] || '';
+
+            const isDonate = type.includes('تبرع');
+            const typeBadgeColor = isDonate 
+              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" 
+              : "bg-amber-500/10 text-amber-600 dark:text-amber-400";
+
+            const directWaLink = getDirectWhatsAppChatUrl(phone);
+
+            let actionButtonsMarkup = '';
+            if (isDonate) {
+              actionButtonsMarkup = `
+                <button onclick="approveDonationDirect(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 transition shadow-sm" title="قبول ونشر في المكتبة فوراً">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                  <span>قبول ونشر</span>
+                </button>
+                <button onclick="openEditDonationModal(${index})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="تعديل تفاصيل الكتاب قبل النشر">
+                  <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                  <span>تعديل</span>
+                </button>
+                ${directWaLink ? `
+                  <a href="${directWaLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition border border-emerald-500/30" title="بدء محادثة واتساب مباشرة مع المتبرع">
+                    <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                    <span>واتساب</span>
+                  </a>
+                ` : ''}
+                <button onclick="deleteBookRequestByIndex(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white text-xs font-bold flex items-center gap-1 transition" title="رفض الطلب وإلغاؤه">
+                  <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                  <span>رفض</span>
+                </button>
+              `;
+            } else {
+              actionButtonsMarkup = `
+                <button onclick="approveBorrowDirect(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 transition shadow-sm" title="قبول الاستعارة">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                  <span>قبول</span>
+                </button>
+                ${directWaLink ? `
+                  <a href="${directWaLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition border border-emerald-500/30" title="بدء محادثة واتساب مباشرة مع المستعير">
+                    <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                    <span>واتساب</span>
+                  </a>
+                ` : ''}
+                <button onclick="deleteBookRequestByIndex(${index})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition" title="رفض الطلب">
+                  <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                  <span>رفض</span>
+                </button>
+              `;
+            }
+
+            return `
+              <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded text-[10px] font-bold ${typeBadgeColor}">${type}</span>
+                    <span class="text-[11px] text-slate-400 font-mono">${time}</span>
+                  </div>
+                  <h4 class="font-bold text-sm text-slate-900 dark:text-white">${bookRaw}</h4>
+                  <p class="text-xs text-slate-600 dark:text-slate-300">
+                    الاسم: <strong class="text-gold-500 font-bold">${name}</strong> • الهاتف: <span class="font-mono text-slate-700 dark:text-slate-200" dir="ltr">${phone}</span> • الملف: <span class="font-mono text-slate-400">${studentId}</span>
+                  </p>
+                </div>
+                <div class="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap">
+                  ${actionButtonsMarkup}
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      lucide.createIcons();
+    }
+
+    async function fetchLiveBookRequests(forceFresh = false) {
+      const cached = localStorage.getItem('nadi_book_requests_cache');
+      if (cached && !forceFresh) {
+        try {
+          liveBookRequestsList = JSON.parse(cached);
+          renderBookRequests(liveBookRequestsList);
+        } catch (e) {}
+      }
+
+      if (!SCRIPT_URL) return;
+
+      try {
+        const bustUrl = `${SCRIPT_URL}${SCRIPT_URL.includes('?') ? '&' : '?'}req_bust=${Date.now()}`;
+        const res = await fetch(bustUrl);
+        const data = await res.json();
+        if (data.bookRequests && Array.isArray(data.bookRequests)) {
+          liveBookRequestsList = data.bookRequests;
+          renderBookRequests(liveBookRequestsList);
+          localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
+        }
+      } catch (err) {}
+    }
+
+    setInterval(() => {
+      if (sessionStorage.getItem('nadi_admin_session')) {
+        fetchLiveBookRequests(true);
+      }
+    }, 6000);
+
+    async function approveDonationDirect(index) {
+      const target = liveBookRequestsList[index];
+      if (!target) return;
+
+      const rawBook = target['عنوان الكتاب / المقرر'] || '';
+      const parsed = parseDonationInfo(rawBook);
+
+      const newBook = {
+        'عنوان الكتاب': parsed.title,
+        'الكلية': parsed.college,
+        'الوصف والطبعة': parsed.desc,
+        'عدد النسخ': '1',
+        'الحالة': 'متوفر للاستلام'
+      };
+
+      liveBooksList.push(newBook);
+      localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
+      renderAdminBookCards(liveBooksList);
+
+      liveBookRequestsList.splice(index, 1);
+      localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
+      localStorage.setItem('nadi_bell_dismissed_count', String(liveBookRequestsList.length));
+      renderBookRequests(liveBookRequestsList);
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "approve_book_donation",
+            title: newBook['عنوان الكتاب'],
+            college: newBook['الكلية'],
+            desc: newBook['الوصف والطبعة'],
+            copies: newBook['عدد النسخ'],
+            status: newBook['الحالة'],
+            studentId: target['رقم الملف ID'] || '',
+            phone: target['رقم الهاتف'] || '',
+            originalRequestTitle: rawBook,
+            timestamp: target['تاريخ الإرسال'] || ''
+          })
+        });
+      } catch (e) {}
+    }
+
+    async function approveBorrowDirect(index) {
+      const target = liveBookRequestsList[index];
+      if (!target) return;
+
+      const bookTitle = target['عنوان الكتاب / المقرر'] || '';
+      const studentName = target['الاسم الكامل'] || '';
+      const phone = target['رقم الهاتف'] || '';
+
+      const bookIndex = liveBooksList.findIndex(b => b['عنوان الكتاب'] === bookTitle);
+      if (bookIndex !== -1) {
+        liveBooksList[bookIndex]['الحالة'] = 'مُعار حالياً';
+        liveBooksList[bookIndex]['اسم المستعير'] = studentName;
+        liveBooksList[bookIndex]['رقم هاتف المستعير'] = phone;
+        localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
+        renderAdminBookCards(liveBooksList);
+      }
+
+      liveBookRequestsList.splice(index, 1);
+      localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
+      localStorage.setItem('nadi_bell_dismissed_count', String(liveBookRequestsList.length));
+      renderBookRequests(liveBookRequestsList);
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "approve_book_borrow",
+            bookTitle: bookTitle,
+            studentName: studentName,
+            phone: phone,
+            studentId: target['رقم الملف ID'] || '',
+            timestamp: target['تاريخ الإرسال'] || ''
+          })
+        });
+      } catch (e) {}
+    }
+
+    async function returnBook(index) {
+      const book = liveBooksList[index];
+      if (!book) return;
+
+      const bookTitle = book['عنوان الكتاب'];
+
+      liveBooksList[index]['الحالة'] = 'متوفر للاستلام';
+      liveBooksList[index]['اسم المستعير'] = '';
+      liveBooksList[index]['رقم هاتف المستعير'] = '';
+      localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
+      renderAdminBookCards(liveBooksList);
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "return_book",
+            bookTitle: bookTitle
+          })
+        });
+      } catch(e) {}
+    }
+
+    async function deleteBookRequestByIndex(index) {
+      const target = liveBookRequestsList[index];
+      if (!target) return;
+
+      liveBookRequestsList.splice(index, 1);
+      localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
+      localStorage.setItem('nadi_bell_dismissed_count', String(liveBookRequestsList.length));
+      renderBookRequests(liveBookRequestsList);
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "delete_book_request",
+            studentId: target['رقم الملف ID'] || '',
+            phone: target['رقم الهاتف'] || '',
+            bookTitle: target['عنوان الكتاب / المقرر'] || ''
+          })
+        });
+      } catch (e) {}
+    }
+
+    const editDonationModal = document.getElementById('editDonationModal');
+    const editDonationForm = document.getElementById('editDonationForm');
+    const submitDonationApprovalBtn = document.getElementById('submitDonationApprovalBtn');
+
+    function openEditDonationModal(index) {
+      currentEditDonationIndex = index;
+      const target = liveBookRequestsList[index];
+      if (!target) return;
+
+      const rawBook = target['عنوان الكتاب / المقرر'] || '';
+      const parsed = parseDonationInfo(rawBook);
+
+      document.getElementById('donPublishTitle').value = parsed.title;
+      document.getElementById('donPublishCollege').value = parsed.college;
+      document.getElementById('donPublishDesc').value = parsed.desc;
+      document.getElementById('donPublishCopies').value = "1";
+      document.getElementById('donPublishStatus').value = "متوفر للاستلام";
+
+      editDonationModal.classList.remove('hidden');
+      editDonationModal.classList.add('flex');
+    }
+
+    function closeEditDonationModal() {
+      currentEditDonationIndex = -1;
+      editDonationModal.classList.add('hidden');
+      editDonationModal.classList.remove('flex');
+    }
+
+    if (editDonationForm) {
+      editDonationForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (currentEditDonationIndex === -1) return;
+
+        const target = liveBookRequestsList[currentEditDonationIndex];
+        if (!target) return;
+
+        submitDonationApprovalBtn.disabled = true;
+        submitDonationApprovalBtn.innerHTML = `<span>جاري النشر...</span>`;
+
+        const newBook = {
+          'عنوان الكتاب': document.getElementById('donPublishTitle').value.trim(),
+          'الكلية': document.getElementById('donPublishCollege').value,
+          'الوصف والطبعة': document.getElementById('donPublishDesc').value.trim(),
+          'عدد النسخ': document.getElementById('donPublishCopies').value.trim(),
+          'الحالة': document.getElementById('donPublishStatus').value
+        };
+
+        const alreadyInList = liveBooksList.some(b => (b['عنوان الكتاب'] || '').trim().toLowerCase() === newBook['عنوان الكتاب'].toLowerCase());
+        if (!alreadyInList) {
+          liveBooksList.push(newBook);
+          localStorage.setItem('nadi_books_cache', JSON.stringify(liveBooksList));
+          renderAdminBookCards(liveBooksList);
+        }
+
+        liveBookRequestsList.splice(currentEditDonationIndex, 1);
+        localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
+        localStorage.setItem('nadi_bell_dismissed_count', String(liveBookRequestsList.length));
+        renderBookRequests(liveBookRequestsList);
+
+        closeEditDonationModal();
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "approve_book_donation",
+              title: newBook['عنوان الكتاب'],
+              college: newBook['الكلية'],
+              desc: newBook['الوصف والطبعة'],
+              copies: newBook['عدد النسخ'],
+              status: newBook['الحالة'],
+              studentId: target['رقم الملف ID'] || '',
+              phone: target['رقم الهاتف'] || '',
+              originalRequestTitle: target['عنوان الكتاب / المقرر'] || '',
+              timestamp: target['تاريخ الإرسال'] || ''
+            })
+          });
+        } catch (err) {} finally {
+          submitDonationApprovalBtn.disabled = false;
+          submitDonationApprovalBtn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i><span>تأكيد ونشر بالمكتبة فوراً</span>`;
+          lucide.createIcons();
+        }
+      });
+    }
+
+    checkAuth();
+  </script>
+</body>
+</html>
