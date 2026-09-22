@@ -137,7 +137,7 @@
 
     <div class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8 flex flex-col md:flex-row gap-6">
 
-      <!-- القائمة الجانبية: تم توحيد مكان الأيقونات بجانب النصوص في اليمين مباشرة -->
+      <!-- القائمة الجانبية -->
       <aside class="w-full md:w-64 shrink-0 space-y-2">
         <div class="p-3 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark space-y-1">
           <span class="px-3 py-1 block text-[10px] font-bold text-slate-400 uppercase tracking-wider">الأقسام المتاحة</span>
@@ -337,7 +337,7 @@
           </section>
         </div>
 
-        <!-- القسم 3: التوجيه والمجموعات -->
+        <!-- القسم 3: التوجيه والمجموعات (أزرار تعديل وحذف فقط) -->
         <div id="sectionGuidance" class="hidden space-y-6">
           <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit flex-wrap">
             <button id="tabGuidanceAdd" onclick="switchGuidanceSubTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
@@ -516,6 +516,8 @@
   </div>
 
   <!-- ==================== النوافذ المنبثقة ==================== -->
+  
+  <!-- نافذة تسجيل الخروج -->
   <div id="logoutModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="w-full max-w-md p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
       <div class="flex items-center gap-3 text-gold-500">
@@ -535,6 +537,58 @@
     </div>
   </div>
 
+  <!-- نافذة تعديل بيانات المرشد أو التوجيه (الجديدة) -->
+  <div id="editGuidanceModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <h3 class="font-bold text-sm text-slate-900 dark:text-white">تعديل بيانات المرشد أو المجموعة</h3>
+        <button onclick="closeEditGuidanceModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <form id="editGuidanceForm" class="space-y-4 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">الكلية أو الاختصاص *</label>
+            <input id="editGuidMajor" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block font-bold mb-1">النوع أو الصفة *</label>
+            <select id="editGuidType" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="مرشد أكاديمي للفرع">مرشد أكاديمي للفرع</option>
+              <option value="ممثل اختصاص">ممثل اختصاص</option>
+              <option value="مجموعة واتساب رسمية">مجموعة واتساب رسمية</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold mb-1">الاسم أو الصفة *</label>
+            <input id="editGuidLeader" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block font-bold mb-1">رقم الهاتف *</label>
+            <input id="editGuidPhone" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold mb-1">رابط الواتساب *</label>
+          <input id="editGuidGroupUrl" type="url" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeEditGuidanceModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">إلغاء</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-gold-500 text-slate-950 font-bold flex items-center gap-1.5 shadow-md hover:bg-gold-600 transition">
+            <i data-lucide="save" class="w-3.5 h-3.5"></i>
+            <span>حفظ التعديلات</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة تعديل كتاب -->
   <div id="editBookModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
     <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
@@ -587,6 +641,7 @@
     </div>
   </div>
 
+  <!-- نافذة تعديل ونشر التبرع -->
   <div id="editDonationModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
     <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
@@ -639,6 +694,7 @@
     </div>
   </div>
 
+  <!-- نافذة الحذف العامة -->
   <div id="deleteModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="w-full max-w-sm p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
       <div class="flex items-center gap-3 text-rose-500">
@@ -673,6 +729,7 @@
     
     let currentEditDonationIndex = -1;
     let currentEditBookIndex = -1;
+    let currentEditGuidanceIndex = -1;
     let deleteCallback = null;
 
     function getDirectWhatsAppChatUrl(phoneOrLink) {
@@ -1191,6 +1248,7 @@
       lucide.createIcons();
     }
 
+    // عرض القائمة مع زري (تعديل) و (حذف) فقط دون أي أزرار واتساب
     function renderGuidanceList(list) {
       const container = document.getElementById('guidanceListContainer');
       const badge = document.getElementById('guidanceCountBadge');
@@ -1216,8 +1274,6 @@
         const type = item['النوع'] || 'توجيه طلابي';
         const leader = item['الاسم أو الصفة'] || item['مسؤول التخصص'] || 'مسؤول التخصص';
         const phone = item['رقم الهاتف'] || item['هاتف المسؤول'] || '';
-        const link = item['رابط الواتساب'] || item['رابط المجموعة'] || '#';
-        const directWa = getDirectWhatsAppChatUrl(phone || link);
 
         return `
           <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
@@ -1231,16 +1287,10 @@
               </p>
             </div>
             <div class="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap">
-              <a href="${link}" target="_blank" class="px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1.5 transition">
-                <i data-lucide="users" class="w-3.5 h-3.5"></i>
-                <span>رابط الواتساب</span>
-              </a>
-              ${directWa ? `
-                <a href="${directWa}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition border border-emerald-500/30">
-                  <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-                  <span>واتساب المسؤول</span>
-                </a>
-              ` : ''}
+              <button onclick="openEditGuidanceModal(${idx})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                <span>تعديل</span>
+              </button>
               <button onclick="deleteGuidanceItem(${idx})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 <span>حذف</span>
@@ -1296,6 +1346,73 @@
             mode: "no-cors",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ action: "add_guidance", ...newGuid })
+          });
+        } catch(err) {}
+      });
+    }
+
+    // نافذة وإجراءات تعديل التوجيه
+    const editGuidanceModal = document.getElementById('editGuidanceModal');
+    const editGuidanceForm = document.getElementById('editGuidanceForm');
+
+    function openEditGuidanceModal(idx) {
+      currentEditGuidanceIndex = idx;
+      const target = liveGuidanceList[idx];
+      if (!target) return;
+
+      document.getElementById('editGuidMajor').value = target['الكلية أو الاختصاص'] || target['التخصص'] || '';
+      document.getElementById('editGuidType').value = target['النوع'] || 'مرشد أكاديمي للفرع';
+      document.getElementById('editGuidLeader').value = target['الاسم أو الصفة'] || target['مسؤول التخصص'] || '';
+      document.getElementById('editGuidPhone').value = target['رقم الهاتف'] || target['هاتف المسؤول'] || '';
+      document.getElementById('editGuidGroupUrl').value = target['رابط الواتساب'] || target['رابط المجموعة'] || '';
+
+      if (editGuidanceModal) {
+        editGuidanceModal.classList.remove('hidden');
+        editGuidanceModal.classList.add('flex');
+      }
+    }
+
+    function closeEditGuidanceModal() {
+      currentEditGuidanceIndex = -1;
+      if (editGuidanceModal) {
+        editGuidanceModal.classList.add('hidden');
+        editGuidanceModal.classList.remove('flex');
+      }
+    }
+
+    if (editGuidanceForm) {
+      editGuidanceForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (currentEditGuidanceIndex === -1) return;
+
+        const oldTarget = liveGuidanceList[currentEditGuidanceIndex];
+        const oldName = oldTarget ? (oldTarget['الاسم أو الصفة'] || oldTarget['مسؤول التخصص'] || '') : '';
+        const oldMajor = oldTarget ? (oldTarget['الكلية أو الاختصاص'] || oldTarget['التخصص'] || '') : '';
+
+        const updatedGuid = {
+          'النوع': document.getElementById('editGuidType').value,
+          'الاسم أو الصفة': document.getElementById('editGuidLeader').value.trim(),
+          'الكلية أو الاختصاص': document.getElementById('editGuidMajor').value.trim(),
+          'رقم الهاتف': document.getElementById('editGuidPhone').value.trim(),
+          'رابط الواتساب': document.getElementById('editGuidGroupUrl').value.trim()
+        };
+
+        liveGuidanceList[currentEditGuidanceIndex] = { ...liveGuidanceList[currentEditGuidanceIndex], ...updatedGuid };
+        localStorage.setItem('nadi_guidance_cache', JSON.stringify(liveGuidanceList));
+        renderGuidanceList(liveGuidanceList);
+        closeEditGuidanceModal();
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "edit_guidance",
+              oldName: oldName,
+              oldMajor: oldMajor,
+              ...updatedGuid
+            })
           });
         } catch(err) {}
       });
