@@ -537,7 +537,7 @@
     </div>
   </div>
 
-  <!-- نافذة تعديل بيانات المرشد أو التوجيه (الجديدة) -->
+  <!-- نافذة تعديل بيانات المرشد أو التوجيه -->
   <div id="editGuidanceModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
     <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
@@ -731,6 +731,22 @@
     let currentEditBookIndex = -1;
     let currentEditGuidanceIndex = -1;
     let deleteCallback = null;
+
+    // سجل الطلبات المعالجة لمنع تكرار ظهورها
+    function getHandledRequests() {
+      try {
+        return JSON.parse(localStorage.getItem('nadi_handled_req_ids') || '[]');
+      } catch (e) { return []; }
+    }
+
+    function markRequestAsHandled(reqId) {
+      if (!reqId) return;
+      const list = getHandledRequests();
+      if (!list.includes(reqId)) {
+        list.push(reqId);
+        localStorage.setItem('nadi_handled_req_ids', JSON.stringify(list));
+      }
+    }
 
     function getDirectWhatsAppChatUrl(phoneOrLink) {
       if (!phoneOrLink) return "";
@@ -1248,7 +1264,6 @@
       lucide.createIcons();
     }
 
-    // عرض القائمة مع زري (تعديل) و (حذف) فقط دون أي أزرار واتساب
     function renderGuidanceList(list) {
       const container = document.getElementById('guidanceListContainer');
       const badge = document.getElementById('guidanceCountBadge');
@@ -1351,7 +1366,6 @@
       });
     }
 
-    // نافذة وإجراءات تعديل التوجيه
     const editGuidanceModal = document.getElementById('editGuidanceModal');
     const editGuidanceForm = document.getElementById('editGuidanceForm');
 
@@ -1713,7 +1727,7 @@
       });
     }
 
-    // ==================== إدارة الطلبات ====================
+    // ==================== إدارة الطلبات والتبرعات ====================
     function updateBookBadges(totalCount) {
       const bellBadge = document.getElementById('notifBellBadge');
       const reqBadge = document.getElementById('bookRequestsCountBadge');
@@ -1861,9 +1875,15 @@
 
     async function fetchLiveBookRequests(forceFresh = false) {
       const cached = localStorage.getItem('nadi_book_requests_cache');
+      const handled = getHandledRequests();
+
       if (cached && !forceFresh) {
         try {
-          liveBookRequestsList = JSON.parse(cached);
+          const parsed = JSON.parse(cached);
+          liveBookRequestsList = parsed.filter(r => {
+            const id = (r['رقم الملف ID'] || '') + '_' + (r['عنوان الكتاب / المقرر'] || '') + '_' + (r['تاريخ الإرسال'] || '');
+            return !handled.includes(id);
+          });
           renderBookRequests(liveBookRequestsList);
         } catch (e) {}
       }
@@ -1875,7 +1895,10 @@
         const res = await fetch(bustUrl);
         const data = await res.json();
         if (data.bookRequests && Array.isArray(data.bookRequests)) {
-          liveBookRequestsList = data.bookRequests;
+          liveBookRequestsList = data.bookRequests.filter(r => {
+            const id = (r['رقم الملف ID'] || '') + '_' + (r['عنوان الكتاب / المقرر'] || '') + '_' + (r['تاريخ الإرسال'] || '');
+            return !handled.includes(id);
+          });
           renderBookRequests(liveBookRequestsList);
           localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
         }
@@ -1894,6 +1917,10 @@
 
       const rawBook = target['عنوان الكتاب / المقرر'] || '';
       const parsed = parseDonationInfo(rawBook);
+      const reqUniqueId = (target['رقم الملف ID'] || '') + '_' + rawBook + '_' + (target['تاريخ الإرسال'] || '');
+
+      // حظر فوري لمنع عودة الطلب بالشاشة
+      markRequestAsHandled(reqUniqueId);
 
       const newBook = {
         'عنوان الكتاب': parsed.title,
@@ -1940,6 +1967,10 @@
       const bookTitle = target['عنوان الكتاب / المقرر'] || '';
       const studentName = target['الاسم الكامل'] || '';
       const phone = target['رقم الهاتف'] || '';
+      const reqUniqueId = (target['رقم الملف ID'] || '') + '_' + bookTitle + '_' + (target['تاريخ الإرسال'] || '');
+
+      // حظر فوري لمنع عودة الطلب بالشاشة
+      markRequestAsHandled(reqUniqueId);
 
       const bookIndex = liveBooksList.findIndex(b => b['عنوان الكتاب'] === bookTitle);
       if (bookIndex !== -1) {
@@ -2001,6 +2032,9 @@
       const target = liveBookRequestsList[index];
       if (!target) return;
 
+      const reqUniqueId = (target['رقم الملف ID'] || '') + '_' + (target['عنوان الكتاب / المقرر'] || '') + '_' + (target['تاريخ الإرسال'] || '');
+      markRequestAsHandled(reqUniqueId);
+
       liveBookRequestsList.splice(index, 1);
       localStorage.setItem('nadi_book_requests_cache', JSON.stringify(liveBookRequestsList));
       localStorage.setItem('nadi_bell_dismissed_count', String(liveBookRequestsList.length));
@@ -2056,6 +2090,9 @@
 
         const target = liveBookRequestsList[currentEditDonationIndex];
         if (!target) return;
+
+        const reqUniqueId = (target['رقم الملف ID'] || '') + '_' + (target['عنوان الكتاب / المقرر'] || '') + '_' + (target['تاريخ الإرسال'] || '');
+        markRequestAsHandled(reqUniqueId);
 
         submitDonationApprovalBtn.disabled = true;
         submitDonationApprovalBtn.innerHTML = `<span>جاري النشر...</span>`;
