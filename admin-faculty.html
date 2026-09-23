@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إدارة دليل الأساتذة والإدارة | نادي الوفاء - فرع صور</title>
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Tajawal', 'sans-serif'] },
+          colors: {
+            gold: { 400: '#fbbf24', 500: '#d97706', 600: '#b45309' },
+            clubNavy: { light: '#1e3a8a', dark: '#070b14', cardDark: '#111b33', borderDark: '#1e293b' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+    .custom-scrollbar::-webkit-scrollbar { height: 5px; width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
+  </style>
+
+  <!-- فحص الحماية والجلسة فوراً قبل تحميل الصفحة -->
+  <script>
+    if (!sessionStorage.getItem('nadi_admin_session')) {
+      window.location.replace('admin.html');
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen flex flex-col">
+
+  <!-- ==================== الهيدر العلوي ==================== -->
+  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="admin.html" class="p-2 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-600 dark:text-slate-300 transition" title="الرجوع للبوابة الرئيسية">
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+      <img src="logo.png" alt="شعار النادي" class="w-9 h-9 object-contain">
+      <div>
+        <div class="flex items-center gap-2">
+          <h2 class="text-sm font-bold text-slate-900 dark:text-white">دليل الأساتذة والإدارة</h2>
+          <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20">فرع صور</span>
+        </div>
+        <p id="welcomeAdmin" class="text-[11px] text-slate-400">لوحة التحكم بالكادر التعليمي والإداري</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
+        <span class="themeIconContainer flex items-center justify-center"></span>
+        <span class="themeText">الليلي</span>
+      </button>
+
+      <a href="admin.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition">
+        <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+        <span class="hidden sm:inline">البوابة المركزية</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ==================== المحتوى والتنقل ==================== -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-8 space-y-6">
+
+    <!-- شريط التبويبين -->
+    <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit flex-wrap">
+      <button id="tabBtnAdd" onclick="switchTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
+        <i data-lucide="user-plus" class="w-4 h-4"></i>
+        <span>إضافة أستاذ جديد</span>
+      </button>
+      <button id="tabBtnManage" onclick="switchTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
+        <i data-lucide="users" class="w-4 h-4"></i>
+        <span>إدارة قائمة الأساتذة</span>
+        <span id="facultyCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
+      </button>
+    </div>
+
+    <!-- 1. نموذج إضافة أستاذ جديد -->
+    <section id="viewAdd" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
+      <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+        <span class="text-xs font-bold text-gold-500">سجل الكادر التعليمي والإداري</span>
+        <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة أستاذ أو مسؤول إداري جديد</h3>
+      </div>
+
+      <form id="addFacultyForm" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold mb-1">الاسم الكامل مع اللقب *</label>
+            <input id="facName" type="text" required placeholder="مثال: د. حسن الموسوي" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">الكلية / القسم الأكاديمي *</label>
+            <select id="facCollege" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="كلية الهندسة">كلية الهندسة (Engineering)</option>
+              <option value="كلية إدارة الأعمال">كلية إدارة الأعمال (Business)</option>
+              <option value="كلية الفنون والعلوم">كلية الفنون والعلوم (Arts & Sciences)</option>
+              <option value="كلية التربية واللغات">كلية التربية واللغات (Education)</option>
+              <option value="كلية الصيدلة">كلية الصيدلة (Pharmacy)</option>
+              <option value="الإدارة وشؤون الطلاب">الإدارة وشؤون الطلاب</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold mb-1">الاختصاص أو الصفة الوظيفية *</label>
+            <input id="facTitle" type="text" required placeholder="مثال: رئيس قسم الهندسة الميكانيكية أو أستاذ محاضر" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">البريد الإلكتروني الجامعي الرسمي *</label>
+            <input id="facEmail" type="email" required placeholder="name@liu.edu.lb" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold mb-1">المكتب والقاعة (Location)</label>
+            <input id="facOffice" type="text" placeholder="مثال: Block A - Room 204" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">الساعات المكتبية المعتمدة (Office Hours) *</label>
+            <input id="facHours" type="text" required placeholder="مثال: الإثنين والأربعاء 10:00 - 12:00" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+          <button id="submitFacBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>إدراج في دليل الأساتذة فوراً</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 2. قائمة إدارة وتعديل الأساتذة -->
+    <section id="viewManage" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">الأساتذة والإداريون المسجلون</h3>
+          <p class="text-xs text-slate-400 mt-0.5">البيانات الحية المأخوذة من ورقة «الأساتذة»</p>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <div class="relative w-full sm:w-64">
+            <input id="facultySearchInput" type="text" placeholder="بحث بالاسم أو البريد..." class="w-full text-xs p-2.5 pr-8 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3 right-2.5"></i>
+          </div>
+          <button onclick="fetchLiveFaculty(true)" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span>تحديث</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- أزرار التصفية حسب الكلية -->
+      <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-2">
+        <button class="fac-filter-btn active shrink-0 px-3 py-1 rounded-lg text-xs font-bold bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 transition" data-filter="all">الكل</button>
+        <button class="fac-filter-btn shrink-0 px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="كلية الهندسة">كلية الهندسة</button>
+        <button class="fac-filter-btn shrink-0 px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="كلية إدارة الأعمال">إدارة الأعمال</button>
+        <button class="fac-filter-btn shrink-0 px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="كلية الفنون والعلوم">الفنون والعلوم</button>
+        <button class="fac-filter-btn shrink-0 px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="كلية التربية واللغات">التربية واللغات</button>
+        <button class="fac-filter-btn shrink-0 px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="كلية الصيدلة">كلية الصيدلة</button>
+        <button class="fac-filter-btn shrink-0 px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="الإدارة وشؤون الطلاب">الإدارة والطلاب</button>
+      </div>
+
+      <!-- حاوية الكروت -->
+      <div id="facultyListContainer" class="space-y-3 min-h-[140px]">
+        <div class="py-12 text-center text-xs text-slate-400">جاري تحميل قائمة الأساتذة...</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== النوافذ المنبثقة ==================== -->
+
+  <!-- نافذة الحذف العامة -->
+  <div id="deleteModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="w-full max-w-sm p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
+      <div class="flex items-center gap-3 text-rose-500">
+        <div class="p-2.5 rounded-xl bg-rose-500/10"><i data-lucide="trash-2" class="w-6 h-6"></i></div>
+        <h3 class="font-bold text-sm text-slate-900 dark:text-white">تأكيد الحذف</h3>
+      </div>
+      <p id="deleteModalMsg" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        هل أنت متأكد من حذف هذا الأستاذ نهائياً من الدليل؟
+      </p>
+      <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+        <button onclick="closeDeleteModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">إلغاء</button>
+        <button id="confirmDeleteActionBtn" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-md">
+          <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          <span>حذف نهائي</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== السكربت البرمجي المستقل ==================== -->
+  <script>
+    lucide.createIcons();
+
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
+
+    let liveFacultyList = [];
+    let currentFilter = 'all';
+    let deleteCallback = null;
+
+    const activeAdmin = sessionStorage.getItem('nadi_admin_session');
+    if (activeAdmin) {
+      document.getElementById('welcomeAdmin').textContent = `المشرف: ${activeAdmin}`;
+    }
+
+    // إدارة المظهر
+    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+
+    function applyTheme(isDark) {
+      const html = document.documentElement;
+      const icons = document.querySelectorAll('.themeIconContainer');
+      const texts = document.querySelectorAll('.themeText');
+      if (isDark) {
+        html.classList.add('dark');
+        icons.forEach(i => i.innerHTML = moonSvg);
+        texts.forEach(t => t.textContent = 'الليلي');
+      } else {
+        html.classList.remove('dark');
+        icons.forEach(i => i.innerHTML = sunSvg);
+        texts.forEach(t => t.textContent = 'النهاري');
+      }
+    }
+
+    function toggleTheme() {
+      const isDarkCurrently = document.documentElement.classList.contains('dark');
+      const newTheme = !isDarkCurrently;
+      applyTheme(newTheme);
+      localStorage.setItem('clubTheme', newTheme ? 'dark' : 'light');
+    }
+
+    applyTheme(localStorage.getItem('clubTheme') !== 'light');
+
+    // التنقل بين التبويبين
+    function switchTab(tab) {
+      const viewAdd = document.getElementById('viewAdd');
+      const viewManage = document.getElementById('viewManage');
+      const btnAdd = document.getElementById('tabBtnAdd');
+      const btnManage = document.getElementById('tabBtnManage');
+
+      const activeClasses = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
+      const inactiveClasses = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
+
+      if (tab === 'add') {
+        viewAdd.classList.remove('hidden');
+        viewManage.classList.add('hidden');
+        btnAdd.className = activeClasses;
+        btnManage.className = inactiveClasses;
+      } else {
+        viewAdd.classList.add('hidden');
+        viewManage.classList.remove('hidden');
+        btnAdd.className = inactiveClasses;
+        btnManage.className = activeClasses;
+        fetchLiveFaculty();
+      }
+      lucide.createIcons();
+    }
+
+    // نافذة الحذف
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteModalMsg = document.getElementById('deleteModalMsg');
+    const confirmDeleteActionBtn = document.getElementById('confirmDeleteActionBtn');
+
+    function openDeleteModal(msg, onConfirm) {
+      if (deleteModalMsg) deleteModalMsg.textContent = msg;
+      deleteCallback = onConfirm;
+      if (deleteModal) {
+        deleteModal.classList.remove('hidden');
+        deleteModal.classList.add('flex');
+      }
+    }
+
+    function closeDeleteModal() {
+      deleteCallback = null;
+      if (deleteModal) {
+        deleteModal.classList.add('hidden');
+        deleteModal.classList.remove('flex');
+      }
+    }
+
+    if (confirmDeleteActionBtn) {
+      confirmDeleteActionBtn.addEventListener('click', () => {
+        if (typeof deleteCallback === 'function') deleteCallback();
+        closeDeleteModal();
+      });
+    }
+
+    // عرض قائمة الأساتذة
+    function renderFacultyList(list) {
+      const container = document.getElementById('facultyListContainer');
+      const badge = document.getElementById('facultyCountBadge');
+      if (!container) return;
+      if (badge) badge.textContent = list.length;
+
+      const query = (document.getElementById('facultySearchInput')?.value || '').toLowerCase().trim();
+
+      const filtered = (list || []).filter(fac => {
+        const name = (fac['الاسم واللقب'] || fac['الاسم'] || fac.name || '').toLowerCase();
+        const col = (fac['الكلية'] || fac['الكلية أو القسم'] || fac.college || '').trim();
+        const email = (fac['البريد الجامعي'] || fac['البريد الإلكتروني'] || fac.email || '').toLowerCase();
+        const title = (fac['الاختصاص أو الصفة'] || fac['الصفة'] || fac.title || '').toLowerCase();
+
+        const matchCol = (currentFilter === 'all') || (col === currentFilter);
+        const matchQuery = !query || name.includes(query) || email.includes(query) || title.includes(query);
+
+        return matchCol && matchQuery;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا يوجد أستاذ مطابق لخيارات البحث المحددة.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map((fac, idx) => {
+        const name = fac['الاسم واللقب'] || fac['الاسم'] || fac.name || 'أستاذ';
+        const col = fac['الكلية'] || fac['الكلية أو القسم'] || fac.college || 'عام';
+        const title = fac['الاختصاص أو الصفة'] || fac['الصفة'] || fac.title || '';
+        const email = fac['البريد الجامعي'] || fac['البريد الإلكتروني'] || fac.email || '';
+        const office = fac['المكتب'] || fac['مكان المكتب'] || fac.office || fac.room || 'غير محدد';
+        const hours = fac['الساعات المكتبية'] || fac.hours || 'عند التنسيق المسبق';
+
+        return `
+          <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${col}</span>
+                ${title ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gold-500/10 text-gold-600 dark:text-gold-400">${title}</span>` : ''}
+                <span class="text-[11px] text-slate-400 font-mono">${office}</span>
+              </div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                البريد: <a href="mailto:${email}" class="font-mono text-slate-700 dark:text-slate-200 hover:text-gold-500 underline" dir="ltr">${email}</a> 
+                • الساعات المكتبية: <span class="text-slate-700 dark:text-slate-300 font-medium">${hours}</span>
+              </p>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap">
+              ${email ? `
+                <a href="mailto:${email}" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="إرسال بريد إلكتروني">
+                  <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                  <span>مراسلة</span>
+                </a>
+              ` : ''}
+              <button onclick="deleteFacultyByIndex(${idx})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition" title="حذف الأستاذ من الدليل">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>حذف</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // جلب بيانات الأساتذة
+    async function fetchLiveFaculty(forceFresh = false) {
+      const cached = localStorage.getItem('nadi_faculty_cache');
+      if (cached && !forceFresh) {
+        try {
+          liveFacultyList = JSON.parse(cached);
+          renderFacultyList(liveFacultyList);
+        } catch(e) {}
+      }
+
+      if (!SCRIPT_URL) return;
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=faculty&bust=${Date.now()}`);
+        const data = await res.json();
+        if (data.faculty && Array.isArray(data.faculty)) {
+          liveFacultyList = data.faculty;
+          localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
+          renderFacultyList(liveFacultyList);
+        }
+      } catch(err) {}
+    }
+
+    // إضافة أستاذ جديد
+    const addFacultyForm = document.getElementById('addFacultyForm');
+    if (addFacultyForm) {
+      addFacultyForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('submitFacBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>جاري الإدراج...</span>`;
+
+        const newFac = {
+          name: document.getElementById('facName').value.trim(),
+          college: document.getElementById('facCollege').value,
+          title: document.getElementById('facTitle').value.trim(),
+          email: document.getElementById('facEmail').value.trim(),
+          office: document.getElementById('facOffice').value.trim(),
+          hours: document.getElementById('facHours').value.trim()
+        };
+
+        liveFacultyList.push({
+          'الاسم واللقب': newFac.name,
+          'الكلية': newFac.college,
+          'الاختصاص أو الصفة': newFac.title,
+          'البريد الجامعي': newFac.email,
+          'المكتب': newFac.office,
+          'الساعات المكتبية': newFac.hours
+        });
+
+        localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
+        renderFacultyList(liveFacultyList);
+
+        addFacultyForm.reset();
+        switchTab('manage');
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "add_faculty",
+              ...newFac
+            })
+          });
+        } catch(err) {} finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4"></i><span>إدراج في دليل الأساتذة فوراً</span>`;
+          lucide.createIcons();
+        }
+      });
+    }
+
+    // حذف أستاذ
+    function deleteFacultyByIndex(index) {
+      const target = liveFacultyList[index];
+      if (!target) return;
+
+      const targetName = target['الاسم واللقب'] || target['الاسم'] || target.name || '';
+      const targetEmail = target['البريد الجامعي'] || target['البريد الإلكتروني'] || target.email || '';
+
+      openDeleteModal(`هل أنت متأكد من حذف الأستاذ (${targetName}) من الدليل نهائياً؟`, async () => {
+        liveFacultyList.splice(index, 1);
+        localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
+        renderFacultyList(liveFacultyList);
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "delete_faculty",
+              name: targetName,
+              email: targetEmail
+            })
+          });
+        } catch(e) {}
+      });
+    }
+
+    // البحث والتصفية
+    document.getElementById('facultySearchInput')?.addEventListener('input', () => {
+      renderFacultyList(liveFacultyList);
+    });
+
+    const filterBtns = document.querySelectorAll('.fac-filter-btn');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('active', 'bg-clubNavy-light', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'font-bold');
+          b.classList.add('bg-slate-100', 'dark:bg-[#131e3a]', 'text-slate-700', 'dark:text-slate-300', 'font-medium');
+        });
+        btn.classList.remove('bg-slate-100', 'dark:bg-[#131e3a]', 'text-slate-700', 'dark:text-slate-300', 'font-medium');
+        btn.classList.add('active', 'bg-clubNavy-light', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'font-bold');
+
+        currentFilter = btn.getAttribute('data-filter');
+        renderFacultyList(liveFacultyList);
+      });
+    });
+
+    // جلب البيانات فور تحميل الصفحة
+    fetchLiveFaculty();
+  </script>
+</body>
+</html>
