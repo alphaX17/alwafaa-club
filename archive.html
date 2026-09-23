@@ -64,7 +64,7 @@
           <span id="themeText">الليلي</span>
         </button>
 
-        <a href="index.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 transition">
+        <a href="index.html" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 transition">
           <i data-lucide="home" class="w-3.5 h-3.5"></i>
           <span>الرئيسية</span>
         </a>
@@ -96,17 +96,17 @@
           <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3.5 right-3"></i>
         </div>
 
-        <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0" id="filterContainer">
-          <button class="filter-btn active px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950" data-category="all">الكل</button>
-          <button class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="scientific">معارض وملتقيات</button>
-          <button class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="workshop">ورش وتدريب</button>
-          <button class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="service">مبادرات وخدمات</button>
-          <button class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="honoring">تكريم واحتفال</button>
+        <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 custom-scrollbar" id="filterContainer">
+          <button class="filter-btn active px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 shrink-0" data-category="all">الكل</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition shrink-0" data-category="workshop">ورش وتدريب</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition shrink-0" data-category="scientific">معارض وندوات</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition shrink-0" data-category="service">مبادرات وتطوع</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition shrink-0" data-category="honoring">ثقافي وتكريم</button>
         </div>
       </div>
     </div>
 
-    <!-- شبكة فعاليات الأرشيف (يتم ملؤها فورياً عبر الجافاسكربت لمنع وميض النص القديم) -->
+    <!-- شبكة فعاليات الأرشيف -->
     <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[250px]"></div>
 
     <!-- رسالة عدم وجود نتائج في الأرشيف -->
@@ -143,13 +143,21 @@
         <div id="modalThumbnails" class="hidden flex gap-2 overflow-x-auto pb-1 custom-scrollbar"></div>
       </div>
 
-      <div>
+      <div class="space-y-2">
         <h3 id="modalTitle" class="font-bold text-base text-slate-900 dark:text-white"></h3>
-        <p id="modalDate" class="text-xs text-gold-500 font-medium mt-0.5 flex items-center gap-1.5">
-          <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-          <span id="modalDateText"></span>
-        </p>
-        <p id="modalDesc" class="mt-3 text-xs leading-relaxed text-slate-600 dark:text-slate-300 whitespace-pre-line"></p>
+        
+        <div class="flex items-center gap-4 text-xs text-slate-400 flex-wrap">
+          <span class="text-gold-500 font-medium flex items-center gap-1.5">
+            <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+            <span id="modalDateText"></span>
+          </span>
+          <span id="modalLocationWrap" class="hidden items-center gap-1.5 text-slate-400">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+            <span id="modalLocationText"></span>
+          </span>
+        </div>
+
+        <p id="modalDesc" class="pt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300 whitespace-pre-line"></p>
       </div>
 
       <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-end">
@@ -160,7 +168,7 @@
     </div>
   </div>
 
-  <!-- ==================== القائمة الجانبية (SLIDE-OVER MENU) ==================== -->
+  <!-- ==================== القائمة الجانبية ==================== -->
   <div id="menuOverlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
   <aside id="sidebar" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0c1427] border-l border-slate-200 dark:border-clubNavy-borderDark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
@@ -203,11 +211,15 @@
           <span>دليل الأساتذة والساعات المكتبية</span>
         </a>
         <a href="guidance.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
-          <i data-lucide="message-circle" class="w-4 h-4 text-slate-400"></i>
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
           <div>
             <p>شبكة التوجيه وممثلو الاختصاصات</p>
             <span class="text-[10px] text-slate-400 dark:text-slate-500">مجموعات الواتساب والتواصل المباشر</span>
           </div>
+        </a>
+        <a href="archive.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
+          <i data-lucide="camera" class="w-4 h-4"></i>
+          <span>أرشيف الفعاليات والأنشطة</span>
         </a>
       </nav>
     </div>
@@ -217,20 +229,20 @@
     </div>
   </aside>
 
-  <!-- ==================== السكربت البرمجي الشامل ==================== -->
+  <!-- ==================== السكربت البرمجي ==================== -->
   <script>
     lucide.createIcons();
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
     let activitiesData = [];
 
-    // استخراج مصفوفة روابط الصور من الخلية سواء كانت رابطاً واحداً أو روابط مفصولة بفاصلة
+    // استخراج مصفوفة روابط الصور
     function parseImages(raw) {
       if (!raw) return [];
       return String(raw).split(',').map(u => u.trim()).filter(u => u.length > 0);
     }
 
-    // رسم كروت الأنشطة في الصفحة
+    // رسم كروت الأنشطة
     function renderActivities(list) {
       const grid = document.getElementById('eventsGrid');
       if (!grid) return;
@@ -241,27 +253,31 @@
       }
 
       grid.innerHTML = list.map((act, idx) => {
-        const title = act['العنوان'] || '';
-        const date = act['التاريخ'] || '';
-        const rawCat = act['التصنيف'] || 'نشاط جامعي';
-        const shortDesc = act['الوصف المختصر'] || '';
-        const imgs = parseImages(act['رابط الصورة']);
+        // قراءة المسميات بالتوافق الشامل
+        const title = act['عنوان النشاط'] || act['العنوان'] || act.title || 'فعالية بدون عنوان';
+        const date = act['التاريخ'] || act.date || '';
+        const location = act['المكان'] || act.location || '';
+        const rawCat = act['التصنيف'] || act.category || 'فعالية عامة';
+        const desc = act['الوصف'] || act['الوصف المختصر'] || act['التفاصيل الكاملة'] || act.desc || '';
+        const imgs = parseImages(act['رابط الصورة'] || act.imageUrl);
         const coverImg = imgs[0] || '';
 
-        // تصنيف الأزرار
+        // تصنيف الفعالية لأزرار الفرز
         let catCode = 'scientific';
         const lowerCat = rawCat.toLowerCase();
         if (lowerCat.includes('ورش') || lowerCat.includes('تدريب') || lowerCat.includes('workshop')) {
           catCode = 'workshop';
-        } else if (lowerCat.includes('خدم') || lowerCat.includes('مبادر') || lowerCat.includes('كتب') || lowerCat.includes('service')) {
+        } else if (lowerCat.includes('تطوع') || lowerCat.includes('خدم') || lowerCat.includes('مبادر') || lowerCat.includes('اجتماع') || lowerCat.includes('service')) {
           catCode = 'service';
-        } else if (lowerCat.includes('تكريم') || lowerCat.includes('احتفال') || lowerCat.includes('تخرج') || lowerCat.includes('honor')) {
+        } else if (lowerCat.includes('تكريم') || lowerCat.includes('احتفال') || lowerCat.includes('تخرج') || lowerCat.includes('ثقاف') || lowerCat.includes('ترفيه') || lowerCat.includes('honor')) {
           catCode = 'honoring';
+        } else {
+          catCode = 'scientific';
         }
 
         let badgeBg = "bg-clubNavy-light";
         if (catCode === 'workshop') badgeBg = "bg-indigo-600";
-        else if (catCode === 'service') badgeBg = "bg-gold-600";
+        else if (catCode === 'service') badgeBg = "bg-emerald-600";
         else if (catCode === 'honoring') badgeBg = "bg-amber-600";
 
         const imgMarkup = coverImg 
@@ -283,13 +299,21 @@
                 ${badgeMulti}
               </div>
               <div class="p-5">
-                <div class="text-[11px] text-gold-600 dark:text-gold-400 font-bold mb-1 flex items-center gap-1.5">
-                  <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-                  <span>${date}</span>
+                <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1.5 flex-wrap gap-1">
+                  <span class="text-gold-600 dark:text-gold-400 font-bold flex items-center gap-1">
+                    <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                    <span>${date}</span>
+                  </span>
+                  ${location ? `
+                    <span class="flex items-center gap-1 text-slate-400">
+                      <i data-lucide="map-pin" class="w-3 h-3"></i>
+                      <span>${location}</span>
+                    </span>
+                  ` : ''}
                 </div>
                 <h3 class="font-bold text-base text-slate-900 dark:text-white mb-2">${title}</h3>
                 <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-3">
-                  ${shortDesc}
+                  ${desc}
                 </p>
               </div>
             </div>
@@ -307,22 +331,20 @@
       filterEvents();
     }
 
-    // جلب البيانات مع التسريع الفوري (localStorage)
+    // جلب البيانات مع مانع الكاش
     async function fetchLiveArchive() {
       const cached = localStorage.getItem('nadi_archive_cache');
       if (cached) {
         try {
           activitiesData = JSON.parse(cached);
           renderActivities(activitiesData);
-        } catch (e) {
-          console.warn("خطأ في قراءة كاش الأرشيف:", e);
-        }
+        } catch (e) {}
       }
 
       if (!SCRIPT_URL) return;
 
       try {
-        const response = await fetch(SCRIPT_URL);
+        const response = await fetch(`${SCRIPT_URL}?req=activities&bust=${Date.now()}`);
         const data = await response.json();
 
         if (data.activities && Array.isArray(data.activities)) {
@@ -330,9 +352,7 @@
           renderActivities(activitiesData);
           localStorage.setItem('nadi_archive_cache', JSON.stringify(activitiesData));
         }
-      } catch (err) {
-        console.warn("تعذر الاتصال بالجدول:", err);
-      }
+      } catch (err) {}
     }
 
     fetchLiveArchive();
@@ -342,16 +362,28 @@
       const act = activitiesData[index];
       if (!act) return;
 
-      const title = act['العنوان'] || '';
-      const date = act['التاريخ'] || '';
-      const cat = act['التصنيف'] || 'فعالية';
-      const desc = act['التفاصيل الكاملة'] || act['الوصف المختصر'] || '';
-      const imgs = parseImages(act['رابط الصورة']);
+      const title = act['عنوان النشاط'] || act['العنوان'] || act.title || 'فعالية بدون عنوان';
+      const date = act['التاريخ'] || act.date || '';
+      const cat = act['التصنيف'] || act.category || 'فعالية';
+      const desc = act['الوصف'] || act['التفاصيل الكاملة'] || act['الوصف المختصر'] || act.desc || '';
+      const location = act['المكان'] || act.location || '';
+      const imgs = parseImages(act['رابط الصورة'] || act.imageUrl);
 
       document.getElementById('modalTitle').textContent = title;
       document.getElementById('modalCategory').textContent = cat;
       document.getElementById('modalDateText').textContent = date;
       document.getElementById('modalDesc').textContent = desc;
+
+      const locWrap = document.getElementById('modalLocationWrap');
+      const locText = document.getElementById('modalLocationText');
+      if (location) {
+        locText.textContent = location;
+        locWrap.classList.remove('hidden');
+        locWrap.classList.add('flex');
+      } else {
+        locWrap.classList.add('hidden');
+        locWrap.classList.remove('flex');
+      }
 
       const mainImg = document.getElementById('modalMainImage');
       const placeholder = document.getElementById('modalImagePlaceholder');
@@ -364,7 +396,7 @@
 
         if (imgs.length > 1) {
           thumbs.classList.remove('hidden');
-          thumbs.innerHTML = imgs.map((src, i) => `
+          thumbs.innerHTML = imgs.map((src) => `
             <button type="button" onclick="changeMainImage('${src}')" class="flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 border-slate-700 hover:border-gold-500 focus:border-gold-500 transition">
               <img src="${src}" alt="مصغرة" class="w-full h-full object-cover">
             </button>
@@ -384,6 +416,7 @@
       const modal = document.getElementById('eventModal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
+      lucide.createIcons();
     };
 
     window.changeMainImage = function(src) {
