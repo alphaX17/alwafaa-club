@@ -281,7 +281,7 @@
         const link = item['رابط التحميل'] || '#';
         
         // قراءة الوصف المخصص من عمود "الوصف" الجديد
-        const desc = item['الوصف'] || `مرجع معتمد لكلية ${faculty} متوفر للتحميل المباشر.`;
+        const desc = item['الوصف'] || `مرجع معتمد لدى ${faculty} متوفر للتحميل المباشر.`;
 
         // الفحص البرمجي للكلية ونوع الملف
         const meta = detectResourceMetadata(faculty, type, name, code);
