@@ -123,6 +123,28 @@
           </div>
         </div>
 
+        <!-- خانة التخيير: عرض في الصفحة الرئيسية (Radio Buttons) -->
+        <div class="p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#0c1427] space-y-2">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <label class="block text-xs font-bold text-slate-900 dark:text-white">
+              عرض النشاط في الصفحة الرئيسية <span class="text-rose-500">*</span>
+            </label>
+            <span id="addFeaturedNotice" class="text-[11px] font-medium text-slate-400"></span>
+          </div>
+
+          <div class="flex items-center gap-6 pt-1">
+            <label id="addFeaturedYesLabel" class="inline-flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-800 dark:text-slate-200">
+              <input type="radio" id="addFeaturedYes" name="addFeaturedRadio" value="نعم" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500">
+              <span>نعم</span>
+            </label>
+
+            <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-800 dark:text-slate-200">
+              <input type="radio" id="addFeaturedNo" name="addFeaturedRadio" value="لا" checked class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500">
+              <span>لا</span>
+            </label>
+          </div>
+        </div>
+
         <!-- خانة الصور التفاعلية -->
         <div class="space-y-2">
           <label class="block text-xs font-bold mb-1">صور النشاط (الصورة الأولى هي الغلاف والخلفية الأساسية)</label>
@@ -189,6 +211,8 @@
 
   </main>
 
+  <!-- ==================== النوافذ المنبثقة ==================== -->
+
   <!-- نافذة تعديل بيانات النشاط -->
   <div id="editActivityModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
     <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
@@ -226,6 +250,29 @@
           </div>
         </div>
 
+        <!-- خانة التخيير في نافذة التعديل -->
+        <div class="p-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#0c1427] space-y-1.5">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <label class="block font-bold text-slate-900 dark:text-white">
+              عرض النشاط في الصفحة الرئيسية <span class="text-rose-500">*</span>
+            </label>
+            <span id="editFeaturedNotice" class="text-[11px] font-medium text-slate-400"></span>
+          </div>
+
+          <div class="flex items-center gap-6 pt-1">
+            <label id="editFeaturedYesLabel" class="inline-flex items-center gap-2 cursor-pointer font-bold text-slate-800 dark:text-slate-200">
+              <input type="radio" id="editFeaturedYes" name="editFeaturedRadio" value="نعم" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500">
+              <span>نعم</span>
+            </label>
+
+            <label class="inline-flex items-center gap-2 cursor-pointer font-bold text-slate-800 dark:text-slate-200">
+              <input type="radio" id="editFeaturedNo" name="editFeaturedRadio" value="لا" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500">
+              <span>لا</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- خانة الصور التفاعلية في نافذة التعديل -->
         <div class="space-y-2">
           <label class="block font-bold mb-1">صور النشاط (الصورة الأولى هي الغلاف والخلفية الأساسية)</label>
           <div id="editImagesContainer" class="space-y-2.5"></div>
@@ -287,7 +334,7 @@
       document.getElementById('welcomeAdmin').textContent = `المشرف: ${activeAdmin}`;
     }
 
-    // دالة ذكية لتنظيف واستخراج الروابط المباشرة حتى لو تم لصق كود HTML بالخطأ
+    // تنظيف واستخراج روابط الصور
     function cleanDirectImageUrl(raw) {
       if (!raw) return '';
       let str = String(raw).trim();
@@ -375,6 +422,7 @@
         viewManage.classList.add('hidden');
         btnAdd.className = activeClasses;
         btnManage.className = inactiveClasses;
+        updateFeaturedLimitsUI();
       } else {
         viewAdd.classList.add('hidden');
         viewManage.classList.remove('hidden');
@@ -383,6 +431,38 @@
         fetchLiveActivities(true);
       }
       lucide.createIcons();
+    }
+
+    // فحص ما إذا كان النشاط معروضاً بالرئيسية
+    function isItemFeatured(item) {
+      if (!item) return false;
+      const val = String(item['عرض في الرئيسية'] || item['عرض في الرئسية'] || item['الرئيسية'] || item.featured || item.showInHome || '').trim();
+      return val === 'نعم' || val === 'true' || val === '1';
+    }
+
+    // تحديث قيود وقفل خيار الصفحة الرئيسية في استمارة الإضافة
+    function updateFeaturedLimitsUI() {
+      const currentFeaturedCount = liveActivitiesList.filter(isItemFeatured).length;
+      const yesRadio = document.getElementById('addFeaturedYes');
+      const noRadio = document.getElementById('addFeaturedNo');
+      const yesLabel = document.getElementById('addFeaturedYesLabel');
+      const notice = document.getElementById('addFeaturedNotice');
+
+      if (!yesRadio || !notice) return;
+
+      if (currentFeaturedCount >= 3) {
+        yesRadio.disabled = true;
+        noRadio.checked = true;
+        yesLabel.classList.add('opacity-40', 'cursor-not-allowed');
+        notice.textContent = "يوجد 3 أنشطة في الصفحة الرئيسية، لا يمكن إضافة المزيد";
+        notice.className = "text-[11px] font-bold text-rose-500";
+      } else {
+        yesRadio.disabled = false;
+        yesLabel.classList.remove('opacity-40', 'cursor-not-allowed');
+        const remaining = 3 - currentFeaturedCount;
+        notice.textContent = `الحد الأقصى 3 أنشطة (المتبقي متاح: ${remaining})`;
+        notice.className = "text-[11px] font-bold text-gold-500";
+      }
     }
 
     // نافذة الحذف
@@ -414,13 +494,12 @@
       });
     }
 
-    // عرض قائمة الأنشطة (متوافق مع كل أسماء الأعمدة في شيت الأنشطة)
+    // عرض قائمة الأنشطة
     function renderActivityList(list) {
       const container = document.getElementById('activityListContainer');
       const badge = document.getElementById('activityCountBadge');
       if (!container) return;
 
-      // فحص وجود العنوان بالاسم الصريح المكتوب في الشيت
       const validList = (list || []).filter(item => {
         const title = item['العنوان'] || item['عنوان النشاط'] || item['عنوان الفعالية'] || item.title || '';
         return String(title).trim() !== '';
@@ -453,6 +532,7 @@
         const location = item['المكان'] || item.location || 'حرم فرع صور';
         const rawImageUrl = item['رابط الصورة'] || item.imageUrl || '';
         const desc = item['التفاصيل الكاملة'] || item['الوصف'] || item.desc || '';
+        const isFeatured = isItemFeatured(item);
 
         const imageArray = String(rawImageUrl).split(',').map(s => cleanDirectImageUrl(s)).filter(Boolean);
         const coverImage = imageArray[0] || '';
@@ -476,6 +556,12 @@
               <div class="space-y-1">
                 <div class="flex items-center gap-2 flex-wrap">
                   <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gold-500/10 text-gold-600 dark:text-gold-400">${category}</span>
+                  ${isFeatured ? `
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 flex items-center gap-1">
+                      <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                      <span>معروض بالرئيسية</span>
+                    </span>
+                  ` : ''}
                   <span class="text-[11px] text-slate-400 font-mono flex items-center gap-1">
                     <i data-lucide="clock" class="w-3 h-3"></i>
                     ${date}
@@ -513,6 +599,7 @@
         try {
           liveActivitiesList = JSON.parse(cached);
           renderActivityList(liveActivitiesList);
+          updateFeaturedLimitsUI();
         } catch(e) {}
       }
 
@@ -524,6 +611,7 @@
           liveActivitiesList = data.activities;
           localStorage.setItem('nadi_activities_cache', JSON.stringify(liveActivitiesList));
           renderActivityList(liveActivitiesList);
+          updateFeaturedLimitsUI();
         }
       } catch(err) {}
     }
@@ -538,6 +626,7 @@
         submitBtn.innerHTML = `<span>جاري النشر...</span>`;
 
         const allImages = collectImagesFromContainer('addImagesContainer');
+        const isFeaturedVal = document.querySelector('input[name="addFeaturedRadio"]:checked')?.value || 'لا';
 
         const newActivity = {
           title: document.getElementById('actTitle').value.trim(),
@@ -545,7 +634,8 @@
           date: document.getElementById('actDate').value.trim(),
           location: document.getElementById('actLocation').value.trim(),
           imageUrl: allImages,
-          desc: document.getElementById('actDesc').value.trim()
+          desc: document.getElementById('actDesc').value.trim(),
+          featured: isFeaturedVal
         };
 
         liveActivitiesList.push({
@@ -556,14 +646,17 @@
           'المكان': newActivity.location,
           'رابط الصورة': newActivity.imageUrl,
           'التفاصيل الكاملة': newActivity.desc,
-          'الوصف': newActivity.desc
+          'الوصف': newActivity.desc,
+          'عرض في الرئيسية': newActivity.featured
         });
 
         localStorage.setItem('nadi_activities_cache', JSON.stringify(liveActivitiesList));
         renderActivityList(liveActivitiesList);
+        updateFeaturedLimitsUI();
 
         addActivityForm.reset();
-        
+        document.getElementById('addFeaturedNo').checked = true;
+
         const addContainer = document.getElementById('addImagesContainer');
         if (addContainer) {
           addContainer.innerHTML = `
@@ -593,7 +686,7 @@
       });
     }
 
-    // نافذة تعديل النشاط
+    // نافذة تعديل النشاط مع قفل الراديو الذكي
     const editActivityModal = document.getElementById('editActivityModal');
     const editActivityForm = document.getElementById('editActivityForm');
 
@@ -608,6 +701,38 @@
       document.getElementById('editActLocation').value = target['المكان'] || target.location || '';
       document.getElementById('editActDesc').value = target['التفاصيل الكاملة'] || target['الوصف'] || target.desc || '';
 
+      // فحص الأنشطة الأخرى المعروضة بالرئيسية
+      const otherFeaturedCount = liveActivitiesList.filter((item, i) => i !== idx && isItemFeatured(item)).length;
+      const isTargetFeatured = isItemFeatured(target);
+
+      const yesRadio = document.getElementById('editFeaturedYes');
+      const noRadio = document.getElementById('editFeaturedNo');
+      const yesLabel = document.getElementById('editFeaturedYesLabel');
+      const notice = document.getElementById('editFeaturedNotice');
+
+      if (isTargetFeatured) {
+        yesRadio.checked = true;
+        yesRadio.disabled = false;
+        yesLabel.classList.remove('opacity-40', 'cursor-not-allowed');
+        notice.textContent = "معروض حالياً في الصفحة الرئيسية";
+        notice.className = "text-[11px] font-bold text-amber-500";
+      } else {
+        noRadio.checked = true;
+        if (otherFeaturedCount >= 3) {
+          yesRadio.disabled = true;
+          yesLabel.classList.add('opacity-40', 'cursor-not-allowed');
+          notice.textContent = "يوجد 3 أنشطة في الرئيسية، لا يمكن تفعيل المزيد";
+          notice.className = "text-[11px] font-bold text-rose-500";
+        } else {
+          yesRadio.disabled = false;
+          yesLabel.classList.remove('opacity-40', 'cursor-not-allowed');
+          const remaining = 3 - otherFeaturedCount;
+          notice.textContent = `الحد الأقصى 3 (متاح للإضافة: ${remaining})`;
+          notice.className = "text-[11px] font-bold text-gold-500";
+        }
+      }
+
+      // تفكيك الصور
       const editContainer = document.getElementById('editImagesContainer');
       if (editContainer) {
         editContainer.innerHTML = '';
@@ -625,6 +750,7 @@
 
       editActivityModal.classList.remove('hidden');
       editActivityModal.classList.add('flex');
+      lucide.createIcons();
     }
 
     function closeEditActivityModal() {
@@ -641,6 +767,7 @@
         const oldTarget = liveActivitiesList[currentEditActivityIndex];
         const oldTitle = oldTarget ? (oldTarget['العنوان'] || oldTarget['عنوان النشاط'] || oldTarget.title || '') : '';
         const allImages = collectImagesFromContainer('editImagesContainer');
+        const isFeaturedVal = document.querySelector('input[name="editFeaturedRadio"]:checked')?.value || 'لا';
 
         const updated = {
           title: document.getElementById('editActTitle').value.trim(),
@@ -648,7 +775,8 @@
           date: document.getElementById('editActDate').value.trim(),
           location: document.getElementById('editActLocation').value.trim(),
           imageUrl: allImages,
-          desc: document.getElementById('editActDesc').value.trim()
+          desc: document.getElementById('editActDesc').value.trim(),
+          featured: isFeaturedVal
         };
 
         liveActivitiesList[currentEditActivityIndex] = {
@@ -660,11 +788,13 @@
           'المكان': updated.location,
           'رابط الصورة': updated.imageUrl,
           'التفاصيل الكاملة': updated.desc,
-          'الوصف': updated.desc
+          'الوصف': updated.desc,
+          'عرض في الرئيسية': updated.featured
         };
 
         localStorage.setItem('nadi_activities_cache', JSON.stringify(liveActivitiesList));
         renderActivityList(liveActivitiesList);
+        updateFeaturedLimitsUI();
         closeEditActivityModal();
 
         try {
@@ -693,6 +823,7 @@
         liveActivitiesList.splice(index, 1);
         localStorage.setItem('nadi_activities_cache', JSON.stringify(liveActivitiesList));
         renderActivityList(liveActivitiesList);
+        updateFeaturedLimitsUI();
 
         try {
           await fetch(SCRIPT_URL, {
@@ -728,7 +859,7 @@
       });
     });
 
-    // جلب فوري من الشيت فور تحميل الصفحة
+    // جلب البيانات لحظياً
     fetchLiveActivities(true);
   </script>
 </body>
