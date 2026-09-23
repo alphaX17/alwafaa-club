@@ -87,7 +87,7 @@
       </button>
     </div>
 
-    <!-- 1. نموذج إضافة نشاط جديد -->
+    <!-- 1. نموذج إضافة نشاط جديد مع دعم إضافة عدة صور ديناميكياً -->
     <section id="viewAdd" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
       <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
         <span class="text-xs font-bold text-gold-500">لوحة نشر وتوثيق الفعاليات</span>
@@ -123,9 +123,21 @@
           </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-bold mb-1">رابط صورة البوستر / الغلاف (اختياري)</label>
-          <input id="actImageUrl" type="url" placeholder="https://... رابط صورة مباشر أو اترك فارغاً" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+        <!-- خانة الصور التفاعلية -->
+        <div class="space-y-2">
+          <label class="block text-xs font-bold mb-1">صور النشاط (الصورة الأولى هي الغلاف والخلفية الأساسية)</label>
+          <div id="addImagesContainer" class="space-y-2.5">
+            <!-- الصورة الأولى: البوستر الأساسي -->
+            <div>
+              <input type="url" placeholder="رابط صورة البوستر / الغلاف الرئيسي (اختياري)" class="act-img-input w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+            </div>
+          </div>
+
+          <!-- زر إضافة صورة أخرى -->
+          <button type="button" onclick="addImageField('addImagesContainer')" class="mt-2 text-xs text-gold-500 hover:text-gold-600 font-bold inline-flex items-center gap-1.5 transition p-1 rounded-lg hover:bg-gold-500/10">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>اضغط لإضافة صورة أخرى</span>
+          </button>
         </div>
 
         <div>
@@ -218,9 +230,16 @@
           </div>
         </div>
 
-        <div>
-          <label class="block font-bold mb-1">رابط صورة البوستر</label>
-          <input id="editActImageUrl" type="url" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+        <!-- خانة الصور التفاعلية في نافذة التعديل -->
+        <div class="space-y-2">
+          <label class="block font-bold mb-1">صور النشاط (الصورة الأولى هي الغلاف والخلفية الأساسية)</label>
+          <div id="editImagesContainer" class="space-y-2.5">
+            <!-- سيتم تعبئة الحقول ديناميكياً عند فتح النافذة -->
+          </div>
+          <button type="button" onclick="addImageField('editImagesContainer')" class="mt-2 text-xs text-gold-500 hover:text-gold-600 font-bold inline-flex items-center gap-1.5 transition p-1 rounded-lg hover:bg-gold-500/10">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>اضغط لإضافة صورة أخرى</span>
+          </button>
         </div>
 
         <div>
@@ -259,7 +278,7 @@
     </div>
   </div>
 
-  <!-- ==================== السكربت البرمجي المستقل ==================== -->
+  <!-- ==================== السكربت البرمجي ==================== -->
   <script>
     lucide.createIcons();
 
@@ -273,6 +292,44 @@
     const activeAdmin = sessionStorage.getItem('nadi_admin_session');
     if (activeAdmin) {
       document.getElementById('welcomeAdmin').textContent = `المشرف: ${activeAdmin}`;
+    }
+
+    // إدارة الحقول الديناميكية للصور
+    function addImageField(containerId, value = '') {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      const isFirst = container.children.length === 0;
+      const fieldWrapper = document.createElement('div');
+      fieldWrapper.className = 'flex items-center gap-2';
+
+      const placeholderText = isFirst 
+        ? "رابط صورة البوستر / الغلاف الرئيسي (اختياري)" 
+        : `رابط صورة إضافية #${container.children.length + 1}`;
+
+      fieldWrapper.innerHTML = `
+        <input type="url" value="${value}" placeholder="${placeholderText}" class="act-img-input w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+        ${!isFirst ? `
+          <button type="button" onclick="this.parentElement.remove()" class="p-3 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-500 hover:text-white transition shrink-0" title="إزالة هذا الحقل">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        ` : ''}
+      `;
+
+      container.appendChild(fieldWrapper);
+      lucide.createIcons();
+    }
+
+    function collectImagesFromContainer(containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return '';
+      const inputs = container.querySelectorAll('.act-img-input');
+      const urls = [];
+      inputs.forEach(input => {
+        const val = input.value.trim();
+        if (val) urls.push(val);
+      });
+      return urls.join(', ');
     }
 
     // إدارة المظهر
@@ -389,12 +446,22 @@
         const category = item['التصنيف'] || item.category || 'فعالية عامة';
         const date = item['التاريخ'] || item.date || 'الموعد يحدد لاحقاً';
         const location = item['المكان'] || item.location || 'حرم فرع صور';
-        const imageUrl = item['رابط الصورة'] || item.imageUrl || '';
+        const rawImageUrl = item['رابط الصورة'] || item.imageUrl || '';
         const desc = item['الوصف'] || item.desc || '';
 
-        const imageThumbHtml = imageUrl ? `
-          <div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
-            <img src="${imageUrl}" alt="${title}" class="w-full h-full object-cover" onerror="this.parentElement.style.display='none'">
+        // تقسيم الروابط لاستخراج صورة الغلاف وعدد الصور الإجمالي
+        const imageArray = rawImageUrl.split(',').map(s => s.trim()).filter(Boolean);
+        const coverImage = imageArray[0] || '';
+        const extraImagesCount = imageArray.length > 1 ? imageArray.length : 0;
+
+        const imageThumbHtml = coverImage ? `
+          <div class="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
+            <img src="${coverImage}" alt="${title}" class="w-full h-full object-cover" onerror="this.parentElement.style.display='none'">
+            ${extraImagesCount > 0 ? `
+              <span class="absolute bottom-0 right-0 bg-black/75 text-white font-mono text-[9px] px-1.5 py-0.5 rounded-tl-lg font-bold" title="${extraImagesCount} صور إجمالية">
+                +${extraImagesCount}
+              </span>
+            ` : ''}
           </div>
         ` : '';
 
@@ -466,12 +533,14 @@
         submitBtn.disabled = true;
         submitBtn.innerHTML = `<span>جاري النشر...</span>`;
 
+        const allImages = collectImagesFromContainer('addImagesContainer');
+
         const newActivity = {
           title: document.getElementById('actTitle').value.trim(),
           category: document.getElementById('actCategory').value,
           date: document.getElementById('actDate').value.trim(),
           location: document.getElementById('actLocation').value.trim(),
-          imageUrl: document.getElementById('actImageUrl').value.trim(),
+          imageUrl: allImages,
           desc: document.getElementById('actDesc').value.trim()
         };
 
@@ -488,6 +557,17 @@
         renderActivityList(liveActivitiesList);
 
         addActivityForm.reset();
+        
+        // إعادة تهيئة خانات الصور في الإضافة إلى حقل واحد أساسي
+        const addContainer = document.getElementById('addImagesContainer');
+        if (addContainer) {
+          addContainer.innerHTML = `
+            <div>
+              <input type="url" placeholder="رابط صورة البوستر / الغلاف الرئيسي (اختياري)" class="act-img-input w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+            </div>
+          `;
+        }
+
         switchTab('manage');
 
         try {
@@ -508,7 +588,7 @@
       });
     }
 
-    // نافذة تعديل النشاط
+    // نافذة تعديل النشاط وتفكيك الصور ديناميكياً
     const editActivityModal = document.getElementById('editActivityModal');
     const editActivityForm = document.getElementById('editActivityForm');
 
@@ -521,8 +601,23 @@
       document.getElementById('editActCategory').value = target['التصنيف'] || target.category || 'ورشة عمل تدريبية';
       document.getElementById('editActDate').value = target['التاريخ'] || target.date || '';
       document.getElementById('editActLocation').value = target['المكان'] || target.location || '';
-      document.getElementById('editActImageUrl').value = target['رابط الصورة'] || target.imageUrl || '';
       document.getElementById('editActDesc').value = target['الوصف'] || target.desc || '';
+
+      // تفكيك روابط الصور المحفوظة وعرضها في حقول ديناميكية
+      const editContainer = document.getElementById('editImagesContainer');
+      if (editContainer) {
+        editContainer.innerHTML = '';
+        const rawImages = target['رابط الصورة'] || target.imageUrl || '';
+        const imagesList = rawImages.split(',').map(s => s.trim()).filter(Boolean);
+
+        if (imagesList.length === 0) {
+          addImageField('editImagesContainer');
+        } else {
+          imagesList.forEach(imgUrl => {
+            addImageField('editImagesContainer', imgUrl);
+          });
+        }
+      }
 
       editActivityModal.classList.remove('hidden');
       editActivityModal.classList.add('flex');
@@ -541,13 +636,14 @@
 
         const oldTarget = liveActivitiesList[currentEditActivityIndex];
         const oldTitle = oldTarget ? (oldTarget['عنوان النشاط'] || oldTarget.title || '') : '';
+        const allImages = collectImagesFromContainer('editImagesContainer');
 
         const updated = {
           title: document.getElementById('editActTitle').value.trim(),
           category: document.getElementById('editActCategory').value,
           date: document.getElementById('editActDate').value.trim(),
           location: document.getElementById('editActLocation').value.trim(),
-          imageUrl: document.getElementById('editActImageUrl').value.trim(),
+          imageUrl: allImages,
           desc: document.getElementById('editActDesc').value.trim()
         };
 
