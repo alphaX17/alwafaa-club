@@ -127,13 +127,11 @@
         <div class="space-y-2">
           <label class="block text-xs font-bold mb-1">صور النشاط (الصورة الأولى هي الغلاف والخلفية الأساسية)</label>
           <div id="addImagesContainer" class="space-y-2.5">
-            <!-- الصورة الأولى: البوستر الأساسي -->
             <div>
               <input type="url" placeholder="رابط صورة البوستر / الغلاف الرئيسي (اختياري)" class="act-img-input w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
             </div>
           </div>
 
-          <!-- زر إضافة صورة أخرى -->
           <button type="button" onclick="addImageField('addImagesContainer')" class="mt-2 text-xs text-gold-500 hover:text-gold-600 font-bold inline-flex items-center gap-1.5 transition p-1 rounded-lg hover:bg-gold-500/10">
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
             <span>اضغط لإضافة صورة أخرى</span>
@@ -233,9 +231,7 @@
         <!-- خانة الصور التفاعلية في نافذة التعديل -->
         <div class="space-y-2">
           <label class="block font-bold mb-1">صور النشاط (الصورة الأولى هي الغلاف والخلفية الأساسية)</label>
-          <div id="editImagesContainer" class="space-y-2.5">
-            <!-- سيتم تعبئة الحقول ديناميكياً عند فتح النافذة -->
-          </div>
+          <div id="editImagesContainer" class="space-y-2.5"></div>
           <button type="button" onclick="addImageField('editImagesContainer')" class="mt-2 text-xs text-gold-500 hover:text-gold-600 font-bold inline-flex items-center gap-1.5 transition p-1 rounded-lg hover:bg-gold-500/10">
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
             <span>اضغط لإضافة صورة أخرى</span>
@@ -380,7 +376,7 @@
         viewManage.classList.remove('hidden');
         btnAdd.className = inactiveClasses;
         btnManage.className = activeClasses;
-        fetchLiveActivities();
+        fetchLiveActivities(true);
       }
       lucide.createIcons();
     }
@@ -414,21 +410,26 @@
       });
     }
 
-    // عرض قائمة الأنشطة
+    // عرض قائمة الأنشطة (مع التوافق الشامل لأسماء الأعمدة)
     function renderActivityList(list) {
       const container = document.getElementById('activityListContainer');
       const badge = document.getElementById('activityCountBadge');
       if (!container) return;
 
-      const validList = (list || []).filter(item => (item['عنوان النشاط'] || item.title || '').trim() !== '');
+      // الفحص الشامل لكل مسميات الحقول
+      const validList = (list || []).filter(item => {
+        const title = item['عنوان النشاط'] || item['العنوان'] || item['عنوان الفعالية'] || item.title || '';
+        return String(title).trim() !== '';
+      });
+
       if (badge) badge.textContent = validList.length;
 
       const query = (document.getElementById('activitySearchInput')?.value || '').toLowerCase().trim();
 
       const filtered = validList.filter(item => {
-        const title = (item['عنوان النشاط'] || item.title || '').toLowerCase();
+        const title = (item['عنوان النشاط'] || item['العنوان'] || item['عنوان الفعالية'] || item.title || '').toLowerCase();
         const cat = (item['التصنيف'] || item.category || '').trim();
-        const desc = (item['الوصف'] || item.desc || '').toLowerCase();
+        const desc = (item['الوصف'] || item['الوصف المختصر'] || item['التفاصيل الكاملة'] || item.desc || '').toLowerCase();
 
         const matchCat = (currentFilter === 'all') || (cat === currentFilter);
         const matchQuery = !query || title.includes(query) || desc.includes(query);
@@ -442,21 +443,20 @@
       }
 
       container.innerHTML = filtered.map((item, idx) => {
-        const title = item['عنوان النشاط'] || item.title || 'نشاط بدون عنوان';
+        const title = item['عنوان النشاط'] || item['العنوان'] || item['عنوان الفعالية'] || item.title || 'نشاط بدون عنوان';
         const category = item['التصنيف'] || item.category || 'فعالية عامة';
         const date = item['التاريخ'] || item.date || 'الموعد يحدد لاحقاً';
         const location = item['المكان'] || item.location || 'حرم فرع صور';
         const rawImageUrl = item['رابط الصورة'] || item.imageUrl || '';
-        const desc = item['الوصف'] || item.desc || '';
+        const desc = item['الوصف'] || item['الوصف المختصر'] || item['التفاصيل الكاملة'] || item.desc || '';
 
-        // تقسيم الروابط لاستخراج صورة الغلاف وعدد الصور الإجمالي
         const imageArray = rawImageUrl.split(',').map(s => s.trim()).filter(Boolean);
         const coverImage = imageArray[0] || '';
         const extraImagesCount = imageArray.length > 1 ? imageArray.length : 0;
 
         const imageThumbHtml = coverImage ? `
           <div class="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
-            <img src="${coverImage}" alt="${title}" class="w-full h-full object-cover" onerror="this.parentElement.style.display='none'">
+            <img src="${coverImage}" alt="${title}" referrerpolicy="no-referrer" class="w-full h-full object-cover" onerror="this.parentElement.style.display='none'">
             ${extraImagesCount > 0 ? `
               <span class="absolute bottom-0 right-0 bg-black/75 text-white font-mono text-[9px] px-1.5 py-0.5 rounded-tl-lg font-bold" title="${extraImagesCount} صور إجمالية">
                 +${extraImagesCount}
@@ -502,7 +502,7 @@
       lucide.createIcons();
     }
 
-    // جلب بيانات الأنشطة
+    // جلب البيانات من Google Sheets
     async function fetchLiveActivities(forceFresh = false) {
       const cached = localStorage.getItem('nadi_activities_cache');
       if (cached && !forceFresh) {
@@ -546,6 +546,7 @@
 
         liveActivitiesList.push({
           'عنوان النشاط': newActivity.title,
+          'العنوان': newActivity.title,
           'التصنيف': newActivity.category,
           'التاريخ': newActivity.date,
           'المكان': newActivity.location,
@@ -558,7 +559,6 @@
 
         addActivityForm.reset();
         
-        // إعادة تهيئة خانات الصور في الإضافة إلى حقل واحد أساسي
         const addContainer = document.getElementById('addImagesContainer');
         if (addContainer) {
           addContainer.innerHTML = `
@@ -597,13 +597,12 @@
       const target = liveActivitiesList[idx];
       if (!target) return;
 
-      document.getElementById('editActTitle').value = target['عنوان النشاط'] || target.title || '';
+      document.getElementById('editActTitle').value = target['عنوان النشاط'] || target['العنوان'] || target.title || '';
       document.getElementById('editActCategory').value = target['التصنيف'] || target.category || 'ورشة عمل تدريبية';
       document.getElementById('editActDate').value = target['التاريخ'] || target.date || '';
       document.getElementById('editActLocation').value = target['المكان'] || target.location || '';
-      document.getElementById('editActDesc').value = target['الوصف'] || target.desc || '';
+      document.getElementById('editActDesc').value = target['الوصف'] || target['الوصف المختصر'] || target['التفاصيل الكاملة'] || target.desc || '';
 
-      // تفكيك روابط الصور المحفوظة وعرضها في حقول ديناميكية
       const editContainer = document.getElementById('editImagesContainer');
       if (editContainer) {
         editContainer.innerHTML = '';
@@ -635,7 +634,7 @@
         if (currentEditActivityIndex === -1) return;
 
         const oldTarget = liveActivitiesList[currentEditActivityIndex];
-        const oldTitle = oldTarget ? (oldTarget['عنوان النشاط'] || oldTarget.title || '') : '';
+        const oldTitle = oldTarget ? (oldTarget['عنوان النشاط'] || oldTarget['العنوان'] || oldTarget.title || '') : '';
         const allImages = collectImagesFromContainer('editImagesContainer');
 
         const updated = {
@@ -648,7 +647,9 @@
         };
 
         liveActivitiesList[currentEditActivityIndex] = {
+          ...liveActivitiesList[currentEditActivityIndex],
           'عنوان النشاط': updated.title,
+          'العنوان': updated.title,
           'التصنيف': updated.category,
           'التاريخ': updated.date,
           'المكان': updated.location,
@@ -680,7 +681,7 @@
       const target = liveActivitiesList[index];
       if (!target) return;
 
-      const targetTitle = target['عنوان النشاط'] || target.title || '';
+      const targetTitle = target['عنوان النشاط'] || target['العنوان'] || target.title || '';
 
       openDeleteModal(`هل أنت متأكد من حذف فعالية (${targetTitle}) نهائياً؟`, async () => {
         liveActivitiesList.splice(index, 1);
@@ -721,8 +722,8 @@
       });
     });
 
-    // جلب البيانات فور تحميل الصفحة
-    fetchLiveActivities();
+    // جلب فوري ومحدث للبيانات فور تحميل الصفحة
+    fetchLiveActivities(true);
   </script>
 </body>
 </html>
