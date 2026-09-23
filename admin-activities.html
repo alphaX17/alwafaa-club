@@ -87,7 +87,7 @@
       </button>
     </div>
 
-    <!-- 1. نموذج إضافة نشاط جديد مع دعم إضافة عدة صور ديناميكياً -->
+    <!-- 1. نموذج إضافة نشاط جديد -->
     <section id="viewAdd" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
       <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
         <span class="text-xs font-bold text-gold-500">لوحة نشر وتوثيق الفعاليات</span>
@@ -128,7 +128,7 @@
           <label class="block text-xs font-bold mb-1">صور النشاط (الصورة الأولى هي الغلاف والخلفية الأساسية)</label>
           <div id="addImagesContainer" class="space-y-2.5">
             <div>
-              <input type="url" placeholder="رابط صورة البوستر / الغلاف الرئيسي (اختياري)" class="act-img-input w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+              <input type="url" placeholder="رابط صورة الغلاف المباشر (مثل: https://i.ibb.co/.../img.jpg)" class="act-img-input w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
             </div>
           </div>
 
@@ -139,8 +139,8 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold mb-1">شرح وتفاصيل النشاط *</label>
-          <textarea id="actDesc" rows="4" required placeholder="اكتب نبذة شاملة عن النشاط وأهدافه والجهات المشاركة..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 custom-scrollbar"></textarea>
+          <label class="block text-xs font-bold mb-1">شرح وتفاصيل النشاط الكاملة *</label>
+          <textarea id="actDesc" rows="4" required placeholder="اكتب نبذة شاملة عن النشاط وأهدافه والبرنامج الزمني..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 custom-scrollbar"></textarea>
         </div>
 
         <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
@@ -171,7 +171,7 @@
         </div>
       </div>
 
-      <!-- أزرار التصفية حسب التصنيف -->
+      <!-- أزرار التصفية -->
       <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-2">
         <button class="act-filter-btn active shrink-0 px-3 py-1 rounded-lg text-xs font-bold bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 transition" data-filter="all">الكل</button>
         <button class="act-filter-btn shrink-0 px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="ورشة عمل تدريبية">ورش عمل</button>
@@ -188,8 +188,6 @@
     </section>
 
   </main>
-
-  <!-- ==================== النوافذ المنبثقة ==================== -->
 
   <!-- نافذة تعديل بيانات النشاط -->
   <div id="editActivityModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
@@ -228,7 +226,6 @@
           </div>
         </div>
 
-        <!-- خانة الصور التفاعلية في نافذة التعديل -->
         <div class="space-y-2">
           <label class="block font-bold mb-1">صور النشاط (الصورة الأولى هي الغلاف والخلفية الأساسية)</label>
           <div id="editImagesContainer" class="space-y-2.5"></div>
@@ -239,7 +236,7 @@
         </div>
 
         <div>
-          <label class="block font-bold mb-1">شرح وتفاصيل الفعالية *</label>
+          <label class="block font-bold mb-1">شرح وتفاصيل الفعالية الكاملة *</label>
           <textarea id="editActDesc" rows="3" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 custom-scrollbar"></textarea>
         </div>
 
@@ -290,7 +287,14 @@
       document.getElementById('welcomeAdmin').textContent = `المشرف: ${activeAdmin}`;
     }
 
-    // إدارة الحقول الديناميكية للصور
+    // دالة ذكية لتنظيف واستخراج الروابط المباشرة حتى لو تم لصق كود HTML بالخطأ
+    function cleanDirectImageUrl(raw) {
+      if (!raw) return '';
+      let str = String(raw).trim();
+      const match = str.match(/https?:\/\/[^\s"'<>]+/);
+      return match ? match[0] : str;
+    }
+
     function addImageField(containerId, value = '') {
       const container = document.getElementById(containerId);
       if (!container) return;
@@ -300,11 +304,11 @@
       fieldWrapper.className = 'flex items-center gap-2';
 
       const placeholderText = isFirst 
-        ? "رابط صورة البوستر / الغلاف الرئيسي (اختياري)" 
+        ? "رابط صورة الغلاف المباشر (مثل: https://i.ibb.co/.../img.jpg)" 
         : `رابط صورة إضافية #${container.children.length + 1}`;
 
       fieldWrapper.innerHTML = `
-        <input type="url" value="${value}" placeholder="${placeholderText}" class="act-img-input w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+        <input type="url" value="${cleanDirectImageUrl(value)}" placeholder="${placeholderText}" class="act-img-input w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
         ${!isFirst ? `
           <button type="button" onclick="this.parentElement.remove()" class="p-3 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-500 hover:text-white transition shrink-0" title="إزالة هذا الحقل">
             <i data-lucide="x" class="w-4 h-4"></i>
@@ -322,7 +326,7 @@
       const inputs = container.querySelectorAll('.act-img-input');
       const urls = [];
       inputs.forEach(input => {
-        const val = input.value.trim();
+        const val = cleanDirectImageUrl(input.value);
         if (val) urls.push(val);
       });
       return urls.join(', ');
@@ -410,15 +414,15 @@
       });
     }
 
-    // عرض قائمة الأنشطة (مع التوافق الشامل لأسماء الأعمدة)
+    // عرض قائمة الأنشطة (متوافق مع كل أسماء الأعمدة في شيت الأنشطة)
     function renderActivityList(list) {
       const container = document.getElementById('activityListContainer');
       const badge = document.getElementById('activityCountBadge');
       if (!container) return;
 
-      // الفحص الشامل لكل مسميات الحقول
+      // فحص وجود العنوان بالاسم الصريح المكتوب في الشيت
       const validList = (list || []).filter(item => {
-        const title = item['عنوان النشاط'] || item['العنوان'] || item['عنوان الفعالية'] || item.title || '';
+        const title = item['العنوان'] || item['عنوان النشاط'] || item['عنوان الفعالية'] || item.title || '';
         return String(title).trim() !== '';
       });
 
@@ -427,9 +431,9 @@
       const query = (document.getElementById('activitySearchInput')?.value || '').toLowerCase().trim();
 
       const filtered = validList.filter(item => {
-        const title = (item['عنوان النشاط'] || item['العنوان'] || item['عنوان الفعالية'] || item.title || '').toLowerCase();
+        const title = (item['العنوان'] || item['عنوان النشاط'] || item.title || '').toLowerCase();
         const cat = (item['التصنيف'] || item.category || '').trim();
-        const desc = (item['الوصف'] || item['الوصف المختصر'] || item['التفاصيل الكاملة'] || item.desc || '').toLowerCase();
+        const desc = (item['التفاصيل الكاملة'] || item['الوصف'] || item.desc || '').toLowerCase();
 
         const matchCat = (currentFilter === 'all') || (cat === currentFilter);
         const matchQuery = !query || title.includes(query) || desc.includes(query);
@@ -443,14 +447,14 @@
       }
 
       container.innerHTML = filtered.map((item, idx) => {
-        const title = item['عنوان النشاط'] || item['العنوان'] || item['عنوان الفعالية'] || item.title || 'نشاط بدون عنوان';
+        const title = item['العنوان'] || item['عنوان النشاط'] || item.title || 'نشاط بدون عنوان';
         const category = item['التصنيف'] || item.category || 'فعالية عامة';
         const date = item['التاريخ'] || item.date || 'الموعد يحدد لاحقاً';
         const location = item['المكان'] || item.location || 'حرم فرع صور';
         const rawImageUrl = item['رابط الصورة'] || item.imageUrl || '';
-        const desc = item['الوصف'] || item['الوصف المختصر'] || item['التفاصيل الكاملة'] || item.desc || '';
+        const desc = item['التفاصيل الكاملة'] || item['الوصف'] || item.desc || '';
 
-        const imageArray = rawImageUrl.split(',').map(s => s.trim()).filter(Boolean);
+        const imageArray = String(rawImageUrl).split(',').map(s => cleanDirectImageUrl(s)).filter(Boolean);
         const coverImage = imageArray[0] || '';
         const extraImagesCount = imageArray.length > 1 ? imageArray.length : 0;
 
@@ -545,12 +549,13 @@
         };
 
         liveActivitiesList.push({
-          'عنوان النشاط': newActivity.title,
           'العنوان': newActivity.title,
+          'عنوان النشاط': newActivity.title,
           'التصنيف': newActivity.category,
           'التاريخ': newActivity.date,
           'المكان': newActivity.location,
           'رابط الصورة': newActivity.imageUrl,
+          'التفاصيل الكاملة': newActivity.desc,
           'الوصف': newActivity.desc
         });
 
@@ -563,7 +568,7 @@
         if (addContainer) {
           addContainer.innerHTML = `
             <div>
-              <input type="url" placeholder="رابط صورة البوستر / الغلاف الرئيسي (اختياري)" class="act-img-input w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+              <input type="url" placeholder="رابط صورة الغلاف المباشر (مثل: https://i.ibb.co/.../img.jpg)" class="act-img-input w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
             </div>
           `;
         }
@@ -588,7 +593,7 @@
       });
     }
 
-    // نافذة تعديل النشاط وتفكيك الصور ديناميكياً
+    // نافذة تعديل النشاط
     const editActivityModal = document.getElementById('editActivityModal');
     const editActivityForm = document.getElementById('editActivityForm');
 
@@ -597,17 +602,17 @@
       const target = liveActivitiesList[idx];
       if (!target) return;
 
-      document.getElementById('editActTitle').value = target['عنوان النشاط'] || target['العنوان'] || target.title || '';
+      document.getElementById('editActTitle').value = target['العنوان'] || target['عنوان النشاط'] || target.title || '';
       document.getElementById('editActCategory').value = target['التصنيف'] || target.category || 'ورشة عمل تدريبية';
       document.getElementById('editActDate').value = target['التاريخ'] || target.date || '';
       document.getElementById('editActLocation').value = target['المكان'] || target.location || '';
-      document.getElementById('editActDesc').value = target['الوصف'] || target['الوصف المختصر'] || target['التفاصيل الكاملة'] || target.desc || '';
+      document.getElementById('editActDesc').value = target['التفاصيل الكاملة'] || target['الوصف'] || target.desc || '';
 
       const editContainer = document.getElementById('editImagesContainer');
       if (editContainer) {
         editContainer.innerHTML = '';
         const rawImages = target['رابط الصورة'] || target.imageUrl || '';
-        const imagesList = rawImages.split(',').map(s => s.trim()).filter(Boolean);
+        const imagesList = String(rawImages).split(',').map(s => cleanDirectImageUrl(s)).filter(Boolean);
 
         if (imagesList.length === 0) {
           addImageField('editImagesContainer');
@@ -634,7 +639,7 @@
         if (currentEditActivityIndex === -1) return;
 
         const oldTarget = liveActivitiesList[currentEditActivityIndex];
-        const oldTitle = oldTarget ? (oldTarget['عنوان النشاط'] || oldTarget['العنوان'] || oldTarget.title || '') : '';
+        const oldTitle = oldTarget ? (oldTarget['العنوان'] || oldTarget['عنوان النشاط'] || oldTarget.title || '') : '';
         const allImages = collectImagesFromContainer('editImagesContainer');
 
         const updated = {
@@ -648,12 +653,13 @@
 
         liveActivitiesList[currentEditActivityIndex] = {
           ...liveActivitiesList[currentEditActivityIndex],
-          'عنوان النشاط': updated.title,
           'العنوان': updated.title,
+          'عنوان النشاط': updated.title,
           'التصنيف': updated.category,
           'التاريخ': updated.date,
           'المكان': updated.location,
           'رابط الصورة': updated.imageUrl,
+          'التفاصيل الكاملة': updated.desc,
           'الوصف': updated.desc
         };
 
@@ -681,7 +687,7 @@
       const target = liveActivitiesList[index];
       if (!target) return;
 
-      const targetTitle = target['عنوان النشاط'] || target['العنوان'] || target.title || '';
+      const targetTitle = target['العنوان'] || target['عنوان النشاط'] || target.title || '';
 
       openDeleteModal(`هل أنت متأكد من حذف فعالية (${targetTitle}) نهائياً؟`, async () => {
         liveActivitiesList.splice(index, 1);
@@ -722,7 +728,7 @@
       });
     });
 
-    // جلب فوري ومحدث للبيانات فور تحميل الصفحة
+    // جلب فوري من الشيت فور تحميل الصفحة
     fetchLiveActivities(true);
   </script>
 </body>
