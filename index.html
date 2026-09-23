@@ -6,7 +6,6 @@
   <title>نادي الوفاء | الجامعة اللبنانية الدولية في صور</title>
   <link rel="icon" type="image/png" href="logo.png">
 
-  
   <!-- خط تجوال الأكاديمي المتناسق -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -138,7 +137,7 @@
       </a>
     </div>
 
-    <!-- شبكة كروت الأنشطة (يتم ملؤها فورياً عبر الكاش لمنع الوميض) -->
+    <!-- شبكة كروت الأنشطة المعروضة بالرئيسية -->
     <div id="activitiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[160px]"></div>
   </main>
 
@@ -161,7 +160,6 @@
 
       <!-- قائمة الروابط الرئيسية المعتمدة -->
       <nav class="p-4 space-y-1.5">
-        
         <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
           <i data-lucide="layout-grid" class="w-4 h-4"></i>
           <span>الرئيسية (الأنشطة والإعلانات)</span>
@@ -201,6 +199,10 @@
           </div>
         </a>
 
+        <a href="archive.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="camera" class="w-4 h-4 text-slate-400"></i>
+          <span>أرشيف الفعاليات والأنشطة</span>
+        </a>
       </nav>
     </div>
 
@@ -260,7 +262,7 @@
 
   </div>
 
-  <!-- سكربت التحكم الشامل: الأيقونات + القائمة الجانبية + المظهر + السحب الحي + الذكاء الاصطناعي -->
+  <!-- ==================== السكربت البرمجي ==================== -->
   <script>
     lucide.createIcons();
 
@@ -288,7 +290,7 @@
     if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeSidebar);
     if (menuOverlay) menuOverlay.addEventListener('click', closeSidebar);
 
-    // 2. إدارة التبديل بين المظهر الصباحي والليلي
+    // 2. إدارة المظهر (النهاري والليلي)
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const themeIconContainer = document.getElementById('themeIconContainer');
     const themeText = document.getElementById('themeText');
@@ -321,13 +323,28 @@
       });
     }
 
-    // ==================== 3. ربط وسحب البيانات الحية بتسريع فوري ====================
+    // ==================== 3. جلب وعرض البيانات الحية ====================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
+
+    // استخراج وتنظيف الروابط
+    function cleanDirectImageUrl(raw) {
+      if (!raw) return '';
+      let str = String(raw).trim();
+      const match = str.match(/https?:\/\/[^\s"'<>]+/);
+      return match ? match[0] : str;
+    }
+
+    // فحص ما إذا كان النشاط مخفياً في الشيت (العمود H)
+    function isActivityHidden(act) {
+      if (!act) return false;
+      const status = String(act['الحالة'] || act['حالة النشاط'] || act.status || '').trim();
+      return status === 'مخفي' || status === 'hidden' || status === 'معطل';
+    }
 
     function renderHomePage(data) {
       if (!data) return;
 
-      // أ) تحديث شريط الإعلانات العاجلة (كما هو دون تعديل)
+      // أ) شريط الإعلانات العاجلة
       if (data.announcement) {
         const sec = document.getElementById('announcementSection');
         const txt = document.getElementById('announcementText');
@@ -350,27 +367,34 @@
         }
       }
 
-      // ب) تحديث كروت الأنشطة والفعاليات في الصفحة الرئيسية مع دعم الصور المتعددة
+      // ب) كروت الأنشطة: فحص خيار العرض بالرئيسية واستبعاد المخفي تماماً
       if (data.activities && Array.isArray(data.activities)) {
-        const homeActivities = data.activities.filter(act => String(act['عرض في الرئيسية'] || '').trim() === 'نعم');
+        const homeActivities = data.activities.filter(act => {
+          const isFeatured = String(act['عرض في الرئيسية'] || act['عرض في الرئسية'] || act.featured || '').trim() === 'نعم';
+          const isHidden = isActivityHidden(act);
+          const hasTitle = String(act['العنوان'] || act['عنوان النشاط'] || act.title || '').trim() !== '';
+
+          // الشرط الحاسم: معروض بالرئيسية + غير مخفي + يمتلك عنواناً
+          return isFeatured && !isHidden && hasTitle;
+        });
+
         const grid = document.getElementById('activitiesGrid');
         if (grid) {
           if (homeActivities.length === 0) {
             grid.innerHTML = `<div class="col-span-full py-12 text-center text-xs text-slate-400">لا توجد فعاليات معروضة حالياً في الصفحة الرئيسية.</div>`;
           } else {
-            grid.innerHTML = homeActivities.slice(0, 6).map(act => {
-              const title = act['العنوان'] || '';
-              const date = act['التاريخ'] || '';
-              const cat = act['التصنيف'] || 'نشاط جامعي';
-              const desc = act['الوصف المختصر'] || '';
+            grid.innerHTML = homeActivities.slice(0, 3).map(act => {
+              const title = act['العنوان'] || act['عنوان النشاط'] || act.title || 'فعالية جامعية';
+              const date = act['التاريخ'] || act.date || '';
+              const cat = act['التصنيف'] || act.category || 'نشاط جامعي';
+              const desc = act['التفاصيل الكاملة'] || act['الوصف المختصر'] || act['الوصف'] || act.desc || '';
               
-              // تقسيم الصور المتعددة
-              const rawImgs = act['رابط الصورة'] || '';
-              const imgs = String(rawImgs).split(',').map(u => u.trim()).filter(u => u.length > 0);
+              const rawImgs = act['رابط الصورة'] || act.imageUrl || '';
+              const imgs = String(rawImgs).split(',').map(u => cleanDirectImageUrl(u)).filter(Boolean);
               const coverImg = imgs[0] || '';
 
               const imgMarkup = coverImg 
-                ? `<img src="${coverImg}" alt="${title}" class="w-full h-full object-cover">`
+                ? `<img src="${coverImg}" alt="${title}" referrerpolicy="no-referrer" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400\\'><i data-lucide=\\'image\\' class=\\'w-10 h-10 opacity-40\\'></i></div>'; lucide.createIcons();">`
                 : `<div class="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400">
                      <i data-lucide="image" class="w-10 h-10 opacity-40"></i>
                    </div>`;
@@ -380,7 +404,7 @@
                 : '';
 
               return `
-                <article class="rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200">
+                <article class="rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200 shadow-sm">
                   <div>
                     <div class="h-44 relative flex items-center justify-center overflow-hidden bg-slate-100 dark:bg-slate-900">
                       ${imgMarkup}
@@ -393,7 +417,7 @@
                     </div>
                   </div>
                   <div class="px-5 py-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                    <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${date}</span>
+                    <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-3.5 h-3.5"></i> ${date}</span>
                     <a href="archive.html" class="text-gold-600 dark:text-gold-400 font-bold hover:underline flex items-center gap-1">
                       <span>التفاصيل</span>
                       <i data-lucide="arrow-left" class="w-3 h-3"></i>
@@ -409,32 +433,26 @@
     }
 
     async function fetchLiveHomeData() {
-      // 1. قراءة البيانات المخزنة محلياً وعرضها في جزء من الثانية
       const cached = localStorage.getItem('nadi_home_cache');
       if (cached) {
         try {
           renderHomePage(JSON.parse(cached));
-        } catch (e) {
-          console.warn("خطأ في قراءة الكاش:", e);
-        }
+        } catch (e) {}
       }
 
       if (!SCRIPT_URL) return;
 
-      // 2. فحص وتحديث البيانات من Google Sheets في الخلفية بصمت
       try {
-        const response = await fetch(SCRIPT_URL);
+        const response = await fetch(`${SCRIPT_URL}?req=home&bust=${Date.now()}`);
         const freshData = await response.json();
         renderHomePage(freshData);
         localStorage.setItem('nadi_home_cache', JSON.stringify(freshData));
-      } catch (err) {
-        console.warn("تعذر الاتصال بالجدول:", err);
-      }
+      } catch (err) {}
     }
 
     fetchLiveHomeData();
 
-    // ==================== 4. تشغيل المساعد الذكي التفاعلي ====================
+    // ==================== 4. المساعد الذكي التفاعلي ====================
     const toggleChatBtn = document.getElementById('toggleChatBtn');
     const closeChatBtn = document.getElementById('closeChatBtn');
     const chatWindow = document.getElementById('chatWindow');
@@ -564,11 +582,9 @@
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // الرد الاحتياطي المباشر
     function getFallbackResponse(text) {
       const q = text.toLowerCase().trim();
 
-      // 1. استفسارات الدكاترة وأعضاء الإدارة والإيميلات
       if (q.includes('غيا') || q.includes('سمرة') || q.includes('مالية') || q.includes('المالي')) {
         return 'البريد الإلكتروني للأستاذة غيا السمرة (المسؤولة المالية والإدارية): gheya.elsamra@liu.edu.lb';
       }
@@ -606,7 +622,6 @@
         return 'يمكنك تصفح ونسخ جميع إيميلات الأساتذة والإدارة في فرع صور مباشرة عبر صفحة "دليل الأساتذة والإدارة" (faculty.html).';
       }
 
-      // 2. ممثلو الاختصاصات للتواصل عبر واتساب
       if (q.includes('ميكانيك')) {
         return 'مسؤول اختصاص هندسة الميكانيك: رقم الواتساب للتواصل هو 71336458 (+961 71 336 458).';
       }
@@ -620,12 +635,10 @@
         return 'أرقام مسؤولي هذا الاختصاص قيد التحديث حالياً، ويمكنك طرح استفسارك مباشرة داخل مجموعة التوجيه الطلابي على واتساب.';
       }
 
-      // 3. مجموعات الواتساب وروابط الدعم
       if (q.includes('جروب') || q.includes('مجموعة') || q.includes('واتساب') || q.includes('رابط') || q.includes('لينك')) {
         return 'روابط مجموعات نادي الوفاء الرسمية على واتساب:\n- مجموعة الإعلانات الأساسية: https://chat.whatsapp.com/H5Gvs4LV3OaH7NQsuJpYFx\n- مجموعة التوجيه الطلابي: https://chat.whatsapp.com/Kdt9QVnMsmW2GguggFDuvs';
       }
 
-      // 4. خدمات المنحة، الكتب، وبنك الموارد
       if (q.includes('منحة') || q.includes('حسم') || q.includes('تقديم') || q.includes('طلب')) {
         return 'للتقديم على المنحة الطلابية: ادخل إلى صفحة "المنح الطلابية" عبر القائمة (☰) واملأ الاستمارة الإلكترونية مباشرة دون الحاجة لرفع أي ملفات PDF.';
       }
@@ -636,7 +649,6 @@
         return 'جميع الامتحانات النصفية والنهائية السابقة والمراجع متوفرة للتحميل المجاني المباشر دون تسجيل دخول في صفحة "بنك الموارد الرقمية" (resources.html).';
       }
 
-      // 5. الرد العام الترحيبي
       return 'أهلاً بك زميلي الطالب في نادي الوفاء (LIU فرع صور). أنا جاهز لمساعدتك في: المنحة الطلابية، الكتب الورقية، إيميلات الدكاترة، أو التواصل مع ممثلي الاختصاصات. ما هو استفسارك؟';
     }
 
