@@ -92,7 +92,7 @@
       <!-- أدوات الفرز والبحث -->
       <div class="flex flex-col md:flex-row gap-4 justify-between items-center pt-4 border-t border-slate-100 dark:border-slate-800">
         <div class="relative w-full md:w-80">
-          <input id="archiveSearch" type="text" placeholder="ابحث باسم الفعالية أو الموضوع..." class="w-full text-xs p-3 pr-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition">
+          <input id="archiveSearch" type="text" placeholder="ابحث باسم الفعالية، المكان أو الموضوع..." class="w-full text-xs p-3 pr-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition">
           <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3.5 right-3"></i>
         </div>
 
@@ -131,8 +131,8 @@
 
       <!-- مساحة معرض الصور داخل النافذة -->
       <div id="modalGalleryContainer" class="space-y-3">
-        <div id="modalMainImageBox" class="h-60 sm:h-72 bg-slate-900 rounded-2xl flex items-center justify-center text-slate-400 border border-slate-800 overflow-hidden">
-          <img id="modalMainImage" src="" alt="صورة الفعالية" class="w-full h-full object-contain hidden">
+        <div id="modalMainImageBox" class="h-60 sm:h-72 bg-slate-900 rounded-2xl flex items-center justify-center text-slate-400 border border-slate-800 overflow-hidden relative">
+          <img id="modalMainImage" src="" alt="صورة الفعالية" referrerpolicy="no-referrer" class="w-full h-full object-contain hidden" onerror="this.classList.add('hidden'); document.getElementById('modalImagePlaceholder').classList.remove('hidden');">
           <div id="modalImagePlaceholder" class="text-center">
             <i data-lucide="image" class="w-8 h-8 mx-auto opacity-40 mb-1"></i>
             <span class="text-[11px]">لا تتوفر صور ملحقة</span>
@@ -236,10 +236,21 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
     let activitiesData = [];
 
-    // استخراج مصفوفة روابط الصور
+    // دالة ذكية لتنظيف واستخراج الروابط المباشرة حتى لو كُتب كود HTML
+    function cleanDirectImageUrl(raw) {
+      if (!raw) return '';
+      let str = String(raw).trim();
+      const match = str.match(/https?:\/\/[^\s"'<>]+/);
+      return match ? match[0] : str;
+    }
+
+    // استخراج مصفوفة روابط الصور النقية
     function parseImages(raw) {
       if (!raw) return [];
-      return String(raw).split(',').map(u => u.trim()).filter(u => u.length > 0);
+      return String(raw)
+        .split(',')
+        .map(u => cleanDirectImageUrl(u))
+        .filter(u => u && u.length > 0);
     }
 
     // رسم كروت الأنشطة
@@ -253,12 +264,12 @@
       }
 
       grid.innerHTML = list.map((act, idx) => {
-        // قراءة المسميات بالتوافق الشامل
-        const title = act['عنوان النشاط'] || act['العنوان'] || act.title || 'فعالية بدون عنوان';
+        // قراءة المسميات بالتوافق الشامل مع جدول الأنشطة
+        const title = act['العنوان'] || act['عنوان النشاط'] || act.title || 'فعالية بدون عنوان';
         const date = act['التاريخ'] || act.date || '';
         const location = act['المكان'] || act.location || '';
         const rawCat = act['التصنيف'] || act.category || 'فعالية عامة';
-        const desc = act['الوصف'] || act['الوصف المختصر'] || act['التفاصيل الكاملة'] || act.desc || '';
+        const desc = act['التفاصيل الكاملة'] || act['الوصف'] || act['الوصف المختصر'] || act.desc || '';
         const imgs = parseImages(act['رابط الصورة'] || act.imageUrl);
         const coverImg = imgs[0] || '';
 
@@ -281,7 +292,7 @@
         else if (catCode === 'honoring') badgeBg = "bg-amber-600";
 
         const imgMarkup = coverImg 
-          ? `<img src="${coverImg}" alt="${title}" class="w-full h-full object-cover">`
+          ? `<img src="${coverImg}" alt="${title}" referrerpolicy="no-referrer" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400\\'><i data-lucide=\\'image\\' class=\\'w-12 h-12 opacity-30\\'></i></div>'; lucide.createIcons();">`
           : `<div class="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400">
                <i data-lucide="image" class="w-12 h-12 opacity-30"></i>
              </div>`;
@@ -290,8 +301,10 @@
           ? `<span class="absolute bottom-3 left-3 px-2 py-0.5 rounded bg-black/75 backdrop-blur-sm text-white text-[10px] font-bold flex items-center gap-1 shadow-sm"><i data-lucide="images" class="w-3 h-3"></i> ${imgs.length} صور</span>`
           : '';
 
+        const searchMetadata = `${title} ${rawCat} ${desc} ${location}`.toLowerCase();
+
         return `
-          <article class="event-card rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200 shadow-sm" data-category="${catCode}" data-title="${title.toLowerCase()}">
+          <article class="event-card rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200 shadow-sm" data-category="${catCode}" data-title="${searchMetadata}">
             <div>
               <div class="h-48 relative flex items-center justify-center overflow-hidden bg-slate-100 dark:bg-slate-900">
                 ${imgMarkup}
@@ -362,10 +375,10 @@
       const act = activitiesData[index];
       if (!act) return;
 
-      const title = act['عنوان النشاط'] || act['العنوان'] || act.title || 'فعالية بدون عنوان';
+      const title = act['العنوان'] || act['عنوان النشاط'] || act.title || 'فعالية بدون عنوان';
       const date = act['التاريخ'] || act.date || '';
       const cat = act['التصنيف'] || act.category || 'فعالية';
-      const desc = act['الوصف'] || act['التفاصيل الكاملة'] || act['الوصف المختصر'] || act.desc || '';
+      const desc = act['التفاصيل الكاملة'] || act['الوصف'] || act['الوصف المختصر'] || act.desc || '';
       const location = act['المكان'] || act.location || '';
       const imgs = parseImages(act['رابط الصورة'] || act.imageUrl);
 
@@ -396,9 +409,9 @@
 
         if (imgs.length > 1) {
           thumbs.classList.remove('hidden');
-          thumbs.innerHTML = imgs.map((src) => `
-            <button type="button" onclick="changeMainImage('${src}')" class="flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 border-slate-700 hover:border-gold-500 focus:border-gold-500 transition">
-              <img src="${src}" alt="مصغرة" class="w-full h-full object-cover">
+          thumbs.innerHTML = imgs.map((src, i) => `
+            <button type="button" onclick="changeMainImage('${src}', this)" class="modal-thumb-btn flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 ${i === 0 ? 'border-gold-500' : 'border-slate-700'} hover:border-gold-500 transition">
+              <img src="${src}" alt="مصغرة" referrerpolicy="no-referrer" class="w-full h-full object-cover">
             </button>
           `).join('');
         } else {
@@ -419,9 +432,18 @@
       lucide.createIcons();
     };
 
-    window.changeMainImage = function(src) {
+    window.changeMainImage = function(src, btnElement) {
       const mainImg = document.getElementById('modalMainImage');
       if (mainImg) mainImg.src = src;
+
+      if (btnElement) {
+        document.querySelectorAll('.modal-thumb-btn').forEach(b => {
+          b.classList.remove('border-gold-500');
+          b.classList.add('border-slate-700');
+        });
+        btnElement.classList.add('border-gold-500');
+        btnElement.classList.remove('border-slate-700');
+      }
     };
 
     window.closeEventModal = function() {
@@ -445,11 +467,11 @@
 
       eventCards.forEach(card => {
         const category = card.getAttribute('data-category') || '';
-        const title = card.getAttribute('data-title') || '';
+        const titleData = card.getAttribute('data-title') || '';
         const cardText = card.innerText.toLowerCase();
 
         const matchesCat = (currentCategory === 'all') || (category === currentCategory);
-        const matchesQuery = !query || title.includes(query) || cardText.includes(query);
+        const matchesQuery = !query || titleData.includes(query) || cardText.includes(query);
 
         if (matchesCat && matchesQuery) {
           card.classList.remove('hidden');
