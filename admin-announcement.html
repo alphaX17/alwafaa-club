@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إدارة الإعلانات العاجلة | نادي الوفاء - فرع صور</title>
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Tajawal', 'sans-serif'] },
+          colors: {
+            gold: { 400: '#fbbf24', 500: '#d97706', 600: '#b45309' },
+            clubNavy: { light: '#1e3a8a', dark: '#070b14', cardDark: '#111b33', borderDark: '#1e293b' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+  </style>
+
+  <!-- فحص الجلسة قبل التحميل -->
+  <script>
+    if (!sessionStorage.getItem('nadi_admin_session')) {
+      window.location.replace('admin.html');
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen flex flex-col justify-between">
+
+  <!-- ==================== الشريط العلوي ==================== -->
+  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="admin.html" class="p-2 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-600 dark:text-slate-300 transition" title="الرجوع للبوابة الرئيسية">
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+      <img src="logo.png" alt="شعار النادي" class="w-9 h-9 object-contain">
+      <div>
+        <div class="flex items-center gap-2">
+          <h2 class="text-sm font-bold text-slate-900 dark:text-white">إدارة الإعلانات العاجلة</h2>
+          <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20">فرع صور</span>
+        </div>
+        <p id="welcomeAdmin" class="text-[11px] text-slate-400">التحكم في الشريط التنبيهي أعلى الصفحة الرئيسية</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
+        <span class="themeIconContainer flex items-center justify-center"></span>
+        <span class="themeText">الليلي</span>
+      </button>
+
+      <a href="admin.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition">
+        <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+        <span class="hidden sm:inline">البوابة المركزية</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ==================== المحتوى والتعديل ==================== -->
+  <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-8 space-y-6">
+
+    <!-- معاينة حية لشكل الإعلان كما سيظهر للطلاب -->
+    <div class="space-y-2">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+          <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+          معاينة حية ومباشرة للشريط كما يظهر في المنصة
+        </span>
+        <span id="previewStatusBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+          مفعل حالياً
+        </span>
+      </div>
+
+      <div id="livePreviewBanner" class="rounded-2xl border border-gold-500/30 bg-amber-50 dark:bg-[#17120a] p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm shadow-sm transition-all">
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <span class="flex-shrink-0 p-1.5 rounded-md bg-gold-500/20 text-gold-600 dark:text-gold-400">
+            <i data-lucide="bell" class="w-4 h-4"></i>
+          </span>
+          <p class="text-slate-800 dark:text-amber-100/90 font-medium text-xs sm:text-sm">
+            <strong class="text-gold-600 dark:text-gold-400">إعلان هام:</strong>
+            <span id="previewText">تم فتح باب التقديم للمنحة الطلابية السنوية التابعة لنادي الوفاء.</span>
+          </p>
+        </div>
+        <div class="w-full sm:w-auto text-center px-4 py-1.5 rounded-lg bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow">
+          <span id="previewBtnText">التقديم المباشر</span>
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- نموذج تعديل الإعلان -->
+    <section class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
+      <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+        <span class="text-xs font-bold text-gold-500">التحكم المركزي</span>
+        <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">تعديل بيانات ورابط الإعلان العاجل</h3>
+      </div>
+
+      <form id="announcementForm" class="space-y-5">
+        
+        <!-- 1. نص الإعلان -->
+        <div>
+          <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">نص الإعلان التنبيهي *</label>
+          <textarea id="annText" rows="3" required placeholder="اكتب نص الإعلان الذي سيظهر للطلاب في أعلى الموقع..." class="w-full text-xs p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- 2. نص الزر -->
+          <div>
+            <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">نص الزر التفاعلي *</label>
+            <input id="annBtnText" type="text" required placeholder="مثال: التقديم المباشر، تصفح الكتب، استكشف..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition">
+          </div>
+
+          <!-- 3. اختيار القسم المطلوب مباشرة -->
+          <div>
+            <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">القسم المستهدف عند ضغط الزر *</label>
+            <select id="annTargetPage" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition">
+              <option value="scholarship.html">بوابة المنح الطلابية (التسجيل المباشر)</option>
+              <option value="books.html">مكتبة استعارة وتبرع الكتب الورقية</option>
+              <option value="resources.html">بنك الموارد الرقمية والامتحانات السابقة</option>
+              <option value="archive.html">أرشيف الفعاليات والأنشطة الجامعية</option>
+              <option value="faculty.html">دليل الأساتذة والساعات المكتبية</option>
+              <option value="guidance.html">شبكة التوجيه ومجموعات الواتساب</option>
+              <option value="index.html">الصفحة الرئيسية</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 4. تفعيل الإعلان (نقاط اختيار نعم / لا) -->
+        <div class="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#0c1427] space-y-2">
+          <label class="block text-xs font-bold text-slate-900 dark:text-white">
+            تفعيل وعرض الإعلان في المنصة <span class="text-rose-500">*</span>
+          </label>
+          
+          <div class="flex items-center gap-8 pt-1">
+            <label class="inline-flex items-center gap-2.5 cursor-pointer text-xs font-bold text-slate-800 dark:text-slate-200">
+              <input type="radio" id="activeYes" name="annActiveRadio" value="نعم" checked class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500">
+              <span>نعم (مفعل ومعروض للطلاب)</span>
+            </label>
+
+            <label class="inline-flex items-center gap-2.5 cursor-pointer text-xs font-bold text-slate-800 dark:text-slate-200">
+              <input type="radio" id="activeNo" name="annActiveRadio" value="لا" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500">
+              <span>لا (إخفاء وتعطيل الإعلان)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- زر الحفظ والإرسال للسيرفر -->
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <div id="saveStatusMsg" class="hidden text-xs font-bold text-emerald-500 flex items-center gap-1.5">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>تم حفظ ونشر الإعلان بنجاح في المنصة!</span>
+          </div>
+
+          <button id="saveBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+            <i data-lucide="save" class="w-4 h-4"></i>
+            <span>حفظ ونشر التعديل فوراً</span>
+          </button>
+        </div>
+
+      </form>
+    </section>
+
+  </main>
+
+  <!-- ==================== التذييل السفلي ==================== -->
+  <footer class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
+    نادي الوفاء — الجامعة اللبنانية الدولية في صور • إدارة الإعلانات
+  </footer>
+
+  <!-- ==================== السكربت البرمجي ==================== -->
+  <script>
+    lucide.createIcons();
+
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
+
+    const activeAdmin = sessionStorage.getItem('nadi_admin_session');
+    if (activeAdmin) {
+      document.getElementById('welcomeAdmin').textContent = `المشرف: ${activeAdmin}`;
+    }
+
+    // عناصر المعاينة الحية
+    const annText = document.getElementById('annText');
+    const annBtnText = document.getElementById('annBtnText');
+    const previewText = document.getElementById('previewText');
+    const previewBtnText = document.getElementById('previewBtnText');
+    const previewStatusBadge = document.getElementById('previewStatusBadge');
+    const livePreviewBanner = document.getElementById('livePreviewBanner');
+
+    function updateLivePreview() {
+      if (previewText) previewText.textContent = annText.value.trim() || 'اكتب نص الإعلان لمعاينته...';
+      if (previewBtnText) previewBtnText.textContent = annBtnText.value.trim() || 'زر الانتقال';
+
+      const isYes = document.getElementById('activeYes').checked;
+      if (previewStatusBadge && livePreviewBanner) {
+        if (isYes) {
+          previewStatusBadge.textContent = 'مفعل حالياً';
+          previewStatusBadge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20';
+          livePreviewBanner.classList.remove('opacity-40');
+        } else {
+          previewStatusBadge.textContent = 'معطل ومخفي';
+          previewStatusBadge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20';
+          livePreviewBanner.classList.add('opacity-40');
+        }
+      }
+    }
+
+    annText.addEventListener('input', updateLivePreview);
+    annBtnText.addEventListener('input', updateLivePreview);
+    document.querySelectorAll('input[name="annActiveRadio"]').forEach(r => r.addEventListener('change', updateLivePreview));
+
+    // جلب بيانات الإعلان الحالية من Google Sheets عند فتح الصفحة
+    async function loadCurrentAnnouncement() {
+      if (!SCRIPT_URL) return;
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=announcement&bust=${Date.now()}`);
+        const data = await res.json();
+        if (data.announcement) {
+          annText.value = data.announcement.text || '';
+          annBtnText.value = data.announcement.btnText || 'التقديم المباشر';
+          
+          const targetPage = document.getElementById('annTargetPage');
+          if (targetPage && data.announcement.btnLink) {
+            targetPage.value = data.announcement.btnLink;
+          }
+
+          if (data.announcement.active === false || String(data.announcement.active).toLowerCase() === 'false') {
+            document.getElementById('activeNo').checked = true;
+          } else {
+            document.getElementById('activeYes').checked = true;
+          }
+          updateLivePreview();
+        }
+      } catch (e) {}
+    }
+
+    // إرسال وحفظ التعديلات إلى السيرفر والشيت
+    const announcementForm = document.getElementById('announcementForm');
+    if (announcementForm) {
+      announcementForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const saveBtn = document.getElementById('saveBtn');
+        const saveStatusMsg = document.getElementById('saveStatusMsg');
+
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = `<span>جاري الحفظ والنشر...</span>`;
+        if (saveStatusMsg) saveStatusMsg.classList.add('hidden');
+
+        const activeVal = document.querySelector('input[name="annActiveRadio"]:checked').value;
+        const targetLink = document.getElementById('annTargetPage').value;
+
+        const payload = {
+          action: "update_announcement",
+          text: annText.value.trim(),
+          btnText: annBtnText.value.trim(),
+          btnLink: targetLink,
+          active: activeVal
+        };
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          // تفريغ كاش الصفحة الرئيسية محلياً لكي ينعكس التعديل فوراً
+          localStorage.removeItem('nadi_home_cache');
+
+          if (saveStatusMsg) {
+            saveStatusMsg.classList.remove('hidden');
+            setTimeout(() => saveStatusMsg.classList.add('hidden'), 4000);
+          }
+        } catch (err) {
+          alert("تعذر الاتصال بالسيرفر، يرجى المحاولة ثانية");
+        } finally {
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = `<i data-lucide="save" class="w-4 h-4"></i><span>حفظ ونشر التعديل فوراً</span>`;
+          lucide.createIcons();
+        }
+      });
+    }
+
+    // إدارة المظهر (النهاري / الليلي)
+    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+
+    function applyTheme(isDark) {
+      const html = document.documentElement;
+      const icons = document.querySelectorAll('.themeIconContainer');
+      const texts = document.querySelectorAll('.themeText');
+      if (isDark) {
+        html.classList.add('dark');
+        icons.forEach(i => i.innerHTML = moonSvg);
+        texts.forEach(t => t.textContent = 'الليلي');
+      } else {
+        html.classList.remove('dark');
+        icons.forEach(i => i.innerHTML = sunSvg);
+        texts.forEach(t => t.textContent = 'النهاري');
+      }
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      applyTheme(!isDark);
+      localStorage.setItem('clubTheme', !isDark ? 'dark' : 'light');
+    }
+
+    applyTheme(localStorage.getItem('clubTheme') !== 'light');
+
+    // تشغيل الجلب فور فتح الصفحة
+    loadCurrentAnnouncement();
+  </script>
+</body>
+</html>
