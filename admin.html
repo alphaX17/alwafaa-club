@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بوابة المشرفين | نادي الوفاء - فرع صور</title>
+  <title>بوابة المشرفين المركزية | نادي الوفاء - فرع صور</title>
   <link rel="icon" type="image/png" href="logo.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,318 +28,315 @@
   </script>
   <style>
     body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative">
+<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen flex flex-col justify-between">
 
-  <!-- ==================== 1. بوابة تسجيل الدخول ==================== -->
-  <div id="loginGate" class="min-h-screen flex flex-col items-center justify-center p-4 relative">
-    <div class="absolute top-5 left-5">
-      <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark text-xs font-semibold shadow-sm">
-        <span class="themeIconContainer flex items-center"></span>
-        <span class="themeText">الليلي</span>
-      </button>
-    </div>
-
-    <div class="w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-2xl space-y-6">
-      <div class="text-center space-y-2">
-        <img src="logo.png" alt="نادي الوفاء" class="w-16 h-16 mx-auto object-contain mb-2">
-        <h1 class="text-xl font-black text-slate-900 dark:text-white">بوابة مشرفي منصة نادي الوفاء</h1>
-        <p class="text-xs text-slate-500 dark:text-slate-400">لوحة الإدارة المركزية — فرع صور</p>
-      </div>
-
-      <form id="loginForm" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">اسم المشرف الثلاثي *</label>
-          <input id="adminName" type="text" required placeholder="الاسم الثلاثي للمشرف المعتمد" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">رقم الملف الجامعي (Student ID) *</label>
-          <input id="adminID" type="text" required placeholder="مثال: 42130000" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left" dir="ltr">
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">الرمز السري الخاص باللوحة (Admin Key) *</label>
-          <input id="adminKey" type="password" required placeholder="••••••••" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left" dir="ltr">
-        </div>
-
-        <button type="submit" class="w-full py-3 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-lg mt-2">
-          <i data-lucide="lock-open" class="w-4 h-4"></i>
-          <span>الدخول إلى لوحة التحكم</span>
-        </button>
-      </form>
-
-      <div id="loginError" class="hidden p-3 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs text-center font-medium">
-        البيانات المدخلة أو الرمز السري غير صحيح. يرجى مراجعة إدارة النادي.
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== 2. لوحة التحكم المركزية (Hub) ==================== -->
-  <div id="adminDashboard" class="hidden min-h-screen flex flex-col">
-
-    <!-- الهيدر العلوي -->
-    <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 flex items-center justify-between">
+  <!-- ==================== الشريط العلوي ==================== -->
+  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 transition-colors">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <img src="logo.png" alt="شعار النادي" class="w-9 h-9 object-contain">
+        <img src="logo.png" alt="شعار النادي" class="w-10 h-10 object-contain">
         <div>
           <div class="flex items-center gap-2">
-            <h2 class="text-sm font-bold text-slate-900 dark:text-white">بوابة المشرفين المركزية</h2>
+            <h1 class="text-base font-bold text-slate-900 dark:text-white">بوابة المشرفين المركزية</h1>
             <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20">فرع صور</span>
           </div>
-          <p id="welcomeAdmin" class="text-[11px] text-slate-400">مرحباً بك في نظام الإدارة</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400">لوحة التحكم وإدارة خدمات منصة نادي الوفاء</p>
         </div>
       </div>
 
       <div class="flex items-center gap-3">
-        <a href="index.html" target="_blank" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition" title="معاينة الموقع للطلاب">
-          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-          <span>زيارة المنصة</span>
-        </a>
-
-        <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
-          <span class="themeIconContainer flex items-center justify-center"></span>
-          <span class="themeText">الليلي</span>
+        <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
+          <span id="themeIconContainer" class="flex items-center justify-center"></span>
+          <span id="themeText">الليلي</span>
         </button>
 
-        <button onclick="openLogoutModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-600 dark:text-rose-400 text-xs font-bold transition">
+        <a href="index.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 transition">
+          <i data-lucide="home" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">الرئيسية</span>
+        </a>
+
+        <button id="logoutBtn" onclick="adminLogout()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-600 hover:text-white text-rose-600 dark:text-rose-400 text-xs font-bold transition" title="تسجيل الخروج">
           <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
           <span>خروج</span>
         </button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <!-- مساحة الكروت المركزية -->
-    <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-8 space-y-6">
-      
-      <div class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <span class="text-xs font-bold text-gold-500">نظام الإدارة المستقل</span>
-          <h2 class="text-xl font-black text-slate-900 dark:text-white mt-1">أقسام إدارة محتوى منصة نادي الوفاء</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">اختر القسم المطلوب لإدارة وتحديث بياناته بشكل مخصص ومستقل.</p>
+  <!-- ==================== المحتوى الرئيسي ==================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-8 flex items-center justify-center">
+
+    <!-- 1. شاشة تسجيل الدخول السحابية المحمية -->
+    <div id="loginView" class="w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-xl space-y-6">
+      <div class="text-center space-y-2">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500">
+          <i data-lucide="shield-check" class="w-7 h-7"></i>
         </div>
+        <h2 class="text-lg font-black text-slate-900 dark:text-white">تسجيل دخول المشرفين</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+          يرجى إدخال رقم ملفك الجامعي المسجل ورمز المرور السحابي الخاص بك.
+        </p>
       </div>
 
-      <!-- شبكة الأقسام الخمسة -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <form id="adminLoginForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">رقم الملف الجامعي (Student ID) *</label>
+          <div class="relative">
+            <input id="loginStudentId" type="text" required placeholder="مثال: 42130000" class="w-full text-xs p-3 pr-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 font-mono text-left" dir="ltr">
+            <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute top-3.5 right-3"></i>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">الرمز السري الخاص *</label>
+          <div class="relative">
+            <input id="loginPasscode" type="password" required placeholder="••••••••" class="w-full text-xs p-3 pr-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 font-mono text-left" dir="ltr">
+            <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute top-3.5 right-3"></i>
+          </div>
+        </div>
+
+        <div id="loginErrorMsg" class="hidden p-3 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs text-center font-medium"></div>
+
+        <button id="loginSubmitBtn" type="submit" class="w-full py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+          <i data-lucide="key-round" class="w-4 h-4"></i>
+          <span>التحقق والدخول إلى النظام</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- 2. شبكة الأقسام المركزية (تظهر فقط بعد نجاح تسجيل الدخول) -->
+    <div id="dashboardView" class="hidden w-full space-y-8">
+      
+      <!-- رسالة الترحيب بالمشرف -->
+      <div class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold text-gold-500">الجلسة نشطة وموثقة</span>
+          <h2 id="adminWelcomeTitle" class="text-lg font-black text-slate-900 dark:text-white mt-0.5">أهلاً بك، مشرف المنصة</h2>
+          <p class="text-xs text-slate-400">اختر القسم الذي تود إدارته وتحديث بياناته الحية في قاعدة البيانات.</p>
+        </div>
+        <button onclick="adminLogout()" class="self-start sm:self-auto flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-600 hover:text-white text-rose-600 dark:text-rose-400 text-xs font-bold transition">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          <span>تسجيل الخروج</span>
+        </button>
+      </div>
+
+      <!-- كروت الأقسام الخمسة المستقلة -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
-        <!-- كرت مكتبة الكتب الورقية -->
-        <a href="admin-books.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 shadow-sm transition group flex flex-col justify-between">
+        <!-- 1. مكتبة الكتب الورقية -->
+        <a href="admin-books.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-gold-500 flex items-center justify-center group-hover:scale-105 transition">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center group-hover:scale-105 transition">
               <i data-lucide="book-open" class="w-6 h-6"></i>
             </div>
-            <div>
-              <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-gold-500 transition">مكتبة الكتب الورقية</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                إدارة الكتب المتوفرة، طلبات الاستعارة والتبرعات، وسجل المتابعة والاسترداد عبر منظومة الـ 3 جداول.
-              </p>
-            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">إدارة مكتبة الكتب الورقية</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              إضافة كتب جديدة، إدارة المخزون، معالجة طلبات الاستعارة والتبرعات، وسجل الإعارات والاسترداد.
+            </p>
           </div>
-          <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-gold-500">
-            <span>فتح إدارة الكتب</span>
-            <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition"></i>
+          <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-gold-500">
+            <span>فتح لوحة الكتب</span>
+            <i data-lucide="chevron-left" class="w-4 h-4 group-hover:-translate-x-1 transition"></i>
           </div>
         </a>
 
-        <!-- كرت دليل الأساتذة -->
-        <a href="admin-faculty.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 shadow-sm transition group flex flex-col justify-between">
+        <!-- 2. الأنشطة والفعاليات -->
+        <a href="admin-activities.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
           <div class="space-y-3">
             <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center group-hover:scale-105 transition">
-              <i data-lucide="users" class="w-6 h-6"></i>
+              <i data-lucide="calendar" class="w-6 h-6"></i>
             </div>
-            <div>
-              <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-gold-500 transition">دليل الأساتذة والإدارة</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                تحديث قائمة الهيئة التعليمية والإدارية، البريد الجامعي، مكاتب الدكاترة، والساعات المكتبية الرسمية.
-              </p>
-            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">الأنشطة والفعاليات</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              نشر ورش العمل والندوات والمعارض، إضافة ألبومات صور متعددة، وخيارات العرض في الرئيسية والإخفاء.
+            </p>
           </div>
-          <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-gold-500">
-            <span>فتح دليل الأساتذة</span>
-            <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition"></i>
+          <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-gold-500">
+            <span>فتح لوحة الأنشطة</span>
+            <i data-lucide="chevron-left" class="w-4 h-4 group-hover:-translate-x-1 transition"></i>
           </div>
         </a>
 
-        <!-- كرت الموارد والامتحانات -->
-        <a href="admin-resources.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 shadow-sm transition group flex flex-col justify-between">
+        <!-- 3. دليل الأساتذة والإدارة -->
+        <a href="admin-faculty.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center group-hover:scale-105 transition">
+              <i data-lucide="users" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">دليل الأساتذة والإدارة</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              تحديث بيانات الكادر التعليمي، البريد الجامعي الرسمي، أماكن المكاتب، والساعات المكتبية للأساتذة.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-gold-500">
+            <span>فتح لوحة الأساتذة</span>
+            <i data-lucide="chevron-left" class="w-4 h-4 group-hover:-translate-x-1 transition"></i>
+          </div>
+        </a>
+
+        <!-- 4. بنك الموارد والامتحانات -->
+        <a href="admin-resources.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
           <div class="space-y-3">
             <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center group-hover:scale-105 transition">
               <i data-lucide="folder-down" class="w-6 h-6"></i>
             </div>
-            <div>
-              <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-gold-500 transition">الموارد والامتحانات</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                رفع وإدارة نماذج الامتحانات النصفية والنهائية، السلايدات، والملخصات المعتمدة لمختلف الكليات.
-              </p>
-            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">الموارد والامتحانات</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              إضافة نماذج الامتحانات النصفية والنهائية، الملخصات الشاملة، وروابط ملفات Google Drive للطلاب.
+            </p>
           </div>
-          <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-gold-500">
+          <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-gold-500">
             <span>فتح بنك الموارد</span>
-            <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition"></i>
+            <i data-lucide="chevron-left" class="w-4 h-4 group-hover:-translate-x-1 transition"></i>
           </div>
         </a>
 
-        <!-- كرت التوجيه والمجموعات -->
-        <a href="admin-guidance.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 shadow-sm transition group flex flex-col justify-between">
-          <div class="space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center group-hover:scale-105 transition">
-              <i data-lucide="message-circle" class="w-6 h-6"></i>
-            </div>
-            <div>
-              <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-gold-500 transition">التوجيه والمجموعات</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                تعديل وتحديث بيانات ممثلي التخصصات وروابط مجموعات واتساب الرسمية المخصصة لكل دفعة.
-              </p>
-            </div>
-          </div>
-          <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-gold-500">
-            <span>فتح شبكة التوجيه</span>
-            <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition"></i>
-          </div>
-        </a>
-
-        <!-- كرت الأنشطة والفعاليات -->
-        <a href="admin-activities.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 shadow-sm transition group flex flex-col justify-between">
+        <!-- 5. شبكة التوجيه والتواصل -->
+        <a href="admin-guidance.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
           <div class="space-y-3">
             <div class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center group-hover:scale-105 transition">
-              <i data-lucide="calendar" class="w-6 h-6"></i>
+              <i data-lucide="message-circle" class="w-6 h-6"></i>
             </div>
-            <div>
-              <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-gold-500 transition">الأنشطة والفعاليات</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                نشر وتوثيق المعارض، ورش العمل، والندوات، وتعديل بوسترات الفعاليات ومواعيدها الرسمية.
-              </p>
-            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">التوجيه والمجموعات</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              إدارة ممثلي الاختصاصات، المرشدين الأكاديميين للفرع، وروابط مجموعات الواتساب الرسمية لكل كلية.
+            </p>
           </div>
-          <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-gold-500">
-            <span>فتح إدارة الأنشطة</span>
-            <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition"></i>
+          <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-gold-500">
+            <span>فتح شبكة التوجيه</span>
+            <i data-lucide="chevron-left" class="w-4 h-4 group-hover:-translate-x-1 transition"></i>
           </div>
         </a>
 
       </div>
-    </main>
-  </div>
-
-  <!-- نافذة تسجيل الخروج -->
-  <div id="logoutModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="w-full max-w-md p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-4">
-      <div class="flex items-center gap-3 text-gold-500">
-        <div class="p-2.5 rounded-xl bg-gold-500/10"><i data-lucide="log-out" class="w-6 h-6 text-gold-500"></i></div>
-        <h3 class="font-bold text-sm text-slate-900 dark:text-white">تأكيد تسجيل الخروج</h3>
-      </div>
-      <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-        هل أنت متأكد من إنهاء جلسة المشرف وتسجيل الخروج من المنظومة؟
-      </p>
-      <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
-        <button onclick="closeLogoutModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">إلغاء</button>
-        <button id="confirmLogoutBtn" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-md">
-          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
-          <span>نعم، خروج</span>
-        </button>
-      </div>
     </div>
-  </div>
 
-  <!-- السكربت البرمجي -->
+  </main>
+
+  <!-- ==================== التذييل السفلي ==================== -->
+  <footer class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
+    نادي الوفاء — الجامعة اللبنانية الدولية في صور • بوابة الإدارة والتحكم
+  </footer>
+
+  <!-- ==================== السكربت البرمجي ==================== -->
   <script>
     lucide.createIcons();
 
-    const ADMIN_SECRET_KEY = "wafaa2026";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
 
-    // إدارة المظهر
-    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
-    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
-
-    function applyAdminTheme(isDark) {
-      const html = document.documentElement;
-      const icons = document.querySelectorAll('.themeIconContainer');
-      const texts = document.querySelectorAll('.themeText');
-      if (isDark) {
-        html.classList.add('dark');
-        icons.forEach(i => i.innerHTML = moonSvg);
-        texts.forEach(t => t.textContent = 'الليلي');
-      } else {
-        html.classList.remove('dark');
-        icons.forEach(i => i.innerHTML = sunSvg);
-        texts.forEach(t => t.textContent = 'النهاري');
-      }
-    }
-
-    function toggleTheme() {
-      const isDarkCurrently = document.documentElement.classList.contains('dark');
-      const newTheme = !isDarkCurrently;
-      applyAdminTheme(newTheme);
-      localStorage.setItem('clubTheme', newTheme ? 'dark' : 'light');
-    }
-
-    applyAdminTheme(localStorage.getItem('clubTheme') !== 'light');
-
-    // المصادقة والجلسة
-    const loginGate = document.getElementById('loginGate');
-    const adminDashboard = document.getElementById('adminDashboard');
-    const loginForm = document.getElementById('loginForm');
-    const loginError = document.getElementById('loginError');
-    const welcomeAdmin = document.getElementById('welcomeAdmin');
-
-    const logoutModal = document.getElementById('logoutModal');
-    const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
-
-    function openLogoutModal() {
-      if (logoutModal) {
-        logoutModal.classList.remove('hidden');
-        logoutModal.classList.add('flex');
-      }
-    }
-
-    function closeLogoutModal() {
-      if (logoutModal) {
-        logoutModal.classList.add('hidden');
-        logoutModal.classList.remove('flex');
-      }
-    }
-
-    if (confirmLogoutBtn) {
-      confirmLogoutBtn.addEventListener('click', () => {
-        sessionStorage.removeItem('nadi_admin_session');
-        closeLogoutModal();
-        checkAuth();
-      });
-    }
-
-    function checkAuth() {
+    // إدارة الجلسة والعرض
+    function checkSession() {
       const activeAdmin = sessionStorage.getItem('nadi_admin_session');
+      const loginView = document.getElementById('loginView');
+      const dashboardView = document.getElementById('dashboardView');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const welcomeTitle = document.getElementById('adminWelcomeTitle');
+
       if (activeAdmin) {
-        loginGate.classList.add('hidden');
-        adminDashboard.classList.remove('hidden');
-        if (welcomeAdmin) welcomeAdmin.textContent = `المشرف النشط: ${activeAdmin}`;
-        lucide.createIcons();
+        if (loginView) loginView.classList.add('hidden');
+        if (dashboardView) dashboardView.classList.remove('hidden');
+        if (logoutBtn) logoutBtn.classList.remove('hidden');
+        if (welcomeTitle) welcomeTitle.textContent = `أهلاً بك، ${activeAdmin}`;
       } else {
-        loginGate.classList.remove('hidden');
-        adminDashboard.classList.add('hidden');
+        if (loginView) loginView.classList.remove('hidden');
+        if (dashboardView) dashboardView.classList.add('hidden');
+        if (logoutBtn) logoutBtn.classList.add('hidden');
       }
+      lucide.createIcons();
     }
 
-    if (loginForm) {
-      loginForm.addEventListener('submit', (e) => {
+    // تسجيل الدخول بالتحقق السحابي
+    const adminLoginForm = document.getElementById('adminLoginForm');
+    if (adminLoginForm) {
+      adminLoginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const name = document.getElementById('adminName').value.trim();
-        const id = document.getElementById('adminID').value.trim();
-        const key = document.getElementById('adminKey').value.trim();
+        const submitBtn = document.getElementById('loginSubmitBtn');
+        const errorMsg = document.getElementById('loginErrorMsg');
+        const studentId = document.getElementById('loginStudentId').value.trim();
+        const passcode = document.getElementById('loginPasscode').value.trim();
 
-        if (key === ADMIN_SECRET_KEY && name && id) {
-          sessionStorage.setItem('nadi_admin_session', `${name} (${id})`);
-          loginError.classList.add('hidden');
-          checkAuth();
-        } else {
-          loginError.classList.remove('hidden');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>جاري التحقق من الصلاحيات...</span>`;
+        if (errorMsg) errorMsg.classList.add('hidden');
+
+        try {
+          const res = await fetch(SCRIPT_URL, {
+            method: "POST",
+            body: JSON.stringify({
+              action: "admin_login",
+              studentId: studentId,
+              passcode: passcode
+            })
+          });
+
+          const data = await res.json();
+
+          if (data.status === "success") {
+            sessionStorage.setItem('nadi_admin_session', data.adminName || 'مشرف معتمد');
+            adminLoginForm.reset();
+            checkSession();
+          } else {
+            if (errorMsg) {
+              errorMsg.textContent = data.message || "بيانات الدخول غير صحيحة";
+              errorMsg.classList.remove('hidden');
+            }
+          }
+        } catch (err) {
+          if (errorMsg) {
+            errorMsg.textContent = "تعذر الاتصال بالسيرفر للتحقق، يرجى المحاولة ثانية";
+            errorMsg.classList.remove('hidden');
+          }
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<i data-lucide="key-round" class="w-4 h-4"></i><span>التحقق والدخول إلى النظام</span>`;
+          lucide.createIcons();
         }
       });
     }
 
-    checkAuth();
+    // تسجيل الخروج
+    function adminLogout() {
+      sessionStorage.removeItem('nadi_admin_session');
+      checkSession();
+    }
+
+    // إدارة المظهر (النهاري / الليلي)
+    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+
+    function applyTheme(isDark) {
+      const html = document.documentElement;
+      const icon = document.getElementById('themeIconContainer');
+      const text = document.getElementById('themeText');
+      if (isDark) {
+        html.classList.add('dark');
+        if (icon) icon.innerHTML = moonSvg;
+        if (text) text.textContent = 'الليلي';
+      } else {
+        html.classList.remove('dark');
+        if (icon) icon.innerHTML = sunSvg;
+        if (text) text.textContent = 'النهاري';
+      }
+    }
+
+    const savedTheme = localStorage.getItem('clubTheme');
+    applyTheme(savedTheme !== 'light');
+
+    document.getElementById('themeToggleBtn')?.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      applyTheme(!isDark);
+      localStorage.setItem('clubTheme', !isDark ? 'dark' : 'light');
+    });
+
+    // فحص الجلسة عند تحميل الصفحة
+    checkSession();
   </script>
 </body>
 </html>
