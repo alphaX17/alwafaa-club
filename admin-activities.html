@@ -33,7 +33,7 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
   </style>
 
-  <!-- فحص الحماية والجلسة فوراً قبل تحميل الصفحة -->
+  <!-- فحص الجلسة قبل تحميل الصفحة -->
   <script>
     if (!sessionStorage.getItem('nadi_admin_session')) {
       window.location.replace('admin.html');
@@ -145,15 +145,25 @@
           </div>
         </div>
 
-        <!-- خانة الصور التفاعلية -->
+        <!-- مساحة رفع الصور بالسحب والإفلات (إضافة نشاط) -->
         <div class="space-y-2">
-          <label class="block text-xs font-bold mb-1">صور النشاط (الصورة الأولى هي الغلاف والخلفية الأساسية)</label>
-          <div id="addImagesContainer" class="space-y-2.5"></div>
+          <label class="block text-xs font-bold mb-1">صور الفعالية (الصورة الأولى تلقائياً هي صورة الغلاف الأساسية)</label>
+          
+          <div id="addDropzone" onclick="document.getElementById('addFileInput').click()" class="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-gold-500 dark:hover:border-gold-500 rounded-2xl p-6 text-center cursor-pointer transition bg-slate-50/50 dark:bg-[#080e1c] group">
+            <input type="file" id="addFileInput" multiple accept="image/*" class="hidden" onchange="handleFileSelect(event, 'add')">
+            <div class="flex flex-col items-center justify-center space-y-2 text-slate-500 dark:text-slate-400 group-hover:text-gold-500 transition">
+              <div class="p-3 rounded-2xl bg-gold-500/10 text-gold-500">
+                <i data-lucide="cloud-upload" class="w-6 h-6"></i>
+              </div>
+              <p class="text-xs font-bold text-slate-800 dark:text-slate-200">
+                اسحب الصور وأفلتها هنا أو <span class="text-gold-500 underline">اضغط لاختيارها من جهازك</span>
+              </p>
+              <p class="text-[10px] text-slate-400">يمكنك رفع عدة صور دفعة واحدة (JPG, PNG, WebP) بدقة فائقة</p>
+            </div>
+          </div>
 
-          <button type="button" onclick="addImageField('addImagesContainer')" class="mt-2 text-xs text-gold-500 hover:text-gold-600 font-bold inline-flex items-center gap-1.5 transition p-1 rounded-lg hover:bg-gold-500/10">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i>
-            <span>اضغط لإضافة صورة أخرى</span>
-          </button>
+          <!-- معرض مصغرات الصور المرفوعة -->
+          <div id="addImagesPreviewGrid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 pt-2"></div>
         </div>
 
         <div>
@@ -207,6 +217,8 @@
 
   </main>
 
+  <!-- ==================== النوافذ المنبثقة ==================== -->
+
   <!-- نافذة تعديل بيانات النشاط -->
   <div id="editActivityModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
     <div class="w-full max-w-xl my-8 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-5">
@@ -244,7 +256,7 @@
           </div>
         </div>
 
-        <!-- خانة التخيير في نافذة التعديل -->
+        <!-- خيار العرض بالرئيسية -->
         <div class="p-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#0c1427] space-y-1.5">
           <div class="flex items-center justify-between flex-wrap gap-2">
             <label class="block font-bold text-slate-900 dark:text-white">
@@ -266,19 +278,24 @@
           </div>
         </div>
 
-        <!-- خانة الصور التفاعلية في نافذة التعديل -->
+        <!-- مساحة رفع وتعديل الصور بالسحب والإفلات (نافذة التعديل) -->
         <div class="space-y-2">
           <div class="flex items-center justify-between">
-            <label class="block font-bold">صور النشاط (الصورة الأولى هي الغلاف والخلفية)</label>
-            <button type="button" onclick="clearAllImages('editImagesContainer')" class="text-[10px] text-rose-500 hover:underline font-bold">
+            <label class="block font-bold">صور الفعالية (الصورة الأولى هي صورة الغلاف الأساسية)</label>
+            <button type="button" onclick="clearAllImages('edit')" class="text-[10px] text-rose-500 hover:underline font-bold">
               مسح جميع الصور
             </button>
           </div>
-          <div id="editImagesContainer" class="space-y-2.5"></div>
-          <button type="button" onclick="addImageField('editImagesContainer')" class="mt-2 text-xs text-gold-500 hover:text-gold-600 font-bold inline-flex items-center gap-1.5 transition p-1 rounded-lg hover:bg-gold-500/10">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i>
-            <span>اضغط لإضافة صورة أخرى</span>
-          </button>
+
+          <div id="editDropzone" onclick="document.getElementById('editFileInput').click()" class="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-gold-500 dark:hover:border-gold-500 rounded-2xl p-4 text-center cursor-pointer transition bg-slate-50/50 dark:bg-[#080e1c] group">
+            <input type="file" id="editFileInput" multiple accept="image/*" class="hidden" onchange="handleFileSelect(event, 'edit')">
+            <div class="flex items-center justify-center gap-2 text-slate-500 dark:text-slate-400 group-hover:text-gold-500 transition">
+              <i data-lucide="cloud-upload" class="w-5 h-5 text-gold-500"></i>
+              <span class="text-xs font-bold text-slate-800 dark:text-slate-200">اضغط لإضافة صور جديدة من جهازك</span>
+            </div>
+          </div>
+
+          <div id="editImagesPreviewGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2"></div>
         </div>
 
         <div>
@@ -322,78 +339,163 @@
     lucide.createIcons();
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
+    
+    // مفتاح ImgBB API للرفع المباشر (يمكنك تغييره بمفتاحك المجاني)
+    const IMGBB_API_KEY = "f42dd54fdc8962d9420e2e34d89218fd";
 
     let liveActivitiesList = [];
     let currentEditActivityIndex = -1;
     let currentFilter = 'all';
     let deleteCallback = null;
 
+    // مصفوفات تخزين روابط الصور المرفوعة لحظياً
+    let addImagesArray = [];
+    let editImagesArray = [];
+
     const activeAdmin = sessionStorage.getItem('nadi_admin_session');
     if (activeAdmin) {
       document.getElementById('welcomeAdmin').textContent = `المشرف: ${activeAdmin}`;
     }
 
-    // استخراج الروابط النقية دائماً بدون أي كود HTML أو مسافات
-    function cleanDirectImageUrl(raw) {
-      if (!raw) return '';
-      let str = String(raw).trim();
-      const match = str.match(/https?:\/\/[^\s"'<>]+/);
-      return match ? match[0] : str;
+    // ==================== محرك الرفع السحابي ومعالجة الصور ====================
+
+    async function uploadSingleFileToImgBB(file) {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+      if (data && data.success && data.data && data.data.url) {
+        return data.data.url; // رابط مباشر صافي عالي الجودة
+      } else {
+        throw new Error("تعذر رفع الصورة");
+      }
     }
 
-    function addImageField(containerId, value = '') {
-      const container = document.getElementById(containerId);
-      if (!container) return;
+    // معالجة اختيار أو سحب الملفات
+    async function handleFileSelect(e, scope) {
+      const files = Array.from(e.target.files || (e.dataTransfer ? e.dataTransfer.files : []));
+      if (files.length === 0) return;
 
-      const fieldWrapper = document.createElement('div');
-      fieldWrapper.className = 'flex items-center gap-2 image-field-row';
+      const grid = document.getElementById(scope === 'add' ? 'addImagesPreviewGrid' : 'editImagesPreviewGrid');
+      const submitBtn = document.getElementById(scope === 'add' ? 'submitActBtn' : null);
 
-      const isFirst = container.querySelectorAll('.image-field-row').length === 0;
-      const placeholderText = isFirst 
-        ? "رابط صورة الغلاف الأساسي (أو اتركه فارغاً)" 
-        : `رابط صورة إضافية #${container.querySelectorAll('.image-field-row').length + 1}`;
+      if (submitBtn) submitBtn.disabled = true;
 
-      fieldWrapper.innerHTML = `
-        <input type="text" value="${cleanDirectImageUrl(value)}" placeholder="${placeholderText}" class="act-img-input w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr" oninput="this.value = cleanDirectImageUrl(this.value)">
-        <button type="button" onclick="removeImageRow(this, '${containerId}')" class="p-3 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-500 hover:text-white transition shrink-0" title="حذف هذا الحقل">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      `;
+      for (const file of files) {
+        if (!file.type.startsWith('image/')) continue;
 
-      container.appendChild(fieldWrapper);
+        // بطاقة تحميل مؤقتة (Placeholder)
+        const loadingId = 'loading_' + Math.random().toString(36).substring(2, 9);
+        const card = document.createElement('div');
+        card.id = loadingId;
+        card.className = "relative h-24 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 flex flex-col items-center justify-center text-gold-500";
+        card.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span class="text-[10px] text-slate-400 mt-1">جاري الرفع...</span>`;
+        grid.appendChild(card);
+        lucide.createIcons();
+
+        try {
+          const directUrl = await uploadSingleFileToImgBB(file);
+          if (scope === 'add') {
+            addImagesArray.push(directUrl);
+          } else {
+            editImagesArray.push(directUrl);
+          }
+          card.remove();
+          renderImagesPreview(scope);
+        } catch (err) {
+          card.className = "relative h-24 rounded-xl overflow-hidden border border-rose-500 bg-rose-500/10 flex flex-col items-center justify-center text-rose-500 p-1 text-center";
+          card.innerHTML = `<i data-lucide="alert-circle" class="w-5 h-5"></i><span class="text-[9px]">فشل الرفع</span>`;
+          setTimeout(() => card.remove(), 2500);
+        }
+      }
+
+      if (submitBtn) submitBtn.disabled = false;
+      // إعادة تصفير مدخل الملفات ليقبل نفس الملف لاحقاً إن أردت
+      e.target.value = '';
+    }
+
+    // رسم مصغرات الصور مع شارة الغلاف وزر الحذف
+    function renderImagesPreview(scope) {
+      const isAdd = (scope === 'add');
+      const arr = isAdd ? addImagesArray : editImagesArray;
+      const grid = document.getElementById(isAdd ? 'addImagesPreviewGrid' : 'editImagesPreviewGrid');
+      if (!grid) return;
+
+      grid.innerHTML = arr.map((url, idx) => `
+        <div class="relative h-24 rounded-xl overflow-hidden border ${idx === 0 ? 'border-2 border-gold-500' : 'border-slate-200 dark:border-slate-800'} bg-slate-100 dark:bg-slate-900 group shadow-sm">
+          <img src="${url}" referrerpolicy="no-referrer" class="w-full h-full object-cover">
+          
+          ${idx === 0 ? `
+            <span class="absolute top-1 right-1 bg-gold-500 text-slate-950 font-bold text-[9px] px-1.5 py-0.5 rounded shadow">
+              الغلاف
+            </span>
+          ` : ''}
+
+          <button type="button" onclick="removeImageAt('${scope}', ${idx})" class="absolute top-1 left-1 p-1 rounded-md bg-black/75 hover:bg-rose-600 text-white transition" title="إزالة الصورة">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      `).join('');
+
       lucide.createIcons();
     }
 
-    function removeImageRow(btn, containerId) {
-      const row = btn.closest('.image-field-row');
-      if (row) row.remove();
-      const container = document.getElementById(containerId);
-      if (container && container.children.length === 0) {
-        addImageField(containerId);
+    function removeImageAt(scope, idx) {
+      if (scope === 'add') {
+        addImagesArray.splice(idx, 1);
+        renderImagesPreview('add');
+      } else {
+        editImagesArray.splice(idx, 1);
+        renderImagesPreview('edit');
       }
     }
 
-    function clearAllImages(containerId) {
-      const container = document.getElementById(containerId);
-      if (container) {
-        container.innerHTML = '';
-        addImageField(containerId);
+    function clearAllImages(scope) {
+      if (scope === 'add') {
+        addImagesArray = [];
+        renderImagesPreview('add');
+      } else {
+        editImagesArray = [];
+        renderImagesPreview('edit');
       }
     }
 
-    function collectImagesFromContainer(containerId) {
-      const container = document.getElementById(containerId);
-      if (!container) return '';
-      const inputs = container.querySelectorAll('.act-img-input');
-      const urls = [];
-      inputs.forEach(input => {
-        const val = cleanDirectImageUrl(input.value);
-        if (val) urls.push(val);
+    // تفعيل السحب والإفلات فوق الـ Dropzone
+    function setupDragAndDrop(zoneId, scope) {
+      const zone = document.getElementById(zoneId);
+      if (!zone) return;
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        zone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          zone.classList.add('border-gold-500', 'bg-gold-500/5');
+        }, false);
       });
-      return urls.join(', ');
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        zone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          zone.classList.remove('border-gold-500', 'bg-gold-500/5');
+        }, false);
+      });
+
+      zone.addEventListener('drop', (e) => {
+        handleFileSelect(e, scope);
+      }, false);
     }
 
-    // إدارة المظهر
+    setupDragAndDrop('addDropzone', 'add');
+    setupDragAndDrop('editDropzone', 'edit');
+
+    // ==================== إدارة المظهر والتنقل ====================
+
     const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
     const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
 
@@ -413,15 +515,13 @@
     }
 
     function toggleTheme() {
-      const isDarkCurrently = document.documentElement.classList.contains('dark');
-      const newTheme = !isDarkCurrently;
-      applyTheme(newTheme);
-      localStorage.setItem('clubTheme', newTheme ? 'dark' : 'light');
+      const isDark = document.documentElement.classList.contains('dark');
+      applyTheme(!isDark);
+      localStorage.setItem('clubTheme', !isDark ? 'dark' : 'light');
     }
 
     applyTheme(localStorage.getItem('clubTheme') !== 'light');
 
-    // التنقل بين التبويبين
     function switchTab(tab) {
       const viewAdd = document.getElementById('viewAdd');
       const viewManage = document.getElementById('viewManage');
@@ -453,7 +553,6 @@
       return val === 'نعم' || val === 'true' || val === '1';
     }
 
-    // فحص ما إذا كان النشاط مخفياً
     function isItemHidden(item) {
       if (!item) return false;
       const val = String(item['الحالة'] || item['حالة النشاط'] || item.status || '').trim();
@@ -484,7 +583,8 @@
       }
     }
 
-    // تبديل حالة الظهور / الإخفاء (زر العين التفاعلي)
+    // ==================== تبديل الإخفاء والإظهار وقائمة الأنشطة ====================
+
     async function toggleActivityVisibility(index) {
       const target = liveActivitiesList[index];
       if (!target) return;
@@ -493,14 +593,12 @@
       const newStatus = currentlyHidden ? 'ظاهر' : 'مخفي';
       const title = target['العنوان'] || target['عنوان النشاط'] || target.title || '';
 
-      // تحديث الحالة محلياً فوراً لمنع أي تأخير في الاستجابة
       target['الحالة'] = newStatus;
       target.status = newStatus;
 
       localStorage.setItem('nadi_activities_cache', JSON.stringify(liveActivitiesList));
       renderActivityList(liveActivitiesList);
 
-      // إرسال التحديث إلى قاعدة البيانات
       try {
         await fetch(SCRIPT_URL, {
           method: "POST",
@@ -551,7 +649,6 @@
       });
     }
 
-    // عرض قائمة الأنشطة (متضمنة خيارات: تعديل، إخفاء/إظهار، حذف)
     function renderActivityList(list) {
       const container = document.getElementById('activityListContainer');
       const badge = document.getElementById('activityCountBadge');
@@ -594,7 +691,7 @@
 
         const realIndex = liveActivitiesList.indexOf(item);
 
-        const imageArray = String(rawImageUrl).split(',').map(s => cleanDirectImageUrl(s)).filter(Boolean);
+        const imageArray = String(rawImageUrl).split(',').map(s => s.trim()).filter(Boolean);
         const coverImage = imageArray[0] || '';
         const extraImagesCount = imageArray.length > 1 ? imageArray.length : 0;
 
@@ -609,7 +706,6 @@
           </div>
         ` : '';
 
-        // زر العين التفاعلي (عين عادية إذا ظاهر، وعين مشطوبة إذا مخفي)
         const visibilityBtn = isHidden ? `
           <button onclick="toggleActivityVisibility(${realIndex})" class="p-2 rounded-xl bg-amber-500/15 border border-amber-500/30 hover:bg-amber-500 hover:text-slate-950 text-amber-600 dark:text-amber-400 text-xs font-bold flex items-center gap-1 transition" title="النشاط مخفي حالياً - اضغط لإظهاره في الأرشيف">
             <i data-lucide="eye-off" class="w-3.5 h-3.5"></i>
@@ -660,7 +756,6 @@
               </div>
             </div>
 
-            <!-- خيارات التحكم الثلاثية: تعديل، إخفاء/إظهار، حذف -->
             <div class="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap">
               <button onclick="openEditActivityModal(${realIndex})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="تعديل بيانات النشاط">
                 <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
@@ -681,7 +776,6 @@
       lucide.createIcons();
     }
 
-    // جلب البيانات من Google Sheets
     async function fetchLiveActivities(forceFresh = false) {
       const cached = localStorage.getItem('nadi_activities_cache');
       if (cached && !forceFresh) {
@@ -708,7 +802,7 @@
       } catch(err) {}
     }
 
-    // إضافة نشاط جديد
+    // ==================== إضافة نشاط ====================
     const addActivityForm = document.getElementById('addActivityForm');
     if (addActivityForm) {
       addActivityForm.addEventListener('submit', async (e) => {
@@ -717,7 +811,7 @@
         submitBtn.disabled = true;
         submitBtn.innerHTML = `<span>جاري النشر...</span>`;
 
-        const allImages = collectImagesFromContainer('addImagesContainer');
+        const allImagesString = addImagesArray.join(', ');
         const isFeaturedVal = document.querySelector('input[name="addFeaturedRadio"]:checked')?.value || 'لا';
 
         const newActivity = {
@@ -725,7 +819,7 @@
           category: document.getElementById('actCategory').value,
           date: document.getElementById('actDate').value.trim(),
           location: document.getElementById('actLocation').value.trim(),
-          imageUrl: allImages,
+          imageUrl: allImagesString,
           desc: document.getElementById('actDesc').value.trim(),
           featured: isFeaturedVal,
           status: 'ظاهر'
@@ -750,12 +844,7 @@
 
         addActivityForm.reset();
         document.getElementById('addFeaturedNo').checked = true;
-
-        const addContainer = document.getElementById('addImagesContainer');
-        if (addContainer) {
-          addContainer.innerHTML = '';
-          addImageField('addImagesContainer');
-        }
+        clearAllImages('add');
 
         switchTab('manage');
 
@@ -777,7 +866,7 @@
       });
     }
 
-    // نافذة تعديل النشاط
+    // ==================== تعديل نشاط ====================
     const editActivityModal = document.getElementById('editActivityModal');
     const editActivityForm = document.getElementById('editActivityForm');
 
@@ -822,21 +911,10 @@
         }
       }
 
-      // عرض الصور
-      const editContainer = document.getElementById('editImagesContainer');
-      if (editContainer) {
-        editContainer.innerHTML = '';
-        const rawImages = target['رابط الصورة'] || target.imageUrl || '';
-        const imagesList = String(rawImages).split(',').map(s => cleanDirectImageUrl(s)).filter(Boolean);
-
-        if (imagesList.length === 0) {
-          addImageField('editImagesContainer');
-        } else {
-          imagesList.forEach(imgUrl => {
-            addImageField('editImagesContainer', imgUrl);
-          });
-        }
-      }
+      // تجهيز مصفوفة الصور القديمة للمعاينة الفورية والتعديل
+      const rawImages = target['رابط الصورة'] || target.imageUrl || '';
+      editImagesArray = String(rawImages).split(',').map(s => s.trim()).filter(Boolean);
+      renderImagesPreview('edit');
 
       editActivityModal.classList.remove('hidden');
       editActivityModal.classList.add('flex');
@@ -856,7 +934,7 @@
 
         const oldTarget = liveActivitiesList[currentEditActivityIndex];
         const oldTitle = oldTarget ? (oldTarget['العنوان'] || oldTarget['عنوان النشاط'] || oldTarget.title || '') : '';
-        const allImages = collectImagesFromContainer('editImagesContainer');
+        const allImagesString = editImagesArray.join(', ');
         const isFeaturedVal = document.querySelector('input[name="editFeaturedRadio"]:checked')?.value || 'لا';
         const currentStatusVal = oldTarget ? (oldTarget['الحالة'] || oldTarget.status || 'ظاهر') : 'ظاهر';
 
@@ -865,7 +943,7 @@
           category: document.getElementById('editActCategory').value,
           date: document.getElementById('editActDate').value.trim(),
           location: document.getElementById('editActLocation').value.trim(),
-          imageUrl: allImages,
+          imageUrl: allImagesString,
           desc: document.getElementById('editActDesc').value.trim(),
           featured: isFeaturedVal,
           status: currentStatusVal
@@ -952,10 +1030,7 @@
       });
     });
 
-    // التهيئة المبدئية لحقل صورة واحد
-    addImageField('addImagesContainer');
-
-    // جلب البيانات لحظياً
+    // جلب البيانات فور تحميل الصفحة
     fetchLiveActivities(true);
   </script>
 </body>
