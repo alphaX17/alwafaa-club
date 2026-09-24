@@ -33,140 +33,149 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden">
+<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
 
-  <!-- ==================== الشريط العلوي (HEADER / NAVBAR) ==================== -->
-  <header class="sticky top-0 z-40 bg-white/90 dark:bg-[#080e1c]/90 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 transition-colors">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      
-      <!-- الجهة اليمنى: زر القائمة الجانبية وهوية الصفحة -->
-      <div class="flex items-center gap-4">
-        <button id="openMenuBtn" aria-label="فتح القائمة" class="p-2.5 rounded-lg bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
-          <i data-lucide="menu" class="w-5 h-5"></i>
-        </button>
+  <div>
+    <!-- ==================== الشريط العلوي (HEADER / NAVBAR) ==================== -->
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-3.5 sm:px-6 lg:px-8 py-2.5 sm:py-3 transition-colors">
+      <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+        
+        <!-- الجهة اليمنى: زر القائمة الجانبية وهوية الصفحة -->
+        <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+          <button id="openMenuBtn" aria-label="فتح القائمة" class="p-2 sm:p-2.5 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition shrink-0" title="القائمة الرئيسية">
+            <i data-lucide="menu" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+          </button>
 
-        <div class="flex items-center gap-3">
-          <img src="logo.png" alt="شعار نادي الوفاء" class="w-10 h-10 object-contain">
-          <div>
-            <h1 class="text-base font-bold text-slate-900 dark:text-white">بوابة التوجيه الطلابي</h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400">شبكة الدعم والمجموعات الرسمية - فرع صور</p>
+          <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+            <img src="logo.png" alt="شعار نادي الوفاء" class="w-9 h-9 sm:w-10 sm:h-10 object-contain shrink-0">
+            <div class="min-w-0">
+              <h1 class="text-xs sm:text-base font-bold text-slate-900 dark:text-white whitespace-nowrap">بوابة التوجيه الطلابي</h1>
+              <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 truncate">شبكة الدعم والمجموعات الرسمية - فرع صور</p>
+            </div>
           </div>
         </div>
+
+        <!-- الجهة اليسرى: محول المظهر (Dark/Light) وزر الرئيسية -->
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center justify-center p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition shrink-0" title="تبديل المظهر">
+            <span id="themeIconContainer" class="flex items-center justify-center"></span>
+            <span id="themeText" class="hidden sm:inline mr-1.5 text-xs font-semibold">الليلي</span>
+          </button>
+
+          <a href="index.html" class="flex items-center justify-center gap-1.5 p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 transition shrink-0" title="الصفحة الرئيسية">
+            <i data-lucide="home" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">الرئيسية</span>
+          </a>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- ==================== المحتوى الرئيسي ==================== -->
+    <main class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 sm:space-y-10">
+
+      <!-- لافتة الترحيب والإرشاد -->
+      <div class="p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-gradient-to-br from-white to-slate-100 dark:from-[#0f172a] dark:to-[#090f1f] shadow-sm space-y-2.5 sm:space-y-3">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20">
+          <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+          خدمة التوجيه الأكاديمي المباشر
+        </span>
+        <h2 class="text-lg sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
+          دليلك المباشر للتواصل مع منسقي الكليات ومجموعات الدعم
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
+          يوفر نادي الوفاء هذه المنصة لمساعدة طلاب الجامعة اللبنانية الدولية (فرع صور) في اختيار المواد، تجاوز صعوبات التسجيل، والتواصل الفردي مع ممثلي الاختصاصات لحل أي استفسار دراسي.
+        </p>
       </div>
 
-      <!-- الجهة اليسرى: محول المظهر (Dark/Light) -->
-      <div class="flex items-center gap-3">
-        <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
-          <span id="themeIconContainer" class="flex items-center justify-center"></span>
-          <span id="themeText">الليلي</span>
-        </button>
+      <!-- 1. مجموعات الواتساب الرسمية -->
+      <section class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="message-square" class="w-4 h-4 text-emerald-500"></i>
+            <span>مجموعات الدعم والإعلانات المركزية</span>
+          </h3>
+          <span class="text-[11px] text-slate-400 font-medium">واتساب الرسمي</span>
+        </div>
 
-        <a href="index.html" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 transition">
-          <i data-lucide="home" class="w-3.5 h-3.5"></i>
-          <span>الرئيسية</span>
-        </a>
-      </div>
+        <!-- شبكة المجموعات -->
+        <div id="groupsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 min-h-[160px]">
+          <div class="col-span-full py-8 text-center text-xs text-slate-400">جاري تحميل المجموعات...</div>
+        </div>
+      </section>
 
-    </div>
-  </header>
+      <!-- 2. شبكة ممثلي الكليات والاختصاصات -->
+      <section class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="user-check" class="w-4 h-4 text-gold-500"></i>
+            <span>ممثلو الاختصاصات للتواصل المباشر (واتساب)</span>
+          </h3>
+          <span class="text-[11px] text-slate-400 font-medium">فرع صور</span>
+        </div>
 
-  <!-- ==================== المحتوى الرئيسي ==================== -->
-  <main class="max-w-7xl mx-auto px-4 lg:px-8 py-8 space-y-10">
+        <!-- شبكة الممثلين والمرشدين -->
+        <div id="repsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-4 min-h-[180px]">
+          <div class="col-span-full py-8 text-center text-xs text-slate-400">جاري تحميل شبكة التوجيه...</div>
+        </div>
+      </section>
 
-    <!-- لافتة الترحيب والإرشاد -->
-    <div class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-gradient-to-br from-white to-slate-100 dark:from-[#0f172a] dark:to-[#090f1f] shadow-sm space-y-3">
-      <span class="px-3 py-1 rounded-full text-xs font-bold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20">
-        خدمة التوجيه الأكاديمي المباشر
-      </span>
-      <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
-        دليلك المباشر للتواصل مع منسقي الكليات ومجموعات الدعم
-      </h2>
-      <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
-        يوفر نادي الوفاء هذه المنصة لمساعدة طلاب الجامعة اللبنانية الدولية (فرع صور) في اختيار المواد، تجاوز صعوبات التسجيل، والتواصل الفردي مع ممثلي الاختصاصات لحل أي استفسار دراسي.
-      </p>
-    </div>
+    </main>
+  </div>
 
-    <!-- 1. مجموعات الواتساب الرسمية -->
-    <section class="space-y-4">
-      <div class="flex items-center justify-between">
-        <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-          <i data-lucide="message-square" class="w-4 h-4 text-emerald-500"></i>
-          <span>مجموعات الدعم والإعلانات المركزية</span>
-        </h3>
-        <span class="text-[11px] text-slate-400 font-medium">واتساب الرسمي</span>
-      </div>
-
-      <!-- شبكة المجموعات -->
-      <div id="groupsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4 min-h-[160px]"></div>
-    </section>
-
-    <!-- 2. شبكة ممثلي الكليات والاختصاصات -->
-    <section class="space-y-4">
-      <div class="flex items-center justify-between">
-        <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-          <i data-lucide="user-check" class="w-4 h-4 text-gold-500"></i>
-          <span>ممثلو الاختصاصات للتواصل المباشر (واتساب)</span>
-        </h3>
-        <span class="text-[11px] text-slate-400 font-medium">فرع صور</span>
-      </div>
-
-      <!-- شبكة الممثلين والمرشدين -->
-      <div id="repsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 min-h-[180px]"></div>
-    </section>
-
-  </main>
+  <!-- ==================== التذييل السفلي ==================== -->
+  <footer class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
+    نادي الوفاء — الجامعة اللبنانية الدولية في صور • بوابة التوجيه الطلابي
+  </footer>
 
   <!-- ==================== القائمة الجانبية (SLIDE-OVER MENU) ==================== -->
   <div id="menuOverlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
   <aside id="sidebar" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0c1427] border-l border-slate-200 dark:border-clubNavy-borderDark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
-    
     <div>
-      <div class="p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
+      <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
         <div>
-          <h2 class="font-bold text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">الوصول السريع لكافة الخدمات</p>
+          <h2 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">الوصول السريع لكافة الخدمات</p>
         </div>
-        <button id="closeMenuBtn" aria-label="إغلاق القائمة" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-red-500">
+        <button id="closeMenuBtn" aria-label="إغلاق القائمة" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-red-500">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <nav class="p-4 space-y-1.5">
-        <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+      <nav class="p-3.5 sm:p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-140px)] custom-scrollbar">
+        <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
           <span>الرئيسية (الأنشطة والإعلانات)</span>
         </a>
-
-        <a href="scholarship.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+        <a href="scholarship.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="graduation-cap" class="w-4 h-4 text-slate-400"></i>
           <span>المنح الطلابية (تسجيل مباشر)</span>
         </a>
-
-        <a href="resources.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
-          <i data-lucide="folder-down" class="w-4 h-4 text-slate-400"></i>
+        <a href="resources.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="folder-down" class="w-4 h-4 text-slate-400 shrink-0"></i>
           <div>
             <p>بنك الموارد الرقمية والامتحانات</p>
             <p class="text-[10px] text-slate-400 dark:text-slate-500">كتب PDF • نماذج سابقة • ملخصات</p>
           </div>
         </a>
-
-        <a href="books.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
-          <i data-lucide="book-open" class="w-4 h-4 text-slate-400"></i>
+        <a href="books.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="book-open" class="w-4 h-4 text-slate-400 shrink-0"></i>
           <div>
             <p>استعارة وتبادل الكتب الورقية</p>
             <p class="text-[10px] text-slate-400 dark:text-slate-500">حجز أو تبرع بالنسخ الفيزيائية</p>
           </div>
         </a>
-
-        <a href="faculty.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+        <a href="faculty.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
           <span>دليل الأساتذة والساعات المكتبية</span>
         </a>
-
-        <a href="guidance.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
+        <a href="guidance.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
           <i data-lucide="message-circle" class="w-4 h-4"></i>
           <div>
             <p>شبكة التوجيه وممثلو الاختصاصات</p>
@@ -179,7 +188,6 @@
     <div class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
       نادي الوفاء — الجامعة اللبنانية الدولية في صور
     </div>
-
   </aside>
 
   <!-- ==================== سكربت التحكم الشامل والسحب اللحظي ==================== -->
@@ -188,17 +196,14 @@
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
 
-    // دالة رسم بطاقات التوجيه والمجموعات بفرز ذكي ومرن
     function renderGuidance(guidanceList) {
       if (!guidanceList || !Array.isArray(guidanceList)) return;
 
-      // فرز المجموعات: أي بطاقة تحتوي في خانة النوع على "مجموعة" أو "قناة" أو "إعلان"
       const groups = guidanceList.filter(item => {
         const type = String(item['النوع'] || '').trim().toLowerCase();
         return type.includes('مجموعة') || type.includes('قناة') || type.includes('إعلان');
       });
 
-      // فرز الممثلين والمرشدين: أي بطاقة تحتوي على "مسؤول"، "مندوب"، "ممثل"، أو "مرشد"
       const reps = guidanceList.filter(item => {
         const type = String(item['النوع'] || '').trim().toLowerCase();
         return type.includes('مسؤول') || type.includes('مندوب') || type.includes('ممثل') || type.includes('مرشد') || (!type.includes('مجموعة') && !type.includes('قناة'));
@@ -238,15 +243,15 @@
             const cardOpacity = isActive ? '' : 'opacity-80';
 
             return `
-              <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}">
+              <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}">
                 <div class="space-y-2">
-                  <span class="px-2.5 py-0.5 rounded text-[10px] font-bold ${badgeBg}">${tag}</span>
-                  <h4 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h4>
-                  <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  <span class="px-2.5 py-0.5 rounded-lg text-[10px] font-bold ${badgeBg}">${tag}</span>
+                  <h4 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white line-clamp-1">${name}</h4>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3">
                     ${desc}
                   </p>
                 </div>
-                <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
                   ${actionBtn}
                 </div>
               </div>
@@ -270,7 +275,6 @@
 
             const isClosed = status.includes('ممتلئ') || status.includes('مغلق') || status.includes('تحديث');
 
-            // تجهيز رابط الواتساب سواء كان رابطاً مدخلاً أو هاتفاً
             const cleanPhone = phone.replace(/[^0-9]/g, '');
             const defaultMsg = encodeURIComponent(`السلام عليكم ورحمة الله، أتواصل معك عبر منصة نادي الوفاء بخصوص ${name}`);
             const waLink = rawLink || (cleanPhone ? `https://wa.me/${cleanPhone}?text=${defaultMsg}` : '');
@@ -278,7 +282,6 @@
             const hasLink = waLink !== '' && waLink !== '#';
             const isActive = !isClosed && hasLink;
 
-            // تحديد لون الشارة حسب الكلية
             let tagColor = "text-gold-500";
             const lowerFac = faculty.toLowerCase();
             const lowerName = name.toLowerCase();
@@ -290,11 +293,11 @@
             if (lowerFac.includes('تربي') || lowerFac.includes('لغات') || lowerFac.includes('education')) tagColor = "text-purple-500";
 
             const actionBtn = isActive
-              ? `<a href="${waLink}" target="_blank" class="w-full py-2 rounded-lg bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+              ? `<a href="${waLink}" target="_blank" class="w-full py-2 rounded-xl bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
                    <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                    <span>مراسلة عبر واتساب</span>
                  </a>`
-              : `<button disabled class="w-full py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1.5 cursor-not-allowed">
+              : `<button disabled class="w-full py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-1.5 cursor-not-allowed">
                    <i data-lucide="clock" class="w-3.5 h-3.5"></i>
                    <span>الرقم قريباً</span>
                  </button>`;
@@ -306,13 +309,13 @@
             const cardOpacity = isActive ? '' : 'opacity-75';
 
             return `
-              <div class="p-4 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}">
+              <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}">
                 <div class="space-y-1">
                   <span class="text-[10px] font-bold ${tagColor}">${faculty}</span>
-                  <h4 class="font-bold text-xs text-slate-900 dark:text-white">${name}</h4>
+                  <h4 class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white line-clamp-1">${name}</h4>
                   ${phoneText}
                 </div>
-                <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <div class="mt-3.5 pt-2.5 border-t border-slate-100 dark:border-slate-800">
                   ${actionBtn}
                 </div>
               </div>
@@ -324,9 +327,7 @@
       lucide.createIcons();
     }
 
-    // جلب البيانات مع التسريع الفوري (localStorage)
     async function fetchLiveGuidance() {
-      // 1. قراءة الكاش المحلي وعرضه فوراً في 0 ثانية
       const cached = localStorage.getItem('nadi_guidance_cache');
       if (cached) {
         try {
@@ -338,7 +339,6 @@
 
       if (!SCRIPT_URL) return;
 
-      // 2. تحديث البيانات الحية من Google Sheets بالخلفية
       try {
         const response = await fetch(SCRIPT_URL);
         const data = await response.json();
