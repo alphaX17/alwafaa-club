@@ -33,354 +33,360 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden">
+<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
 
-  <!-- ==================== الشريط العلوي (HEADER / NAVBAR) ==================== -->
-  <header class="sticky top-0 z-40 bg-white/90 dark:bg-[#080e1c]/90 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 transition-colors">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      
-      <!-- الجهة اليمنى: زر القائمة الجانبية (☰) وهوية الصفحة -->
-      <div class="flex items-center gap-4">
-        <button id="openMenuBtn" aria-label="فتح القائمة" class="p-2.5 rounded-lg bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
-          <i data-lucide="menu" class="w-5 h-5"></i>
-        </button>
-
-        <div class="flex items-center gap-3">
-          <img src="logo.png" alt="شعار نادي الوفاء" class="w-10 h-10 object-contain">
-          <div>
-            <h1 class="text-base font-bold text-slate-900 dark:text-white">المنحة الطلابية السنوية</h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400">نموذج التسجيل المباشر</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- الجهة اليسرى: محول المظهر (Dark/Light) -->
-      <div class="flex items-center gap-3">
-        <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
-          <span id="themeIconContainer" class="flex items-center justify-center"></span>
-          <span id="themeText">الليلي</span>
-        </button>
-
-        <a href="index.html" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 transition">
-          <i data-lucide="home" class="w-3.5 h-3.5"></i>
-          <span>الرئيسية</span>
-        </a>
-      </div>
-
-    </div>
-  </header>
-
-  <!-- ==================== محتوى الاستمارة ==================== -->
-  <main class="max-w-3xl mx-auto px-4 py-8">
-
-    <div class="p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm">
-      
-      <form id="officialScholarshipForm" class="space-y-6">
+  <div>
+    <!-- ==================== الشريط العلوي (HEADER / NAVBAR) ==================== -->
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-3.5 sm:px-6 lg:px-8 py-2.5 sm:py-3 transition-colors">
+      <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
         
-        <!-- 1. البيانات الشخصية والعائلية الأساسية -->
-        <div class="space-y-4">
-          <h2 class="text-sm font-bold text-slate-900 dark:text-white pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
-            <i data-lucide="user" class="w-4 h-4 text-gold-500"></i>
-            <span>البيانات الشخصية</span>
-          </h2>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold mb-1.5">الاسم <span class="text-red-500">*</span></label>
-              <input type="text" required class="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold mb-1.5">اسم الأب <span class="text-red-500">*</span></label>
-              <input type="text" required class="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold mb-1.5">الشهرة (العائلة) <span class="text-red-500">*</span></label>
-              <input type="text" required class="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold mb-1.5">اسم الأم وشهرتها <span class="text-red-500">*</span></label>
-              <input type="text" required class="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold mb-1.5">البلدة الأساسية <span class="text-red-500">*</span></label>
-              <input type="text" required class="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold mb-1.5">مكان السكن الحالي <span class="text-red-500">*</span></label>
-              <input type="text" required class="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-            </div>
-          </div>
-
-          <!-- الجنس -->
-          <div>
-            <label class="block text-xs font-bold mb-2">الجنس <span class="text-red-500">*</span></label>
-            <div class="flex items-center gap-6">
-              <label class="flex items-center gap-2 text-xs cursor-pointer">
-                <input type="radio" name="gender" value="ذكر" required class="accent-gold-500">
-                <span>ذكر</span>
-              </label>
-              <label class="flex items-center gap-2 text-xs cursor-pointer">
-                <input type="radio" name="gender" value="أنثى" required class="accent-gold-500">
-                <span>أنثى</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- تاريخ الولادة ورقم الهاتف -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-            <div>
-              <label class="block text-xs font-bold mb-1.5">تاريخ الولادة حسب الهوية (اليوم/الشهر/السنة) <span class="text-red-500">*</span></label>
-              <input type="date" required class="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-right">
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold mb-1.5">رقم الهاتف للطالب <span class="text-red-500">*</span></label>
-              <input type="tel" required placeholder="03xxxxxx / 70xxxxxx" class="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left" dir="ltr">
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. عمل ربّ الأسرة -->
-        <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
-          <label class="block text-xs font-bold mb-3">ما هو عمل ربّ الأسرة؟ <span class="text-red-500">*</span></label>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50">
-              <input type="radio" name="fatherJob" value="أستاذ رسمي (ملاك)" required class="accent-gold-500">
-              <span>أستاذ رسمي (ملاك)</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50">
-              <input type="radio" name="fatherJob" value="أستاذ رسمي متعاقد" class="accent-gold-500">
-              <span>أستاذ رسمي متعاقد</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50">
-              <input type="radio" name="fatherJob" value="أستاذ (قطاع خاص)" class="accent-gold-500">
-              <span>أستاذ (قطاع خاص)</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50">
-              <input type="radio" name="fatherJob" value="قوى أمن (جيش/درك/أمن عام..)" class="accent-gold-500">
-              <span>قوى أمن (جيش/درك/أمن عام..)</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50">
-              <input type="radio" name="fatherJob" value="موظف (قطاع عام)" class="accent-gold-500">
-              <span>موظف (قطاع عام)</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50">
-              <input type="radio" name="fatherJob" value="موظف (قطاع خاص)" class="accent-gold-500">
-              <span>موظف (قطاع خاص)</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50">
-              <input type="radio" name="fatherJob" value="عمل حرّ (تجارة..)" class="accent-gold-500">
-              <span>عمل حرّ (تجارة..)</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50">
-              <input type="radio" name="fatherJob" value="مهن حرّة (مهندس/طبيب/محامي..)" class="accent-gold-500">
-              <span>مهن حرّة (مهندس/طبيب/محامي..)</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50">
-              <input type="radio" name="fatherJob" value="مهني أو حرفي (ميكانيكي/نجار/حداد/كهربائي/ديلفري/بلات..." class="accent-gold-500">
-              <span>مهني أو حرفي (ميكانيكي/نجار/كهربائي..)</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50">
-              <input type="radio" name="fatherJob" value="مزارع" class="accent-gold-500">
-              <span>مزارع</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50">
-              <input type="radio" name="fatherJob" value="عامل يومي" class="accent-gold-500">
-              <span>عامل يومي</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50">
-              <input type="radio" name="fatherJob" value="متقاعد (قطاع عام)" class="accent-gold-500">
-              <span>متقاعد (قطاع عام)</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50">
-              <input type="radio" name="fatherJob" value="متقاعد (قوى أمنية)" class="accent-gold-500">
-              <span>متقاعد (قوى أمنية)</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50">
-              <input type="radio" name="fatherJob" value="لا يعمل" class="accent-gold-500">
-              <span>لا يعمل</span>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 sm:col-span-2">
-              <input type="radio" name="fatherJob" value="غير ذلك" class="accent-gold-500">
-              <span>غير ذلك</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- 3. البيانات الجامعية والدراسية -->
-        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
-          <h2 class="text-sm font-bold text-slate-900 dark:text-white pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
-            <i data-lucide="graduation-cap" class="w-4 h-4 text-gold-500"></i>
-            <span>البيانات الجامعية والأكاديمية</span>
-          </h2>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold mb-1.5">اسم الجامعة الحالية أو التي ترغب بالتسجيل فيها <span class="text-red-500">*</span></label>
-              <input type="text" required class="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold mb-1.5">الاختصاص <span class="text-red-500">*</span></label>
-              <input type="text" required class="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-            </div>
-          </div>
-
-          <!-- السنة الدراسية -->
-          <div>
-            <label class="block text-xs font-bold mb-2">السنة الدراسية <span class="text-red-500">*</span></label>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              <label class="flex items-center gap-2 text-xs cursor-pointer p-2 rounded border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/40">
-                <input type="radio" name="academicYear" value="الأولى" required class="accent-gold-500">
-                <span>الأولى</span>
-              </label>
-              <label class="flex items-center gap-2 text-xs cursor-pointer p-2 rounded border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/40">
-                <input type="radio" name="academicYear" value="الثانية" class="accent-gold-500">
-                <span>الثانية</span>
-              </label>
-              <label class="flex items-center gap-2 text-xs cursor-pointer p-2 rounded border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/40">
-                <input type="radio" name="academicYear" value="الثالثة" class="accent-gold-500">
-                <span>الثالثة</span>
-              </label>
-              <label class="flex items-center gap-2 text-xs cursor-pointer p-2 rounded border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/40">
-                <input type="radio" name="academicYear" value="ماستر 1" class="accent-gold-500">
-                <span>ماستر 1</span>
-              </label>
-              <label class="flex items-center gap-2 text-xs cursor-pointer p-2 rounded border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/40">
-                <input type="radio" name="academicYear" value="ماستر 2" class="accent-gold-500">
-                <span>ماستر 2</span>
-              </label>
-              <label class="flex items-center gap-2 text-xs cursor-pointer p-2 rounded border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/40">
-                <input type="radio" name="academicYear" value="أخرى" class="accent-gold-500">
-                <span>أخرى</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-            <div>
-              <label class="block text-xs font-bold mb-1.5">رقم الملف (ID) إن وجد</label>
-              <input type="text" class="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left" dir="ltr">
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold mb-1.5">معدل النجاح في الامتحان الرسمي في الثالث ثانوي من 20 <span class="text-red-500">*</span></label>
-              <input type="text" required class="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left" dir="ltr">
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-bold mb-1.5">هل تستفيد من منحة جامعية حالياً؟ أذكر جهة إن وجد <span class="text-red-500">*</span></label>
-            <input type="text" required class="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-          </div>
-
-          <div>
-            <label class="block text-xs font-bold mb-1.5">سبب اختيارك للاختصاص الجامعي</label>
-            <textarea rows="3" class="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500"></textarea>
-          </div>
-        </div>
-
-        <!-- التنويه الرسمي المعتمد -->
-        <div class="p-3.5 rounded-xl border border-gold-500/30 bg-amber-500/5 text-slate-700 dark:text-amber-200/90 text-xs leading-relaxed text-center font-medium">
-          تختلف نسبة الحسم بحسب الجامعة والاتفاقيات المتاحة، كما فإن تقديم الطلب لا يعني الحصول على الحسم تلقائياً.
-        </div>
-
-        <!-- زر الإرسال -->
-        <div>
-          <button type="submit" class="w-full py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
-            <i data-lucide="send" class="w-4 h-4"></i>
-            <span>إرسال الطلب</span>
+        <!-- الجهة اليمنى: زر القائمة الجانبية (☰) وهوية الصفحة -->
+        <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+          <button id="openMenuBtn" aria-label="فتح القائمة" class="p-2 sm:p-2.5 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition shrink-0" title="القائمة الرئيسية">
+            <i data-lucide="menu" class="w-5 h-5 sm:w-6 sm:h-6"></i>
           </button>
+
+          <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+            <img src="logo.png" alt="شعار نادي الوفاء" class="w-9 h-9 sm:w-10 sm:h-10 object-contain shrink-0">
+            <div class="min-w-0">
+              <h1 class="text-xs sm:text-base font-bold text-slate-900 dark:text-white whitespace-nowrap">المنحة الطلابية السنوية</h1>
+              <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 truncate">نموذج التسجيل المباشر</p>
+            </div>
+          </div>
         </div>
 
-      </form>
+        <!-- الجهة اليسرى: محول المظهر (Dark/Light) وزر الرئيسية -->
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center justify-center p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition shrink-0" title="تبديل المظهر">
+            <span id="themeIconContainer" class="flex items-center justify-center"></span>
+            <span id="themeText" class="hidden sm:inline mr-1.5 text-xs font-semibold">الليلي</span>
+          </button>
 
-      <!-- إشعار النجاح بعد الإرسال -->
-      <div id="successNotice" class="hidden mt-6 p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs">
-        <div class="flex items-center gap-2 font-bold mb-1">
-          <i data-lucide="check-circle" class="w-4 h-4"></i>
-          <span>تم استلام طلبك بنجاح!</span>
+          <a href="index.html" class="flex items-center justify-center gap-1.5 p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 transition shrink-0" title="الصفحة الرئيسية">
+            <i data-lucide="home" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">الرئيسية</span>
+          </a>
         </div>
-        <p>تم تسجيل كامل بياناتك في استمارة منحة نادي الوفاء، وسيتم التواصل معك على رقم الهاتف المحدد.</p>
+
       </div>
+    </header>
 
-    </div>
-  </main>
+    <!-- ==================== محتوى الاستمارة ==================== -->
+    <main class="max-w-3xl mx-auto px-3.5 sm:px-6 py-6 sm:py-8">
+
+      <div class="p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm">
+        
+        <form id="officialScholarshipForm" class="space-y-6">
+          
+          <!-- 1. البيانات الشخصية والعائلية الأساسية -->
+          <div class="space-y-4">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
+              <h2 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <i data-lucide="user" class="w-4 h-4 text-gold-500"></i>
+                <span>البيانات الشخصية والعائلية</span>
+              </h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
+              <div>
+                <label class="block text-xs font-bold mb-1.5">الاسم <span class="text-red-500">*</span></label>
+                <input type="text" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1.5">اسم الأب <span class="text-red-500">*</span></label>
+                <input type="text" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1.5">الشهرة (العائلة) <span class="text-red-500">*</span></label>
+                <input type="text" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1.5">اسم الأم وشهرتها <span class="text-red-500">*</span></label>
+                <input type="text" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1.5">البلدة الأساسية <span class="text-red-500">*</span></label>
+                <input type="text" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1.5">مكان السكن الحالي <span class="text-red-500">*</span></label>
+                <input type="text" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              </div>
+            </div>
+
+            <!-- الجنس -->
+            <div class="pt-1">
+              <label class="block text-xs font-bold mb-2">الجنس <span class="text-red-500">*</span></label>
+              <div class="flex items-center gap-6">
+                <label class="inline-flex items-center gap-2 text-xs font-bold cursor-pointer">
+                  <input type="radio" name="gender" value="ذكر" required class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500">
+                  <span>ذكر</span>
+                </label>
+                <label class="inline-flex items-center gap-2 text-xs font-bold cursor-pointer">
+                  <input type="radio" name="gender" value="أنثى" required class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500">
+                  <span>أنثى</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- تاريخ الولادة ورقم الهاتف -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 pt-1">
+              <div>
+                <label class="block text-xs font-bold mb-1.5">تاريخ الولادة حسب الهوية <span class="text-red-500">*</span></label>
+                <input type="date" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-right">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1.5">رقم هاتف الطالب (واتساب فعال) <span class="text-red-500">*</span></label>
+                <input type="tel" required placeholder="03xxxxxx / 70xxxxxx" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. عمل ربّ الأسرة -->
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
+            <label class="block text-xs font-bold text-slate-900 dark:text-white">ما هو عمل ربّ الأسرة؟ <span class="text-red-500">*</span></label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition">
+                <input type="radio" name="fatherJob" value="أستاذ رسمي (ملاك)" required class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>أستاذ رسمي (ملاك)</span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition">
+                <input type="radio" name="fatherJob" value="أستاذ رسمي متعاقد" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>أستاذ رسمي متعاقد</span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition">
+                <input type="radio" name="fatherJob" value="أستاذ (قطاع خاص)" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>أستاذ (قطاع خاص)</span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition">
+                <input type="radio" name="fatherJob" value="قوى أمن (جيش/درك/أمن عام..)" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>قوى أمن (جيش/درك/أمن عام..)</span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition">
+                <input type="radio" name="fatherJob" value="موظف (قطاع عام)" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>موظف (قطاع عام)</span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition">
+                <input type="radio" name="fatherJob" value="موظف (قطاع خاص)" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>موظف (قطاع خاص)</span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition">
+                <input type="radio" name="fatherJob" value="عمل حرّ (تجارة..)" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>عمل حرّ (تجارة..)</span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition">
+                <input type="radio" name="fatherJob" value="مهن حرّة (مهندس/طبيب/محامي..)" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>مهن حرّة (مهندس/طبيب/محامي..)</span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition">
+                <input type="radio" name="fatherJob" value="مهني أو حرفي (ميكانيكي/نجار/حداد/كهربائي/ديلفري/بلات..." class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>مهني أو حرفي (ميكانيكي/نجار/كهربائي..)</span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition">
+                <input type="radio" name="fatherJob" value="مزارع" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>مزارع</span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition">
+                <input type="radio" name="fatherJob" value="عامل يومي" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>عامل يومي</span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition">
+                <input type="radio" name="fatherJob" value="متقاعد (قطاع عام)" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>متقاعد (قطاع عام)</span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition">
+                <input type="radio" name="fatherJob" value="متقاعد (قوى أمنية)" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>متقاعد (قوى أمنية)</span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition">
+                <input type="radio" name="fatherJob" value="لا يعمل" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>لا يعمل</span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 text-xs cursor-pointer hover:border-gold-500/50 transition sm:col-span-2">
+                <input type="radio" name="fatherJob" value="غير ذلك" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                <span>غير ذلك</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 3. البيانات الجامعية والدراسية -->
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
+              <h2 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <i data-lucide="graduation-cap" class="w-4 h-4 text-gold-500"></i>
+                <span>البيانات الجامعية والأكاديمية</span>
+              </h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
+              <div>
+                <label class="block text-xs font-bold mb-1.5">اسم الجامعة الحالية أو المراد التسجيل فيها <span class="text-red-500">*</span></label>
+                <input type="text" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1.5">الاختصاص <span class="text-red-500">*</span></label>
+                <input type="text" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              </div>
+            </div>
+
+            <!-- السنة الدراسية -->
+            <div>
+              <label class="block text-xs font-bold mb-2">السنة الدراسية <span class="text-red-500">*</span></label>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-2.5">
+                <label class="flex items-center gap-2 text-xs font-medium cursor-pointer p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 hover:border-gold-500/50 transition">
+                  <input type="radio" name="academicYear" value="الأولى" required class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                  <span>الأولى</span>
+                </label>
+                <label class="flex items-center gap-2 text-xs font-medium cursor-pointer p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 hover:border-gold-500/50 transition">
+                  <input type="radio" name="academicYear" value="الثانية" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                  <span>الثانية</span>
+                </label>
+                <label class="flex items-center gap-2 text-xs font-medium cursor-pointer p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 hover:border-gold-500/50 transition">
+                  <input type="radio" name="academicYear" value="الثالثة" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                  <span>الثالثة</span>
+                </label>
+                <label class="flex items-center gap-2 text-xs font-medium cursor-pointer p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 hover:border-gold-500/50 transition">
+                  <input type="radio" name="academicYear" value="ماستر 1" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                  <span>ماستر 1</span>
+                </label>
+                <label class="flex items-center gap-2 text-xs font-medium cursor-pointer p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 hover:border-gold-500/50 transition">
+                  <input type="radio" name="academicYear" value="ماستر 2" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                  <span>ماستر 2</span>
+                </label>
+                <label class="flex items-center gap-2 text-xs font-medium cursor-pointer p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/40 hover:border-gold-500/50 transition">
+                  <input type="radio" name="academicYear" value="أخرى" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500 shrink-0">
+                  <span>أخرى</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 pt-1">
+              <div>
+                <label class="block text-xs font-bold mb-1.5">رقم الملف (ID) إن وجد</label>
+                <input type="text" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold mb-1.5">معدل النجاح في الامتحان الرسمي بالثالث ثانوي من 20 <span class="text-red-500">*</span></label>
+                <input type="text" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold mb-1.5">هل تستفيد من منحة جامعية حالياً؟ أذكر الجهة إن وجد <span class="text-red-500">*</span></label>
+              <input type="text" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold mb-1.5">سبب اختيارك للاختصاص الجامعي</label>
+              <textarea rows="3" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 custom-scrollbar"></textarea>
+            </div>
+          </div>
+
+          <!-- التنويه الرسمي المعتمد -->
+          <div class="p-3.5 sm:p-4 rounded-2xl border border-gold-500/30 bg-amber-500/5 text-slate-700 dark:text-amber-200/90 text-xs leading-relaxed text-center font-medium">
+            تختلف نسبة الحسم بحسب الجامعة والاتفاقيات المتاحة، كما فإن تقديم الطلب لا يعني الحصول على الحسم تلقائياً.
+          </div>
+
+          <!-- زر الإرسال -->
+          <div class="pt-2">
+            <button type="submit" class="w-full py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+              <i data-lucide="send" class="w-4 h-4"></i>
+              <span>إرسال الطلب</span>
+            </button>
+          </div>
+
+        </form>
+
+        <!-- إشعار النجاح بعد الإرسال -->
+        <div id="successNotice" class="hidden mt-6 p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs">
+          <div class="flex items-center gap-2 font-bold mb-1">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>تم استلام طلبك بنجاح!</span>
+          </div>
+          <p class="leading-relaxed">تم تسجيل كامل بياناتك في استمارة منحة نادي الوفاء، وسيتم التواصل معك على رقم الهاتف المحدد.</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== التذييل السفلي ==================== -->
+  <footer class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
+    نادي الوفاء — الجامعة اللبنانية الدولية في صور • المنحة الطلابية السنوية
+  </footer>
 
   <!-- ==================== القائمة الجانبية (SLIDE-OVER MENU) ==================== -->
   <div id="menuOverlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
   <aside id="sidebar" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0c1427] border-l border-slate-200 dark:border-clubNavy-borderDark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
-    
     <div>
-      <!-- رأس القائمة -->
-      <div class="p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
+      <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
         <div>
-          <h2 class="font-bold text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">الوصول السريع لكافة الخدمات</p>
+          <h2 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">الوصول السريع لكافة الخدمات</p>
         </div>
-        <button id="closeMenuBtn" aria-label="إغلاق القائمة" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-red-500">
+        <button id="closeMenuBtn" aria-label="إغلاق القائمة" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-red-500">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <!-- قائمة الروابط الرئيسية -->
-      <nav class="p-4 space-y-1.5">
-        
-        <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+      <nav class="p-3.5 sm:p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-140px)] custom-scrollbar">
+        <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
           <span>الرئيسية (الأنشطة والإعلانات)</span>
         </a>
 
-        <a href="scholarship.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
+        <a href="scholarship.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
           <i data-lucide="graduation-cap" class="w-4 h-4"></i>
           <span>المنح الطلابية (تسجيل مباشر)</span>
         </a>
 
-        <a href="resources.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
-          <i data-lucide="folder-down" class="w-4 h-4 text-slate-400"></i>
+        <a href="resources.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="folder-down" class="w-4 h-4 text-slate-400 shrink-0"></i>
           <div>
             <p>بنك الموارد الرقمية والامتحانات</p>
             <p class="text-[10px] text-slate-400 dark:text-slate-500">كتب PDF • نماذج سابقة • ملخصات</p>
           </div>
         </a>
 
-        <a href="books.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
-          <i data-lucide="book-open" class="w-4 h-4 text-slate-400"></i>
+        <a href="books.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="book-open" class="w-4 h-4 text-slate-400 shrink-0"></i>
           <div>
             <p>استعارة وتبادل الكتب الورقية</p>
             <p class="text-[10px] text-slate-400 dark:text-slate-500">حجز أو تبرع بالنسخ الفيزيائية</p>
           </div>
         </a>
 
-        <a href="faculty.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+        <a href="faculty.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
           <span>دليل الأساتذة والساعات المكتبية</span>
         </a>
 
-        <a href="guidance.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
-          <i data-lucide="message-circle" class="w-4 h-4 text-slate-400"></i>
+        <a href="guidance.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="message-circle" class="w-4 h-4 text-slate-400 shrink-0"></i>
           <div>
             <p>شبكة التوجيه وممثلو الاختصاصات</p>
             <span class="text-[10px] text-slate-400 dark:text-slate-500">مجموعات الواتساب والتواصل المباشر</span>
           </div>
         </a>
-
       </nav>
     </div>
 
-    <!-- أسفل القائمة -->
     <div class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
       نادي الوفاء — الجامعة اللبنانية الدولية في صور
     </div>
-
   </aside>
 
   <!-- ==================== سكربت التحكم الشامل ==================== -->
@@ -445,7 +451,6 @@
     }
 
     // 3. معالجة إرسال النموذج
-   // استبدل الرابط بين القوسين بالرابط الذي نسخته من Apps Script (ينتهي بـ /exec)
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
 
     const form = document.getElementById('officialScholarshipForm');
@@ -457,7 +462,6 @@
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalBtnContent = submitBtn.innerHTML;
 
-        // إظهار حالة جاري الإرسال
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span>جاري إرسال الطلب...</span>';
 
