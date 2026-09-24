@@ -32,7 +32,6 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
   </style>
 
-  <!-- التحقق من الجلسة -->
   <script>
     if (!sessionStorage.getItem('nadi_admin_session')) {
       window.location.replace('admin.html');
@@ -41,7 +40,7 @@
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen flex flex-col justify-between">
 
-  <!-- ==================== الشريط العلوي المتجاوب ==================== -->
+  <!-- ==================== الشريط العلوي ==================== -->
   <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-3.5 sm:px-6 lg:px-8 py-3 transition-colors">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
       
@@ -118,7 +117,7 @@
 
     </div>
 
-    <!-- ==================== 1. إضافة كتاب جديد ==================== -->
+    <!-- 1. إضافة كتاب جديد -->
     <section id="viewAdd" class="p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
       <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
         <span class="text-xs font-bold text-gold-500">إدخال مباشر إلى ورقة الكتب_المتوفرة</span>
@@ -169,7 +168,7 @@
       </form>
     </section>
 
-    <!-- ==================== 2. الكتب المتوفرة ==================== -->
+    <!-- 2. الكتب المتوفرة -->
     <section id="viewAvailable" class="hidden p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
         <div>
@@ -193,7 +192,7 @@
       </div>
     </section>
 
-    <!-- ==================== 3. طلبات الاستعارة والتبرعات ==================== -->
+    <!-- 3. طلبات الاستعارة والتبرعات -->
     <section id="viewRequests" class="hidden p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
         <div>
@@ -211,7 +210,7 @@
       </div>
     </section>
 
-    <!-- ==================== 4. سجل الإعارات والاسترداد ==================== -->
+    <!-- 4. سجل الإعارات والاسترداد -->
     <section id="viewLoans" class="hidden p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
         <div>
@@ -303,7 +302,7 @@
     نادي الوفاء — الجامعة اللبنانية الدولية في صور • إدارة مكتبة الكتب
   </footer>
 
-  <!-- ==================== السكربت البرمجي المانع للطلبات الشبحية ==================== -->
+  <!-- ==================== السكربت البرمجي ==================== -->
   <script>
     lucide.createIcons();
 
@@ -315,7 +314,6 @@
     let currentEditOriginalTitle = "";
     let activeActionCallback = null;
 
-    // مجموعة حظر الطلبات المعالجة محلياً لمنع عودتها كأشباح
     const processedRequestsKeys = new Set();
 
     const activeAdmin = sessionStorage.getItem('nadi_admin_session');
@@ -323,10 +321,23 @@
       document.getElementById('welcomeAdmin').textContent = `المشرف: ${activeAdmin}`;
     }
 
+    // دالة إرسال آمنة وقطعية لسيرفر جوجل بدون أي تعطيل من المتصفح
+    async function postToServer(payload) {
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.warn("Server call info:", err);
+      }
+    }
+
     function generateRequestKey(r) {
-      const id = String(r['رقم الملف'] || r.studentId || '').trim().toLowerCase();
-      const phone = String(r['رقم الهاتف'] || r.phone || '').replace(/\D/g, '');
-      const book = String(r['عنوان الكتاب'] || r.bookTitle || '').trim().toLowerCase();
+      const id = String(r['رقم الملف'] || r['الرقم الجامعي'] || r['ID'] || r.studentId || '').trim().toLowerCase();
+      const phone = String(r['رقم الهاتف'] || r['الهاتف'] || r.phone || '').replace(/\D/g, '');
+      const book = String(r['عنوان الكتاب'] || r['اسم الكتاب'] || r['الكتاب'] || r['اسم المرجع'] || r.bookTitle || r.title || '').trim().toLowerCase();
       return `${id}_${phone}_${book}`;
     }
 
@@ -361,18 +372,17 @@
       lucide.createIcons();
     }
 
-    // عرض الكتب المتوفرة
     function renderAvailableBooks(list) {
       const container = document.getElementById('availableListContainer');
       const badge = document.getElementById('badgeAvailableCount');
       if (!container) return;
 
-      const valid = (list || []).filter(b => (b['العنوان'] || b['عنوان الكتاب'] || b.title || '').trim() !== '');
+      const valid = (list || []).filter(b => (b['العنوان'] || b['عنوان الكتاب'] || b['اسم الكتاب'] || b['الكتاب'] || b.title || '').trim() !== '');
       if (badge) badge.textContent = valid.length;
 
       const query = (document.getElementById('availableSearchInput')?.value || '').toLowerCase().trim();
       const filtered = valid.filter(b => {
-        const title = (b['العنوان'] || b['عنوان الكتاب'] || b.title || '').toLowerCase();
+        const title = (b['العنوان'] || b['عنوان الكتاب'] || b['اسم الكتاب'] || b['الكتاب'] || b.title || '').toLowerCase();
         const college = (b['الكلية'] || b.college || '').toLowerCase();
         const desc = (b['الوصف'] || b.desc || '').toLowerCase();
         return !query || title.includes(query) || college.includes(query) || desc.includes(query);
@@ -384,7 +394,7 @@
       }
 
       container.innerHTML = filtered.map((b, idx) => {
-        const title = b['العنوان'] || b['عنوان الكتاب'] || b.title || '';
+        const title = b['العنوان'] || b['عنوان الكتاب'] || b['اسم الكتاب'] || b['الكتاب'] || b.title || '';
         const college = b['الكلية'] || b.college || 'عام';
         const copies = b['عدد النسخ'] || b.copies || '1';
         const desc = b['الوصف'] || b.desc || 'لا يوجد وصف ملحق';
@@ -402,11 +412,11 @@
               <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">${desc}</p>
             </div>
             <div class="flex items-center gap-2 shrink-0 self-end sm:self-auto">
-              <button onclick="openEditBookModal(${idx})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition">
+              <button onclick="openEditBookModal(${idx})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="تعديل الكتاب">
                 <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                 <span>تعديل</span>
               </button>
-              <button onclick="deleteBookAction('${title.replace(/'/g, "\\'")}')" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition">
+              <button onclick="deleteBookAction('${title.replace(/'/g, "\\'")}')" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition" title="حذف من المخزون">
                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 <span>حذف</span>
               </button>
@@ -418,14 +428,13 @@
       lucide.createIcons();
     }
 
-    // عرض الطلبات مع تصفية أي طلب تم تنفيذه محلياً
     function renderBookRequests(list) {
       const container = document.getElementById('requestsListContainer');
       const badge = document.getElementById('badgeRequestsCount');
       if (!container) return;
 
       const valid = (list || []).filter(r => {
-        const hasName = (r['اسم الطالب'] || r['الاسم الكامل'] || r.fullName || '').trim() !== '';
+        const hasName = (r['اسم الطالب'] || r['الاسم الكامل'] || r['الاسم'] || r.fullName || r.name || '').trim() !== '';
         const key = generateRequestKey(r);
         return hasName && !processedRequestsKeys.has(key);
       });
@@ -438,11 +447,11 @@
       }
 
       container.innerHTML = valid.map(r => {
-        const type = r['نوع الطلب'] || r.type || 'طلب استعارة';
-        const name = r['اسم الطالب'] || r['الاسم الكامل'] || r.fullName || '';
-        const id = r['رقم الملف'] || r.studentId || '';
-        const phone = r['رقم الهاتف'] || r.phone || '';
-        const book = r['عنوان الكتاب'] || r.bookTitle || '';
+        const type = r['نوع الطلب'] || r['النوع'] || r.type || 'طلب استعارة';
+        const name = r['اسم الطالب'] || r['الاسم الكامل'] || r['الاسم'] || r.fullName || r.name || '';
+        const id = r['رقم الملف'] || r['الرقم الجامعي'] || r['ID'] || r.studentId || '';
+        const phone = r['رقم الهاتف'] || r['الهاتف'] || r.phone || '';
+        const book = r['عنوان الكتاب'] || r['اسم الكتاب'] || r['الكتاب'] || r['اسم المرجع'] || r.bookTitle || r.title || 'كتاب بدون عنوان';
         const isBorrow = type.includes('استعارة');
 
         return `
@@ -481,13 +490,12 @@
       lucide.createIcons();
     }
 
-    // عرض سجل الإعارات
     function renderLoanedBooks(list) {
       const container = document.getElementById('loansListContainer');
       const badge = document.getElementById('badgeLoansCount');
       if (!container) return;
 
-      const valid = (list || []).filter(l => (l['عنوان الكتاب'] || l.bookTitle || '').trim() !== '');
+      const valid = (list || []).filter(l => (l['عنوان الكتاب'] || l['اسم الكتاب'] || l['الكتاب'] || l.bookTitle || '').trim() !== '');
       if (badge) badge.textContent = valid.length;
 
       if (valid.length === 0) {
@@ -496,10 +504,10 @@
       }
 
       container.innerHTML = valid.map(l => {
-        const book = l['عنوان الكتاب'] || l.bookTitle || '';
-        const name = l['اسم الطالب'] || l.studentName || '';
-        const id = l['رقم الملف'] || l.studentId || '';
-        const phone = l['رقم الهاتف'] || l.phone || '';
+        const book = l['عنوان الكتاب'] || l['اسم الكتاب'] || l['الكتاب'] || l.bookTitle || '';
+        const name = l['اسم الطالب'] || l['الاسم الكامل'] || l.studentName || '';
+        const id = l['رقم الملف'] || l['الرقم الجامعي'] || l.studentId || '';
+        const phone = l['رقم الهاتف'] || l['الهاتف'] || l.phone || '';
         const date = l['تاريخ الإعارة'] || l.timestamp || '';
 
         return `
@@ -523,7 +531,6 @@
       lucide.createIcons();
     }
 
-    // جلب البيانات مع مانع الكاش
     async function fetchLiveBooksData(forceFresh = false) {
       if (!SCRIPT_URL) return;
       try {
@@ -545,7 +552,6 @@
       } catch (e) {}
     }
 
-    // إضافة كتاب للمخزون
     const addBookForm = document.getElementById('addBookForm');
     if (addBookForm) {
       addBookForm.addEventListener('submit', async (e) => {
@@ -572,28 +578,20 @@
         addBookForm.reset();
         switchTab('available');
 
-        try {
-          await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              action: "add_book",
-              title: title,
-              college: college,
-              copies: copies,
-              desc: fullDesc
-            })
-          });
-        } catch (err) {} finally {
-          btn.disabled = false;
-          btn.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4"></i><span>إضافة الكتاب إلى المخزون فوراً</span>`;
-          lucide.createIcons();
-        }
+        await postToServer({
+          action: "add_book",
+          title: title,
+          college: college,
+          copies: copies,
+          desc: fullDesc
+        });
+
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4"></i><span>إضافة الكتاب إلى المخزون فوراً</span>`;
+        lucide.createIcons();
       });
     }
 
-    // تعديل كتاب
     const editBookModal = document.getElementById('editBookModal');
     const editBookForm = document.getElementById('editBookForm');
 
@@ -601,7 +599,7 @@
       const b = availableBooksList[idx];
       if (!b) return;
 
-      currentEditOriginalTitle = b['العنوان'] || b['عنوان الكتاب'] || b.title || '';
+      currentEditOriginalTitle = b['العنوان'] || b['عنوان الكتاب'] || b['اسم الكتاب'] || b.title || '';
       document.getElementById('editBookTitle').value = currentEditOriginalTitle;
       document.getElementById('editBookCollege').value = b['الكلية'] || b.college || 'كلية الهندسة';
       document.getElementById('editBookCopies').value = b['عدد النسخ'] || b.copies || '1';
@@ -625,7 +623,7 @@
         const updatedCopies = document.getElementById('editBookCopies').value.trim();
         const updatedDesc = document.getElementById('editBookDesc').value.trim();
 
-        const target = availableBooksList.find(b => (b['العنوان'] || b['عنوان الكتاب'] || b.title) === currentEditOriginalTitle);
+        const target = availableBooksList.find(b => (b['العنوان'] || b['عنوان الكتاب'] || b['اسم الكتاب'] || b.title) === currentEditOriginalTitle);
         if (target) {
           target['العنوان'] = updatedTitle;
           target['عنوان الكتاب'] = updatedTitle;
@@ -637,25 +635,17 @@
         renderAvailableBooks(availableBooksList);
         closeEditBookModal();
 
-        try {
-          await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              action: "edit_book",
-              originalTitle: currentEditOriginalTitle,
-              title: updatedTitle,
-              college: updatedCollege,
-              copies: updatedCopies,
-              desc: updatedDesc
-            })
-          });
-        } catch(e) {}
+        await postToServer({
+          action: "edit_book",
+          originalTitle: currentEditOriginalTitle,
+          title: updatedTitle,
+          college: updatedCollege,
+          copies: updatedCopies,
+          desc: updatedDesc
+        });
       });
     }
 
-    // نافذة الإجراءات الموحدة
     const actionConfirmModal = document.getElementById('actionConfirmModal');
     const modalActionMsg = document.getElementById('modalActionMsg');
     const confirmExecuteBtn = document.getElementById('confirmExecuteBtn');
@@ -687,28 +677,25 @@
       });
     }
 
-    // قبول الإعارة: الحذف اللحظي والتسجيل في الحظر
+    // قبول الإعارة
     function approveBorrowAction(bookTitle, studentName, studentId, phone) {
       openActionModal(`تأكيد إعارة كتاب (${bookTitle}) وتسليم النسخة للطالب (${studentName})؟`, async () => {
         const reqKey = `${String(studentId).trim().toLowerCase()}_${String(phone).replace(/\D/g, '')}_${String(bookTitle).trim().toLowerCase()}`;
         processedRequestsKeys.add(reqKey);
 
-        // 1. خصم نسخة أو حذف من المتوفرة محلياً
-        const target = availableBooksList.find(b => (b['العنوان'] || b['عنوان الكتاب'] || b.title) === bookTitle);
+        const target = availableBooksList.find(b => (b['العنوان'] || b['عنوان الكتاب'] || b['اسم الكتاب'] || b.title) === bookTitle);
         if (target) {
           let count = parseInt(target['عدد النسخ'] || target.copies || "1", 10);
           if (count > 1) {
             target['عدد النسخ'] = count - 1;
             target.copies = count - 1;
           } else {
-            availableBooksList = availableBooksList.filter(b => (b['العنوان'] || b['عنوان الكتاب'] || b.title) !== bookTitle);
+            availableBooksList = availableBooksList.filter(b => (b['العنوان'] || b['عنوان الكتاب'] || b['اسم الكتاب'] || b.title) !== bookTitle);
           }
         }
 
-        // 2. حذف من قائمة الطلبات محلياً
         bookRequestsList = bookRequestsList.filter(r => generateRequestKey(r) !== reqKey);
 
-        // 3. إضافة لسجل الإعارات محلياً
         loanedBooksList.push({
           'عنوان الكتاب': bookTitle,
           'اسم الطالب': studentName,
@@ -721,24 +708,17 @@
         renderBookRequests(bookRequestsList);
         renderLoanedBooks(loanedBooksList);
 
-        try {
-          await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              action: "approve_book_borrow",
-              bookTitle: bookTitle,
-              studentName: studentName,
-              studentId: studentId,
-              phone: phone
-            })
-          });
-        } catch (e) {}
+        await postToServer({
+          action: "approve_book_borrow",
+          bookTitle: bookTitle,
+          studentName: studentName,
+          studentId: studentId,
+          phone: phone
+        });
       });
     }
 
-    // اعتماد التبرع: إضافة للمخزون ومسح الطلب فوراً
+    // اعتماد التبرع: إضافة للمخزون ومسح من الطلبات في الشيت والموقع فوراً
     function approveDonationAction(title, studentId, phone) {
       openActionModal(`تأكيد استلام كتاب (${title}) وإضافته للمخزون المتوفر؟`, async () => {
         const reqKey = `${String(studentId).trim().toLowerCase()}_${String(phone).replace(/\D/g, '')}_${String(title).trim().toLowerCase()}`;
@@ -746,7 +726,7 @@
 
         bookRequestsList = bookRequestsList.filter(r => generateRequestKey(r) !== reqKey);
 
-        const existing = availableBooksList.find(b => (b['العنوان'] || b['عنوان الكتاب'] || b.title) === title);
+        const existing = availableBooksList.find(b => (b['العنوان'] || b['عنوان الكتاب'] || b['اسم الكتاب'] || b.title) === title);
         if (existing) {
           let count = parseInt(existing['عدد النسخ'] || existing.copies || "0", 10);
           existing['عدد النسخ'] = count + 1;
@@ -763,23 +743,17 @@
         renderAvailableBooks(availableBooksList);
         renderBookRequests(bookRequestsList);
 
-        try {
-          await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              action: "approve_book_donation",
-              title: title,
-              studentId: studentId,
-              phone: phone
-            })
-          });
-        } catch (e) {}
+        // إرسال الأمر للسيرفر
+        await postToServer({
+          action: "approve_book_donation",
+          title: title,
+          studentId: studentId,
+          phone: phone
+        });
       });
     }
 
-    // رفض وحذف طلب: مسح قطعي لا يعود بعده أبداً
+    // رفض وحذف طلب
     function deleteRequestAction(studentId, phone, bookTitle) {
       openActionModal(`هل أنت متأكد من رفض وحذف هذا الطلب نهائياً؟`, async () => {
         const reqKey = `${String(studentId).trim().toLowerCase()}_${String(phone).replace(/\D/g, '')}_${String(bookTitle).trim().toLowerCase()}`;
@@ -788,28 +762,21 @@
         bookRequestsList = bookRequestsList.filter(r => generateRequestKey(r) !== reqKey);
         renderBookRequests(bookRequestsList);
 
-        try {
-          await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              action: "delete_book_request",
-              studentId: studentId,
-              phone: phone,
-              bookTitle: bookTitle
-            })
-          });
-        } catch (e) {}
+        await postToServer({
+          action: "delete_book_request",
+          studentId: studentId,
+          phone: phone,
+          bookTitle: bookTitle
+        });
       }, true);
     }
 
     // استرداد نسخة
     function returnBookAction(bookTitle) {
       openActionModal(`تأكيد استلام كتاب (${bookTitle}) وإعادته للكتب المتوفرة؟`, async () => {
-        loanedBooksList = loanedBooksList.filter(l => (l['عنوان الكتاب'] || l.bookTitle) !== bookTitle);
+        loanedBooksList = loanedBooksList.filter(l => (l['عنوان الكتاب'] || l['اسم الكتاب'] || l['الكتاب'] || l.bookTitle) !== bookTitle);
 
-        const existing = availableBooksList.find(b => (b['العنوان'] || b['عنوان الكتاب'] || b.title) === bookTitle);
+        const existing = availableBooksList.find(b => (b['العنوان'] || b['عنوان الكتاب'] || b['اسم الكتاب'] || b.title) === bookTitle);
         if (existing) {
           let count = parseInt(existing['عدد النسخ'] || existing.copies || "0", 10);
           existing['عدد النسخ'] = count + 1;
@@ -826,33 +793,20 @@
         renderLoanedBooks(loanedBooksList);
         renderAvailableBooks(availableBooksList);
 
-        try {
-          await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              action: "return_book",
-              bookTitle: bookTitle
-            })
-          });
-        } catch (e) {}
+        await postToServer({
+          action: "return_book",
+          bookTitle: bookTitle
+        });
       });
     }
 
     // حذف كتاب من المتوفرة
     function deleteBookAction(title) {
       openActionModal(`هل أنت متأكد من حذف كتاب (${title}) نهائياً من المخزون؟`, async () => {
-        availableBooksList = availableBooksList.filter(b => (b['العنوان'] || b['عنوان الكتاب'] || b.title) !== title);
+        availableBooksList = availableBooksList.filter(b => (b['العنوان'] || b['عنوان الكتاب'] || b['اسم الكتاب'] || b.title) !== title);
         renderAvailableBooks(availableBooksList);
-        try {
-          await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "delete_book", title: title })
-          });
-        } catch (e) {}
+
+        await postToServer({ action: "delete_book", title: title });
       }, true);
     }
 
@@ -885,8 +839,6 @@
     }
 
     applyTheme(localStorage.getItem('clubTheme') !== 'light');
-
-    // تشغيل الجلب اللحظي
     fetchLiveBooksData(true);
   </script>
 </body>
