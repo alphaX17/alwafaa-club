@@ -74,22 +74,18 @@
   <!-- ==================== المحتوى والتنقل ==================== -->
   <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-8 space-y-6">
 
-    <!-- أزرار التبويبات بنظام شبكة تفاعلي واضح (2 كروت عريضة) -->
-    <div class="grid grid-cols-2 gap-2.5 sm:gap-3.5 w-full max-w-lg">
-      <button id="tabBtnAdd" onclick="switchTab('add')" class="p-3 sm:px-4 sm:py-2.5 rounded-xl text-xs font-bold transition shadow-sm bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center justify-between gap-1.5 border border-transparent ring-2 ring-gold-500/20">
-        <div class="flex items-center gap-1.5">
-          <i data-lucide="calendar-plus" class="w-4 h-4 shrink-0"></i>
-          <span class="whitespace-nowrap">إضافة نشاط</span>
-        </div>
-        <span class="text-[10px] px-1.5 py-0.5 rounded font-mono bg-white/20 dark:bg-black/20 text-current">+جديد</span>
+    <!-- أزرار التبويبات المتناسقة والمرتبة -->
+    <div class="grid grid-cols-2 gap-2.5 sm:gap-4 w-full max-w-md">
+      <button id="tabBtnAdd" onclick="switchTab('add')" class="px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center justify-center gap-2 border border-transparent ring-2 ring-gold-500/20">
+        <i data-lucide="calendar-plus" class="w-4 h-4 shrink-0"></i>
+        <span class="whitespace-nowrap">إضافة نشاط</span>
+        <span class="text-[10px] px-1.5 py-0.5 rounded-full font-mono bg-white/20 dark:bg-black/20 text-current">+جديد</span>
       </button>
 
-      <button id="tabBtnManage" onclick="switchTab('manage')" class="p-3 sm:px-4 sm:py-2.5 rounded-xl text-xs font-bold transition shadow-sm bg-white dark:bg-clubNavy-cardDark border border-slate-200 dark:border-clubNavy-borderDark text-slate-600 dark:text-slate-300 hover:border-gold-500 flex items-center justify-between gap-1.5">
-        <div class="flex items-center gap-1.5">
-          <i data-lucide="calendar" class="w-4 h-4 shrink-0"></i>
-          <span class="whitespace-nowrap">الأنشطة المنشورة</span>
-        </div>
-        <span id="activityCountBadge" class="px-1.5 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
+      <button id="tabBtnManage" onclick="switchTab('manage')" class="px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-white dark:bg-clubNavy-cardDark border border-slate-200 dark:border-clubNavy-borderDark text-slate-600 dark:text-slate-300 hover:border-gold-500 flex items-center justify-center gap-2">
+        <i data-lucide="calendar" class="w-4 h-4 shrink-0"></i>
+        <span class="whitespace-nowrap">سجل الأنشطة</span>
+        <span id="activityCountBadge" class="text-[10px] px-2 py-0.5 rounded-full font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">...</span>
       </button>
     </div>
 
@@ -349,8 +345,6 @@
     lucide.createIcons();
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
-    
-    // مفتاح ImgBB API للرفع المباشر
     const IMGBB_API_KEY = "f42dd54fdc8962d9420e2e34d89218fd";
 
     let liveActivitiesList = [];
@@ -366,7 +360,6 @@
       document.getElementById('welcomeAdmin').textContent = `المشرف: ${activeAdmin}`;
     }
 
-    // محرك الرفع السحابي ومعالجة الصور
     async function uploadSingleFileToImgBB(file) {
       const formData = new FormData();
       formData.append("image", file);
@@ -433,13 +426,11 @@
       grid.innerHTML = arr.map((url, idx) => `
         <div class="relative h-24 rounded-xl overflow-hidden border ${idx === 0 ? 'border-2 border-gold-500' : 'border-slate-200 dark:border-slate-800'} bg-slate-100 dark:bg-slate-900 group shadow-sm">
           <img src="${url}" referrerpolicy="no-referrer" class="w-full h-full object-cover">
-          
           ${idx === 0 ? `
             <span class="absolute top-1 right-1 bg-gold-500 text-slate-950 font-bold text-[9px] px-1.5 py-0.5 rounded shadow">
               الغلاف
             </span>
           ` : ''}
-
           <button type="button" onclick="removeImageAt('${scope}', ${idx})" class="absolute top-1 left-1 p-1 rounded-md bg-black/75 hover:bg-rose-600 text-white transition" title="إزالة الصورة">
             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
           </button>
@@ -524,26 +515,34 @@
 
     applyTheme(localStorage.getItem('clubTheme') !== 'light');
 
+    // التبديل بين التبويبين مع التنسيق المحاذي للمنتصف
     function switchTab(tab) {
       const viewAdd = document.getElementById('viewAdd');
       const viewManage = document.getElementById('viewManage');
       const btnAdd = document.getElementById('tabBtnAdd');
       const btnManage = document.getElementById('tabBtnManage');
+      const countBadge = document.getElementById('activityCountBadge');
 
-      const activeClasses = "p-3 sm:px-4 sm:py-2.5 rounded-xl text-xs font-bold transition shadow-sm bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center justify-between gap-1.5 border border-transparent ring-2 ring-gold-500/20";
-      const inactiveClasses = "p-3 sm:px-4 sm:py-2.5 rounded-xl text-xs font-bold transition shadow-sm bg-white dark:bg-clubNavy-cardDark border border-slate-200 dark:border-clubNavy-borderDark text-slate-600 dark:text-slate-300 hover:border-gold-500 flex items-center justify-between gap-1.5";
+      const activeClasses = "px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center justify-center gap-2 border border-transparent ring-2 ring-gold-500/20";
+      const inactiveClasses = "px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-white dark:bg-clubNavy-cardDark border border-slate-200 dark:border-clubNavy-borderDark text-slate-600 dark:text-slate-300 hover:border-gold-500 flex items-center justify-center gap-2";
 
       if (tab === 'add') {
         viewAdd.classList.remove('hidden');
         viewManage.classList.add('hidden');
         btnAdd.className = activeClasses;
         btnManage.className = inactiveClasses;
+        if (countBadge) {
+          countBadge.className = "text-[10px] px-2 py-0.5 rounded-full font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400";
+        }
         updateFeaturedLimitsUI();
       } else {
         viewAdd.classList.add('hidden');
         viewManage.classList.remove('hidden');
         btnAdd.className = inactiveClasses;
         btnManage.className = activeClasses;
+        if (countBadge) {
+          countBadge.className = "text-[10px] px-2 py-0.5 rounded-full font-mono bg-white/20 dark:bg-black/20 text-current";
+        }
         fetchLiveActivities(true);
       }
       lucide.createIcons();
@@ -742,11 +741,11 @@
                   ` : ''}
 
                   <span class="text-[11px] text-slate-400 font-mono flex items-center gap-1">
-                    <i data-lucide="clock" class="w-3 h-3"></i>
+                    <i data-lucide="clock" class="w-3.5 h-3.5"></i>
                     ${date}
                   </span>
                   <span class="text-[11px] text-slate-400 flex items-center gap-1">
-                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
                     ${location}
                   </span>
                 </div>
@@ -801,7 +800,6 @@
       } catch(err) {}
     }
 
-    // إضافة نشاط
     const addActivityForm = document.getElementById('addActivityForm');
     if (addActivityForm) {
       addActivityForm.addEventListener('submit', async (e) => {
@@ -865,7 +863,6 @@
       });
     }
 
-    // تعديل نشاط
     const editActivityModal = document.getElementById('editActivityModal');
     const editActivityForm = document.getElementById('editActivityForm');
 
