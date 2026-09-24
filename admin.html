@@ -39,8 +39,8 @@
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen flex flex-col justify-between">
 
-  <!-- ==================== الشريط العلوي المتجاوب ==================== -->
-  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-3.5 sm:px-6 lg:px-8 py-3 transition-colors">
+  <!-- ==================== الشريط العلوي المتناسق ==================== -->
+  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 sm:px-6 lg:px-8 py-3 transition-colors">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
       
       <!-- الجهة اليمنى: الهوية والعنوان -->
@@ -55,12 +55,12 @@
         </div>
       </div>
 
-      <!-- الجهة اليسرى: أزرار التحكم المرنة والمتجاوبة -->
-      <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+      <!-- الجهة اليسرى: عناصر التحكم (إشعارات + مظهر + خروج متوازن) -->
+      <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
         
         <!-- 1. جرس الإشعارات -->
         <div class="relative">
-          <button id="notificationsBtn" onclick="toggleNotificationsMenu()" aria-label="الإشعارات" class="relative flex items-center justify-center w-8 h-8 sm:w-auto sm:h-auto sm:p-2 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-slate-700 dark:text-slate-300 transition shrink-0" title="مركز التنبيهات">
+          <button id="notificationsBtn" onclick="toggleNotificationsMenu()" aria-label="الإشعارات" class="relative flex items-center justify-center p-0 w-8 h-8 sm:w-auto sm:h-auto sm:p-2 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-slate-700 dark:text-slate-300 transition shrink-0" title="مركز التنبيهات">
             <i data-lucide="bell" class="w-4 h-4"></i>
             <span id="notifBadge" class="hidden absolute top-1 right-1 sm:-top-1 sm:-right-1 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-gold-500 rounded-full border-2 border-white dark:border-[#080e1c]"></span>
           </button>
@@ -86,21 +86,15 @@
         </div>
 
         <!-- 2. زر تبديل المظهر -->
-        <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center justify-center gap-1.5 w-8 h-8 sm:w-auto sm:h-auto sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition shrink-0" title="تبديل المظهر">
+        <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center justify-center p-0 sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition shrink-0" title="تبديل المظهر">
           <span id="themeIconContainer" class="flex items-center justify-center"></span>
-          <span id="themeText" class="hidden sm:inline">الليلي</span>
+          <span id="themeText" class="hidden sm:inline mr-1.5">الليلي</span>
         </button>
 
-        <!-- 3. زر الانتقال للمنصة -->
-        <a href="index.html" class="flex items-center justify-center gap-1.5 w-8 h-8 sm:w-auto sm:h-auto sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:border-gold-500/50 transition shrink-0" title="الانتقال للمنصة الرئيسية">
-          <span class="hidden md:inline">الانتقال للمنصة</span>
-          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
-        </a>
-
-        <!-- 4. زر تسجيل الخروج -->
-        <button id="logoutBtn" onclick="openLogoutModal()" class="hidden items-center justify-center gap-1.5 w-8 h-8 sm:w-auto sm:h-auto sm:px-3 sm:py-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-600 hover:text-white text-rose-600 dark:text-rose-400 text-xs font-bold transition shrink-0" title="تسجيل الخروج">
-          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
-          <span class="hidden sm:inline">خروج</span>
+        <!-- 3. زر تسجيل الخروج (موسّط بالكامل وبدون انحراف) -->
+        <button id="logoutBtn" onclick="openLogoutModal()" class="hidden flex items-center justify-center p-0 sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-600 hover:text-white text-rose-600 dark:text-rose-400 text-xs font-bold transition shrink-0" title="تسجيل الخروج">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+          <span class="hidden sm:inline mr-1.5">خروج</span>
         </button>
       </div>
 
@@ -314,13 +308,19 @@
       if (activeAdmin) {
         if (loginView) loginView.classList.add('hidden');
         if (dashboardView) dashboardView.classList.remove('hidden');
-        if (logoutBtn) logoutBtn.classList.remove('hidden');
+        if (logoutBtn) {
+          logoutBtn.classList.remove('hidden');
+          logoutBtn.classList.add('flex');
+        }
         if (welcomeTitle) welcomeTitle.textContent = `أهلاً بك، ${activeAdmin}`;
         loadNotifications();
       } else {
         if (loginView) loginView.classList.remove('hidden');
         if (dashboardView) dashboardView.classList.add('hidden');
-        if (logoutBtn) logoutBtn.classList.add('hidden');
+        if (logoutBtn) {
+          logoutBtn.classList.add('hidden');
+          logoutBtn.classList.remove('flex');
+        }
       }
       lucide.createIcons();
     }
