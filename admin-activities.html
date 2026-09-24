@@ -40,31 +40,31 @@
     }
   </script>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen flex flex-col justify-between">
 
-  <!-- ==================== الهيدر العلوي ==================== -->
-  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <a href="admin.html" class="p-2 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-600 dark:text-slate-300 transition" title="الرجوع للبوابة الرئيسية">
+  <!-- ==================== الهيدر العلوي المتجاوب ==================== -->
+  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-3.5 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-2 transition-colors">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <a href="admin.html" class="p-2 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-600 dark:text-slate-300 transition shrink-0" title="الرجوع للبوابة الرئيسية">
         <i data-lucide="arrow-right" class="w-4 h-4"></i>
       </a>
-      <img src="logo.png" alt="شعار النادي" class="w-9 h-9 object-contain">
-      <div>
-        <div class="flex items-center gap-2">
-          <h2 class="text-sm font-bold text-slate-900 dark:text-white">إدارة الأنشطة والفعاليات</h2>
-          <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20">فرع صور</span>
+      <img src="logo.png" alt="شعار النادي" class="w-8 h-8 sm:w-9 sm:h-9 object-contain shrink-0">
+      <div class="min-w-0">
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <h2 class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white whitespace-nowrap">إدارة الأنشطة</h2>
+          <span class="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-extrabold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20 whitespace-nowrap">فرع صور</span>
         </div>
-        <p id="welcomeAdmin" class="text-[11px] text-slate-400">لوحة نشر وتوثيق الفعاليات الطلابية</p>
+        <p id="welcomeAdmin" class="hidden sm:block text-[11px] text-slate-400 truncate">لوحة نشر وتوثيق الفعاليات الطلابية</p>
       </div>
     </div>
 
-    <div class="flex items-center gap-3">
-      <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
+    <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+      <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center justify-center p-0 sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition shrink-0" title="تبديل المظهر">
         <span class="themeIconContainer flex items-center justify-center"></span>
-        <span class="themeText">الليلي</span>
+        <span class="themeText hidden sm:inline mr-1.5">الليلي</span>
       </button>
 
-      <a href="admin.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition">
+      <a href="admin.html" class="flex items-center justify-center gap-1.5 p-0 sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition shrink-0" title="البوابة المركزية">
         <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
         <span class="hidden sm:inline">البوابة المركزية</span>
       </a>
@@ -74,28 +74,34 @@
   <!-- ==================== المحتوى والتنقل ==================== -->
   <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-8 space-y-6">
 
-    <!-- شريط التبويبين -->
-    <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit flex-wrap">
-      <button id="tabBtnAdd" onclick="switchTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
-        <i data-lucide="calendar-plus" class="w-4 h-4"></i>
-        <span>إضافة نشاط جديد</span>
+    <!-- أزرار التبويبات بنظام شبكة تفاعلي واضح (2 كروت عريضة) -->
+    <div class="grid grid-cols-2 gap-2.5 sm:gap-3.5 w-full max-w-lg">
+      <button id="tabBtnAdd" onclick="switchTab('add')" class="p-3 sm:px-4 sm:py-2.5 rounded-xl text-xs font-bold transition shadow-sm bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center justify-between gap-1.5 border border-transparent ring-2 ring-gold-500/20">
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="calendar-plus" class="w-4 h-4 shrink-0"></i>
+          <span class="whitespace-nowrap">إضافة نشاط</span>
+        </div>
+        <span class="text-[10px] px-1.5 py-0.5 rounded font-mono bg-white/20 dark:bg-black/20 text-current">+جديد</span>
       </button>
-      <button id="tabBtnManage" onclick="switchTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
-        <i data-lucide="calendar" class="w-4 h-4"></i>
-        <span>إدارة الأنشطة والفعاليات</span>
-        <span id="activityCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
+
+      <button id="tabBtnManage" onclick="switchTab('manage')" class="p-3 sm:px-4 sm:py-2.5 rounded-xl text-xs font-bold transition shadow-sm bg-white dark:bg-clubNavy-cardDark border border-slate-200 dark:border-clubNavy-borderDark text-slate-600 dark:text-slate-300 hover:border-gold-500 flex items-center justify-between gap-1.5">
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="calendar" class="w-4 h-4 shrink-0"></i>
+          <span class="whitespace-nowrap">الأنشطة المنشورة</span>
+        </div>
+        <span id="activityCountBadge" class="px-1.5 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
       </button>
     </div>
 
     <!-- 1. نموذج إضافة نشاط جديد -->
-    <section id="viewAdd" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
+    <section id="viewAdd" class="p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
       <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
         <span class="text-xs font-bold text-gold-500">لوحة نشر وتوثيق الفعاليات</span>
         <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">إضافة نشاط أو فعالية جديدة لنادي الوفاء</h3>
       </div>
 
       <form id="addActivityForm" class="space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
           <div>
             <label class="block text-xs font-bold mb-1">عنوان النشاط أو الفعالية *</label>
             <input id="actTitle" type="text" required placeholder="مثال: ورشة تدريبية في الذكاء الاصطناعي" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
@@ -112,7 +118,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
           <div>
             <label class="block text-xs font-bold mb-1">تاريخ وموعد النشاط *</label>
             <input id="actDate" type="text" required placeholder="مثال: الخميس 15 تشرين الأول 2026 - الساعة 11:00 صباحاً" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
@@ -145,15 +151,15 @@
           </div>
         </div>
 
-        <!-- مساحة رفع الصور بالسحب والإفلات (إضافة نشاط) -->
+        <!-- مساحة رفع الصور بالسحب والإفلات -->
         <div class="space-y-2">
           <label class="block text-xs font-bold mb-1">صور الفعالية (الصورة الأولى تلقائياً هي صورة الغلاف الأساسية)</label>
           
-          <div id="addDropzone" onclick="document.getElementById('addFileInput').click()" class="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-gold-500 dark:hover:border-gold-500 rounded-2xl p-6 text-center cursor-pointer transition bg-slate-50/50 dark:bg-[#080e1c] group">
+          <div id="addDropzone" onclick="document.getElementById('addFileInput').click()" class="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-gold-500 dark:hover:border-gold-500 rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition bg-slate-50/50 dark:bg-[#080e1c] group">
             <input type="file" id="addFileInput" multiple accept="image/*" class="hidden" onchange="handleFileSelect(event, 'add')">
             <div class="flex flex-col items-center justify-center space-y-2 text-slate-500 dark:text-slate-400 group-hover:text-gold-500 transition">
-              <div class="p-3 rounded-2xl bg-gold-500/10 text-gold-500">
-                <i data-lucide="cloud-upload" class="w-6 h-6"></i>
+              <div class="p-2.5 sm:p-3 rounded-2xl bg-gold-500/10 text-gold-500">
+                <i data-lucide="cloud-upload" class="w-5 h-5 sm:w-6 sm:h-6"></i>
               </div>
               <p class="text-xs font-bold text-slate-800 dark:text-slate-200">
                 اسحب الصور وأفلتها هنا أو <span class="text-gold-500 underline">اضغط لاختيارها من جهازك</span>
@@ -162,8 +168,7 @@
             </div>
           </div>
 
-          <!-- معرض مصغرات الصور المرفوعة -->
-          <div id="addImagesPreviewGrid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 pt-2"></div>
+          <div id="addImagesPreviewGrid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-2.5 sm:gap-3 pt-2"></div>
         </div>
 
         <div>
@@ -181,8 +186,8 @@
     </section>
 
     <!-- 2. إدارة وتعديل الأنشطة -->
-    <section id="viewManage" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+    <section id="viewManage" class="hidden p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
         <div>
           <h3 class="text-base font-bold text-slate-900 dark:text-white">قائمة الأنشطة والفعاليات المنشورة</h3>
           <p class="text-xs text-slate-400 mt-0.5">البيانات الحية المأخوذة من ورقة «الأنشطة»</p>
@@ -278,7 +283,7 @@
           </div>
         </div>
 
-        <!-- مساحة رفع وتعديل الصور بالسحب والإفلات (نافذة التعديل) -->
+        <!-- مساحة رفع وتعديل الصور بالسحب والإفلات -->
         <div class="space-y-2">
           <div class="flex items-center justify-between">
             <label class="block font-bold">صور الفعالية (الصورة الأولى هي صورة الغلاف الأساسية)</label>
@@ -295,7 +300,7 @@
             </div>
           </div>
 
-          <div id="editImagesPreviewGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2"></div>
+          <div id="editImagesPreviewGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 pt-2"></div>
         </div>
 
         <div>
@@ -334,13 +339,18 @@
     </div>
   </div>
 
+  <!-- ==================== التذييل السفلي ==================== -->
+  <footer class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
+    نادي الوفاء — الجامعة اللبنانية الدولية في صور • إدارة الأنشطة والفعاليات
+  </footer>
+
   <!-- ==================== السكربت البرمجي ==================== -->
   <script>
     lucide.createIcons();
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
     
-    // مفتاح ImgBB API للرفع المباشر (يمكنك تغييره بمفتاحك المجاني)
+    // مفتاح ImgBB API للرفع المباشر
     const IMGBB_API_KEY = "f42dd54fdc8962d9420e2e34d89218fd";
 
     let liveActivitiesList = [];
@@ -348,7 +358,6 @@
     let currentFilter = 'all';
     let deleteCallback = null;
 
-    // مصفوفات تخزين روابط الصور المرفوعة لحظياً
     let addImagesArray = [];
     let editImagesArray = [];
 
@@ -357,8 +366,7 @@
       document.getElementById('welcomeAdmin').textContent = `المشرف: ${activeAdmin}`;
     }
 
-    // ==================== محرك الرفع السحابي ومعالجة الصور ====================
-
+    // محرك الرفع السحابي ومعالجة الصور
     async function uploadSingleFileToImgBB(file) {
       const formData = new FormData();
       formData.append("image", file);
@@ -370,13 +378,12 @@
 
       const data = await res.json();
       if (data && data.success && data.data && data.data.url) {
-        return data.data.url; // رابط مباشر صافي عالي الجودة
+        return data.data.url;
       } else {
         throw new Error("تعذر رفع الصورة");
       }
     }
 
-    // معالجة اختيار أو سحب الملفات
     async function handleFileSelect(e, scope) {
       const files = Array.from(e.target.files || (e.dataTransfer ? e.dataTransfer.files : []));
       if (files.length === 0) return;
@@ -389,7 +396,6 @@
       for (const file of files) {
         if (!file.type.startsWith('image/')) continue;
 
-        // بطاقة تحميل مؤقتة (Placeholder)
         const loadingId = 'loading_' + Math.random().toString(36).substring(2, 9);
         const card = document.createElement('div');
         card.id = loadingId;
@@ -415,11 +421,9 @@
       }
 
       if (submitBtn) submitBtn.disabled = false;
-      // إعادة تصفير مدخل الملفات ليقبل نفس الملف لاحقاً إن أردت
       e.target.value = '';
     }
 
-    // رسم مصغرات الصور مع شارة الغلاف وزر الحذف
     function renderImagesPreview(scope) {
       const isAdd = (scope === 'add');
       const arr = isAdd ? addImagesArray : editImagesArray;
@@ -465,7 +469,6 @@
       }
     }
 
-    // تفعيل السحب والإفلات فوق الـ Dropzone
     function setupDragAndDrop(zoneId, scope) {
       const zone = document.getElementById(zoneId);
       if (!zone) return;
@@ -494,8 +497,7 @@
     setupDragAndDrop('addDropzone', 'add');
     setupDragAndDrop('editDropzone', 'edit');
 
-    // ==================== إدارة المظهر والتنقل ====================
-
+    // إدارة المظهر والتنقل
     const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
     const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
 
@@ -528,8 +530,8 @@
       const btnAdd = document.getElementById('tabBtnAdd');
       const btnManage = document.getElementById('tabBtnManage');
 
-      const activeClasses = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
-      const inactiveClasses = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
+      const activeClasses = "p-3 sm:px-4 sm:py-2.5 rounded-xl text-xs font-bold transition shadow-sm bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center justify-between gap-1.5 border border-transparent ring-2 ring-gold-500/20";
+      const inactiveClasses = "p-3 sm:px-4 sm:py-2.5 rounded-xl text-xs font-bold transition shadow-sm bg-white dark:bg-clubNavy-cardDark border border-slate-200 dark:border-clubNavy-borderDark text-slate-600 dark:text-slate-300 hover:border-gold-500 flex items-center justify-between gap-1.5";
 
       if (tab === 'add') {
         viewAdd.classList.remove('hidden');
@@ -583,8 +585,6 @@
       }
     }
 
-    // ==================== تبديل الإخفاء والإظهار وقائمة الأنشطة ====================
-
     async function toggleActivityVisibility(index) {
       const target = liveActivitiesList[index];
       if (!target) return;
@@ -620,7 +620,6 @@
       } catch (err) {}
     }
 
-    // نافذة الحذف
     const deleteModal = document.getElementById('deleteModal');
     const deleteModalMsg = document.getElementById('deleteModalMsg');
     const confirmDeleteActionBtn = document.getElementById('confirmDeleteActionBtn');
@@ -696,7 +695,7 @@
         const extraImagesCount = imageArray.length > 1 ? imageArray.length : 0;
 
         const imageThumbHtml = coverImage ? `
-          <div class="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
+          <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
             <img src="${coverImage}" alt="${title}" referrerpolicy="no-referrer" class="w-full h-full object-cover" onerror="this.parentElement.style.display='none'">
             ${extraImagesCount > 0 ? `
               <span class="absolute bottom-0 right-0 bg-black/75 text-white font-mono text-[9px] px-1.5 py-0.5 rounded-tl-lg font-bold" title="${extraImagesCount} صور إجمالية">
@@ -721,10 +720,10 @@
         const cardDimClass = isHidden ? 'opacity-70 border-dashed border-slate-300 dark:border-slate-700' : 'hover:border-gold-500/40';
 
         return `
-          <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition ${cardDimClass}">
-            <div class="flex items-start gap-3">
+          <div class="p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 transition ${cardDimClass}">
+            <div class="flex items-start gap-3 min-w-0">
               ${imageThumbHtml}
-              <div class="space-y-1">
+              <div class="space-y-1 min-w-0">
                 <div class="flex items-center gap-2 flex-wrap">
                   <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gold-500/10 text-gold-600 dark:text-gold-400">${category}</span>
                   
@@ -751,12 +750,12 @@
                     ${location}
                   </span>
                 </div>
-                <h4 class="font-bold text-sm text-slate-900 dark:text-white ${isHidden ? 'line-through opacity-80' : ''}">${title}</h4>
+                <h4 class="font-bold text-sm text-slate-900 dark:text-white truncate ${isHidden ? 'line-through opacity-80' : ''}">${title}</h4>
                 <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-xl line-clamp-2">${desc}</p>
               </div>
             </div>
 
-            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap">
+            <div class="flex items-center gap-1.5 sm:gap-2 self-end sm:self-auto shrink-0 flex-wrap">
               <button onclick="openEditActivityModal(${realIndex})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="تعديل بيانات النشاط">
                 <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                 <span>تعديل</span>
@@ -802,7 +801,7 @@
       } catch(err) {}
     }
 
-    // ==================== إضافة نشاط ====================
+    // إضافة نشاط
     const addActivityForm = document.getElementById('addActivityForm');
     if (addActivityForm) {
       addActivityForm.addEventListener('submit', async (e) => {
@@ -866,7 +865,7 @@
       });
     }
 
-    // ==================== تعديل نشاط ====================
+    // تعديل نشاط
     const editActivityModal = document.getElementById('editActivityModal');
     const editActivityForm = document.getElementById('editActivityForm');
 
@@ -911,7 +910,6 @@
         }
       }
 
-      // تجهيز مصفوفة الصور القديمة للمعاينة الفورية والتعديل
       const rawImages = target['رابط الصورة'] || target.imageUrl || '';
       editImagesArray = String(rawImages).split(',').map(s => s.trim()).filter(Boolean);
       renderImagesPreview('edit');
@@ -983,7 +981,6 @@
       });
     }
 
-    // حذف نشاط
     function deleteActivityByIndex(index) {
       const target = liveActivitiesList[index];
       if (!target) return;
@@ -1010,7 +1007,6 @@
       });
     }
 
-    // البحث والتصفية
     document.getElementById('activitySearchInput')?.addEventListener('input', () => {
       renderActivityList(liveActivitiesList);
     });
@@ -1030,7 +1026,6 @@
       });
     });
 
-    // جلب البيانات فور تحميل الصفحة
     fetchLiveActivities(true);
   </script>
 </body>
