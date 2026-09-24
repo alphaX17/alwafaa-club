@@ -1,0 +1,27 @@
+{
+  "name": "نادي الوفاء - فرع صور",
+  "short_name": "نادي الوفاء",
+  "description": "منصة نادي الوفاء الجامعية الموحدة - الجامعة اللبنانية الدولية فرع صور",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#070b14",
+  "theme_color": "#070b14",
+  "orientation": "portrait-primary",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
