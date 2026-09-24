@@ -28,6 +28,8 @@
   </script>
   <style>
     body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+    .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
   </style>
 
   <!-- فحص الجلسة قبل التحميل -->
@@ -39,36 +41,36 @@
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen flex flex-col justify-between">
 
-  <!-- ==================== الشريط العلوي ==================== -->
-  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <a href="admin.html" class="p-2 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-600 dark:text-slate-300 transition" title="الرجوع للبوابة الرئيسية">
+  <!-- ==================== الهيدر العلوي المتجاوب ==================== -->
+  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-3.5 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-2 transition-colors">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <a href="admin.html" class="p-2 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-600 dark:text-slate-300 transition shrink-0" title="الرجوع للبوابة الرئيسية">
         <i data-lucide="arrow-right" class="w-4 h-4"></i>
       </a>
-      <img src="logo.png" alt="شعار النادي" class="w-9 h-9 object-contain">
-      <div>
-        <div class="flex items-center gap-2">
-          <h2 class="text-sm font-bold text-slate-900 dark:text-white">إدارة الإعلانات العاجلة</h2>
-          <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20">فرع صور</span>
+      <img src="logo.png" alt="شعار النادي" class="w-8 h-8 sm:w-9 sm:h-9 object-contain shrink-0">
+      <div class="min-w-0">
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <h2 class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white whitespace-nowrap">إدارة الإعلانات</h2>
+          <span class="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-extrabold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20 whitespace-nowrap">فرع صور</span>
         </div>
-        <p id="welcomeAdmin" class="text-[11px] text-slate-400">التحكم في الشريط التنبيهي أعلى الصفحة الرئيسية</p>
+        <p id="welcomeAdmin" class="hidden sm:block text-[11px] text-slate-400 truncate">التحكم بالشريط التنبيهي أعلى المنصة</p>
       </div>
     </div>
 
-    <div class="flex items-center gap-3">
-      <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
+    <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+      <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center justify-center p-0 sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition shrink-0" title="تبديل المظهر">
         <span class="themeIconContainer flex items-center justify-center"></span>
-        <span class="themeText">الليلي</span>
+        <span class="themeText hidden sm:inline mr-1.5">الليلي</span>
       </button>
 
-      <a href="admin.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition">
+      <a href="admin.html" class="flex items-center justify-center gap-1.5 p-0 sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition shrink-0" title="البوابة المركزية">
         <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
         <span class="hidden sm:inline">البوابة المركزية</span>
       </a>
     </div>
   </header>
 
-  <!-- ==================== المحتوى والتعديل ==================== -->
+  <!-- ==================== المحتوى الأساسي ==================== -->
   <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-8 space-y-6">
 
     <!-- معاينة حية لشكل الإعلان كما سيظهر للطلاب -->
@@ -83,8 +85,8 @@
         </span>
       </div>
 
-      <div id="livePreviewBanner" class="rounded-2xl border border-gold-500/30 bg-amber-50 dark:bg-[#17120a] p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm shadow-sm transition-all">
-        <div class="flex items-center gap-3 w-full sm:w-auto">
+      <div id="livePreviewBanner" class="rounded-2xl border border-gold-500/30 bg-amber-50 dark:bg-[#17120a] p-3.5 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm shadow-sm transition-all">
+        <div class="flex items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
           <span class="flex-shrink-0 p-1.5 rounded-md bg-gold-500/20 text-gold-600 dark:text-gold-400">
             <i data-lucide="bell" class="w-4 h-4"></i>
           </span>
@@ -93,7 +95,7 @@
             <span id="previewText">تم فتح باب التقديم للمنحة الطلابية السنوية التابعة لنادي الوفاء.</span>
           </p>
         </div>
-        <div class="w-full sm:w-auto text-center px-4 py-1.5 rounded-lg bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow">
+        <div class="w-full sm:w-auto text-center px-4 py-1.5 rounded-lg bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow shrink-0">
           <span id="previewBtnText">التقديم المباشر</span>
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
         </div>
@@ -101,21 +103,21 @@
     </div>
 
     <!-- نموذج تعديل الإعلان -->
-    <section class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
+    <section class="p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
       <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
         <span class="text-xs font-bold text-gold-500">التحكم المركزي</span>
-        <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">تعديل بيانات ورابط الإعلان العاجل</h3>
+        <h3 class="text-base sm:text-lg font-black text-slate-900 dark:text-white mt-1">تعديل بيانات ورابط الإعلان العاجل</h3>
       </div>
 
-      <form id="announcementForm" class="space-y-5">
+      <form id="announcementForm" class="space-y-4 sm:space-y-5">
         
         <!-- 1. نص الإعلان -->
         <div>
           <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">نص الإعلان التنبيهي *</label>
-          <textarea id="annText" rows="3" required placeholder="اكتب نص الإعلان الذي سيظهر للطلاب في أعلى الموقع..." class="w-full text-xs p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition"></textarea>
+          <textarea id="annText" rows="3" required placeholder="اكتب نص الإعلان الذي سيظهر للطلاب في أعلى الموقع..." class="w-full text-xs p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition custom-scrollbar"></textarea>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
           <!-- 2. نص الزر -->
           <div>
             <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">نص الزر التفاعلي *</label>
@@ -138,18 +140,18 @@
         </div>
 
         <!-- 4. تفعيل الإعلان (نقاط اختيار نعم / لا) -->
-        <div class="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#0c1427] space-y-2">
+        <div class="p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#0c1427] space-y-2">
           <label class="block text-xs font-bold text-slate-900 dark:text-white">
             تفعيل وعرض الإعلان في المنصة <span class="text-rose-500">*</span>
           </label>
           
-          <div class="flex items-center gap-8 pt-1">
-            <label class="inline-flex items-center gap-2.5 cursor-pointer text-xs font-bold text-slate-800 dark:text-slate-200">
+          <div class="flex items-center gap-6 sm:gap-8 pt-1">
+            <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-800 dark:text-slate-200">
               <input type="radio" id="activeYes" name="annActiveRadio" value="نعم" checked class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500">
               <span>نعم (مفعل ومعروض للطلاب)</span>
             </label>
 
-            <label class="inline-flex items-center gap-2.5 cursor-pointer text-xs font-bold text-slate-800 dark:text-slate-200">
+            <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-800 dark:text-slate-200">
               <input type="radio" id="activeNo" name="annActiveRadio" value="لا" class="w-4 h-4 text-gold-500 focus:ring-gold-500 accent-gold-500">
               <span>لا (إخفاء وتعطيل الإعلان)</span>
             </label>
@@ -157,7 +159,7 @@
         </div>
 
         <!-- زر الحفظ والإرسال للسيرفر -->
-        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div id="saveStatusMsg" class="hidden text-xs font-bold text-emerald-500 flex items-center gap-1.5">
             <i data-lucide="check-circle" class="w-4 h-4"></i>
             <span>تم حفظ ونشر الإعلان بنجاح في المنصة!</span>
