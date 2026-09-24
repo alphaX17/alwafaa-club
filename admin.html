@@ -39,27 +39,30 @@
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen flex flex-col justify-between">
 
-  <!-- ==================== الشريط العلوي ==================== -->
-  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 transition-colors">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="logo.png" alt="شعار النادي" class="w-10 h-10 object-contain">
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-base font-bold text-slate-900 dark:text-white">بوابة المشرفين المركزية</h1>
-            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20">فرع صور</span>
+  <!-- ==================== الشريط العلوي المتجاوب ==================== -->
+  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-3.5 sm:px-6 lg:px-8 py-3 transition-colors">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+      
+      <!-- الجهة اليمنى: الهوية والعنوان -->
+      <div class="flex items-center gap-2.5 min-w-0">
+        <img src="logo.png" alt="شعار النادي" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0">
+        <div class="min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <h1 class="text-xs sm:text-base font-bold text-slate-900 dark:text-white whitespace-nowrap">بوابة المشرفين</h1>
+            <span class="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-extrabold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20 whitespace-nowrap">فرع صور</span>
           </div>
-          <p class="text-xs text-slate-500 dark:text-slate-400">لوحة التحكم وإدارة خدمات منصة نادي الوفاء</p>
+          <p class="hidden sm:block text-[11px] text-slate-500 dark:text-slate-400 truncate">لوحة التحكم وإدارة خدمات منصة نادي الوفاء</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-2 sm:gap-3">
+      <!-- الجهة اليسرى: أزرار التحكم المرنة والمتجاوبة -->
+      <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
         
-        <!-- 1. زر وجرس الإشعارات والتنبيهات -->
+        <!-- 1. جرس الإشعارات -->
         <div class="relative">
-          <button id="notificationsBtn" onclick="toggleNotificationsMenu()" aria-label="الإشعارات" class="relative flex items-center justify-center p-2 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-slate-700 dark:text-slate-300 transition">
+          <button id="notificationsBtn" onclick="toggleNotificationsMenu()" aria-label="الإشعارات" class="relative flex items-center justify-center w-8 h-8 sm:w-auto sm:h-auto sm:p-2 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-slate-700 dark:text-slate-300 transition shrink-0" title="مركز التنبيهات">
             <i data-lucide="bell" class="w-4 h-4"></i>
-            <span id="notifBadge" class="hidden absolute -top-1 -right-1 w-2.5 h-2.5 bg-gold-500 rounded-full border-2 border-white dark:border-[#080e1c]"></span>
+            <span id="notifBadge" class="hidden absolute top-1 right-1 sm:-top-1 sm:-right-1 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-gold-500 rounded-full border-2 border-white dark:border-[#080e1c]"></span>
           </button>
 
           <!-- قائمة الإشعارات المنسدلة -->
@@ -83,30 +86,31 @@
         </div>
 
         <!-- 2. زر تبديل المظهر -->
-        <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
+        <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center justify-center gap-1.5 w-8 h-8 sm:w-auto sm:h-auto sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition shrink-0" title="تبديل المظهر">
           <span id="themeIconContainer" class="flex items-center justify-center"></span>
-          <span id="themeText">الليلي</span>
+          <span id="themeText" class="hidden sm:inline">الليلي</span>
         </button>
 
-        <!-- 3. زر الانتقال للمنصة بالسهم -->
-        <a href="index.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:border-gold-500/50 transition">
-          <span>الانتقال للمنصة</span>
+        <!-- 3. زر الانتقال للمنصة -->
+        <a href="index.html" class="flex items-center justify-center gap-1.5 w-8 h-8 sm:w-auto sm:h-auto sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:border-gold-500/50 transition shrink-0" title="الانتقال للمنصة الرئيسية">
+          <span class="hidden md:inline">الانتقال للمنصة</span>
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
         </a>
 
-        <!-- 4. زر الخروج العلوي بنافذة تأكيد -->
-        <button id="logoutBtn" onclick="openLogoutModal()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-600 hover:text-white text-rose-600 dark:text-rose-400 text-xs font-bold transition" title="تسجيل الخروج">
+        <!-- 4. زر تسجيل الخروج -->
+        <button id="logoutBtn" onclick="openLogoutModal()" class="hidden items-center justify-center gap-1.5 w-8 h-8 sm:w-auto sm:h-auto sm:px-3 sm:py-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-600 hover:text-white text-rose-600 dark:text-rose-400 text-xs font-bold transition shrink-0" title="تسجيل الخروج">
           <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
-          <span>خروج</span>
+          <span class="hidden sm:inline">خروج</span>
         </button>
       </div>
+
     </div>
   </header>
 
   <!-- ==================== المحتوى الرئيسي ==================== -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-8 flex items-center justify-center">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 sm:py-8 flex items-center justify-center">
 
-    <!-- 1. شاشة تسجيل الدخول السحابية المحمية -->
+    <!-- 1. شاشة تسجيل الدخول السحابية -->
     <div id="loginView" class="w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-xl space-y-6">
       <div class="text-center space-y-2">
         <div class="w-14 h-14 mx-auto rounded-2xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500">
@@ -144,28 +148,26 @@
       </form>
     </div>
 
-    <!-- 2. شبكة الأقسام المركزية (تظهر بعد الدخول) -->
-    <div id="dashboardView" class="hidden w-full space-y-8">
+    <!-- 2. شبكة الأقسام المركزية -->
+    <div id="dashboardView" class="hidden w-full space-y-6 sm:space-y-8">
       
-      <!-- رسالة الترحيب بالمشرف (بدون زر خروج مكرر) -->
-      <div class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <span class="text-xs font-bold text-gold-500">الجلسة نشطة وموثقة</span>
-          <h2 id="adminWelcomeTitle" class="text-lg font-black text-slate-900 dark:text-white mt-0.5">أهلاً بك، مشرف المنصة</h2>
-          <p class="text-xs text-slate-400">اختر القسم الذي تود إدارته وتحديث بياناته الحية في قاعدة البيانات.</p>
-        </div>
+      <!-- رسالة الترحيب بالمشرف -->
+      <div class="p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm">
+        <span class="text-[11px] font-bold text-gold-500">الجلسة نشطة وموثقة</span>
+        <h2 id="adminWelcomeTitle" class="text-base sm:text-lg font-black text-slate-900 dark:text-white mt-0.5">أهلاً بك، مشرف المنصة</h2>
+        <p class="text-xs text-slate-400 mt-1">اختر القسم الذي تود إدارته وتحديث بياناته الحية في قاعدة البيانات.</p>
       </div>
 
-      <!-- كروت الأقسام الخمسة المستقلة -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- كروت الأقسام الستة الشاملة -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         
         <!-- 1. مكتبة الكتب الورقية -->
-        <a href="admin-books.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
+        <a href="admin-books.html" class="p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center group-hover:scale-105 transition">
-              <i data-lucide="book-open" class="w-6 h-6"></i>
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center group-hover:scale-105 transition">
+              <i data-lucide="book-open" class="w-5 h-5 sm:w-6 sm:h-6"></i>
             </div>
-            <h3 class="font-bold text-base text-slate-900 dark:text-white">إدارة مكتبة الكتب الورقية</h3>
+            <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">إدارة مكتبة الكتب الورقية</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
               إضافة كتب جديدة، إدارة المخزون، معالجة طلبات الاستعارة والتبرعات، وسجل الإعارات والاسترداد.
             </p>
@@ -177,14 +179,14 @@
         </a>
 
         <!-- 2. الأنشطة والفعاليات -->
-        <a href="admin-activities.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
+        <a href="admin-activities.html" class="p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center group-hover:scale-105 transition">
-              <i data-lucide="calendar" class="w-6 h-6"></i>
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center group-hover:scale-105 transition">
+              <i data-lucide="calendar" class="w-5 h-5 sm:w-6 sm:h-6"></i>
             </div>
-            <h3 class="font-bold text-base text-slate-900 dark:text-white">الأنشطة والفعاليات</h3>
+            <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">الأنشطة والفعاليات</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-              نشر ورش العمل والندوات والمعارض، إضافة ألبومات صور متعددة، وخيارات العرض في الرئيسية والإخفاء.
+              نشر ورش العمل والندوات، الرفع المباشر للألبومات بالسحب والإفلات، وخيارات العرض بالرئيسية والإخفاء.
             </p>
           </div>
           <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-gold-500">
@@ -193,13 +195,30 @@
           </div>
         </a>
 
-        <!-- 3. دليل الأساتذة والإدارة -->
-        <a href="admin-faculty.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
+        <!-- 3. إدارة الإعلانات العاجلة -->
+        <a href="admin-announcement.html" class="p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center group-hover:scale-105 transition">
-              <i data-lucide="users" class="w-6 h-6"></i>
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gold-500/10 text-gold-500 flex items-center justify-center group-hover:scale-105 transition">
+              <i data-lucide="bell" class="w-5 h-5 sm:w-6 sm:h-6"></i>
             </div>
-            <h3 class="font-bold text-base text-slate-900 dark:text-white">دليل الأساتذة والإدارة</h3>
+            <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">إدارة الإعلانات العاجلة</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              تعديل نص الشريط التنبيهي أعلى المنصة، تغيير القسم المستهدف بنقرة واحدة، وتفعيل أو إخفاء الإعلان.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-gold-500">
+            <span>فتح لوحة الإعلانات</span>
+            <i data-lucide="chevron-left" class="w-4 h-4 group-hover:-translate-x-1 transition"></i>
+          </div>
+        </a>
+
+        <!-- 4. دليل الأساتذة والإدارة -->
+        <a href="admin-faculty.html" class="p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
+          <div class="space-y-3">
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center group-hover:scale-105 transition">
+              <i data-lucide="users" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+            </div>
+            <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">دليل الأساتذة والإدارة</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
               تحديث بيانات الكادر التعليمي، البريد الجامعي الرسمي، أماكن المكاتب، والساعات المكتبية للأساتذة.
             </p>
@@ -210,13 +229,13 @@
           </div>
         </a>
 
-        <!-- 4. بنك الموارد والامتحانات -->
-        <a href="admin-resources.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
+        <!-- 5. بنك الموارد والامتحانات -->
+        <a href="admin-resources.html" class="p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center group-hover:scale-105 transition">
-              <i data-lucide="folder-down" class="w-6 h-6"></i>
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center group-hover:scale-105 transition">
+              <i data-lucide="folder-down" class="w-5 h-5 sm:w-6 sm:h-6"></i>
             </div>
-            <h3 class="font-bold text-base text-slate-900 dark:text-white">الموارد والامتحانات</h3>
+            <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">الموارد والامتحانات</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
               إضافة نماذج الامتحانات النصفية والنهائية، الملخصات الشاملة، وروابط ملفات Google Drive للطلاب.
             </p>
@@ -227,36 +246,19 @@
           </div>
         </a>
 
-        <!-- 5. شبكة التوجيه والتواصل -->
-        <a href="admin-guidance.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
+        <!-- 6. شبكة التوجيه والتواصل -->
+        <a href="admin-guidance.html" class="p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center group-hover:scale-105 transition">
-              <i data-lucide="message-circle" class="w-6 h-6"></i>
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center group-hover:scale-105 transition">
+              <i data-lucide="message-circle" class="w-5 h-5 sm:w-6 sm:h-6"></i>
             </div>
-            <h3 class="font-bold text-base text-slate-900 dark:text-white">التوجيه والمجموعات</h3>
+            <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">التوجيه والمجموعات</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
               إدارة ممثلي الاختصاصات، المرشدين الأكاديميين للفرع، وروابط مجموعات الواتساب الرسمية لكل كلية.
             </p>
           </div>
           <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-gold-500">
             <span>فتح شبكة التوجيه</span>
-            <i data-lucide="chevron-left" class="w-4 h-4 group-hover:-translate-x-1 transition"></i>
-          </div>
-        </a>
-
-        <!-- 6. الإعلانات والتنبيهات العاجلة -->
-        <a href="admin-announcement.html" class="p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark hover:border-gold-500 transition group flex flex-col justify-between space-y-4 shadow-sm">
-          <div class="space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center group-hover:scale-105 transition">
-              <i data-lucide="bell" class="w-6 h-6"></i>
-            </div>
-            <h3 class="font-bold text-base text-slate-900 dark:text-white">إدارة الإعلانات العاجلة</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-              تعديل نص الشريط التنبيهي أعلى المنصة، تغيير نص وزر التوجيه للقسم المطلوب، وتفعيل أو إخفاء الإعلان.
-            </p>
-          </div>
-          <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-gold-500">
-            <span>فتح لوحة الإعلانات</span>
             <i data-lucide="chevron-left" class="w-4 h-4 group-hover:-translate-x-1 transition"></i>
           </div>
         </a>
@@ -404,7 +406,6 @@
       }
     }
 
-    // إغلاق قائمة الإشعارات عند النقر خارجها
     document.addEventListener('click', (e) => {
       const btn = document.getElementById('notificationsBtn');
       const menu = document.getElementById('notificationsMenu');
