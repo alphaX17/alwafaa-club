@@ -33,130 +33,137 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .custom-scrollbar::-webkit-scrollbar { height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 4px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden">
+<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
 
-  <!-- ==================== الشريط العلوي (HEADER / NAVBAR) ==================== -->
-  <header class="sticky top-0 z-40 bg-white/90 dark:bg-[#080e1c]/90 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 transition-colors">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      
-      <!-- الجهة اليمنى: زر القائمة الجانبية (☰) وهوية الصفحة -->
-      <div class="flex items-center gap-4">
-        <button id="openMenuBtn" aria-label="فتح القائمة" class="p-2.5 rounded-lg bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
-          <i data-lucide="menu" class="w-5 h-5"></i>
-        </button>
+  <div>
+    <!-- ==================== الشريط العلوي (HEADER / NAVBAR) ==================== -->
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-3.5 sm:px-6 lg:px-8 py-2.5 sm:py-3 transition-colors">
+      <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+        
+        <!-- الجهة اليمنى: زر القائمة الجانبية (☰) وهوية الصفحة -->
+        <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+          <button id="openMenuBtn" aria-label="فتح القائمة" class="p-2 sm:p-2.5 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition shrink-0" title="القائمة الرئيسية">
+            <i data-lucide="menu" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+          </button>
 
-        <div class="flex items-center gap-3">
-          <img src="logo.png" alt="شعار نادي الوفاء" class="w-10 h-10 object-contain">
-          <div>
-            <h1 class="text-base font-bold text-slate-900 dark:text-white">دليل الأساتذة والإدارة</h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400">عناوين التواصل الرسمية - فرع صور</p>
+          <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+            <img src="logo.png" alt="شعار نادي الوفاء" class="w-9 h-9 sm:w-10 sm:h-10 object-contain shrink-0">
+            <div class="min-w-0">
+              <h1 class="text-xs sm:text-base font-bold text-slate-900 dark:text-white whitespace-nowrap">دليل الأساتذة والإدارة</h1>
+              <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 truncate">عناوين التواصل الرسمية - فرع صور</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- الجهة اليسرى: محول المظهر (Dark/Light) -->
-      <div class="flex items-center gap-3">
-        <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
-          <span id="themeIconContainer" class="flex items-center justify-center"></span>
-          <span id="themeText">الليلي</span>
-        </button>
+        <!-- الجهة اليسرى: محول المظهر (Dark/Light) وزر الرئيسية -->
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center justify-center p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition shrink-0" title="تبديل المظهر">
+            <span id="themeIconContainer" class="flex items-center justify-center"></span>
+            <span id="themeText" class="hidden sm:inline mr-1.5 text-xs font-semibold">الليلي</span>
+          </button>
 
-        <a href="index.html" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 transition">
-          <i data-lucide="home" class="w-3.5 h-3.5"></i>
-          <span>الرئيسية</span>
-        </a>
-      </div>
-
-    </div>
-  </header>
-
-  <!-- ==================== المحتوى الرئيسي ==================== -->
-  <main class="max-w-7xl mx-auto px-4 lg:px-8 py-8 space-y-6">
-
-    <!-- شريط البحث والتصفية للكليات الـ 5 + الإدارة -->
-    <div class="p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-4">
-      
-      <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
-        <div class="relative w-full md:w-80">
-          <input id="searchInput" type="text" placeholder="ابحث باسم الدكتور، المادة أو الاختصاص..." class="w-full text-xs p-3 pr-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3.5 right-3"></i>
+          <a href="index.html" class="flex items-center justify-center gap-1.5 p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 transition shrink-0" title="الصفحة الرئيسية">
+            <i data-lucide="home" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">الرئيسية</span>
+          </a>
         </div>
 
-        <!-- أزرار الفرز -->
-        <div class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 custom-scrollbar" id="filterContainer">
-          <button class="filter-btn active shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 border-transparent" data-category="all">الكل</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="engineering">كلية الهندسة</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="business">إدارة الأعمال</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="arts_sciences">الفنون والعلوم</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="education">التربية واللغات</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="pharmacy">كلية الصيدلة</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="admin">الجهاز الإداري</button>
+      </div>
+    </header>
+
+    <!-- ==================== المحتوى الرئيسي ==================== -->
+    <main class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+
+      <!-- شريط البحث والتصفية للكليات الـ 5 + الإدارة -->
+      <div class="p-4 sm:p-6 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-4">
+        
+        <div class="flex flex-col md:flex-row gap-3.5 sm:gap-4 justify-between items-center">
+          <div class="relative w-full md:w-80">
+            <input id="searchInput" type="text" placeholder="ابحث باسم الدكتور، المادة أو الاختصاص..." class="w-full text-xs p-3 pr-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3.5 right-3"></i>
+          </div>
+
+          <!-- أزرار الفرز -->
+          <div class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 custom-scrollbar" id="filterContainer">
+            <button class="filter-btn active shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 border-transparent" data-category="all">الكل</button>
+            <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="engineering">كلية الهندسة</button>
+            <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="business">إدارة الأعمال</button>
+            <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="arts_sciences">الفنون والعلوم</button>
+            <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="education">التربية واللغات</button>
+            <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="pharmacy">كلية الصيدلة</button>
+            <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-category="admin">الجهاز الإداري</button>
+          </div>
         </div>
+
       </div>
 
-    </div>
+      <!-- شبكة بطاقات الدكاترة والإدارة -->
+      <div id="facultyGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 min-h-[200px]"></div>
 
-    <!-- شبكة بطاقات الدكاترة والإدارة -->
-    <div id="facultyGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 min-h-[200px]"></div>
+      <!-- رسالة عدم وجود نتائج -->
+      <div id="noFacultyResults" class="hidden text-center py-16">
+        <i data-lucide="user-x" class="w-12 h-12 mx-auto text-slate-400 mb-3 opacity-60"></i>
+        <h3 class="text-sm font-bold text-slate-700 dark:text-slate-300">لم يتم العثور على أي نتيجة مطابقة</h3>
+        <p class="text-xs text-slate-400 mt-1">تأكد من كتابة الاسم بدقة أو اختر كلية أخرى من الأعلى.</p>
+      </div>
 
-    <!-- رسالة عدم وجود نتائج -->
-    <div id="noFacultyResults" class="hidden text-center py-16">
-      <i data-lucide="user-x" class="w-12 h-12 mx-auto text-slate-400 mb-3 opacity-60"></i>
-      <h3 class="text-sm font-bold text-slate-700 dark:text-slate-300">لم يتم العثور على أي نتيجة مطابقة</h3>
-      <p class="text-xs text-slate-400 mt-1">تأكد من كتابة الاسم بدقة أو اختر كلية أخرى من الأعلى.</p>
-    </div>
+    </main>
+  </div>
 
-  </main>
+  <!-- ==================== التذييل السفلي ==================== -->
+  <footer class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
+    نادي الوفاء — الجامعة اللبنانية الدولية في صور • دليل الأساتذة والإدارة
+  </footer>
 
   <!-- ==================== القائمة الجانبية (SLIDE-OVER MENU) ==================== -->
   <div id="menuOverlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
   <aside id="sidebar" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0c1427] border-l border-slate-200 dark:border-clubNavy-borderDark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
     <div>
-      <div class="p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
+      <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
         <div>
-          <h2 class="font-bold text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">الوصول السريع لكافة الخدمات</p>
+          <h2 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">الوصول السريع لكافة الخدمات</p>
         </div>
-        <button id="closeMenuBtn" aria-label="إغلاق القائمة" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-red-500">
+        <button id="closeMenuBtn" aria-label="إغلاق القائمة" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-red-500">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <nav class="p-4 space-y-1.5">
-        <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+      <nav class="p-3.5 sm:p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-140px)] custom-scrollbar">
+        <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
           <span>الرئيسية (الأنشطة والإعلانات)</span>
         </a>
-        <a href="scholarship.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+        <a href="scholarship.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="graduation-cap" class="w-4 h-4 text-slate-400"></i>
           <span>المنح الطلابية (تسجيل مباشر)</span>
         </a>
-        <a href="resources.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
-          <i data-lucide="folder-down" class="w-4 h-4 text-slate-400"></i>
+        <a href="resources.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="folder-down" class="w-4 h-4 text-slate-400 shrink-0"></i>
           <div>
             <p>بنك الموارد الرقمية والامتحانات</p>
             <p class="text-[10px] text-slate-400 dark:text-slate-500">كتب PDF • نماذج سابقة • ملخصات</p>
           </div>
         </a>
-        <a href="books.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
-          <i data-lucide="book-open" class="w-4 h-4 text-slate-400"></i>
+        <a href="books.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="book-open" class="w-4 h-4 text-slate-400 shrink-0"></i>
           <div>
             <p>استعارة وتبادل الكتب الورقية</p>
             <p class="text-[10px] text-slate-400 dark:text-slate-500">حجز أو تبرع بالنسخ الفيزيائية</p>
           </div>
         </a>
-        <a href="faculty.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
+        <a href="faculty.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
           <i data-lucide="users" class="w-4 h-4"></i>
           <span>دليل الأساتذة والساعات المكتبية</span>
         </a>
-        <a href="guidance.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
-          <i data-lucide="message-circle" class="w-4 h-4 text-slate-400"></i>
+        <a href="guidance.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="message-circle" class="w-4 h-4 text-slate-400 shrink-0"></i>
           <div>
             <p>شبكة التوجيه وممثلو الاختصاصات</p>
             <span class="text-[10px] text-slate-400 dark:text-slate-500">مجموعات الواتساب والتواصل المباشر</span>
@@ -264,7 +271,6 @@
       };
     }
 
-    // دالة رسم بطاقات الأساتذة على الشاشة مع دعم الساعات المكتبية الذكي (Hidden إذا كانت فارغة)
     function renderFaculty(list) {
       const grid = document.getElementById('facultyGrid');
       if (!grid) return;
@@ -281,7 +287,6 @@
         const email = item['البريد الإلكتروني'] || '';
         const rawCat = item['التصنيف البرمجي'] || '';
 
-        // قراءة الساعات المكتبية ومكان المكتب
         const officeRoom = String(item['مكان المكتب'] || item['المكتب'] || '').trim();
         const officeHours = String(item['الساعات المكتبية'] || '').trim();
 
@@ -292,7 +297,6 @@
         const roleTag = item['الصفة الوظيفية'] || (catCode === 'admin' ? 'الجهاز الإداري' : 'عضو هيئة تعليمية');
         const escapedEmail = email.replace(/'/g, "\\'");
 
-        // قسم الساعات المكتبية والمكتب: يُبنى فقط إذا كانت هناك بيانات فعلية مدخلة
         const hasOfficeDetails = officeRoom !== '' || officeHours !== '';
         const officeDetailsMarkup = hasOfficeDetails ? `
           <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 space-y-1.5 text-xs">
@@ -312,19 +316,19 @@
         ` : '';
 
         return `
-          <div class="faculty-card p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="${catCode}">
+          <div class="faculty-card p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm" data-category="${catCode}">
             <div>
-              <div class="flex items-center justify-between mb-2">
-                <span class="px-2.5 py-1 rounded text-[11px] font-bold ${badgeColor}">${college}</span>
-                <span class="text-xs text-slate-400 font-medium">${roleTag}</span>
+              <div class="flex items-center justify-between mb-2 gap-2">
+                <span class="px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold ${badgeColor}">${college}</span>
+                <span class="text-xs text-slate-400 font-medium truncate">${roleTag}</span>
               </div>
-              <h3 class="font-bold text-sm text-slate-900 dark:text-white">${name}</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${title}</p>
+              <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white line-clamp-1">${name}</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">${title}</p>
               ${officeDetailsMarkup}
             </div>
             <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
               <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">${email}</span>
-              <button onclick="copyEmail('${escapedEmail}', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
+              <button onclick="copyEmail('${escapedEmail}', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition shadow-sm">
                 <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                 <span>نسخ</span>
               </button>
@@ -337,7 +341,6 @@
       filterData();
     }
 
-    // جلب البيانات مع التسريع الفوري (localStorage)
     async function fetchLiveFaculty() {
       const cached = localStorage.getItem('nadi_faculty_cache');
       if (cached) {
