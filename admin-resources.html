@@ -40,31 +40,31 @@
     }
   </script>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen flex flex-col justify-between">
 
-  <!-- ==================== الهيدر العلوي ==================== -->
-  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-4 lg:px-8 py-3.5 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <a href="admin.html" class="p-2 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-600 dark:text-slate-300 transition" title="الرجوع للبوابة الرئيسية">
+  <!-- ==================== الهيدر العلوي المتجاوب ==================== -->
+  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-3.5 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-2 transition-colors">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <a href="admin.html" class="p-2 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-600 dark:text-slate-300 transition shrink-0" title="الرجوع للبوابة الرئيسية">
         <i data-lucide="arrow-right" class="w-4 h-4"></i>
       </a>
-      <img src="logo.png" alt="شعار النادي" class="w-9 h-9 object-contain">
-      <div>
-        <div class="flex items-center gap-2">
-          <h2 class="text-sm font-bold text-slate-900 dark:text-white">بنك الموارد والامتحانات</h2>
-          <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20">فرع صور</span>
+      <img src="logo.png" alt="شعار النادي" class="w-8 h-8 sm:w-9 sm:h-9 object-contain shrink-0">
+      <div class="min-w-0">
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <h2 class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white whitespace-nowrap">بنك الموارد والامتحانات</h2>
+          <span class="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-extrabold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20 whitespace-nowrap">فرع صور</span>
         </div>
-        <p id="welcomeAdmin" class="text-[11px] text-slate-400">لوحة التحكم بالنماذج والملخصات الرقمية</p>
+        <p id="welcomeAdmin" class="hidden sm:block text-[11px] text-slate-400 truncate">لوحة التحكم بالنماذج والملخصات الرقمية</p>
       </div>
     </div>
 
-    <div class="flex items-center gap-3">
-      <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition">
+    <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+      <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center justify-center p-0 sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition shrink-0" title="تبديل المظهر">
         <span class="themeIconContainer flex items-center justify-center"></span>
-        <span class="themeText">الليلي</span>
+        <span class="themeText hidden sm:inline mr-1.5">الليلي</span>
       </button>
 
-      <a href="admin.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition">
+      <a href="admin.html" class="flex items-center justify-center gap-1.5 p-0 sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition shrink-0" title="البوابة المركزية">
         <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
         <span class="hidden sm:inline">البوابة المركزية</span>
       </a>
@@ -74,28 +74,30 @@
   <!-- ==================== المحتوى والتنقل ==================== -->
   <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-8 space-y-6">
 
-    <!-- شريط التبويبين -->
-    <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark max-w-fit flex-wrap">
-      <button id="tabBtnAdd" onclick="switchTab('add')" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2">
-        <i data-lucide="file-plus" class="w-4 h-4"></i>
-        <span>إضافة مورد جديد</span>
+    <!-- أزرار التبويبات المتناسقة والمرتبة -->
+    <div class="grid grid-cols-2 gap-2.5 sm:gap-4 w-full max-w-md">
+      <button id="tabBtnAdd" onclick="switchTab('add')" class="px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center justify-center gap-2 border border-transparent ring-2 ring-gold-500/20">
+        <i data-lucide="file-plus" class="w-4 h-4 shrink-0"></i>
+        <span class="whitespace-nowrap">إضافة مورد</span>
+        <span class="text-[10px] px-1.5 py-0.5 rounded-full font-mono bg-white/20 dark:bg-black/20 text-current">+جديد</span>
       </button>
-      <button id="tabBtnManage" onclick="switchTab('manage')" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2">
-        <i data-lucide="folder-open" class="w-4 h-4"></i>
-        <span>إدارة بنك الموارد</span>
-        <span id="resourceCountBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">...</span>
+
+      <button id="tabBtnManage" onclick="switchTab('manage')" class="px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-white dark:bg-clubNavy-cardDark border border-slate-200 dark:border-clubNavy-borderDark text-slate-600 dark:text-slate-300 hover:border-gold-500 flex items-center justify-center gap-2">
+        <i data-lucide="folder-open" class="w-4 h-4 shrink-0"></i>
+        <span class="whitespace-nowrap">سجل الموارد</span>
+        <span id="resourceCountBadge" class="text-[10px] px-2 py-0.5 rounded-full font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">...</span>
       </button>
     </div>
 
     <!-- 1. نموذج إضافة مورد جديد -->
-    <section id="viewAdd" class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
+    <section id="viewAdd" class="p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
       <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
         <span class="text-xs font-bold text-gold-500">بنك الامتحانات والملخصات الأكاديمية</span>
         <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">رفع رابط ملخص أو نموذج امتحان رسمي</h3>
       </div>
 
       <form id="addResourceForm" class="space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
           <div>
             <label class="block text-xs font-bold mb-1">اسم المادة والمقرر *</label>
             <input id="resTitle" type="text" required placeholder="مثال: تفاضل وتكامل 2 أو Calculus II" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
@@ -106,7 +108,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4">
           <div>
             <label class="block text-xs font-bold mb-1">الكلية التابع لها المقرر *</label>
             <select id="resCollege" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
@@ -148,8 +150,8 @@
     </section>
 
     <!-- 2. إدارة وتصفية الموارد المنشورة -->
-    <section id="viewManage" class="hidden p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+    <section id="viewManage" class="hidden p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
         <div>
           <h3 class="text-base font-bold text-slate-900 dark:text-white">الملخصات والامتحانات المنشورة</h3>
           <p class="text-xs text-slate-400 mt-0.5">البيانات الحية المأخوذة من ورقة «الموارد»</p>
@@ -207,7 +209,12 @@
     </div>
   </div>
 
-  <!-- ==================== السكربت البرمجي المستقل ==================== -->
+  <!-- ==================== التذييل السفلي ==================== -->
+  <footer class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
+    نادي الوفاء — الجامعة اللبنانية الدولية في صور • إدارة بنك الموارد
+  </footer>
+
+  <!-- ==================== السكربت البرمجي ==================== -->
   <script>
     lucide.createIcons();
 
@@ -243,9 +250,8 @@
 
     function toggleTheme() {
       const isDarkCurrently = document.documentElement.classList.contains('dark');
-      const newTheme = !isDarkCurrently;
-      applyTheme(newTheme);
-      localStorage.setItem('clubTheme', newTheme ? 'dark' : 'light');
+      applyTheme(!isDarkCurrently);
+      localStorage.setItem('clubTheme', !isDarkCurrently ? 'dark' : 'light');
     }
 
     applyTheme(localStorage.getItem('clubTheme') !== 'light');
@@ -256,20 +262,27 @@
       const viewManage = document.getElementById('viewManage');
       const btnAdd = document.getElementById('tabBtnAdd');
       const btnManage = document.getElementById('tabBtnManage');
+      const countBadge = document.getElementById('resourceCountBadge');
 
-      const activeClasses = "px-4 py-2 rounded-xl text-xs font-bold transition bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center gap-2";
-      const inactiveClasses = "px-4 py-2 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:text-gold-500 flex items-center gap-2";
+      const activeClasses = "px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center justify-center gap-2 border border-transparent ring-2 ring-gold-500/20";
+      const inactiveClasses = "px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-white dark:bg-clubNavy-cardDark border border-slate-200 dark:border-clubNavy-borderDark text-slate-600 dark:text-slate-300 hover:border-gold-500 flex items-center justify-center gap-2";
 
       if (tab === 'add') {
         viewAdd.classList.remove('hidden');
         viewManage.classList.add('hidden');
         btnAdd.className = activeClasses;
         btnManage.className = inactiveClasses;
+        if (countBadge) {
+          countBadge.className = "text-[10px] px-2 py-0.5 rounded-full font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400";
+        }
       } else {
         viewAdd.classList.add('hidden');
         viewManage.classList.remove('hidden');
         btnAdd.className = inactiveClasses;
         btnManage.className = activeClasses;
+        if (countBadge) {
+          countBadge.className = "text-[10px] px-2 py-0.5 rounded-full font-mono bg-white/20 dark:bg-black/20 text-current";
+        }
         fetchLiveResources();
       }
       lucide.createIcons();
@@ -339,17 +352,17 @@
         const link = item['رابط التحميل'] || item.link || '#';
 
         return `
-          <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
-            <div class="space-y-1">
+          <div class="p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:border-gold-500/40 transition">
+            <div class="space-y-1 min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">${type}</span>
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${col}</span>
                 ${code ? `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300" dir="ltr">${code}</span>` : ''}
                 ${term ? `<span class="text-[11px] text-slate-400 font-mono">${term}</span>` : ''}
               </div>
-              <h4 class="font-bold text-sm text-slate-900 dark:text-white">${title}</h4>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white truncate">${title}</h4>
             </div>
-            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap">
+            <div class="flex items-center gap-1.5 sm:gap-2 self-end sm:self-auto shrink-0 flex-wrap">
               <a href="${link}" target="_blank" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="فتح الرابط الخارجي">
                 <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                 <span>معاينة</span>
