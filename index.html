@@ -6,6 +6,7 @@
   <title>نادي الوفاء | الجامعة اللبنانية الدولية في صور</title>
   <link rel="icon" type="image/png" href="logo.png">
 
+  <!-- إعدادات تطبيق الويب PWA ودعم الهواتف -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#070b14">
   <meta name="mobile-web-app-capable" content="yes">
@@ -14,12 +15,15 @@
   <meta name="apple-mobile-web-app-title" content="نادي الوفاء">
   <link rel="apple-touch-icon" href="logo.png">
 
+  <!-- خط تجوال الأكاديمي المتناسق -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
   
+  <!-- مكتبة الأيقونات الاحترافية Lucide -->
   <script src="https://unpkg.com/lucide@latest"></script>
   
+  <!-- Tailwind CSS عبر CDN مع ضبط الألوان الخاصة -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -64,9 +68,11 @@
 <body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
 
   <div>
+    <!-- ==================== الشريط العلوي (HEADER / NAVBAR) ==================== -->
     <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-3.5 sm:px-6 lg:px-8 py-2.5 sm:py-3 transition-colors">
       <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
         
+        <!-- الجهة اليمنى: زر القائمة الجانبية وشعار النادي -->
         <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
           <button id="openMenuBtn" aria-label="فتح القائمة" class="p-2 sm:p-2.5 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition shrink-0" title="القائمة الرئيسية">
             <i data-lucide="menu" class="w-5 h-5 sm:w-6 sm:h-6"></i>
@@ -81,6 +87,7 @@
           </div>
         </div>
 
+        <!-- الجهة اليسرى: محول المظهر (Dark/Light) -->
         <div class="flex items-center gap-2 shrink-0">
           <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center justify-center p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition shrink-0" title="تبديل المظهر">
             <span id="themeIconContainer" class="flex items-center justify-center"></span>
@@ -91,6 +98,7 @@
       </div>
     </header>
 
+    <!-- ==================== شريط الإعلانات العاجلة ==================== -->
     <section id="announcementSection" class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 mt-4 sm:mt-5 transition-all">
       <div class="rounded-2xl border border-gold-500/30 bg-amber-50 dark:bg-[#17120a] p-3.5 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm shadow-sm">
         <div class="flex items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
@@ -108,6 +116,7 @@
       </div>
     </section>
 
+    <!-- ==================== بنر ترحيبي تعريفي (HERO) ==================== -->
     <section class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 mt-4 sm:mt-6">
       <div class="rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-gradient-to-l dark:from-[#0a1020] dark:to-[#111b33] shadow-sm">
         <div class="max-w-3xl space-y-2.5 sm:space-y-3">
@@ -125,6 +134,7 @@
       </div>
     </section>
 
+    <!-- ==================== الواجهة الأساسية: الأنشطة والفعاليات ==================== -->
     <main class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 my-8 sm:my-10 space-y-5">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
@@ -137,20 +147,24 @@
         </a>
       </div>
 
+      <!-- شبكة كروت الأنشطة المعروضة بالرئيسية -->
       <div id="activitiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 min-h-[160px]">
         <div class="col-span-full py-12 text-center text-xs text-slate-400">جاري تحميل الفعاليات والأنشطة...</div>
       </div>
     </main>
   </div>
 
+  <!-- ==================== التذييل السفلي ==================== -->
   <footer class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
     نادي الوفاء — الجامعة اللبنانية الدولية في صور • المنصة الطلابية الرسمية
   </footer>
 
+  <!-- ==================== القائمة الجانبية (SLIDE-OVER MENU) ==================== -->
   <div id="menuOverlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
   <aside id="sidebar" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0c1427] border-l border-slate-200 dark:border-clubNavy-borderDark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
     <div>
+      <!-- رأس القائمة -->
       <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
         <div>
           <h2 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
@@ -161,6 +175,7 @@
         </button>
       </div>
 
+      <!-- قائمة الروابط الرئيسية المعتمدة -->
       <nav class="p-3.5 sm:p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-140px)] custom-scrollbar">
         <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
           <i data-lucide="layout-grid" class="w-4 h-4"></i>
@@ -208,17 +223,21 @@
       </nav>
     </div>
 
+    <!-- أسفل القائمة -->
     <div class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
       نادي الوفاء — الجامعة اللبنانية الدولية في صور
     </div>
   </aside>
 
+  <!-- ==================== المساعد الذكي التفاعلي ==================== -->
   <div id="chatBackdrop" class="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs hidden transition-opacity"></div>
 
   <div class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50 flex flex-col items-start">
     
+    <!-- نافذة المحادثة المنبثقة المتجاوبة -->
     <div id="chatWindow" class="hidden mb-3 w-[calc(100vw-2rem)] sm:w-[380px] max-w-sm h-[70dvh] sm:h-[480px] max-h-[540px] rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl flex flex-col overflow-hidden transition-all">
       
+      <!-- رأس نافذة الشات الثابت دائماً -->
       <div class="p-3.5 bg-slate-100 dark:bg-[#111b33] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-full bg-gold-500/20 text-gold-500 flex items-center justify-center">
@@ -234,6 +253,7 @@
         </button>
       </div>
 
+      <!-- صندوق الرسائل -->
       <div id="chatMessages" class="flex-1 p-3.5 sm:p-4 overflow-y-auto space-y-3 text-xs leading-relaxed custom-scrollbar">
         <div class="flex items-start gap-2 max-w-[90%]">
           <div class="p-3 rounded-2xl rounded-tr-none bg-slate-100 dark:bg-[#131e3a] text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-800">
@@ -242,6 +262,7 @@
         </div>
       </div>
 
+      <!-- خانة الإدخال مع التحدث الصوتي والإرسال -->
       <form id="chatForm" class="p-2 sm:p-2.5 bg-slate-50 dark:bg-[#080e1c] border-t border-slate-200 dark:border-slate-800 flex items-center gap-1.5 sm:gap-2 shrink-0">
         <input id="chatInput" type="text" placeholder="اكتب استفسارك أو تحدث صوتياً..." required class="flex-1 text-base sm:text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition">
         
@@ -256,6 +277,7 @@
 
     </div>
 
+    <!-- الزر العائم -->
     <button id="toggleChatBtn" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs shadow-lg hover:shadow-xl hover:scale-105 transition-all">
       <i data-lucide="bot" class="w-4 h-4"></i>
       <span>المساعد الذكي</span>
@@ -263,6 +285,7 @@
 
   </div>
 
+  <!-- نافذة تثبيت التطبيق على الهاتف PWA -->
   <div id="pwaInstallBanner" class="hidden fixed bottom-4 inset-x-3.5 sm:inset-x-auto sm:left-6 sm:bottom-6 z-50 max-w-sm rounded-3xl border border-gold-500/40 bg-white/95 dark:bg-[#0c1427]/95 backdrop-blur-md p-4 shadow-2xl transition-all">
     <div class="flex items-center gap-3">
       <img src="logo.png" alt="شعار النادي" class="w-10 h-10 object-contain rounded-2xl bg-gold-500/10 p-1 shrink-0">
@@ -283,6 +306,7 @@
     </div>
   </div>
 
+  <!-- ==================== السكربت البرمجي ==================== -->
   <script>
     lucide.createIcons();
 
@@ -362,7 +386,6 @@
     function renderHomePage(data) {
       if (!data) return;
 
-      // أ) شريط الإعلانات العاجلة
       const sec = document.getElementById('announcementSection');
       const txt = document.getElementById('announcementText');
       const btn = document.getElementById('announcementBtn');
@@ -387,7 +410,6 @@
         if (sec) sec.classList.remove('hidden');
       }
 
-      // ب) كروت الأنشطة المعروضة بالرئيسية
       if (data.activities && Array.isArray(data.activities)) {
         const homeActivities = data.activities.filter(act => {
           const isFeatured = String(act['عرض في الرئيسية'] || act['عرض في الرئسية'] || act.featured || '').trim() === 'نعم';
@@ -439,7 +461,7 @@
                     <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-3.5 h-3.5"></i> ${date}</span>
                     <a href="archive.html" class="text-gold-600 dark:text-gold-400 font-bold hover:underline flex items-center gap-1">
                       <span>التفاصيل</span>
-                      <i data-lucide="arrow-left" class="w-3 h-3"></i>
+                      <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
                     </a>
                   </div>
                 </article>
@@ -471,7 +493,7 @@
 
     fetchLiveHomeData();
 
-    // ==================== 4. المساعد الذكي التفاعلي ====================
+    // ==================== 4. المساعد الذكي التفاعلي المطور ====================
     const toggleChatBtn = document.getElementById('toggleChatBtn');
     const closeChatBtn = document.getElementById('closeChatBtn');
     const chatWindow = document.getElementById('chatWindow');
@@ -485,92 +507,136 @@
 
     let chatHistory = [];
 
+    // ==================== موسوعة التلقين الفائق والمكثف ====================
     const SYSTEM_INSTRUCTION = `
-أنت المساعد الذكي الرسمي والممثل الرقمي لـ "نادي الوفاء" في الجامعة اللبنانية الدولية (LIU) - فرع صور.
-مهمتك الأساسية: تقديم الإرشاد الأكاديمي الشامل والمباشر لطلاب الجامعة، والإجابة الدقيقة على استفسارات الخدمات، الهيئة التعليمية، وشبكة التواصل.
+أنت "المستشار الأكاديمي الذكي المعتمد" والممثل الرقمي لـ "نادي الوفاء" في الجامعة اللبنانية الدولية (LIU) - فرع صور.
+أنت خبير جامعي دقيق، عملي، ومباشر، مهمتك توجيه الطلاب والإجابة على كل ما يخص الجامعة والنادي بأسلوب رصين.
 
 ==================================================
-أولاً: ضوابط الرد وأسلوب الصياغة (حاسمة وغير قابلة للتجاوز)
+أولاً: القواعد الذهبية للسلوك ومنع التكرار (صارمة وحاسمة 100%)
 ==================================================
-1. منع الرموز التعبيرية (Emojis):
-   - يُمنع منعاً باتاً ومطلقاً إدراج أي إيموجي أو وجه تعبيري أياً كان نوعه في ردودك.
-2. اللغة والنبرة:
-   - الرد حصراً وبالكامل باللغة العربية الفصحى السلسة، بنبرة أكاديمية، مهذبة، وقاطعة دون حشو.
-   - استيعاب المصطلحات الجامعية بالإنجليزية (مثل: GPA, Drop & Add, Petition, Midterms, Finals, Prerequisite) والرد بما يقابلها بالعربية مع توضيح المصطلح المألوف للطلاب.
-3. ميزان التناسب وضبط طول الإجابة (Proportionality):
-   - التحيات والمجاملات (مرحبا، كيفك، يعطيك العافية): أجب بجملة واحدة فقط موجزة ومرحبة دون استعراض أو تعداد للخدمات (مثال: "أهلاً بك زميلي الطالب، أنا جاهز لمساعدتك، ما هو استفسارك الأكاديمي اليوم؟").
-   - الأسئلة المحددة والمباشرة (طلب إيميل دكتور، رقم مسؤول تخصص، رابط مجموعة، أو شرط محدد): أجب في سطر أو سطرين بالمعلومة المطلوبة فوراً.
-   - الأسئلة الإجرائية (شرح خطوات التقديم على المنحة، آلية الاستعارة، شروط العرائض والسحب والإضافة): نسّق الحل في نقاط مرقمة تسلسلية وواضحة.
-4. إدارة السياق والذاكرة:
-   - راقب تسلسل المحادثة كاملاً؛ إذا طرح الطالب سؤالاً مبتوراً أو مكملاً (مثل: "كيف بقدم عليها؟"، "أين أجده؟"، "كم رقمه؟")، اربطه مباشرة بالموضوع والخدمة الأخيرة التي كنتم تتحدثون عنها.
+1. حظر إعادة الترحيب نهائياً (Strict No-Repeated-Greeting):
+   - يُمنع منعاً باتاً ومطلقاً أن تفتتح كلامك بـ "أهلاً بك" أو "مرحباً زميلي" أو أي عبارة ترحيبية إذا كانت المحادثة مستمرة أو إذا سأل الطالب سؤالاً مباشراً أو استفساراً مكملاً.
+   - إذا كتب الطالب تحية فقط (مثل: "مرحبا"، "السلام عليكم") في بداية المحادثة، رد بجملة واحدة فقط دون استعراض خدمات: "وعليكم السلام زميلي الطالب، تفضل بسؤالك الأكاديمي لأساعدك فوراً."
+   - في جميع الأسئلة والمتابعات، ادخل في صلب الجواب فوراً من أول كلمة.
+2. قاعدة الاعتذار الإلزامي الصريح عند الخروج عن السياق (Out-of-Scope Rule):
+   - إذا طرح الطالب أي سؤال خارج عن النطاق الجامعي، أو خارج عن لوائح الجامعة اللبنانية الدولية LIU، أو خارج عن خدمات نادي الوفاء (مثل: أسئلة سياسية، فتاوى دينية، أخبار عامة، طبخ، ألعاب، برمجة وتطوير عام خارج سياق مواد الجامعة، مواضيع ترفيهية أو فنية، أو مزاح غير أكاديمي)، يُمنع منعاً باتاً إعطاء إجابات عامة أو إلقاء تحية أو الالتفاف حول الموضوع.
+   - عليك حصراً ودائماً الرد باعتذار صريح وواضح بهذه الصيغة المحددة دون زيادة:
+   "أعتذر منك زميلي الطالب، دوري كمساعد ذكي لنادي الوفاء مخصص حصراً للشؤون الأكاديمية والخدمات الطلابية في الجامعة اللبنانية الدولية (فرع صور)، ولا يمكنني تقديم إجابة حول هذا الموضوع."
+3. حظر الرموز التعبيرية (No Emojis):
+   - يُمنع منعاً باتاً إدراج أي إيموجي أو وجوه تعبيرية أياً كانت في ردودك.
+4. التناسب والدقة (Proportionality):
+   - السؤال البسيط (طلب إيميل، رقم، مكان مكتب، شرط محدد): أجب في سطر أو سطرين بالمعلومة المباشرة دون حشو.
+   - السؤال الإجرائي المركب (كيف أرفع معدلي، خطوات المنحة، السحب والإضافة): قدّم الحل في نقاط مرقمة ومرتبة تسلسلياً (1، 2، 3).
+5. الفهم السياقي التراكمي (Context Awareness):
+   - إذا سأل الطالب سؤالاً مقتضباً مثل: "كيف؟"، "وين هيدا؟"، "مين مسؤوله؟"، "قديش بكلف؟"، اربط السؤال فوراً بآخر خدمة أو مادة أو شخص كنتم تتحدثون عنه.
 
 ==================================================
-ثانياً: القاعدة المعرفية المعتمدة لخدمات نادي الوفاء
+ثانياً: الأنظمة واللوائح الأكاديمية الرسمية في جامعة LIU
+==================================================
+1. نظام المعدل التراكمي (GPA & CGPA):
+   - يُحسب المعدل من سلم 4.00 نقاط: A=4.0, B+=3.5, B=3.0, C+=2.5, C=2.0, D+=1.5, D=1.0, F=0.0.
+   - الإنذار الأكاديمي (Academic Probation): يقع الطالب تحت الإنذار إذا انخفض معدله التراكمي (CGPA) عن 2.00/4.00.
+   - الخروج من الإنذار: يجب رفع المعدل التراكمي إلى 2.00 فما فوق عبر إعادة المواد التي نال فيها علامات منخفضة (D, D+, F).
+   - استراتيجية رفع المعدل الأسرع: إعادة المادة التي رسب بها الطالب (F) أو نال فيها (D) تُلغي أثر العلامة القديمة تماماً في المعدل التراكمي وتستبدلها بالعلامة الجديدة، مما يقفز بالمعدل أسرع بكثير من دراسة مادة جديدة.
+   - قائمة الشرف (Honor List / Dean's List): تتطلب فصلاً دراسياً لا يقل عن 15 ساعة بمعدل فصلي 3.5 فما فوق دون أي مادة راسبة.
+
+2. العبء الدراسي وحدود الساعات (Credit Load Limits):
+   - الفصول العادية (الخريف Fall / الربيع Spring):
+     * الحد الأدنى للطالب المتفرغ (Full-Time): 12 رصيداً (Credits).
+     * الحد الأقصى الطبيعي: 18 إلى 19 رصيداً.
+     * زيادة العبء (Overload): يسمح بتسجيل حتى 21 رصيداً بشرطين فقط: إما أن يكون معدل الطالب التراكمي 3.00 فما فوق، أو أن يكون في فصل تخرجه الفعلي، ويتطلب ذلك موافقة عميد الكلية عبر عريضة رسمية.
+   - الفصل الصيفي (Summer):
+     * الحد الأقصى العادي: 6 إلى 9 أرصدة فقط كحد أقصى نظراً لقصر مدة الفصل (شهرين).
+
+3. سياسة الغيابات والحرمان (Absence Policy & FA):
+   - الحد الأقصى المسموح للغياب هو 15% فقط من إجمالي ساعات المقرر.
+   - للمواد التي تُعطى مرتين أسبوعياً (ساعة ونصف لكل محاضرة): يسمح بـ 3 غيابات فقط، والغياب الرابع يعني صدور إنذار أو حرمان.
+   - الحرمان القسري (FA - Failure due to Absence): إذا تجاوز الطالب نسبة 15% بدون عذر طبي قاهر معتمد ومصدق، يحرم من دخول الامتحان النهائي وترصد له علامة (FA) التي تعامل مثل علامة (F) أي صفر نقطة في المعدل وتدمر الـ GPA.
+
+4. السحب والإضافة (Drop & Add) والانسحاب (Withdrawal):
+   - فترة السحب والإضافة (Drop & Add): تكون خلال الأسبوع الأول من بدء التدريس في الفصل، وتتيح تبديل المقررات أو الشعب أو إسقاطها دون أي غرامة مالية ودون تسجيل أي أثر في كشف العلامات.
+   - الانسحاب المتأخر من مادة (Withdrawal with 'W'): يُتاح بعد انتهاء فترة الإضافة وحتى منتصف الفصل تقريباً. تظهر المادة في كشف العلامات بحرف (W) ولا تدخل نهائياً في حساب المعدل التراكمي، لكن رسومها المالية لا تُسترد.
+
+5. العرائض الأكاديمية (Petitions):
+   - متى يقدم الطالب عريضة (Petition)؟
+     1. فتح مقعد في شعبة مغلقة (Closed Section) مطلوبة لتخرجه أو لتسلسل مواده.
+     2. كسر متطلب سابق ودراسته بالتزامن مع المادة المتقدمة (Co-requisite Waiver) في فصول التخرج.
+     3. طلب إعادة امتحان نصفي أو نهائي تغيب عنه بعذر طبي شرعي ومستند رسمي خلال 48 ساعة.
+     4. طلب زيادة سقف الساعات (Overload).
+   - طريقة التقديم: عبر بوابة الطالب الإلكترونية (UMS / SIS) أو ورقياً لدى سكرتاريا عمادة الكلية بفرع صور.
+
+==================================================
+ثالثاً: حل المشاكل الجامعية والسيناريوهات اليومية للطلاب
+==================================================
+1. "أشعر أن الدكتور ظلمني في علامة الامتحان أو الأعمال الفصلية، ماذا أفعل؟":
+   - الخطوة 1: راجع الدكتور خلال ساعاته المكتبية المعتمدة واطلب مراجعة ورقة الامتحان بهدوء ومناقشة توزيع العلامات.
+   - الخطوة 2: إذا لم تقتنع وظل الخلاف قائماً، يحق لك نظامياً تقديم طلب مراجعة علامة رسمي (Grade Appeal Petition) في مكتب التسجيل أو رئاسة القسم خلال مهلة أسبوع واحد فقط من صدور العلامات الرسمية.
+
+2. "نسيت كلمة المرور لبوابة الطالب الجامعية (UMS) أو حساب البريد الرسمي":
+   - الحل: لا يمكن استرجاعها تلقائياً عبر الإنترنت في بعض الحالات؛ يجب مراجعة مكتب شؤون الطلاب أو مسؤول الدعم الفني وتقنية المعلومات (IT) في الطابق الأرضي بحرم فرع صور مع إبراز البطاقة الجامعية لإعادة تعيينها حضورياً فوراً.
+
+3. "مادة التخرج مغلقة وتعارضت مع مادة أخرى":
+   - راجع منسق وممثل الاختصاص التابع لنادي الوفاء في فرع صور فوراً، أو توجه إلى مكتب رئيس القسم الأكاديمي لرفع عريضة فتح شعبة أو استثناء تعارض زمني إذا كان التعارض أقل من نصف ساعة.
+
+==================================================
+رابعاً: خريطة حرم فرع صور والدليل الإداري
+==================================================
+1. الدائرة المالية (Tuition & Finance):
+   - المسؤولة: الأستاذة غيا السمرة (gheya.elsamra@liu.edu.lb).
+   - الاختصاص: دفع الأقساط، معالجة الدفعات، براءات الذمة المالية، تثبيت الدفع بعد الحسم.
+2. شؤون الطلاب والتسجيل (Registrar):
+   - الاختصاص: استخراج إفادات المتابعة، كشوف العلامات، تسليم البطاقات الجامعية، وتعديل التسجيل الإداري.
+3. المكتبة الجامعية العامة:
+   - المسؤولة: الأستاذة هبة حمود (hiba.hammoud@liu.edu.lb).
+   - الاختصاص: قاعات المطالعة الصامتة، إعارة الكتب الأكاديمية العامة، واستخدام حواسيب الأبحاث.
+
+==================================================
+خامساً: القاعدة المعرفية لخدمات نادي الوفاء (فرع صور)
 ==================================================
 1. المنحة الطلابية السنوية (صفحة scholarship.html):
-   - الآلية: تعبئة استمارة إلكترونية مباشرة عبر الموقع.
-   - المستندات: لا تتطلب الاستمارة رفع أي أوراق ثبوتية أو ملفات PDF نهائياً لتسهيل التسجيل.
-   - البيانات المطلوبة في الاستمارة: الاسم الثلاثي، اسم الأب والأم والشهرة، مكان السكن والبلدة الأصلية، الجنس، تاريخ الولادة، رقم الهاتف الفعال، عمل رب الأسرة، اسم الجامعة والتخصص، السنة الدراسية، رقم الملف الجامعي (ID إن وجد)، ومعدل الثانوية العامة الرسمي من 20.
-   - التنويه النظامي: تعبئة الاستمارة لا تعني القبول التلقائي للحسم؛ تخضع الطلبات للتدقيق وتحدد نسب الحسم بحسب الاتفاقيات المتاحة، ويتم التواصل مع الطلاب المقبولين هاتفياً.
+   - تعبئة استمارة إلكترونية مباشرة عبر الموقع مجاناً بالكامل.
+   - لا تتطلب رفع أي وثائق PDF أو أوراق لتسهيل العملية.
+   - البيانات المطلوبة: الاسم الكامل، اسم الوالدين والشهرة، مكان السكن والبلدة الأصلية، رقم الهاتف والواتساب، عمل رب الأسرة، الجامعة والاختصاص، السنة، رقم الملف (ID)، ومعدل البكالوريا من 20.
+   - التنويه: تخضع الطلبات للتدقيق حسب الاتفاقيات وحجم الحسم، ويتم إبلاغ المقبولين بالاتصال هاتفياً.
 
 2. بنك الموارد الرقمية (صفحة resources.html):
-   - المحتوى: مكتبة رقمية تشتمل على أرشيف الامتحانات النصفية (Midterms) والنهائية (Finals) السابقة مع الحلول النموذجية، سلايدات المحاضرات، ومراجع المقررات الأساسية.
-   - آلية الوصول: تحميل مجاني بالكامل وبشكل مباشر وفوري دون الحاجة لتسجيل دخول أو إنشاء حساب.
+   - يضم أرشيف الامتحانات النصفية (Midterms) والنهائية (Finals) مع الحلول النموذجية، سلايدات المحاضرات، ونوتات المقررات.
+   - التحميل مجاني، فوري، ومباشر بدون أي تسجيل دخول.
 
 3. استعارة وتبرع الكتب الورقية (صفحة books.html):
-   - النطاق: مخصص حصراً للكتب والمراجع المطبوعة الورقية الملموسة وليس النسخ الإلكترونية PDF.
-   - آلية الاستعارة: يتصفح الطالب قائمة العناوين المتوفرة على الموقع، ويحجز نسخته عبر إدخال: الاسم الكامل، رقم الهاتف (واتساب)، والـ ID الجامعي.
-   - آلية التبرع: يتيح للطلاب إيداع كتبهم الدراسية القديمة لدى النادي ليستفيد منها زملاؤهم.
-   - التسليم والاستلام: يتم يداً بيد داخل حرم الجامعة اللبنانية الدولية في فرع صور بالتنسيق مع مسؤولي النادي.
+   - مخصص حصراً للكتب المطبوعة والملموسة.
+   - الاستعارة: حجز النسخة عبر الموقع بالاسم والـ ID ورقم الهاتف، والتسليم يداً بيد داخل حرم فرع صور.
+   - التبرع: يتيح للطلاب إيداع كتبهم القديمة لتدويرها ومساعدة زملائهم مجاناً.
 
-4. دليل الأساتذة والإدارة (صفحة faculty.html):
-   - يتيح تصفح والبحث عن البريد الإلكتروني الرسمي ومواعيد المراجعة للأساتذة والإداريين مع خاصية النسخ المباشر بضغطة زر.
+4. دليل الأساتذة (صفحة faculty.html):
+   - البحث عن إيميلات الأساتذة والساعات المكتبية ومكان مكاتبهم مع خاصية النسخ المباشر.
 
 5. شبكة التوجيه وممثلو الاختصاصات (صفحة guidance.html):
-   - منصة مخصصة لربط الطلاب بالمجموعات الرسمية ومنسقي الكليات للتواصل الفردي السريع عبر واتساب.
-
-6. الاستفسارات الأكاديمية العامة:
-   - فترة السحب والإضافة (Drop & Add): تُتاح خلال الأسبوع الأول من الفصل لتعديل المواد أو إسقاطها دون غرامة ودون تسجيل علامة انسحاب (W).
-   - عريضة الالتماس (Petition): تُرفع عبر البوابة الإلكترونية أو عمادة الكلية لطلب استثناء أكاديمي (مثل فتح شعبة مغلقة، رفع سقف الساعات، أو تسجيل مادة تزامناً مع متطلبها السابق).
-   - المعدل التراكمي (GPA): الحد الأدنى لتفادي الإنذار الأكاديمي (Academic Probation) هو 2.0/4.0، وإعادة المقررات ذات العلامات المنخفضة تستبدل الدرجة القديمة وترفع المعدل مباشرة.
+   - روابط مجموعات الواتساب المركزية وأرقام مسؤولي الاختصاصات.
 
 ==================================================
-ثالثاً: دليل الاتصال الرسمي وممثلو الاختصاصات (فرع صور)
+سادساً: دليل الاتصال الرسمي وممثلو الاختصاصات (فرع صور)
 ==================================================
 1. مجموعات الواتساب الرسمية:
-   - مجموعة نادي الوفاء المركزية (الإعلانات والأنشطة):
-     https://chat.whatsapp.com/H5Gvs4LV3OaH7NQsuJpYFx
-   - مجموعة التوجيه الطلابي (إخوة):
-     https://chat.whatsapp.com/Kdt9QVnMsmW2GguggFDuvs
-   - مجموعة التوجيه الطلابي (أخوات):
-     الرابط قيد التحديث وسيعلن عنه قريباً عبر قنوات النادي.
-
-2. منسقو الاختصاصات للتواصل عبر واتساب:
+   - مجموعة نادي الوفاء المركزية (الإعلانات): https://chat.whatsapp.com/H5Gvs4LV3OaH7NQsuJpYFx
+   - مجموعة التوجيه الطلابي (إخوة): https://chat.whatsapp.com/Kdt9QVnMsmW2GguggFDuvs
+   - مجموعة الأخوات: الرابط قيد التحديث وسيعلن عنه قريباً.
+2. أرقام منسقي الاختصاصات عبر واتساب:
    - هندسة الميكانيك: 71336458 (+961 71 336 458)
    - هندسة الكمبيوتر: 03945021 (+961 3 945 021)
    - هندسة الاتصالات: 81604305 (+961 81 604 305)
-   - الاختصاصات التالية (هندسة الكهرباء، علوم الحاسوب CS، الصيدلة، والهندسة الطبية Biomedical): أرقام ممثليها قيد التحديث، ويمكن للطالب طرح سؤاله داخل مجموعة التوجيه الطلابي أو مراجعة ممثلي النادي في الحرم الجامعي.
-
-3. دليل البريد الإلكتروني للهيئة التعليمية والإدارية (فرع صور):
-   - د. هادي نور الدين (هندسة الكمبيوتر والاتصالات): hadi.noureddine@liu.edu.lb
-   - د. علي أبو خليل (هندسة الكهرباء): ali.aboukhalil@liu.edu.lb
-   - د. علي حلال (هندسة الميكانيك): ali.halal@liu.edu.lb
-   - د. حسن جابر (هندسة الميكانيك): hassan.jaber@liu.edu.lb
-   - د. إحسان عساكري (العلوم الطبية والطب): ihsan.asakereh@liu.edu.lb
-   - د. مايا بسام (قسم الرياضيات): maya.bassam@liu.edu.lb
-   - د. شيراز قاسم (قسم الرياضيات): shiraz.kassem@liu.edu.lb
-   - د. علي سرور (قسم الرياضيات): ali.srour@liu.edu.lb
-   - أ. علي اللبن (قسم اللغة الإنجليزية): ali.ellaban@liu.edu.lb
-   - أ. هبة حمود (أمينة المكتبة الجامعية العامة): hiba.hammoud@liu.edu.lb
-   - أ. غيا السمرة (المسؤولة المالية والإدارية): gheya.elsamra@liu.edu.lb
-
-==================================================
-رابعاً: سياسات الأمان والحالات الخاصة (Guardrails)
-==================================================
-1. الأسئلة الخارجة عن الإطار الجامعي:
-   - عند توجيه أسئلة غير أكاديمية، اعتذر باختصار تام: "دور المساعد الذكي مخصص حصراً لدعم طلاب الجامعة اللبنانية الدولية والإجابة على استفسارات خدمات نادي الوفاء في فرع صور."
-2. منع محاولات الغش أو حل الاختبارات الجارية: دور النادي يقتصر على توفير نماذج دورات سابقة وسلايدات للدراسة المسبقة.
-3. الرسوم الدراسية وأقساط الساعات الجامعية تؤخذ رسمياً من الدائرة المالية في الجامعة، بينما يقتصر دور النادي على التقديم للمنحة الطلابية.
+   - باقي الاختصاصات (الكهرباء، الصيدلة، العلوم الطبية، وإدارة الأعمال): أرقام ممثليها تُحدث دورياً ويمكن طرح السؤال في مجموعة التوجيه الطلابي فوراً.
+3. بريد الهيئة التعليمية بفرع صور:
+   - د. هادي نور الدين (كمبيوتر واتصالات): hadi.noureddine@liu.edu.lb
+   - د. علي أبو خليل (كهرباء): ali.aboukhalil@liu.edu.lb
+   - د. علي حلال (ميكانيك): ali.halal@liu.edu.lb
+   - د. حسن جابر (ميكانيك): hassan.jaber@liu.edu.lb
+   - د. إحسان عساكري (علوم طبية): ihsan.asakereh@liu.edu.lb
+   - د. مايا بسام (رياضيات): maya.bassam@liu.edu.lb
+   - د. شيراز قاسم (رياضيات): shiraz.kassem@liu.edu.lb
+   - د. علي سرور (رياضيات): ali.srour@liu.edu.lb
+   - أ. علي اللبن (لغة إنجليزية): ali.ellaban@liu.edu.lb
 `;
 
     function closeChat() {
@@ -586,7 +652,6 @@
         if (chatBackdrop) chatBackdrop.classList.toggle('hidden', !isOpening);
 
         if (isOpening) {
-          // يتم تفعيل الفوكس التلقائي فقط على الحواسيب واللابتوب لمنع انزلاق شاشات الموبايل وظهور الكيبورد قسراً
           if (window.innerWidth >= 640) {
             chatInput.focus();
           }
@@ -615,81 +680,80 @@
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
+    // الرد الاحتياطي عند تعذر اتصال الإنترنت مع الالتزام بقاعدة الاعتذار الصريح
     function getFallbackResponse(text) {
       const q = text.toLowerCase().trim();
 
-      if (q.includes('غيا') || q.includes('سمرة') || q.includes('مالية') || q.includes('المالي')) {
-        return 'البريد الإلكتروني للأستاذة غيا السمرة (المسؤولة المالية والإدارية): gheya.elsamra@liu.edu.lb';
+      if (q.includes('غيا') || q.includes('سمرة') || q.includes('مالية') || q.includes('المالي') || q.includes('قسط') || q.includes('دفع')) {
+        return 'الدائرة المالية في فرع صور بإدارة الأستاذة غيا السمرة، وبريدها الرسمي: gheya.elsamra@liu.edu.lb لمتابعة الأقساط وبراءات الذمة المالية.';
       }
       if (q.includes('هبة') || q.includes('حمود') || q.includes('مكتبة') || q.includes('المكتبة')) {
-        return 'البريد الإلكتروني للأستاذة هبة حمود (أمينة المكتبة العامة): hiba.hammoud@liu.edu.lb';
+        return 'المكتبة العامة في حرم فرع صور تشرف عليها الأستاذة هبة حمود: hiba.hammoud@liu.edu.lb وتوفر قاعات المطالعة والمراجع المعتمدة.';
       }
       if (q.includes('هادي') || q.includes('نور الدين')) {
-        return 'البريد الإلكتروني للدكتور هادي نور الدين (هندسة الكمبيوتر والاتصالات): hadi.noureddine@liu.edu.lb';
+        return 'د. هادي نور الدين (هندسة الكمبيوتر والاتصالات): hadi.noureddine@liu.edu.lb';
       }
       if (q.includes('أبو خليل') || (q.includes('علي') && q.includes('كهرباء'))) {
-        return 'البريد الإلكتروني للدكتور علي أبو خليل (هندسة الكهرباء): ali.aboukhalil@liu.edu.lb';
+        return 'د. علي أبو خليل (هندسة الكهرباء): ali.aboukhalil@liu.edu.lb';
       }
       if (q.includes('حلال') || (q.includes('علي') && q.includes('ميكانيك'))) {
-        return 'البريد الإلكتروني للدكتور علي حلال (هندسة الميكانيك): ali.halal@liu.edu.lb';
+        return 'د. علي حلال (هندسة الميكانيك): ali.halal@liu.edu.lb';
       }
       if (q.includes('جابر') || (q.includes('حسن') && q.includes('ميكانيك'))) {
-        return 'البريد الإلكتروني للدكتور حسن جابر (هندسة الميكانيك): hassan.jaber@liu.edu.lb';
+        return 'د. حسن جابر (هندسة الميكانيك): hassan.jaber@liu.edu.lb';
       }
       if (q.includes('عساكري') || q.includes('إحسان') || q.includes('طب')) {
-        return 'البريد الإلكتروني للدكتور إحسان عساكري (كلية الطب والعلوم الطبية): ihsan.asakereh@liu.edu.lb';
+        return 'د. إحسان عساكري (العلوم الطبية والطب): ihsan.asakereh@liu.edu.lb';
       }
       if (q.includes('مايا') || q.includes('بسام')) {
-        return 'البريد الإلكتروني للدكتورة مايا بسام (قسم الرياضيات): maya.bassam@liu.edu.lb';
+        return 'د. مايا بسام (قسم الرياضيات): maya.bassam@liu.edu.lb';
       }
       if (q.includes('شيراز') || q.includes('قاسم')) {
-        return 'البريد الإلكتروني للدكتورة شيراز قاسم (قسم الرياضيات): shiraz.kassem@liu.edu.lb';
+        return 'د. شيراز قاسم (قسم الرياضيات): shiraz.kassem@liu.edu.lb';
       }
       if (q.includes('سرور') || (q.includes('علي') && q.includes('رياضيات'))) {
-        return 'البريد الإلكتروني للدكتور علي سرور (قسم الرياضيات): ali.srour@liu.edu.lb';
+        return 'د. علي سرور (قسم الرياضيات): ali.srour@liu.edu.lb';
       }
       if (q.includes('اللبن') || q.includes('انكليزي') || q.includes('إنجليزي') || q.includes('english')) {
-        return 'البريد الإلكتروني للأستاذ علي اللبن (قسم اللغة الإنجليزية): ali.ellaban@liu.edu.lb';
+        return 'أ. علي اللبن (قسم اللغة الإنجليزية): ali.ellaban@liu.edu.lb';
       }
-      if (q.includes('ايميل') || q.includes('إيميل') || q.includes('دكتور') || q.includes('دكاترة') || q.includes('اساتذة')) {
-        return 'يمكنك تصفح ونسخ جميع إيميلات الأساتذة والإدارة في فرع صور مباشرة عبر صفحة "دليل الأساتذة والإدارة" (faculty.html).';
-      }
-
       if (q.includes('ميكانيك')) {
-        return 'مسؤول اختصاص هندسة الميكانيك: رقم الواتساب للتواصل هو 71336458 (+961 71 336 458).';
+        return 'مسؤول اختصاص هندسة الميكانيك (واتساب مباشر): 71336458 (+961 71 336 458).';
       }
-      if (q.includes('كمبيوتر') || q.includes('حاسوب')) {
-        return 'مسؤول اختصاص هندسة الكمبيوتر: رقم الواتساب للتواصل هو 03945021 (+961 3 945 021).';
+      if (q.includes('كمبيوتر') || q.includes('حاسوب') || q.includes('cs')) {
+        return 'مسؤول اختصاص هندسة الكمبيوتر (واتساب مباشر): 03945021 (+961 3 945 021).';
       }
       if (q.includes('اتصالات')) {
-        return 'مسؤول اختصاص هندسة الاتصالات: رقم الواتساب للتواصل هو 81604305 (+961 81 604 305).';
+        return 'مسؤول اختصاص هندسة الاتصالات (واتساب مباشر): 81604305 (+961 81 604 305).';
       }
-      if (q.includes('كهرباء') || q.includes('صيدلة') || q.includes('طبي') || q.includes('biomedical')) {
-        return 'أرقام مسؤولي هذا الاختصاص قيد التحديث حالياً، ويمكنك طرح استفسارك مباشرة داخل مجموعة التوجيه الطلابي على واتساب.';
-      }
-
       if (q.includes('جروب') || q.includes('مجموعة') || q.includes('واتساب') || q.includes('رابط') || q.includes('لينك')) {
-        return 'روابط مجموعات نادي الوفاء الرسمية على واتساب:\n- مجموعة الإعلانات الأساسية: https://chat.whatsapp.com/H5Gvs4LV3OaH7NQsuJpYFx\n- مجموعة التوجيه الطلابي: https://chat.whatsapp.com/Kdt9QVnMsmW2GguggFDuvs';
+        return 'روابط مجموعات نادي الوفاء الرسمية:\n- مجموعة الإعلانات المركزية: https://chat.whatsapp.com/H5Gvs4LV3OaH7NQsuJpYFx\n- مجموعة التوجيه الطلابي: https://chat.whatsapp.com/Kdt9QVnMsmW2GguggFDuvs';
       }
-
       if (q.includes('منحة') || q.includes('حسم') || q.includes('تقديم') || q.includes('طلب')) {
-        return 'للتقديم على المنحة الطلابية: ادخل إلى صفحة "المنح الطلابية" عبر القائمة (☰) واملأ الاستمارة الإلكترونية مباشرة دون الحاجة لرفع أي ملفات PDF.';
+        return 'للتقديم على المنحة الطلابية: افتح القائمة (☰) واختر "المنح الطلابية" (scholarship.html) واملأ الاستمارة إلكترونياً بدون الحاجة لأي ملفات PDF.';
       }
       if (q.includes('كتاب') || q.includes('كتب') || q.includes('استعارة') || q.includes('تبرع')) {
-        return 'بخصوص الكتب المطبوعة الورقية: يمكنك حجز كتاب أو التبرع به عبر صفحة "الكتب والمراجع الورقية" (books.html) بالاسم والـ ID ورقم الهاتف، والاستلام داخل حرم فرع صور.';
+        return 'لحجز كتاب ورقي مجاناً أو التبرع بنسخة قديمة: توجه لصفحة "الكتب والمراجع الورقية" (books.html)، واملأ بيانات الحجز وسيتواصل معك النادي للتسليم بحرم الجامعة.';
       }
-      if (q.includes('امتحان') || q.includes('دورات') || q.includes('pdf') || q.includes('مراجع')) {
+      if (q.includes('امتحان') || q.includes('دورات') || q.includes('pdf') || q.includes('مراجع') || q.includes('سلايد')) {
         return 'جميع الامتحانات النصفية والنهائية السابقة والمراجع متوفرة للتحميل المجاني المباشر دون تسجيل دخول في صفحة "بنك الموارد الرقمية" (resources.html).';
       }
+      if (q.includes('معدل') || q.includes('gpa') || q.includes('إنذار') || q.includes('انذار') || q.includes('probation')) {
+        return 'نظام المعدل في LIU من 4.0 نقاط. يقع الإنذار إذا نزل المعدل التراكمي عن 2.00، وأفضل طريقة لرفعه سريعاً هي إعادة المواد التي نلت فيها D أو F حيث تلغى العلامة القديمة تماماً من المعدل.';
+      }
+      if (q.includes('غياب') || q.includes('حرمان') || q.includes('fa')) {
+        return 'الحد الأقصى للغياب هو 15% من ساعات المادة (3 غيابات للمادة التي تُعطى مرتين أسبوعياً). تجاوز النسبة يؤدي للحرمان برسوب بعلامة FA التي تحسب كصفر في المعدل.';
+      }
 
-      return 'أهلاً بك زميلي الطالب في نادي الوفاء (LIU فرع صور). أنا جاهز لمساعدتك في: المنحة الطلابية، الكتب الورقية، إيميلات الدكاترة، أو التواصل مع ممثلي الاختصاصات. ما هو استفسارك؟';
+      // رسالة الاعتذار الصريحة عند السؤال عن أمر خارج عن النطاق
+      return 'أعتذر منك زميلي الطالب، دوري كمساعد ذكي لنادي الوفاء مخصص حصراً للشؤون الأكاديمية والخدمات الطلابية في الجامعة اللبنانية الدولية (فرع صور)، ولا يمكنني تقديم إجابة حول هذا الموضوع.';
     }
 
     async function queryAI(userPrompt) {
       const loadingDiv = document.createElement('div');
       loadingDiv.id = 'aiLoading';
       loadingDiv.className = 'flex items-start gap-2 max-w-[90%] text-slate-400 text-[11px]';
-      loadingDiv.textContent = 'جاري المعالجة وإعداد الإجابة...';
+      loadingDiv.textContent = 'جاري تحليل استفسارك الأكاديمي...';
       chatMessages.appendChild(loadingDiv);
       chatMessages.scrollTop = chatMessages.scrollHeight;
 
@@ -710,7 +774,7 @@
             },
             contents: chatHistory,
             generationConfig: {
-              temperature: 0.2,
+              temperature: 0.25,
               maxOutputTokens: 2048
             }
           })
