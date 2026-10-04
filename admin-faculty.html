@@ -117,8 +117,8 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
           <div>
-            <label class="block text-xs font-bold mb-1">الاختصاص أو الصفة الوظيفية *</label>
-            <input id="facTitle" type="text" required placeholder="مثال: رئيس قسم الهندسة الميكانيكية أو أستاذ محاضر" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <label class="block text-xs font-bold mb-1">الاختصاص أو المواد التي يُدرّسها *</label>
+            <input id="facTitle" type="text" required placeholder="مثال: هندسة ميكانيكية أو رياضيات أو مدير مالي" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
           </div>
           <div>
             <label class="block text-xs font-bold mb-1">البريد الإلكتروني الجامعي الرسمي *</label>
@@ -128,12 +128,12 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
           <div>
-            <label class="block text-xs font-bold mb-1">المكتب والقاعة (Location)</label>
+            <label class="block text-xs font-bold mb-1">المكتب أو القاعة (اختياري)</label>
             <input id="facOffice" type="text" placeholder="مثال: Block A - Room 204" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
           </div>
           <div>
-            <label class="block text-xs font-bold mb-1">الساعات المكتبية المعتمدة (Office Hours) *</label>
-            <input id="facHours" type="text" required placeholder="مثال: الإثنين والأربعاء 10:00 - 12:00" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <label class="block text-xs font-bold mb-1">الساعات المكتبية المعتمدة (اختياري)</label>
+            <input id="facHours" type="text" placeholder="مثال: الإثنين والأربعاء 10:00 - 12:00" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
           </div>
         </div>
 
@@ -155,7 +155,7 @@
         </div>
         <div class="flex items-center gap-2 flex-wrap">
           <div class="relative w-full sm:w-64">
-            <input id="facultySearchInput" type="text" placeholder="بحث بالاسم أو البريد..." class="w-full text-xs p-2.5 pr-8 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <input id="facultySearchInput" type="text" placeholder="بحث بالاسم، الاختصاص، أو البريد..." class="w-full text-xs p-2.5 pr-8 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
             <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3 right-2.5"></i>
           </div>
           <button onclick="fetchLiveFaculty(true)" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
@@ -184,7 +184,74 @@
 
   </main>
 
-  <!-- ==================== النوافذ المنبثقة ==================== -->
+  <!-- ==================== نافذة التعديل المنبثقة ==================== -->
+  <div id="editFacultyModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="w-full max-w-xl p-5 sm:p-7 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-2 text-gold-500 font-bold text-sm">
+          <i data-lucide="edit-3" class="w-4 h-4"></i>
+          <span>تعديل بيانات الأستاذ</span>
+        </div>
+        <button onclick="closeEditModal()" class="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-red-500 transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form id="editFacultyForm" class="space-y-3.5">
+        <input type="hidden" id="editFacIndex">
+        <input type="hidden" id="origFacName">
+        <input type="hidden" id="origFacEmail">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold mb-1">الاسم الكامل مع اللقب *</label>
+            <input id="editFacName" type="text" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">الكلية / القسم *</label>
+            <select id="editFacCollege" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="كلية الهندسة">كلية الهندسة (Engineering)</option>
+              <option value="كلية إدارة الأعمال">كلية إدارة الأعمال (Business)</option>
+              <option value="كلية الفنون والعلوم">كلية الفنون والعلوم (Arts & Sciences)</option>
+              <option value="كلية التربية واللغات">كلية التربية واللغات (Education)</option>
+              <option value="كلية الصيدلة">كلية الصيدلة (Pharmacy)</option>
+              <option value="الإدارة وشؤون الطلاب">الإدارة وشؤون الطلاب</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold mb-1">الاختصاص أو المواد التي يُدرّسها *</label>
+            <input id="editFacTitle" type="text" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">البريد الإلكتروني الجامعي *</label>
+            <input id="editFacEmail" type="email" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold mb-1">المكتب أو القاعة (اختياري)</label>
+            <input id="editFacOffice" type="text" placeholder="مثال: Block A - Room 204" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">الساعات المكتبية المعتمدة (اختياري)</label>
+            <input id="editFacHours" type="text" placeholder="مثال: الإثنين 10:00 - 12:00" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeEditModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">إلغاء</button>
+          <button type="submit" id="submitEditFacBtn" class="px-5 py-2.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-md hover:opacity-90 transition">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>حفظ التعديلات</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- نافذة الحذف العامة -->
   <div id="deleteModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
@@ -314,7 +381,55 @@
       });
     }
 
-    // عرض قائمة الأساتذة
+    // دالة استخراج وتنقية مكان المكتب والساعات بدقة متطابقة مع الموقع الأساسي
+    function extractOfficeAndHours(item) {
+      let office = String(item['مكان المكتب'] || item['المكتب'] || item.office || item.room || '').trim();
+      let hours = String(item['الساعات المكتبية'] || item['الساعات'] || item.hours || '').trim();
+
+      const isStatusOrInvalid = (val) => {
+        if (!val) return true;
+        const v = val.toLowerCase();
+        return v === 'فعال' || v === 'غير فعال' || v === 'معطل' || v === 'مخفي' || 
+               v === 'غير محدد' || v === 'عند التنسيق المسبق' || v === 'لا يوجد' || 
+               v === 'active' || v === 'inactive' || v === 'null' || v === 'undefined';
+      };
+
+      if (isStatusOrInvalid(office)) office = '';
+      if (isStatusOrInvalid(hours)) hours = '';
+
+      const isLocationPattern = (val) => {
+        if (!val) return false;
+        const v = val.toLowerCase();
+        return v.includes('block') || v.includes('room') || v.includes('floor') || 
+               v.includes('طابق') || v.includes('مكتب') || v.includes('قاعة') || 
+               v.includes('مبنى') || v.includes('bldg') || /^[a-z]\s*[-–]\s*\d+/i.test(v);
+      };
+
+      // معالجة الانزياح: إذا كانت خانة الساعات تحتوي على القاعة وخانة المكتب فارغة
+      if (!office && hours && isLocationPattern(hours)) {
+        office = hours;
+        hours = '';
+      }
+
+      for (const [key, val] of Object.entries(item)) {
+        const cleanVal = String(val || '').trim();
+        if (!cleanVal || isStatusOrInvalid(cleanVal) || cleanVal === office) continue;
+
+        const k = key.toLowerCase();
+        if ((k.includes('ساعات') || k.includes('دوام') || k.includes('hours') || k.includes('توقيت')) && !hours) {
+          if (!isLocationPattern(cleanVal)) {
+            hours = cleanVal;
+          }
+        }
+        if ((k.includes('مكتب') || k.includes('مكان') || k.includes('room') || k.includes('office') || k.includes('قاعة')) && !office) {
+          office = cleanVal;
+        }
+      }
+
+      return { office, hours };
+    }
+
+    // عرض قائمة الأساتذة في السجل
     function renderFacultyList(list) {
       const container = document.getElementById('facultyListContainer');
       const badge = document.getElementById('facultyCountBadge');
@@ -340,36 +455,55 @@
         return;
       }
 
-      container.innerHTML = filtered.map((fac, idx) => {
+      container.innerHTML = filtered.map(fac => {
+        const trueIndex = liveFacultyList.indexOf(fac);
         const name = fac['الاسم واللقب'] || fac['الاسم'] || fac.name || 'أستاذ';
         const col = fac['الكلية'] || fac['الكلية أو القسم'] || fac.college || 'عام';
         const title = fac['الاختصاص أو الصفة'] || fac['الصفة'] || fac.title || '';
         const email = fac['البريد الجامعي'] || fac['البريد الإلكتروني'] || fac.email || '';
-        const office = fac['المكتب'] || fac['مكان المكتب'] || fac.office || fac.room || 'غير محدد';
-        const hours = fac['الساعات المكتبية'] || fac.hours || 'عند التنسيق المسبق';
+        
+        // استخراج مكان المكتب والساعات بدقة متناهية
+        const { office, hours } = extractOfficeAndHours(fac);
 
         return `
           <div class="p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:border-gold-500/40 transition">
-            <div class="space-y-1 min-w-0">
+            <div class="space-y-1.5 min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${col}</span>
                 ${title ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gold-500/10 text-gold-600 dark:text-gold-400">${title}</span>` : ''}
-                <span class="text-[11px] text-slate-400 font-mono">${office}</span>
+                ${office ? `
+                  <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1 bg-slate-200/60 dark:bg-slate-800 px-2 py-0.5 rounded">
+                    <i data-lucide="map-pin" class="w-3 h-3 text-gold-500 shrink-0"></i>
+                    <span>${office}</span>
+                  </span>
+                ` : ''}
               </div>
               <h4 class="font-bold text-sm text-slate-900 dark:text-white truncate">${name}</h4>
-              <p class="text-xs text-slate-500 dark:text-slate-400">
-                البريد: <a href="mailto:${email}" class="font-mono text-slate-700 dark:text-slate-200 hover:text-gold-500 underline" dir="ltr">${email}</a> 
-                • الساعات المكتبية: <span class="text-slate-700 dark:text-slate-300 font-medium">${hours}</span>
-              </p>
+              <div class="text-xs text-slate-500 dark:text-slate-400 flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span>البريد: <a href="mailto:${email}" class="font-mono text-slate-700 dark:text-slate-200 hover:text-gold-500 underline" dir="ltr">${email}</a></span>
+                ${hours ? `
+                  <span class="flex items-center gap-1 text-slate-600 dark:text-slate-300">
+                    <i data-lucide="clock" class="w-3 h-3 text-gold-500 shrink-0"></i>
+                    <span>الساعات المكتبية: <strong class="text-slate-700 dark:text-slate-200 font-medium">${hours}</strong></span>
+                  </span>
+                ` : ''}
+              </div>
             </div>
+            
             <div class="flex items-center gap-1.5 sm:gap-2 self-end sm:self-auto shrink-0 flex-wrap">
+              <button onclick="openEditModal(${trueIndex})" class="p-2 rounded-xl bg-amber-500/10 hover:bg-gold-500 hover:text-slate-950 text-gold-600 dark:text-gold-400 text-xs font-bold flex items-center gap-1 transition" title="تعديل بيانات الأستاذ">
+                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                <span>تعديل</span>
+              </button>
+
               ${email ? `
-                <a href="mailto:${email}" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="إرسال بريد إلكتروني">
+                <a href="mailto:${email}" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="إرسال بريد إلكتروني">
                   <i data-lucide="mail" class="w-3.5 h-3.5"></i>
                   <span>مراسلة</span>
                 </a>
               ` : ''}
-              <button onclick="deleteFacultyByIndex(${idx})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition" title="حذف الأستاذ من الدليل">
+              
+              <button onclick="deleteFacultyByIndex(${trueIndex})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition" title="حذف الأستاذ من الدليل">
                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 <span>حذف</span>
               </button>
@@ -423,10 +557,15 @@
 
         liveFacultyList.push({
           'الاسم واللقب': newFac.name,
+          'الاسم': newFac.name,
           'الكلية': newFac.college,
+          'الكلية أو القسم': newFac.college,
           'الاختصاص أو الصفة': newFac.title,
+          'الصفة': newFac.title,
           'البريد الجامعي': newFac.email,
+          'البريد الإلكتروني': newFac.email,
           'المكتب': newFac.office,
+          'مكان المكتب': newFac.office,
           'الساعات المكتبية': newFac.hours
         });
 
@@ -443,12 +582,132 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               action: "add_faculty",
-              ...newFac
+              ...newFac,
+              "الاسم واللقب": newFac.name,
+              "الاسم": newFac.name,
+              "الكلية": newFac.college,
+              "الكلية أو القسم": newFac.college,
+              "الاختصاص أو الصفة": newFac.title,
+              "الصفة": newFac.title,
+              "البريد الجامعي": newFac.email,
+              "البريد الإلكتروني": newFac.email,
+              "المكتب": newFac.office,
+              "مكان المكتب": newFac.office,
+              "الساعات المكتبية": newFac.hours
             })
           });
         } catch(err) {} finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4"></i><span>إدراج في دليل الأساتذة فوراً</span>`;
+          lucide.createIcons();
+        }
+      });
+    }
+
+    // إدارة نافذة التعديل مع ملء الحقول المنقاة تلقائياً
+    const editModal = document.getElementById('editFacultyModal');
+    const editForm = document.getElementById('editFacultyForm');
+
+    function openEditModal(index) {
+      const fac = liveFacultyList[index];
+      if (!fac) return;
+
+      document.getElementById('editFacIndex').value = index;
+      document.getElementById('origFacName').value = fac['الاسم واللقب'] || fac['الاسم'] || fac.name || '';
+      document.getElementById('origFacEmail').value = fac['البريد الجامعي'] || fac['البريد الإلكتروني'] || fac.email || '';
+
+      document.getElementById('editFacName').value = fac['الاسم واللقب'] || fac['الاسم'] || fac.name || '';
+      document.getElementById('editFacCollege').value = fac['الكلية'] || fac['الكلية أو القسم'] || fac.college || 'كلية الهندسة';
+      document.getElementById('editFacTitle').value = fac['الاختصاص أو الصفة'] || fac['الصفة'] || fac.title || '';
+      document.getElementById('editFacEmail').value = fac['البريد الجامعي'] || fac['البريد الإلكتروني'] || fac.email || '';
+      
+      // تعبئة مكان المكتب والساعات المنقاة لمنع نزول "فعال" أو خلط الأماكن
+      const { office, hours } = extractOfficeAndHours(fac);
+      document.getElementById('editFacOffice').value = office;
+      document.getElementById('editFacHours').value = hours;
+
+      if (editModal) {
+        editModal.classList.remove('hidden');
+        editModal.classList.add('flex');
+        lucide.createIcons();
+      }
+    }
+
+    function closeEditModal() {
+      if (editModal) {
+        editModal.classList.add('hidden');
+        editModal.classList.remove('flex');
+      }
+    }
+
+    if (editForm) {
+      editForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('submitEditFacBtn');
+        const originalBtnContent = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>جاري حفظ التعديل...</span>`;
+
+        const index = parseInt(document.getElementById('editFacIndex').value, 10);
+        const origName = document.getElementById('origFacName').value;
+        const origEmail = document.getElementById('origFacEmail').value;
+
+        const updatedFac = {
+          name: document.getElementById('editFacName').value.trim(),
+          college: document.getElementById('editFacCollege').value,
+          title: document.getElementById('editFacTitle').value.trim(),
+          email: document.getElementById('editFacEmail').value.trim(),
+          office: document.getElementById('editFacOffice').value.trim(),
+          hours: document.getElementById('editFacHours').value.trim()
+        };
+
+        if (!isNaN(index) && liveFacultyList[index]) {
+          liveFacultyList[index] = {
+            'الاسم واللقب': updatedFac.name,
+            'الاسم': updatedFac.name,
+            'الكلية': updatedFac.college,
+            'الكلية أو القسم': updatedFac.college,
+            'الاختصاص أو الصفة': updatedFac.title,
+            'الصفة': updatedFac.title,
+            'البريد الجامعي': updatedFac.email,
+            'البريد الإلكتروني': updatedFac.email,
+            'المكتب': updatedFac.office,
+            'مكان المكتب': updatedFac.office,
+            'الساعات المكتبية': updatedFac.hours
+          };
+
+          localStorage.setItem('nadi_faculty_cache', JSON.stringify(liveFacultyList));
+          renderFacultyList(liveFacultyList);
+        }
+
+        closeEditModal();
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "edit_faculty",
+              originalName: origName,
+              originalEmail: origEmail,
+              ...updatedFac,
+              "الاسم واللقب": updatedFac.name,
+              "الاسم": updatedFac.name,
+              "الكلية": updatedFac.college,
+              "الكلية أو القسم": updatedFac.college,
+              "الاختصاص أو الصفة": updatedFac.title,
+              "الصفة": updatedFac.title,
+              "البريد الجامعي": updatedFac.email,
+              "البريد الإلكتروني": updatedFac.email,
+              "المكتب": updatedFac.office,
+              "مكان المكتب": updatedFac.office,
+              "الساعات المكتبية": updatedFac.hours
+            })
+          });
+        } catch(err) {} finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnContent;
           lucide.createIcons();
         }
       });
@@ -502,7 +761,6 @@
       });
     });
 
-    // جلب البيانات فور تحميل الصفحة
     fetchLiveFaculty();
   </script>
 </body>
