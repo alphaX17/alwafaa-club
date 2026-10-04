@@ -87,10 +87,10 @@
             تحميل مجاني مباشر دون تسجيل
           </span>
           <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900 dark:text-white leading-tight">
-            أرشيف الامتحانات والمراجع الأكاديمية
+            أرشيف الامتحانات والمراجع والكتب الأكاديمية
           </h2>
           <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-            ابحث باسم المادة، الرمز (Course Code)، أو الكلية للوصول المباشر إلى النماذج النصفية والنهائية السابقة والملخصات المعتمدة.
+            ابحث باسم المادة، الرمز (Course Code)، أو الكلية للوصول المباشر إلى النماذج النصفية والنهائية السابقة، الكتب الرقمية، والملخصات المعتمدة.
           </p>
         </div>
 
@@ -105,6 +105,8 @@
           <button class="filter-btn active shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 transition" data-filter="all">الكل</button>
           <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="exam">امتحانات سابقة</button>
           <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="summary">ملخصات وسلايدات</button>
+          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="book">كتب رقمية</button>
+          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="assignment">واجبات واختبارات</button>
           <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="engineering">كلية الهندسة</button>
           <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="business">إدارة الأعمال</button>
           <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="arts_sciences">الفنون والعلوم</button>
@@ -200,6 +202,7 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
     let resourcesData = [];
 
+    // محرك الفحص الدلالي والتصنيف الذكي للمورد
     function detectResourceMetadata(faculty = '', type = '', name = '', code = '') {
       const combined = `${faculty} ${type} ${name} ${code}`.toLowerCase();
       let categories = [];
@@ -207,10 +210,14 @@
       const isExam = combined.includes('امتحان') || combined.includes('دورة') || combined.includes('exam') || 
                      combined.includes('final') || combined.includes('midterm') || combined.includes('نصفي') || combined.includes('نهائي');
       const isSummary = combined.includes('ملخص') || combined.includes('سلايد') || combined.includes('summary') || 
-                        combined.includes('شرح') || combined.includes('نوطة') || combined.includes('تلخيص');
+                        combined.includes('شرح') || combined.includes('نوطة') || combined.includes('تلخيص') || combined.includes('slides');
+      const isBook = combined.includes('كتاب') || combined.includes('book') || combined.includes('ebook') || combined.includes('e-book');
+      const isAssignment = combined.includes('واجب') || combined.includes('اختبار') || combined.includes('assignment') || combined.includes('test') || combined.includes('quiz');
 
       if (isExam) categories.push('exam');
       if (isSummary) categories.push('summary');
+      if (isBook) categories.push('book');
+      if (isAssignment) categories.push('assignment');
 
       if (combined.includes('pharmacy') || combined.includes('صيدل') || combined.includes('phar')) {
         categories.push('pharmacy');
@@ -246,14 +253,17 @@
         categories.push('arts_sciences');
       }
 
-      let typeBadgeClass = "bg-blue-500/10 text-blue-600 dark:text-blue-400";
+      // تحديد ألوان الشارات לפי النوع بدقة
+      let typeBadgeClass = "bg-amber-500/10 text-amber-600 dark:text-amber-400";
       const lowerType = type.toLowerCase();
-      if (lowerType.includes('نصفي') || lowerType.includes('midterm')) {
-        typeBadgeClass = "bg-red-500/10 text-red-600 dark:text-red-400";
-      } else if (lowerType.includes('نهائي') || lowerType.includes('final')) {
-        typeBadgeClass = "bg-purple-500/10 text-purple-600 dark:text-purple-400";
-      } else if (isSummary || lowerType.includes('ملخص')) {
+      if (lowerType.includes('كتاب') || lowerType.includes('book')) {
         typeBadgeClass = "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400";
+      } else if (lowerType.includes('واجب') || lowerType.includes('اختبار') || lowerType.includes('assignment') || lowerType.includes('test')) {
+        typeBadgeClass = "bg-purple-500/10 text-purple-600 dark:text-purple-400";
+      } else if (lowerType.includes('نهائي') || lowerType.includes('final')) {
+        typeBadgeClass = "bg-rose-500/10 text-rose-600 dark:text-rose-400";
+      } else if (lowerType.includes('نصفي') || lowerType.includes('midterm')) {
+        typeBadgeClass = "bg-blue-500/10 text-blue-600 dark:text-blue-400";
       }
 
       return {
@@ -272,28 +282,46 @@
       }
 
       grid.innerHTML = list.map(item => {
-        const name = item['اسم المادة'] || '';
-        const code = item['رمز المادة'] || 'COURSE';
-        const faculty = item['الكلية'] || 'عام';
-        const type = item['نوع الملف'] || 'ملخص دراسي';
-        const link = item['رابط التحميل'] || '#';
-        const desc = item['الوصف'] || `مرجع معتمد لدى ${faculty} متوفر للتحميل المباشر.`;
+        const name = item['اسم المادة'] || item.name || item.title || '';
+        const code = item['رمز المادة'] || item.code || '';
+        const faculty = item['الكلية'] || item.college || 'عام';
+        const type = item['نوع الملف'] || item['نوع المورد'] || item.type || 'ملف دراسي';
+        const link = item['رابط التحميل'] || item.link || '#';
+
+        // استخراج وتنقية الفصل والسنة الدراسية: إخفاؤه تماماً إذا لم يُدخل
+        const rawTerm = item['الفصل'] || item['الفصل والسنة الدراسية'] || item.term || '';
+        const isInvalidTerm = (v) => {
+          if (!v) return true;
+          const s = String(v).trim().toLowerCase();
+          return s === '' || s === 'غير محدد' || s === 'لا يوجد' || s === 'null' || s === 'undefined' || s === '-';
+        };
+        const term = isInvalidTerm(rawTerm) ? '' : String(rawTerm).trim();
+
+        // الوصف
+        let desc = String(item['الوصف'] || '').trim();
+        if (desc === term || isInvalidTerm(desc)) desc = '';
 
         const meta = detectResourceMetadata(faculty, type, name, code);
-        const searchMetadata = `${name} ${code} ${faculty} ${type} ${desc}`.toLowerCase();
+        const searchMetadata = `${name} ${code} ${faculty} ${type} ${term} ${desc}`.toLowerCase();
 
         return `
           <div class="resource-card rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark p-4 sm:p-5 flex flex-col justify-between hover:border-gold-500/50 transition duration-200 shadow-sm" data-category="${meta.categories}" data-name="${searchMetadata}">
             <div class="space-y-2">
-              <div class="flex items-center justify-between mb-1 gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold text-[11px] font-mono">${code}</span>
+              <div class="flex items-center justify-between mb-1 gap-2 flex-wrap">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  ${code ? `<span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold text-[11px] font-mono">${code}</span>` : ''}
+                  ${term ? `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400" dir="ltr">${term}</span>` : ''}
+                </div>
                 <span class="px-2.5 py-1 rounded-lg ${meta.typeBadgeClass} font-bold text-[10px]">${type}</span>
               </div>
               <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white line-clamp-1">${name}</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2">${desc}</p>
+              ${desc ? `<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2">${desc}</p>` : ''}
             </div>
             <div class="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <span class="text-[11px] text-slate-400 flex items-center gap-1 font-mono"><i data-lucide="file-text" class="w-3.5 h-3.5"></i> PDF</span>
+              <span class="text-[11px] text-slate-400 flex items-center gap-1 font-mono">
+                <i data-lucide="${type.includes('كتاب') ? 'book-open' : 'file-text'}" class="w-3.5 h-3.5"></i> 
+                ${type.includes('كتاب') ? 'كتاب رقمي' : 'PDF'}
+              </span>
               <a href="${link}" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-200 hover:bg-gold-500 hover:text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-sm">
                 <span>تحميل</span>
                 <i data-lucide="download" class="w-3.5 h-3.5"></i>
@@ -366,8 +394,8 @@
     const themeText = document.getElementById('themeText');
     const htmlElement = document.documentElement;
 
-    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
-    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
 
     function applyTheme(isDark) {
       if (isDark) {
