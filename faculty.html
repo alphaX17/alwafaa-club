@@ -349,7 +349,6 @@
         const trackWidth = track.clientWidth;
         const contentWidth = content.scrollWidth;
 
-        // إذا كان النص أطول من البطاقة يتم تفعيل السكرول الخطي
         if (contentWidth > trackWidth + 5) {
           const diff = contentWidth - trackWidth + 16;
           const duration = Math.max(6, (diff / 20) + 3);
@@ -418,13 +417,24 @@
 
               ${officeDetailsMarkup}
             </div>
+            
+            <!-- شريط البريد الإلكتروني مع زري المراسلة المباشرة والنسخ -->
             <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
               <span class="text-xs text-slate-600 dark:text-slate-300 font-mono truncate" dir="ltr">${email}</span>
-              <button onclick="copyEmail('${escapedEmail}', this)" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition shadow-sm">
-                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                <span>نسخ</span>
-              </button>
+              <div class="flex items-center gap-1.5 shrink-0">
+                ${email ? `
+                  <a href="mailto:${email}" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 hover:text-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition shadow-sm" title="مراسلة الأستاذ مباشرة">
+                    <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                    <span>مراسلة</span>
+                  </a>
+                ` : ''}
+                <button onclick="copyEmail('${escapedEmail}', this)" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 transition shadow-sm" title="نسخ البريد الإلكتروني">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                  <span>نسخ</span>
+                </button>
+              </div>
             </div>
+
           </div>
         `;
       }).join('');
@@ -525,7 +535,7 @@
     function copyEmail(email, btn) {
       navigator.clipboard.writeText(email).then(() => {
         const originalHTML = btn.innerHTML;
-        btn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i><span class="text-emerald-500">تم النسخ</span>';
+        btn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i><span class="text-emerald-500">تم</span>';
         btn.classList.add('border-emerald-500/50');
         lucide.createIcons();
 
