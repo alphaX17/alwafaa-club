@@ -163,7 +163,7 @@
           <span>دليل الأساتذة والساعات المكتبية</span>
         </a>
         <a href="guidance.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
-          <i data-lucide="message-circle" class="w-4 h-4 text-slate-400 shrink-0"></i>
+          <i data-lucide="message-circle" class="w-4 h-4 text-slate-400"></i>
           <div>
             <p>شبكة التوجيه وممثلو الاختصاصات</p>
             <span class="text-[10px] text-slate-400 dark:text-slate-500">مجموعات الواتساب والتواصل المباشر</span>
@@ -190,10 +190,7 @@
 
       // 1. كلية الصيدلة
       if (combined.includes('pharmacy') || combined.includes('صيدل') || combined.includes('pre-pharmacy')) {
-        return {
-          code: 'pharmacy',
-          badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-        };
+        return { code: 'pharmacy', badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' };
       }
 
       // 2. الجهاز الإداري والمكتبة
@@ -201,10 +198,7 @@
           combined.includes('مكتبة') || combined.includes('library') || combined.includes('شؤون') || 
           combined.includes('تسجيل') || combined.includes('registrar') || combined.includes('سمرة') || 
           (combined.includes('مالية') && !combined.includes('concentration'))) {
-        return {
-          code: 'admin',
-          badgeColor: 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
-        };
+        return { code: 'admin', badgeColor: 'bg-rose-500/10 text-rose-600 dark:text-rose-400' };
       }
 
       // 3. كلية إدارة الأعمال
@@ -214,10 +208,7 @@
           combined.includes('tourism') || combined.includes('hotel') || combined.includes('فندق') || 
           combined.includes('سياح') || combined.includes('market') || combined.includes('تسويق') || 
           combined.includes('mis') || combined.includes('management')) {
-        return {
-          code: 'business',
-          badgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
-        };
+        return { code: 'business', badgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400' };
       }
 
       // 4. كلية التربية واللغات
@@ -225,10 +216,7 @@
           combined.includes('translation') || combined.includes('ترجم') || combined.includes('interpretation') || 
           combined.includes('childhood') || combined.includes('طفول') || combined.includes('english') || 
           combined.includes('إنجليز') || combined.includes('انكليز') || combined.includes('لغات')) {
-        return {
-          code: 'education',
-          badgeColor: 'bg-purple-500/10 text-purple-600 dark:text-purple-400'
-        };
+        return { code: 'education', badgeColor: 'bg-purple-500/10 text-purple-600 dark:text-purple-400' };
       }
 
       // 5. كلية الهندسة
@@ -239,10 +227,7 @@
           (combined.includes('اتصال') && combined.includes('هندس')) || combined.includes('industr') || 
           combined.includes('صناع') || combined.includes('electron') || combined.includes('إلكترون') || 
           combined.includes('biomedical eng')) {
-        return {
-          code: 'engineering',
-          badgeColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
-        };
+        return { code: 'engineering', badgeColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400' };
       }
 
       // 6. كلية الفنون والعلوم
@@ -259,16 +244,60 @@
           combined.includes('فيزياء') || combined.includes('chemist') || combined.includes('كيمياء') || 
           combined.includes('biolog') || combined.includes('بيولوجيا') || combined.includes('biochem') || 
           combined.includes('biomedical science')) {
-        return {
-          code: 'arts_sciences',
-          badgeColor: 'bg-teal-500/10 text-teal-600 dark:text-teal-400'
-        };
+        return { code: 'arts_sciences', badgeColor: 'bg-teal-500/10 text-teal-600 dark:text-teal-400' };
       }
 
-      return {
-        code: 'arts_sciences',
-        badgeColor: 'bg-slate-500/10 text-slate-600 dark:text-slate-400'
+      return { code: 'arts_sciences', badgeColor: 'bg-slate-500/10 text-slate-600 dark:text-slate-400' };
+    }
+
+    // استخراج وتنقية مكان المكتب والساعات مع معالجة الانزياح وإلغاء كلمة "فعال"
+    function extractOfficeAndHours(item) {
+      let office = String(item['مكان المكتب'] || item['المكتب'] || item.office || item.room || '').trim();
+      let hours = String(item['الساعات المكتبية'] || item['الساعات'] || item.hours || '').trim();
+
+      const isStatusOrInvalid = (val) => {
+        if (!val) return true;
+        const v = val.toLowerCase();
+        return v === 'فعال' || v === 'غير فعال' || v === 'معطل' || v === 'مخفي' || 
+               v === 'غير محدد' || v === 'عند التنسيق المسبق' || v === 'لا يوجد' || 
+               v === 'active' || v === 'inactive' || v === 'null' || v === 'undefined';
       };
+
+      if (isStatusOrInvalid(office)) office = '';
+      if (isStatusOrInvalid(hours)) hours = '';
+
+      // نمط يحدد إذا كان النص المكتوب يمثل قاعة أو مبنى
+      const isLocationPattern = (val) => {
+        if (!val) return false;
+        const v = val.toLowerCase();
+        return v.includes('block') || v.includes('room') || v.includes('floor') || 
+               v.includes('طابق') || v.includes('مكتب') || v.includes('قاعة') || 
+               v.includes('مبنى') || v.includes('bldg') || /^[a-z]\s*[-–]\s*\d+/i.test(v);
+      };
+
+      // معالجة الانزياح: إذا كانت خانة الساعات تحتوي على اسم القاعة (مثل Block B - 2nd floor) والمكتب فارغ
+      if (!office && hours && isLocationPattern(hours)) {
+        office = hours;
+        hours = '';
+      }
+
+      // فحص إضافي لكافة الحقول الحية إن وُجدت
+      for (const [key, val] of Object.entries(item)) {
+        const cleanVal = String(val || '').trim();
+        if (!cleanVal || isStatusOrInvalid(cleanVal) || cleanVal === office) continue;
+
+        const k = key.toLowerCase();
+        if ((k.includes('ساعات') || k.includes('دوام') || k.includes('hours') || k.includes('توقيت')) && !hours) {
+          if (!isLocationPattern(cleanVal)) {
+            hours = cleanVal;
+          }
+        }
+        if ((k.includes('مكتب') || k.includes('مكان') || k.includes('room') || k.includes('office') || k.includes('قاعة')) && !office) {
+          office = cleanVal;
+        }
+      }
+
+      return { office, hours };
     }
 
     function renderFaculty(list) {
@@ -281,14 +310,14 @@
       }
 
       grid.innerHTML = list.map(item => {
-        const name = item['الاسم'] || '';
-        const college = item['الكلية أو القسم'] || 'الهيئة التعليمية';
-        const title = item['الاختصاص أو الصفة'] || '';
-        const email = item['البريد الإلكتروني'] || '';
+        const name = item['الاسم واللقب'] || item['الاسم'] || item.name || '';
+        const college = item['الكلية أو القسم'] || item['الكلية'] || item.college || 'الهيئة التعليمية';
+        const title = item['الاختصاص أو الصفة'] || item['الصفة'] || item.title || '';
+        const email = item['البريد الجامعي'] || item['البريد الإلكتروني'] || item.email || '';
         const rawCat = item['التصنيف البرمجي'] || '';
 
-        const officeRoom = String(item['مكان المكتب'] || item['المكتب'] || '').trim();
-        const officeHours = String(item['الساعات المكتبية'] || '').trim();
+        // استخراج وتنقية مكان المكتب والساعات
+        const { office: officeRoom, hours: officeHours } = extractOfficeAndHours(item);
 
         const detection = detectCollegeCategory(college, title, rawCat);
         const catCode = detection.code;
@@ -297,6 +326,7 @@
         const roleTag = item['الصفة الوظيفية'] || (catCode === 'admin' ? 'الجهاز الإداري' : 'عضو هيئة تعليمية');
         const escapedEmail = email.replace(/'/g, "\\'");
 
+        // يظهر القسم فقط إذا كان هناك مكان فعلي أو ساعات فعلية (دون إظهار أيقونات فارغة أو كلمات غير مفيدة)
         const hasOfficeDetails = officeRoom !== '' || officeHours !== '';
         const officeDetailsMarkup = hasOfficeDetails ? `
           <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 space-y-1.5 text-xs">
@@ -309,7 +339,7 @@
             ${officeHours ? `
               <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
                 <i data-lucide="clock" class="w-3.5 h-3.5 text-gold-500 shrink-0"></i>
-                <span>${officeHours}</span>
+                <span>الساعات المكتبية: <strong class="text-slate-700 dark:text-slate-200 font-medium">${officeHours}</strong></span>
               </div>
             ` : ''}
           </div>
@@ -355,7 +385,7 @@
       if (!SCRIPT_URL) return;
 
       try {
-        const response = await fetch(SCRIPT_URL);
+        const response = await fetch(`${SCRIPT_URL}?req=faculty&bust=${Date.now()}`);
         const data = await response.json();
 
         if (data.faculty && Array.isArray(data.faculty)) {
