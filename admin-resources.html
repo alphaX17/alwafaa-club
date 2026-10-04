@@ -92,14 +92,14 @@
     <!-- 1. نموذج إضافة مورد جديد -->
     <section id="viewAdd" class="p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-6">
       <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
-        <span class="text-xs font-bold text-gold-500">بنك الامتحانات والملخصات الأكاديمية</span>
-        <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">رفع رابط ملخص أو نموذج امتحان رسمي</h3>
+        <span class="text-xs font-bold text-gold-500">بنك الامتحانات والملخصات والكتب الأكاديمية</span>
+        <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">رفع رابط ملخص، كتاب، واجب أو نموذج امتحان</h3>
       </div>
 
       <form id="addResourceForm" class="space-y-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
           <div>
-            <label class="block text-xs font-bold mb-1">اسم المادة والمقرر *</label>
+            <label class="block text-xs font-bold mb-1">اسم المادة أو الكتاب والمقرر *</label>
             <input id="resTitle" type="text" required placeholder="مثال: تفاضل وتكامل 2 أو Calculus II" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
           </div>
           <div>
@@ -125,13 +125,15 @@
             <select id="resType" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
               <option value="امتحان نصفي (Midterm)">امتحان نصفي (Midterm)</option>
               <option value="امتحان نهائي (Final)">امتحان نهائي (Final)</option>
+              <option value="واجبات واختبارات (Assignments & Tests)">واجبات واختبارات (Assignments & Tests)</option>
+              <option value="كتاب رقمي (E-Book / PDF)">كتاب رقمي (E-Book / PDF)</option>
               <option value="ملخص شامل (Summary)">ملخص شامل (Summary)</option>
               <option value="سلايدات المقرر (Slides)">سلايدات المقرر (Slides)</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-bold mb-1">الفصل والسنة الدراسية *</label>
-            <input id="resTerm" type="text" required placeholder="مثال: Fall 2025-2026" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 font-mono" dir="ltr">
+            <label class="block text-xs font-bold mb-1">الفصل والسنة الدراسية (اختياري)</label>
+            <input id="resTerm" type="text" placeholder="مثال: Fall 2025-2026 (اختياري)" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 font-mono" dir="ltr">
           </div>
         </div>
 
@@ -153,12 +155,12 @@
     <section id="viewManage" class="hidden p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-5">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
         <div>
-          <h3 class="text-base font-bold text-slate-900 dark:text-white">الملخصات والامتحانات المنشورة</h3>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">الملخصات والامتحانات والكتب المنشورة</h3>
           <p class="text-xs text-slate-400 mt-0.5">البيانات الحية المأخوذة من ورقة «الموارد»</p>
         </div>
         <div class="flex items-center gap-2 flex-wrap">
           <div class="relative w-full sm:w-64">
-            <input id="resourceSearchInput" type="text" placeholder="بحث باسم المادة أو الكود..." class="w-full text-xs p-2.5 pr-8 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <input id="resourceSearchInput" type="text" placeholder="بحث باسم المادة، الكود، أو نوع المورد..." class="w-full text-xs p-2.5 pr-8 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
             <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3 right-2.5"></i>
           </div>
           <button onclick="fetchLiveResources(true)" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
@@ -317,6 +319,24 @@
       });
     }
 
+    // دالة لتحديد لون وتنسيق شارة نوع المورد الأكاديمي
+    function getTypeBadgeClass(typeStr = '') {
+      const t = typeStr.toLowerCase();
+      if (t.includes('كتاب') || t.includes('book')) {
+        return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400';
+      }
+      if (t.includes('واجب') || t.includes('اختبار') || t.includes('assignment') || t.includes('test')) {
+        return 'bg-purple-500/10 text-purple-600 dark:text-purple-400';
+      }
+      if (t.includes('نهائي') || t.includes('final')) {
+        return 'bg-rose-500/10 text-rose-600 dark:text-rose-400';
+      }
+      if (t.includes('نصفي') || t.includes('midterm')) {
+        return 'bg-blue-500/10 text-blue-600 dark:text-blue-400';
+      }
+      return 'bg-amber-500/10 text-amber-600 dark:text-amber-400';
+    }
+
     // عرض قائمة الموارد
     function renderResourceList(list) {
       const container = document.getElementById('resourceListContainer');
@@ -348,17 +368,27 @@
         const code = item['رمز المادة'] || item.code || '';
         const col = item['الكلية'] || item.college || 'عام';
         const type = item['نوع الملف'] || item['نوع المورد'] || item.type || 'ملف دراسي';
-        const term = item['الفصل'] || item['الوصف'] || item.term || '';
+        
+        // استخراج وتنقية الفصل الدراسي: إخفاؤه تماماً إذا كان فارغاً أو غير محدد
+        const rawTerm = item['الفصل'] || item['الفصل والسنة الدراسية'] || item['الوصف'] || item.term || '';
+        const isInvalidTerm = (v) => {
+          if (!v) return true;
+          const s = String(v).trim().toLowerCase();
+          return s === '' || s === 'غير محدد' || s === 'لا يوجد' || s === 'null' || s === 'undefined' || s === '-';
+        };
+        const term = isInvalidTerm(rawTerm) ? '' : String(rawTerm).trim();
+
         const link = item['رابط التحميل'] || item.link || '#';
+        const typeBadgeStyle = getTypeBadgeClass(type);
 
         return `
           <div class="p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:border-gold-500/40 transition">
             <div class="space-y-1 min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">${type}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${typeBadgeStyle}">${type}</span>
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${col}</span>
                 ${code ? `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300" dir="ltr">${code}</span>` : ''}
-                ${term ? `<span class="text-[11px] text-slate-400 font-mono">${term}</span>` : ''}
+                ${term ? `<span class="text-[11px] text-slate-500 dark:text-slate-400 font-mono bg-slate-200/60 dark:bg-slate-800/80 px-2 py-0.5 rounded" dir="ltr">${term}</span>` : ''}
               </div>
               <h4 class="font-bold text-sm text-slate-900 dark:text-white truncate">${title}</h4>
             </div>
@@ -424,7 +454,9 @@
           'رمز المادة': newRes.code,
           'الكلية': newRes.college,
           'نوع الملف': newRes.type,
+          'نوع المورد': newRes.type,
           'الفصل': newRes.term,
+          'الفصل والسنة الدراسية': newRes.term,
           'رابط التحميل': newRes.link
         });
 
@@ -441,7 +473,15 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               action: "add_resource",
-              ...newRes
+              ...newRes,
+              "اسم المادة": newRes.title,
+              "رمز المادة": newRes.code,
+              "الكلية": newRes.college,
+              "نوع الملف": newRes.type,
+              "نوع المورد": newRes.type,
+              "الفصل": newRes.term,
+              "الفصل والسنة الدراسية": newRes.term,
+              "رابط التحميل": newRes.link
             })
           });
         } catch(err) {} finally {
