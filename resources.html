@@ -80,8 +80,8 @@
     <main class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
 
       <!-- بنر تعريفي مع شريط البحث والفرز للكليات والمواد -->
-      <div class="p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-4">
-        <div class="max-w-2xl space-y-2">
+      <div class="p-5 sm:p-7 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-4">
+        <div class="max-w-2xl space-y-1.5">
           <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold border border-gold-500/30 bg-gold-500/10 text-gold-600 dark:text-gold-400">
             <i data-lucide="download-cloud" class="w-3.5 h-3.5"></i>
             تحميل مجاني مباشر دون تسجيل
@@ -115,8 +115,8 @@
         </div>
       </div>
 
-      <!-- شبكة ملفات الموارد -->
-      <div id="resourcesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 min-h-[220px]"></div>
+      <!-- شبكة ملفات الموارد بنظام الارتفاع المتناسق items-start -->
+      <div id="resourcesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 items-start min-h-[200px]"></div>
 
       <!-- رسالة عدم وجود نتائج -->
       <div id="noResults" class="hidden text-center py-16">
@@ -297,32 +297,33 @@
         };
         const term = isInvalidTerm(rawTerm) ? '' : String(rawTerm).trim();
 
-        // الوصف
+        // استخراج الوصف النظيف دون تكرار أو فراغ
         let desc = String(item['الوصف'] || '').trim();
-        if (desc === term || isInvalidTerm(desc)) desc = '';
+        if (desc === term || isInvalidTerm(desc) || desc === name || desc === code) desc = '';
 
         const meta = detectResourceMetadata(faculty, type, name, code);
         const searchMetadata = `${name} ${code} ${faculty} ${type} ${term} ${desc}`.toLowerCase();
 
         return `
-          <div class="resource-card rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark p-4 sm:p-5 flex flex-col justify-between hover:border-gold-500/50 transition duration-200 shadow-sm" data-category="${meta.categories}" data-name="${searchMetadata}">
-            <div class="space-y-2">
-              <div class="flex items-center justify-between mb-1 gap-2 flex-wrap">
+          <div class="resource-card rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark p-4 flex flex-col hover:border-gold-500/50 transition duration-200 shadow-sm" data-category="${meta.categories}" data-name="${searchMetadata}">
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between gap-2 flex-wrap">
                 <div class="flex items-center gap-1.5 flex-wrap">
-                  ${code ? `<span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold text-[11px] font-mono">${code}</span>` : ''}
+                  ${code ? `<span class="px-2 py-0.5 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold text-[11px] font-mono">${code}</span>` : ''}
                   ${term ? `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400" dir="ltr">${term}</span>` : ''}
                 </div>
-                <span class="px-2.5 py-1 rounded-lg ${meta.typeBadgeClass} font-bold text-[10px]">${type}</span>
+                <span class="px-2.5 py-0.5 rounded-lg ${meta.typeBadgeClass} font-bold text-[10px]">${type}</span>
               </div>
-              <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white line-clamp-1">${name}</h3>
-              ${desc ? `<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2">${desc}</p>` : ''}
+              <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white pt-0.5 leading-snug">${name}</h3>
+              ${desc ? `<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 pt-0.5">${desc}</p>` : ''}
             </div>
-            <div class="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            
+            <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <span class="text-[11px] text-slate-400 flex items-center gap-1 font-mono">
                 <i data-lucide="${type.includes('كتاب') ? 'book-open' : 'file-text'}" class="w-3.5 h-3.5"></i> 
                 ${type.includes('كتاب') ? 'كتاب رقمي' : 'PDF'}
               </span>
-              <a href="${link}" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-200 hover:bg-gold-500 hover:text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-sm">
+              <a href="${link}" target="_blank" class="px-3 py-1 rounded-xl bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-200 hover:bg-gold-500 hover:text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-sm">
                 <span>تحميل</span>
                 <i data-lucide="download" class="w-3.5 h-3.5"></i>
               </a>
@@ -394,8 +395,8 @@
     const themeText = document.getElementById('themeText');
     const htmlElement = document.documentElement;
 
-    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
-    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
 
     function applyTheme(isDark) {
       if (isDark) {
