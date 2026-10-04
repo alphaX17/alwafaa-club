@@ -37,7 +37,7 @@
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
 
-    /* أنيميشن الشريط المتحرك التلقائي للاختصاصات والصفات الطويلة */
+    /* أنيميشن الانزلاق لليمين فقط والعودة المباشرة للبداية دون أرجوحة */
     .marquee-track {
       overflow: hidden;
       white-space: nowrap;
@@ -50,14 +50,28 @@
     .marquee-content {
       display: inline-block;
       white-space: nowrap;
-      will-change: transform;
+      will-change: transform, opacity;
     }
-    @keyframes marqueeSlide {
+    @keyframes marqueeLinear {
       0%, 20% {
         transform: translateX(0);
+        opacity: 1;
       }
-      80%, 100% {
+      75%, 85% {
         transform: translateX(var(--marquee-dist, 0px));
+        opacity: 1;
+      }
+      88% {
+        transform: translateX(var(--marquee-dist, 0px));
+        opacity: 0;
+      }
+      90% {
+        transform: translateX(0);
+        opacity: 0;
+      }
+      95%, 100% {
+        transform: translateX(0);
+        opacity: 1;
       }
     }
   </style>
@@ -274,7 +288,7 @@
       return { code: 'arts_sciences', badgeColor: 'bg-slate-500/10 text-slate-600 dark:text-slate-400' };
     }
 
-    // استخراج وتنقية مكان المكتب والساعات مع معالجة الانزياح وإلغاء كلمة "فعال"
+    // استخراج وتنقية مكان المكتب والساعات
     function extractOfficeAndHours(item) {
       let office = String(item['مكان المكتب'] || item['المكتب'] || item.office || item.room || '').trim();
       let hours = String(item['الساعات المكتبية'] || item['الساعات'] || item.hours || '').trim();
@@ -321,25 +335,26 @@
       return { office, hours };
     }
 
-    // إعداد وضبط حركة الشريط المتحرك (Marquee) التلقائية للنصوص الطويلة
+    // إعداد حركة السكرول باتجاه واحد مع العودة المباشرة للبداية
     function setupMarquees() {
       const tracks = document.querySelectorAll('.marquee-track');
       tracks.forEach(track => {
         const content = track.querySelector('.marquee-content');
         if (!content) return;
 
-        // إعادة التعيين لحساب الفارق بدقة
         content.style.animation = 'none';
         content.style.transform = 'translateX(0)';
+        content.style.opacity = '1';
 
         const trackWidth = track.clientWidth;
         const contentWidth = content.scrollWidth;
 
+        // إذا كان النص أطول من البطاقة يتم تفعيل السكرول الخطي
         if (contentWidth > trackWidth + 5) {
-          const diff = contentWidth - trackWidth + 14;
-          const duration = Math.max(5, (diff / 22) + 2.5);
+          const diff = contentWidth - trackWidth + 16;
+          const duration = Math.max(6, (diff / 20) + 3);
           content.style.setProperty('--marquee-dist', `${diff}px`);
-          content.style.animation = `marqueeSlide ${duration}s ease-in-out infinite alternate`;
+          content.style.animation = `marqueeLinear ${duration}s ease-in-out infinite`;
         }
       });
     }
@@ -396,7 +411,7 @@
               </div>
               <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white line-clamp-1">${name}</h3>
               
-              <!-- حاوية الشريط المتحرك للاختصاص والصفة الوظيفية -->
+              <!-- شريط الاختصاص بنظام السكرول أحادي الاتجاه -->
               <div class="marquee-track overflow-hidden whitespace-nowrap mt-0.5 w-full">
                 <span class="marquee-content inline-block text-xs text-slate-500 dark:text-slate-400 font-medium">${title}</span>
               </div>
@@ -417,7 +432,7 @@
       lucide.createIcons();
       filterData();
       setupMarquees();
-      setTimeout(setupMarquees, 100);
+      setTimeout(setupMarquees, 150);
     }
 
     async function fetchLiveFaculty() {
