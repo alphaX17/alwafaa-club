@@ -133,7 +133,7 @@
           </div>
           <div>
             <label class="block text-xs font-bold mb-1">الفصل والسنة الدراسية (اختياري)</label>
-            <input id="resTerm" type="text" placeholder="مثال: Fall 2025-2026 (اختياري)" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 font-mono" dir="ltr">
+            <input id="resTerm" type="text" placeholder="مثال: Fall 2025-2026" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 font-mono" dir="ltr">
           </div>
         </div>
 
@@ -189,7 +189,78 @@
 
   </main>
 
-  <!-- ==================== النوافذ المنبثقة ==================== -->
+  <!-- ==================== نافذة التعديل المنبثقة ==================== -->
+  <div id="editResourceModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="w-full max-w-xl p-5 sm:p-7 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-2 text-gold-500 font-bold text-sm">
+          <i data-lucide="edit-3" class="w-4 h-4"></i>
+          <span>تعديل بيانات المورد الأكاديمي</span>
+        </div>
+        <button onclick="closeEditModal()" class="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-red-500 transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form id="editResourceForm" class="space-y-3.5">
+        <input type="hidden" id="editResIndex">
+        <input type="hidden" id="origResTitle">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold mb-1">اسم المادة أو المقرر *</label>
+            <input id="editResTitle" type="text" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">رمز المقرر (Code) *</label>
+            <input id="editResCode" type="text" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono uppercase" dir="ltr">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-bold mb-1">الكلية *</label>
+            <select id="editResCollege" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="كلية الهندسة">كلية الهندسة</option>
+              <option value="كلية إدارة الأعمال">كلية إدارة الأعمال</option>
+              <option value="كلية الفنون والعلوم">كلية الفنون والعلوم</option>
+              <option value="كلية التربية واللغات">كلية التربية واللغات</option>
+              <option value="كلية الصيدلة">كلية الصيدلة</option>
+              <option value="عام لكافة الكليات">متطلب عام (General)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">نوع المورد *</label>
+            <select id="editResType" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <option value="امتحان نصفي (Midterm)">امتحان نصفي (Midterm)</option>
+              <option value="امتحان نهائي (Final)">امتحان نهائي (Final)</option>
+              <option value="واجبات واختبارات (Assignments & Tests)">واجبات واختبارات (Assignments & Tests)</option>
+              <option value="كتاب رقمي (E-Book / PDF)">كتاب رقمي (E-Book / PDF)</option>
+              <option value="ملخص شامل (Summary)">ملخص شامل (Summary)</option>
+              <option value="سلايدات المقرر (Slides)">سلايدات المقرر (Slides)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">الفصل والسنة (اختياري)</label>
+            <input id="editResTerm" type="text" placeholder="مثال: Fall 2025-2026" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 font-mono" dir="ltr">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold mb-1">رابط التحميل *</label>
+          <input id="editResLink" type="url" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeEditModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">إلغاء</button>
+          <button type="submit" id="submitEditResBtn" class="px-5 py-2.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-md hover:opacity-90 transition">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>حفظ التعديلات</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- نافذة الحذف العامة -->
   <div id="deleteModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
@@ -319,25 +390,17 @@
       });
     }
 
-    // دالة لتحديد لون وتنسيق شارة نوع المورد الأكاديمي
+    // شارات الأنواع
     function getTypeBadgeClass(typeStr = '') {
       const t = typeStr.toLowerCase();
-      if (t.includes('كتاب') || t.includes('book')) {
-        return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400';
-      }
-      if (t.includes('واجب') || t.includes('اختبار') || t.includes('assignment') || t.includes('test')) {
-        return 'bg-purple-500/10 text-purple-600 dark:text-purple-400';
-      }
-      if (t.includes('نهائي') || t.includes('final')) {
-        return 'bg-rose-500/10 text-rose-600 dark:text-rose-400';
-      }
-      if (t.includes('نصفي') || t.includes('midterm')) {
-        return 'bg-blue-500/10 text-blue-600 dark:text-blue-400';
-      }
+      if (t.includes('كتاب') || t.includes('book')) return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400';
+      if (t.includes('واجب') || t.includes('اختبار') || t.includes('assignment') || t.includes('test')) return 'bg-purple-500/10 text-purple-600 dark:text-purple-400';
+      if (t.includes('نهائي') || t.includes('final')) return 'bg-rose-500/10 text-rose-600 dark:text-rose-400';
+      if (t.includes('نصفي') || t.includes('midterm')) return 'bg-blue-500/10 text-blue-600 dark:text-blue-400';
       return 'bg-amber-500/10 text-amber-600 dark:text-amber-400';
     }
 
-    // عرض قائمة الموارد
+    // عرض قائمة الموارد بالسجل
     function renderResourceList(list) {
       const container = document.getElementById('resourceListContainer');
       const badge = document.getElementById('resourceCountBadge');
@@ -363,13 +426,13 @@
         return;
       }
 
-      container.innerHTML = filtered.map((item, idx) => {
+      container.innerHTML = filtered.map(item => {
+        const trueIndex = liveResourcesList.indexOf(item);
         const title = item['اسم المادة'] || item.name || item.title || 'مقرر بدون اسم';
         const code = item['رمز المادة'] || item.code || '';
         const col = item['الكلية'] || item.college || 'عام';
         const type = item['نوع الملف'] || item['نوع المورد'] || item.type || 'ملف دراسي';
         
-        // استخراج وتنقية الفصل الدراسي: إخفاؤه تماماً إذا كان فارغاً أو غير محدد
         const rawTerm = item['الفصل'] || item['الفصل والسنة الدراسية'] || item['الوصف'] || item.term || '';
         const isInvalidTerm = (v) => {
           if (!v) return true;
@@ -393,11 +456,15 @@
               <h4 class="font-bold text-sm text-slate-900 dark:text-white truncate">${title}</h4>
             </div>
             <div class="flex items-center gap-1.5 sm:gap-2 self-end sm:self-auto shrink-0 flex-wrap">
-              <a href="${link}" target="_blank" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="فتح الرابط الخارجي">
+              <button onclick="openEditModal(${trueIndex})" class="p-2 rounded-xl bg-amber-500/10 hover:bg-gold-500 hover:text-slate-950 text-gold-600 dark:text-gold-400 text-xs font-bold flex items-center gap-1 transition" title="تعديل بيانات المورد">
+                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                <span>تعديل</span>
+              </button>
+              <a href="${link}" target="_blank" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="فتح الرابط الخارجي">
                 <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                 <span>معاينة</span>
               </a>
-              <button onclick="deleteResourceByIndex(${idx})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition" title="حذف المورد">
+              <button onclick="deleteResourceByIndex(${trueIndex})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition" title="حذف المورد">
                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 <span>حذف</span>
               </button>
@@ -409,7 +476,7 @@
       lucide.createIcons();
     }
 
-    // جلب بيانات الموارد
+    // جلب بيانات الموارد الحية
     async function fetchLiveResources(forceFresh = false) {
       const cached = localStorage.getItem('nadi_resources_cache');
       if (cached && !forceFresh) {
@@ -492,6 +559,109 @@
       });
     }
 
+    // إدارة نافذة التعديل
+    const editModal = document.getElementById('editResourceModal');
+    const editForm = document.getElementById('editResourceForm');
+
+    function openEditModal(index) {
+      const res = liveResourcesList[index];
+      if (!res) return;
+
+      document.getElementById('editResIndex').value = index;
+      document.getElementById('origResTitle').value = res['اسم المادة'] || res.name || res.title || '';
+
+      document.getElementById('editResTitle').value = res['اسم المادة'] || res.name || res.title || '';
+      document.getElementById('editResCode').value = res['رمز المادة'] || res.code || '';
+      document.getElementById('editResCollege').value = res['الكلية'] || res.college || 'كلية الهندسة';
+      document.getElementById('editResType').value = res['نوع الملف'] || res['نوع المورد'] || res.type || 'امتحان نصفي (Midterm)';
+      
+      const rawTerm = res['الفصل'] || res['الفصل والسنة الدراسية'] || res.term || '';
+      const isInvalid = (v) => {
+        const s = String(v || '').trim().toLowerCase();
+        return s === '' || s === 'غير محدد' || s === 'null' || s === 'undefined' || s === '-';
+      };
+      document.getElementById('editResTerm').value = isInvalid(rawTerm) ? '' : rawTerm;
+      document.getElementById('editResLink').value = res['رابط التحميل'] || res.link || '';
+
+      if (editModal) {
+        editModal.classList.remove('hidden');
+        editModal.classList.add('flex');
+        lucide.createIcons();
+      }
+    }
+
+    function closeEditModal() {
+      if (editModal) {
+        editModal.classList.add('hidden');
+        editModal.classList.remove('flex');
+      }
+    }
+
+    if (editForm) {
+      editForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('submitEditResBtn');
+        const originalBtnContent = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>جاري حفظ التعديل...</span>`;
+
+        const index = parseInt(document.getElementById('editResIndex').value, 10);
+        const origTitle = document.getElementById('origResTitle').value;
+
+        const updatedRes = {
+          title: document.getElementById('editResTitle').value.trim(),
+          code: document.getElementById('editResCode').value.trim().toUpperCase(),
+          college: document.getElementById('editResCollege').value,
+          type: document.getElementById('editResType').value,
+          term: document.getElementById('editResTerm').value.trim(),
+          link: document.getElementById('editResLink').value.trim()
+        };
+
+        if (!isNaN(index) && liveResourcesList[index]) {
+          liveResourcesList[index] = {
+            'اسم المادة': updatedRes.title,
+            'رمز المادة': updatedRes.code,
+            'الكلية': updatedRes.college,
+            'نوع الملف': updatedRes.type,
+            'نوع المورد': updatedRes.type,
+            'الفصل': updatedRes.term,
+            'الفصل والسنة الدراسية': updatedRes.term,
+            'رابط التحميل': updatedRes.link
+          };
+
+          localStorage.setItem('nadi_resources_cache', JSON.stringify(liveResourcesList));
+          renderResourceList(liveResourcesList);
+        }
+
+        closeEditModal();
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "edit_resource",
+              originalTitle: origTitle,
+              ...updatedRes,
+              "اسم المادة": updatedRes.title,
+              "رمز المادة": updatedRes.code,
+              "الكلية": updatedRes.college,
+              "نوع الملف": updatedRes.type,
+              "نوع المورد": updatedRes.type,
+              "الفصل": updatedRes.term,
+              "الفصل والسنة الدراسية": updatedRes.term,
+              "رابط التحميل": updatedRes.link
+            })
+          });
+        } catch(err) {} finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnContent;
+          lucide.createIcons();
+        }
+      });
+    }
+
     // حذف مورد
     function deleteResourceByIndex(index) {
       const target = liveResourcesList[index];
@@ -538,7 +708,6 @@
       });
     });
 
-    // جلب البيانات فور تحميل الصفحة
     fetchLiveResources();
   </script>
 </body>
