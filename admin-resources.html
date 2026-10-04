@@ -138,6 +138,11 @@
         </div>
 
         <div>
+          <label class="block text-xs font-bold mb-1">الوصف أو الملاحظات الإضافية (اختياري)</label>
+          <input id="resDesc" type="text" placeholder="مثال: يشمل حل نماذج امتحانات سابقة وشرح القوانين الأساسية..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+        </div>
+
+        <div>
           <label class="block text-xs font-bold mb-1">رابط التحميل المباشر أو Google Drive *</label>
           <input id="resLink" type="url" required placeholder="https://drive.google.com/..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
         </div>
@@ -244,6 +249,11 @@
             <label class="block text-xs font-bold mb-1">الفصل والسنة (اختياري)</label>
             <input id="editResTerm" type="text" placeholder="مثال: Fall 2025-2026" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 font-mono" dir="ltr">
           </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold mb-1">الوصف أو الملاحظات (اختياري)</label>
+          <input id="editResDesc" type="text" placeholder="مثال: يشمل حل نماذج امتحانات سابقة وشرح القوانين..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
         </div>
 
         <div>
@@ -414,9 +424,10 @@
         const code = (item['رمز المادة'] || item.code || '').toLowerCase();
         const col = (item['الكلية'] || item.college || '').trim();
         const type = (item['نوع الملف'] || item['نوع المورد'] || item.type || '').toLowerCase();
+        const desc = (item['الوصف'] || item.desc || '').toLowerCase();
 
         const matchCol = (currentFilter === 'all') || (col === currentFilter);
-        const matchQuery = !query || title.includes(query) || code.includes(query) || type.includes(query);
+        const matchQuery = !query || title.includes(query) || code.includes(query) || type.includes(query) || desc.includes(query);
 
         return matchCol && matchQuery;
       });
@@ -433,13 +444,17 @@
         const col = item['الكلية'] || item.college || 'عام';
         const type = item['نوع الملف'] || item['نوع المورد'] || item.type || 'ملف دراسي';
         
-        const rawTerm = item['الفصل'] || item['الفصل والسنة الدراسية'] || item['الوصف'] || item.term || '';
+        const rawTerm = item['الفصل'] || item['الفصل والسنة الدراسية'] || item.term || '';
         const isInvalidTerm = (v) => {
           if (!v) return true;
           const s = String(v).trim().toLowerCase();
           return s === '' || s === 'غير محدد' || s === 'لا يوجد' || s === 'null' || s === 'undefined' || s === '-';
         };
         const term = isInvalidTerm(rawTerm) ? '' : String(rawTerm).trim();
+
+        // استخراج الوصف النظيف
+        const rawDesc = item['الوصف'] || item.desc || '';
+        const desc = isInvalidTerm(rawDesc) || rawDesc === term ? '' : String(rawDesc).trim();
 
         const link = item['رابط التحميل'] || item.link || '#';
         const typeBadgeStyle = getTypeBadgeClass(type);
@@ -454,6 +469,7 @@
                 ${term ? `<span class="text-[11px] text-slate-500 dark:text-slate-400 font-mono bg-slate-200/60 dark:bg-slate-800/80 px-2 py-0.5 rounded" dir="ltr">${term}</span>` : ''}
               </div>
               <h4 class="font-bold text-sm text-slate-900 dark:text-white truncate">${title}</h4>
+              ${desc ? `<p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">${desc}</p>` : ''}
             </div>
             <div class="flex items-center gap-1.5 sm:gap-2 self-end sm:self-auto shrink-0 flex-wrap">
               <button onclick="openEditModal(${trueIndex})" class="p-2 rounded-xl bg-amber-500/10 hover:bg-gold-500 hover:text-slate-950 text-gold-600 dark:text-gold-400 text-xs font-bold flex items-center gap-1 transition" title="تعديل بيانات المورد">
@@ -498,7 +514,7 @@
       } catch(err) {}
     }
 
-    // إضافة مورد جديد
+    // إضافة مورد جديد مع خانة الوصف
     const addResourceForm = document.getElementById('addResourceForm');
     if (addResourceForm) {
       addResourceForm.addEventListener('submit', async (e) => {
@@ -513,6 +529,7 @@
           college: document.getElementById('resCollege').value,
           type: document.getElementById('resType').value,
           term: document.getElementById('resTerm').value.trim(),
+          desc: document.getElementById('resDesc').value.trim(),
           link: document.getElementById('resLink').value.trim()
         };
 
@@ -524,6 +541,7 @@
           'نوع المورد': newRes.type,
           'الفصل': newRes.term,
           'الفصل والسنة الدراسية': newRes.term,
+          'الوصف': newRes.desc,
           'رابط التحميل': newRes.link
         });
 
@@ -548,6 +566,7 @@
               "نوع المورد": newRes.type,
               "الفصل": newRes.term,
               "الفصل والسنة الدراسية": newRes.term,
+              "الوصف": newRes.desc,
               "رابط التحميل": newRes.link
             })
           });
@@ -559,7 +578,7 @@
       });
     }
 
-    // إدارة نافذة التعديل
+    // إدارة نافذة التعديل مع تعبئة الوصف
     const editModal = document.getElementById('editResourceModal');
     const editForm = document.getElementById('editResourceForm');
 
@@ -581,6 +600,11 @@
         return s === '' || s === 'غير محدد' || s === 'null' || s === 'undefined' || s === '-';
       };
       document.getElementById('editResTerm').value = isInvalid(rawTerm) ? '' : rawTerm;
+
+      // تعبئة حقل الوصف
+      const rawDesc = res['الوصف'] || res.desc || '';
+      document.getElementById('editResDesc').value = isInvalid(rawDesc) || rawDesc === rawTerm ? '' : rawDesc;
+
       document.getElementById('editResLink').value = res['رابط التحميل'] || res.link || '';
 
       if (editModal) {
@@ -614,6 +638,7 @@
           college: document.getElementById('editResCollege').value,
           type: document.getElementById('editResType').value,
           term: document.getElementById('editResTerm').value.trim(),
+          desc: document.getElementById('editResDesc').value.trim(),
           link: document.getElementById('editResLink').value.trim()
         };
 
@@ -626,6 +651,7 @@
             'نوع المورد': updatedRes.type,
             'الفصل': updatedRes.term,
             'الفصل والسنة الدراسية': updatedRes.term,
+            'الوصف': updatedRes.desc,
             'رابط التحميل': updatedRes.link
           };
 
@@ -651,6 +677,7 @@
               "نوع المورد": updatedRes.type,
               "الفصل": updatedRes.term,
               "الفصل والسنة الدراسية": updatedRes.term,
+              "الوصف": updatedRes.desc,
               "رابط التحميل": updatedRes.link
             })
           });
