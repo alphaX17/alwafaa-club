@@ -484,4 +484,177 @@
     const themeText = document.getElementById('themeText');
     const htmlElement = document.documentElement;
 
-    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width
+    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+
+    function applyTheme(isDark) {
+      if (isDark) {
+        htmlElement.classList.add('dark');
+        if (themeText) themeText.textContent = 'الليلي';
+        if (themeIconContainer) themeIconContainer.innerHTML = moonSvg;
+      } else {
+        htmlElement.classList.remove('dark');
+        if (themeText) themeText.textContent = 'النهاري';
+        if (themeIconContainer) themeIconContainer.innerHTML = sunSvg;
+      }
+    }
+
+    const savedTheme = localStorage.getItem('clubTheme');
+    applyTheme(savedTheme !== 'light');
+
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+        const isDarkCurrently = htmlElement.classList.contains('dark');
+        const newThemeIsDark = !isDarkCurrently;
+        applyTheme(newThemeIsDark);
+        localStorage.setItem('clubTheme', newThemeIsDark ? 'dark' : 'light');
+      });
+    }
+
+    // 3. إدارة نظام قفل واستقبال المنح (Toggle Integration)
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
+    const SCHOLARSHIP_STATUS_KEY = 'club_scholarship_status';
+    let isScholarshipOpen = true;
+
+    function normalizeScholarshipStatus(raw) {
+      if (raw === null || typeof raw === 'undefined') return true;
+      if (typeof raw === 'boolean') return raw;
+      if (typeof raw === 'number') return raw === 1 || raw > 0;
+      if (typeof raw === 'string') {
+        const clean = raw.trim().toLowerCase();
+        if (['open', 'opened', 'available', 'on', 'true', '1', 'enabled', 'مفتوح', 'متاح'].includes(clean)) return true;
+        if (['closed', 'disabled', 'off', 'false', '0', 'مغلق', 'متوقف', 'غير متاح'].includes(clean)) return false;
+      }
+      if (typeof raw === 'object') {
+        const nested = raw.status ?? raw.value ?? raw.scholarshipStatus ?? raw.data ?? raw.result;
+        if (nested !== undefined) return normalizeScholarshipStatus(nested);
+      }
+      return true;
+    }
+
+    function setScholarshipLockUI(isOpen) {
+      isScholarshipOpen = isOpen;
+      const closedAlert = document.getElementById('scholarshipClosedAlert');
+      const overlay = document.getElementById('scholarshipDisabledOverlay');
+      const formElement = document.getElementById('officialScholarshipForm');
+
+      if (closedAlert) {
+        if (isOpen) {
+          closedAlert.classList.add('hidden');
+        } else {
+          closedAlert.classList.remove('hidden');
+        }
+      }
+
+      if (overlay) {
+        if (isOpen) {
+          overlay.classList.add('hidden');
+        } else {
+          overlay.classList.remove('hidden');
+        }
+      }
+
+      if (formElement) {
+        const fields = formElement.querySelectorAll('input, select, textarea, button[type="submit"]');
+        fields.forEach(field => {
+          field.disabled = !isOpen;
+        });
+      }
+      lucide.createIcons();
+    }
+
+    async function syncScholarshipStatus() {
+      // 1. القراءة الفورية من الكاش المحلي لمنع الوميض
+      const cached = localStorage.getItem(SCHOLARSHIP_STATUS_KEY);
+      if (cached !== null && cached !== undefined) {
+        setScholarshipLockUI(normalizeScholarshipStatus(cached));
+      }
+
+      // 2. الفحص المباشر من السيرفر
+      try {
+        const response = await fetch(`${SCRIPT_URL}?req=scholarship_status&_=${Date.now()}`);
+        const rawText = await response.text();
+        if (!rawText) return;
+
+        let parsedValue = rawText;
+        try {
+          parsedValue = JSON.parse(rawText);
+        } catch (e) {}
+
+        const currentStatus = normalizeScholarshipStatus(parsedValue);
+        localStorage.setItem(SCHOLARSHIP_STATUS_KEY, currentStatus ? 'open' : 'closed');
+        setScholarshipLockUI(currentStatus);
+      } catch (err) {
+        console.warn('تعذر تحديث حالة المنح من السيرفر:', err);
+      }
+    }
+
+    // 4. معالجة إرسال النموذج
+    const form = document.getElementById('officialScholarshipForm');
+    const successNotice = document.getElementById('successNotice');
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // حماية إضافية تمنع الإرسال إذا كانت الاستمارة مقفلة
+        if (!isScholarshipOpen) {
+          alert('عذراً، باب التقديم للمنحة مغلق حالياً.');
+          return;
+        }
+
+        const submitBtn = document.getElementById('scholarshipSubmitBtn');
+        const originalBtnContent = submitBtn.innerHTML;
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>جاري إرسال الطلب...</span>';
+
+        const textInputs = form.querySelectorAll('input[type="text"]');
+
+        const formData = {
+          formType: "scholarship",
+          fullName: textInputs[0]?.value || "",
+          fatherName: textInputs[1]?.value || "",
+          lastName: textInputs[2]?.value || "",
+          motherName: textInputs[3]?.value || "",
+          originTown: textInputs[4]?.value || "",
+          currentAddress: textInputs[5]?.value || "",
+          gender: form.querySelector('input[name="gender"]:checked')?.value || "",
+          birthDate: form.querySelector('input[type="date"]')?.value || "",
+          phone: form.querySelector('input[type="tel"]')?.value || "",
+          fatherJob: form.querySelector('input[name="fatherJob"]:checked')?.value || "",
+          university: textInputs[6]?.value || "",
+          major: textInputs[7]?.value || "",
+          academicYear: form.querySelector('input[name="academicYear"]:checked')?.value || "",
+          studentId: textInputs[8]?.value || "",
+          bacGrade: textInputs[9]?.value || "",
+          hasScholarship: textInputs[10]?.value || "",
+          reason: form.querySelector('textarea')?.value || ""
+        };
+
+        try {
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+          });
+
+          if (successNotice) successNotice.classList.remove('hidden');
+          form.reset();
+          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        } catch (err) {
+          alert('تعذر إرسال الطلب، يرجى التأكد من الاتصال بالإنترنت.');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnContent;
+          lucide.createIcons();
+        }
+      });
+    }
+
+    // تشغيل فحص الحالة فور تحميل الصفحة
+    syncScholarshipStatus();
+  </script>
+</body>
+</html>
