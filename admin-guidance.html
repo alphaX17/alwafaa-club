@@ -86,16 +86,15 @@
 
         <div class="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <p id="scholarshipStatusText" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">المتقدمون قادرون على إرسال طلباتهم الآن.</p>
-         <button id="scholarshipToggle" type="button" role="switch" aria-checked="true" class="relative inline-flex h-7 w-14 items-center px-0.5 rounded-full bg-emerald-500 shadow-inner transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-[#111b33]">
-  <span class="sr-only">تبديل حالة المنح</span>
-  <span id="scholarshipToggleKnob" class="inline-block h-6 w-6 transform rounded-full bg-white shadow transition-transform duration-200 -translate-x-7"></span>
-</button>
-        
+          <button id="scholarshipToggle" type="button" role="switch" aria-checked="true" class="relative inline-flex h-7 w-14 items-center px-0.5 rounded-full bg-emerald-500 shadow-inner transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-[#111b33]">
+            <span class="sr-only">تبديل حالة المنح</span>
+            <span id="scholarshipToggleKnob" class="inline-block h-6 w-6 transform rounded-full bg-white shadow transition-transform duration-200 -translate-x-7"></span>
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- أزرار التبويبات المتناسقة والمرتبة -->
+    <!-- أزرار التبويبات -->
     <div class="grid grid-cols-2 gap-2.5 sm:gap-4 w-full max-w-md">
       <button id="tabBtnAdd" onclick="switchTab('add')" class="px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center justify-center gap-2">
         <i data-lucide="message-square-plus" class="w-4 h-4 shrink-0"></i>
@@ -264,7 +263,7 @@
     نادي الوفاء — الجامعة اللبنانية الدولية في صور • إدارة شبكة التوجيه والتواصل
   </footer>
 
-  <!-- ==================== السكربت البرمجي المستقل ==================== -->
+  <!-- ==================== السكربت البرمجي ==================== -->
   <script>
     lucide.createIcons();
 
@@ -345,11 +344,11 @@
 
       if (toggle) {
         toggle.setAttribute('aria-checked', String(isOpen));
-        toggle.className = `relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-[#111b33] ${isOpen ? 'bg-emerald-500 focus:ring-emerald-400/60' : 'bg-rose-500 focus:ring-rose-400/60'}`;
+        toggle.className = `relative inline-flex h-7 w-14 items-center px-0.5 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-[#111b33] ${isOpen ? 'bg-emerald-500 focus:ring-emerald-400/60' : 'bg-rose-500 focus:ring-rose-400/60'}`;
       }
 
       if (knob) {
-        knob.className = `inline-block h-6 w-6 transform rounded-full bg-white shadow transition-transform duration-200 ${isOpen ? 'translate-x-7' : 'translate-x-1'}`;
+        knob.className = `inline-block h-6 w-6 transform rounded-full bg-white shadow transition-transform duration-200 ${isOpen ? '-translate-x-7' : 'translate-x-0'}`;
       }
     }
 
@@ -368,9 +367,7 @@
         let parsedValue = rawText;
         try {
           parsedValue = JSON.parse(rawText);
-        } catch (e) {
-          // ignore
-        }
+        } catch (e) {}
 
         const normalized = normalizeScholarshipStatus(parsedValue);
         setScholarshipToggleUI(normalized);
