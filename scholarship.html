@@ -104,8 +104,37 @@
     <!-- ==================== محتوى الاستمارة ==================== -->
     <main class="max-w-3xl mx-auto px-3.5 sm:px-6 py-6 sm:py-8">
 
-      <div class="p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm">
+      <!-- شريط تنبيه رسمي يظهر عند إغلاق المنح -->
+      <div id="scholarshipClosedAlert" class="hidden mb-6 p-4 sm:p-5 rounded-3xl border border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-300 shadow-sm transition-all duration-300">
+        <div class="flex items-center gap-3">
+          <div class="p-2.5 rounded-2xl bg-rose-500/20 text-rose-600 dark:text-rose-300 shrink-0">
+            <i data-lucide="lock" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-xs sm:text-sm font-bold text-rose-700 dark:text-rose-200">باب استقبال طلبات المنح مغلق حالياً</h3>
+            <p class="text-[11px] sm:text-xs text-slate-600 dark:text-slate-300 mt-0.5 leading-relaxed">
+              نود إعلامكم بأنه تم إغلاق باب استقبال طلبات المنح الطلابية لهذا الفصل الدراسي. نشكر اهتمامكم ونتمنى لكم دوام التوفيق والنجاح.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- بطاقة الاستمارة الحاوية -->
+      <div class="relative rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm overflow-hidden p-5 sm:p-8">
         
+        <!-- طبقة التغطية الرمادية الحاجبة (تظهر فقط عند قفل المنح) -->
+        <div id="scholarshipDisabledOverlay" class="hidden absolute inset-0 z-30 bg-slate-200/50 dark:bg-[#070b14]/75 backdrop-blur-[2.5px] rounded-3xl flex items-center justify-center p-4">
+          <div class="p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#0c1427]/95 shadow-2xl text-center max-w-sm mx-auto space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center mx-auto">
+              <i data-lucide="shield-alert" class="w-6 h-6"></i>
+            </div>
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white">الاستمارة مقفلة</h4>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              تم إيقاف التسجيل في المنحة مؤقتاً من قبل إدارة النادي، ولا يمكن تعبئة أو إرسال النموذج في الوقت الحالي.
+            </p>
+          </div>
+        </div>
+
         <form id="officialScholarshipForm" class="space-y-6">
           
           <!-- 1. البيانات الشخصية والعائلية الأساسية -->
@@ -327,7 +356,7 @@
 
           <!-- زر الإرسال -->
           <div class="pt-2">
-            <button type="submit" class="w-full py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+            <button id="scholarshipSubmitBtn" type="submit" class="w-full py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
               <i data-lucide="send" class="w-4 h-4"></i>
               <span>إرسال الطلب</span>
             </button>
@@ -429,7 +458,6 @@
       if (sidebar && menuOverlay) {
         sidebar.classList.remove('translate-x-full');
         menuOverlay.classList.remove('opacity-0', 'pointer-events-none');
-        // تفعيل انزلاق العناصر المتدرج بعد فتح القائمة بلحظات
         requestAnimationFrame(() => {
           setTimeout(() => {
             sidebar.classList.add('menu-open');
@@ -456,91 +484,4 @@
     const themeText = document.getElementById('themeText');
     const htmlElement = document.documentElement;
 
-    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
-    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
-
-    function applyTheme(isDark) {
-      if (isDark) {
-        htmlElement.classList.add('dark');
-        if (themeText) themeText.textContent = 'الليلي';
-        if (themeIconContainer) themeIconContainer.innerHTML = moonSvg;
-      } else {
-        htmlElement.classList.remove('dark');
-        if (themeText) themeText.textContent = 'النهاري';
-        if (themeIconContainer) themeIconContainer.innerHTML = sunSvg;
-      }
-    }
-
-    const savedTheme = localStorage.getItem('clubTheme');
-    applyTheme(savedTheme !== 'light');
-
-    if (themeToggleBtn) {
-      themeToggleBtn.addEventListener('click', () => {
-        const isDarkCurrently = htmlElement.classList.contains('dark');
-        const newThemeIsDark = !isDarkCurrently;
-        applyTheme(newThemeIsDark);
-        localStorage.setItem('clubTheme', newThemeIsDark ? 'dark' : 'light');
-      });
-    }
-
-    // 3. معالجة إرسال النموذج
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
-
-    const form = document.getElementById('officialScholarshipForm');
-    const successNotice = document.getElementById('successNotice');
-
-    if (form) {
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalBtnContent = submitBtn.innerHTML;
-
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span>جاري إرسال الطلب...</span>';
-
-        const textInputs = form.querySelectorAll('input[type="text"]');
-
-        const formData = {
-          formType: "scholarship",
-          fullName: textInputs[0]?.value || "",
-          fatherName: textInputs[1]?.value || "",
-          lastName: textInputs[2]?.value || "",
-          motherName: textInputs[3]?.value || "",
-          originTown: textInputs[4]?.value || "",
-          currentAddress: textInputs[5]?.value || "",
-          gender: form.querySelector('input[name="gender"]:checked')?.value || "",
-          birthDate: form.querySelector('input[type="date"]')?.value || "",
-          phone: form.querySelector('input[type="tel"]')?.value || "",
-          fatherJob: form.querySelector('input[name="fatherJob"]:checked')?.value || "",
-          university: textInputs[6]?.value || "",
-          major: textInputs[7]?.value || "",
-          academicYear: form.querySelector('input[name="academicYear"]:checked')?.value || "",
-          studentId: textInputs[8]?.value || "",
-          bacGrade: textInputs[9]?.value || "",
-          hasScholarship: textInputs[10]?.value || "",
-          reason: form.querySelector('textarea')?.value || ""
-        };
-
-        try {
-          await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData)
-          });
-
-          if (successNotice) successNotice.classList.remove('hidden');
-          form.reset();
-          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        } catch (err) {
-          alert('تعذر إرسال الطلب، يرجى التأكد من الاتصال بالإنترنت.');
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = originalBtnContent;
-          lucide.createIcons();
-        }
-      });
-    }
-  </script>
-</body>
-</html>
+    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width
