@@ -43,7 +43,7 @@
 <body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen flex flex-col justify-between">
 
   <!-- ==================== الهيدر العلوي المتجاوب ==================== -->
-  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-3.5 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-2 transition-colors">
+  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-3.5 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3">
     <div class="flex items-center gap-2.5 min-w-0">
       <a href="admin.html" class="p-2 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-600 dark:text-slate-300 transition shrink-0" title="الرجوع للبوابة الرئيسية">
         <i data-lucide="arrow-right" class="w-4 h-4"></i>
@@ -59,12 +59,12 @@
     </div>
 
     <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-      <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center justify-center p-0 sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition shrink-0" title="تبديل المظهر">
+      <button onclick="toggleTheme()" aria-label="تبديل المظهر" class="flex items-center justify-center p-0 sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
         <span class="themeIconContainer flex items-center justify-center"></span>
         <span class="themeText hidden sm:inline mr-1.5">الليلي</span>
       </button>
 
-      <a href="admin.html" class="flex items-center justify-center gap-1.5 p-0 sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition shrink-0" title="البوابة المركزية">
+      <a href="admin.html" class="flex items-center justify-center gap-1.5 p-0 sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition">
         <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
         <span class="hidden sm:inline">البوابة المركزية</span>
       </a>
@@ -74,15 +74,35 @@
   <!-- ==================== المحتوى والتنقل ==================== -->
   <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-8 space-y-6">
 
+    <div class="max-w-6xl mx-auto">
+      <div id="scholarshipStatusCard" class="rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm p-4 sm:p-5">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <p class="text-[11px] font-bold text-gold-600 dark:text-gold-400">إدارة المنح الطلابية</p>
+            <h3 class="text-base sm:text-lg font-black text-slate-900 dark:text-white mt-1">استقبال طلبات المنح</h3>
+          </div>
+          <span id="scholarshipStatusBadge" class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300">استقبال المنح: متاح حالياً</span>
+        </div>
+
+        <div class="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <p id="scholarshipStatusText" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">المتقدمون قادرون على إرسال طلباتهم الآن.</p>
+          <button id="scholarshipToggle" type="button" role="switch" aria-checked="true" class="relative inline-flex h-7 w-14 items-center rounded-full bg-emerald-500 shadow-inner transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-[#111b33]">
+            <span class="sr-only">تبديل حالة المنح</span>
+            <span id="scholarshipToggleKnob" class="inline-block h-6 w-6 transform rounded-full bg-white shadow transition-transform duration-200 translate-x-7"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- أزرار التبويبات المتناسقة والمرتبة -->
     <div class="grid grid-cols-2 gap-2.5 sm:gap-4 w-full max-w-md">
-      <button id="tabBtnAdd" onclick="switchTab('add')" class="px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center justify-center gap-2 border border-transparent ring-2 ring-gold-500/20">
+      <button id="tabBtnAdd" onclick="switchTab('add')" class="px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center justify-center gap-2">
         <i data-lucide="message-square-plus" class="w-4 h-4 shrink-0"></i>
         <span class="whitespace-nowrap">إضافة مرشد</span>
         <span class="text-[10px] px-1.5 py-0.5 rounded-full font-mono bg-white/20 dark:bg-black/20 text-current">+جديد</span>
       </button>
 
-      <button id="tabBtnManage" onclick="switchTab('manage')" class="px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-white dark:bg-clubNavy-cardDark border border-slate-200 dark:border-clubNavy-borderDark text-slate-600 dark:text-slate-300 hover:border-gold-500 flex items-center justify-center gap-2">
+      <button id="tabBtnManage" onclick="switchTab('manage')" class="px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-white dark:bg-clubNavy-cardDark border border-slate-200 dark:border-clubNavy-borderDark text-slate-700 dark:text-slate-200 flex items-center justify-center gap-2">
         <i data-lucide="network" class="w-4 h-4 shrink-0"></i>
         <span class="whitespace-nowrap">سجل التوجيه</span>
         <span id="guidanceCountBadge" class="text-[10px] px-2 py-0.5 rounded-full font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">...</span>
@@ -100,11 +120,12 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
           <div>
             <label class="block text-xs font-bold mb-1">الكلية أو الاختصاص *</label>
-            <input id="guidMajor" type="text" required placeholder="مثال: الهندسة الميكانيكية أو الصيدلة" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <input id="guidMajor" type="text" required placeholder="مثال: الهندسة الميكانيكية أو الصيدلة" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500/40">
           </div>
           <div>
             <label class="block text-xs font-bold mb-1">النوع أو الصفة التنظيمية *</label>
-            <select id="guidType" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <select id="guidType" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500/40">
+              <option value="">اختر النوع</option>
               <option value="مرشد أكاديمي للفرع">مرشد أكاديمي للفرع</option>
               <option value="ممثل اختصاص">ممثل اختصاص</option>
               <option value="مجموعة واتساب رسمية">مجموعة واتساب رسمية</option>
@@ -115,21 +136,21 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
           <div>
             <label class="block text-xs font-bold mb-1">الاسم أو صفة المسؤول *</label>
-            <input id="guidLeader" type="text" required placeholder="مثال: الزميل ... " class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <input id="guidLeader" type="text" required placeholder="مثال: الزميل ... " class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500/40">
           </div>
           <div>
             <label class="block text-xs font-bold mb-1">رقم الهاتف للتواصل *</label>
-            <input id="guidPhone" type="text" required placeholder="مثال: 71336458" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+            <input id="guidPhone" type="text" required placeholder="مثال: 71336458" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500/40">
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-bold mb-1">رابط الواتساب (مجموعة أو محادثة مباشرة) *</label>
-          <input id="guidGroupUrl" type="url" required placeholder="https://chat.whatsapp.com/... أو https://wa.me/..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+          <input id="guidGroupUrl" type="url" required placeholder="https://chat.whatsapp.com/... أو https://wa.me/..." class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500/40">
         </div>
 
         <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
-          <button id="submitGuidBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
+          <button id="submitGuidBtn" type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-md hover:opacity-95 transition">
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
             <span>إدراج في دليل التوجيه فوراً</span>
           </button>
@@ -146,10 +167,10 @@
         </div>
         <div class="flex items-center gap-2 flex-wrap">
           <div class="relative w-full sm:w-64">
-            <input id="guidanceSearchInput" type="text" placeholder="بحث بالاختصاص أو الاسم..." class="w-full text-xs p-2.5 pr-8 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <input id="guidanceSearchInput" type="text" placeholder="بحث بالاختصاص أو الاسم..." class="w-full text-xs p-2.5 pr-8 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500/40">
             <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3 right-2.5"></i>
           </div>
-          <button onclick="fetchLiveGuidance(true)" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500 text-xs font-bold transition">
+          <button onclick="fetchLiveGuidance(true)" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-gold-500/50 hover:text-gold-500 text-slate-700 dark:text-slate-200 text-xs font-bold transition">
             <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
             <span>تحديث</span>
           </button>
@@ -178,11 +199,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block font-bold mb-1">الكلية أو الاختصاص *</label>
-            <input id="editGuidMajor" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <input id="editGuidMajor" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500/40">
           </div>
           <div>
             <label class="block font-bold mb-1">النوع أو الصفة *</label>
-            <select id="editGuidType" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <select id="editGuidType" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500/40">
               <option value="مرشد أكاديمي للفرع">مرشد أكاديمي للفرع</option>
               <option value="ممثل اختصاص">ممثل اختصاص</option>
               <option value="مجموعة واتساب رسمية">مجموعة واتساب رسمية</option>
@@ -193,17 +214,17 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block font-bold mb-1">الاسم أو الصفة *</label>
-            <input id="editGuidLeader" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <input id="editGuidLeader" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500/40">
           </div>
           <div>
             <label class="block font-bold mb-1">رقم الهاتف *</label>
-            <input id="editGuidPhone" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+            <input id="editGuidPhone" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500/40">
           </div>
         </div>
 
         <div>
           <label class="block font-bold mb-1">رابط الواتساب *</label>
-          <input id="editGuidGroupUrl" type="url" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+          <input id="editGuidGroupUrl" type="url" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500/40">
         </div>
 
         <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
@@ -257,9 +278,138 @@
       document.getElementById('welcomeAdmin').textContent = `المشرف: ${activeAdmin}`;
     }
 
+    const SCHOLARSHIP_STATUS_KEY = 'club_scholarship_status';
+
+    function normalizeScholarshipStatus(raw) {
+      if (raw === null || typeof raw === 'undefined') return true;
+      if (typeof raw === 'boolean') return raw;
+      if (typeof raw === 'number') return raw === 1 || raw > 0;
+      if (typeof raw === 'string') {
+        const clean = raw.trim().toLowerCase();
+        if (['open', 'opened', 'available', 'on', 'true', '1', 'enabled', 'مفتوح', 'متاح'].includes(clean)) return true;
+        if (['closed', 'disabled', 'off', 'false', '0', 'مغلق', 'متوقف', 'غير متاح'].includes(clean)) return false;
+      }
+      if (typeof raw === 'object') {
+        const nested = raw.status ?? raw.value ?? raw.scholarshipStatus ?? raw.data ?? raw.result;
+        if (nested !== undefined) return normalizeScholarshipStatus(nested);
+      }
+      return true;
+    }
+
+    function showToast(message, type = 'success') {
+      let toast = document.getElementById('globalToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'globalToast';
+        toast.className = 'fixed bottom-4 left-4 z-[70] max-w-sm rounded-2xl border px-4 py-3 text-xs font-bold shadow-xl backdrop-blur-sm transition-all duration-300';
+        document.body.appendChild(toast);
+      }
+
+      const styles = {
+        success: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300',
+        error: 'border-rose-500/20 bg-rose-500/10 text-rose-700 dark:text-rose-300',
+        info: 'border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300'
+      };
+
+      toast.className = `fixed bottom-4 left-4 z-[70] max-w-sm rounded-2xl border px-4 py-3 text-xs font-bold shadow-xl backdrop-blur-sm transition-all duration-300 ${styles[type] || styles.success}`;
+      toast.textContent = message;
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateY(0)';
+      clearTimeout(showToast.timeoutId);
+      showToast.timeoutId = setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+      }, 2600);
+    }
+
+    function setScholarshipToggleUI(isOpen) {
+      const badge = document.getElementById('scholarshipStatusBadge');
+      const text = document.getElementById('scholarshipStatusText');
+      const toggle = document.getElementById('scholarshipToggle');
+      const knob = document.getElementById('scholarshipToggleKnob');
+
+      if (badge) {
+        if (isOpen) {
+          badge.textContent = 'استقبال المنح: متاح حالياً';
+          badge.className = 'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300';
+        } else {
+          badge.textContent = 'استقبال المنح: مغلق حالياً';
+          badge.className = 'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold border border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300';
+        }
+      }
+
+      if (text) {
+        text.textContent = isOpen ? 'المتقدمون قادرون على إرسال طلباتهم الآن.' : 'تم إيقاف استقبال طلبات المنح مؤقتاً حتى إشعار لاحق.';
+      }
+
+      if (toggle) {
+        toggle.setAttribute('aria-checked', String(isOpen));
+        toggle.className = `relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-[#111b33] ${isOpen ? 'bg-emerald-500 focus:ring-emerald-400/60' : 'bg-rose-500 focus:ring-rose-400/60'}`;
+      }
+
+      if (knob) {
+        knob.className = `inline-block h-6 w-6 transform rounded-full bg-white shadow transition-transform duration-200 ${isOpen ? 'translate-x-7' : 'translate-x-1'}`;
+      }
+    }
+
+    async function fetchScholarshipStatus() {
+      const cached = localStorage.getItem(SCHOLARSHIP_STATUS_KEY);
+      if (cached !== null && cached !== undefined) {
+        const parsed = normalizeScholarshipStatus(cached);
+        setScholarshipToggleUI(parsed);
+      }
+
+      try {
+        const response = await fetch(`${SCRIPT_URL}?req=scholarship_status&_=${Date.now()}`);
+        const rawText = await response.text();
+        if (!rawText) return;
+
+        let parsedValue = rawText;
+        try {
+          parsedValue = JSON.parse(rawText);
+        } catch (e) {
+          // ignore
+        }
+
+        const normalized = normalizeScholarshipStatus(parsedValue);
+        setScholarshipToggleUI(normalized);
+        localStorage.setItem(SCHOLARSHIP_STATUS_KEY, normalized ? 'open' : 'closed');
+      } catch (err) {
+        console.warn('تعذر جلب حالة المنح:', err);
+      }
+    }
+
+    async function updateScholarshipStatus(isOpen) {
+      const nextStatus = isOpen ? 'open' : 'closed';
+      localStorage.setItem(SCHOLARSHIP_STATUS_KEY, nextStatus);
+      setScholarshipToggleUI(isOpen);
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'save_scholarship_status',
+            status: nextStatus,
+            value: isOpen ? 1 : 0
+          })
+        });
+      } catch (err) {
+        console.warn('تعذر إرسال حالة المنح إلى السيرفر:', err);
+      }
+
+      try {
+        await fetch(`${SCRIPT_URL}?req=scholarship_status&status=${nextStatus}`);
+      } catch (err) {
+        console.warn('تعذر تحديث حالة المنح عبر الاستعلام:', err);
+      }
+
+      showToast(isOpen ? 'تم فتح باب استقبال المنح بنجاح.' : 'تم إغلاق باب استقبال المنح بنجاح.', 'success');
+    }
+
     // إدارة المظهر
-    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
-    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke-linecap="round"/></svg>`;
+    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
     function applyTheme(isDark) {
       const html = document.documentElement;
@@ -292,8 +442,8 @@
       const btnManage = document.getElementById('tabBtnManage');
       const countBadge = document.getElementById('guidanceCountBadge');
 
-      const activeClasses = "px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center justify-center gap-2 border border-transparent ring-2 ring-gold-500/20";
-      const inactiveClasses = "px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-white dark:bg-clubNavy-cardDark border border-slate-200 dark:border-clubNavy-borderDark text-slate-600 dark:text-slate-300 hover:border-gold-500 flex items-center justify-center gap-2";
+      const activeClasses = 'px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-clubNavy-light text-white dark:bg-gold-500 dark:text-slate-950 flex items-center justify-center gap-2';
+      const inactiveClasses = 'px-3 py-2.5 sm:py-3 rounded-2xl text-xs font-bold transition shadow-sm bg-white dark:bg-clubNavy-cardDark border border-slate-200 dark:border-clubNavy-borderDark text-slate-700 dark:text-slate-200 flex items-center justify-center gap-2';
 
       if (tab === 'add') {
         viewAdd.classList.remove('hidden');
@@ -301,7 +451,7 @@
         btnAdd.className = activeClasses;
         btnManage.className = inactiveClasses;
         if (countBadge) {
-          countBadge.className = "text-[10px] px-2 py-0.5 rounded-full font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400";
+          countBadge.className = 'text-[10px] px-2 py-0.5 rounded-full font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400';
         }
       } else {
         viewAdd.classList.add('hidden');
@@ -309,7 +459,7 @@
         btnAdd.className = inactiveClasses;
         btnManage.className = activeClasses;
         if (countBadge) {
-          countBadge.className = "text-[10px] px-2 py-0.5 rounded-full font-mono bg-white/20 dark:bg-black/20 text-current";
+          countBadge.className = 'text-[10px] px-2 py-0.5 rounded-full font-mono bg-white/20 dark:bg-black/20 text-current';
         }
         fetchLiveGuidance();
       }
@@ -371,7 +521,7 @@
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد سجلات مطابقة لخيارات البحث.</div>`;
+        container.innerHTML = '<div class="py-12 text-center text-xs text-slate-400">لا توجد سجلات مطابقة لخيارات البحث.</div>';
         return;
       }
 
@@ -383,7 +533,7 @@
         const link = item['رابط الواتساب'] || item['رابط المجموعة'] || '';
 
         return `
-          <div class="p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:border-gold-500/40 transition">
+          <div class="p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div class="space-y-1 min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400">${major}</span>
@@ -396,16 +546,16 @@
             </div>
             <div class="flex items-center gap-1.5 sm:gap-2 self-end sm:self-auto shrink-0 flex-wrap">
               ${link ? `
-                <a href="${link}" target="_blank" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="فتح رابط الواتساب">
+                <a href="${link}" target="_blank" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1.5 transition">
                   <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                   <span>معاينة الرابط</span>
                 </a>
               ` : ''}
-              <button onclick="openEditGuidanceModal(${idx})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition" title="تعديل البيانات">
+              <button onclick="openEditGuidanceModal(${idx})" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1.5 transition">
                 <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                 <span>تعديل</span>
               </button>
-              <button onclick="deleteGuidanceByIndex(${idx})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1 transition" title="حذف السجل">
+              <button onclick="deleteGuidanceByIndex(${idx})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 text-xs font-bold flex items-center gap-1.5 transition">
                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 <span>حذف</span>
               </button>
@@ -446,7 +596,7 @@
         e.preventDefault();
         const submitBtn = document.getElementById('submitGuidBtn');
         submitBtn.disabled = true;
-        submitBtn.innerHTML = `<span>جاري الإدراج...</span>`;
+        submitBtn.innerHTML = '<span>جاري الإدراج...</span>';
 
         const newGuid = {
           major: document.getElementById('guidMajor').value.trim(),
@@ -472,17 +622,17 @@
 
         try {
           await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              action: "add_guidance",
+              action: 'add_guidance',
               ...newGuid
             })
           });
         } catch(err) {} finally {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4"></i><span>إدراج في دليل التوجيه فوراً</span>`;
+          submitBtn.innerHTML = '<i data-lucide="plus-circle" class="w-4 h-4"></i><span>إدراج في دليل التوجيه فوراً</span>';
           lucide.createIcons();
         }
       });
@@ -545,11 +695,11 @@
 
         try {
           await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              action: "edit_guidance",
+              action: 'edit_guidance',
               oldName: oldName,
               ...updated
             })
@@ -572,11 +722,11 @@
 
         try {
           await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              action: "delete_guidance",
+              action: 'delete_guidance',
               name: targetName
             })
           });
@@ -589,7 +739,15 @@
       renderGuidanceList(liveGuidanceList);
     });
 
-    // جلب البيانات فور تحميل الصفحة
+    const scholarshipToggle = document.getElementById('scholarshipToggle');
+    if (scholarshipToggle) {
+      scholarshipToggle.addEventListener('click', async () => {
+        const currentState = scholarshipToggle.getAttribute('aria-checked') === 'true';
+        await updateScholarshipStatus(!currentState);
+      });
+    }
+
+    fetchScholarshipStatus();
     fetchLiveGuidance();
   </script>
 </body>
