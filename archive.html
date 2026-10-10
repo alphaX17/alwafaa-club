@@ -36,6 +36,32 @@
     .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 4px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
+
+    /* تأثير الدخول المتتالي لعناصر القائمة الجانبية (Staggered Menu Cascade) */
+    .sidebar-link {
+      opacity: 0;
+      transform: translateX(28px);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                  transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  background-color 0.2s ease,
+                  color 0.2s ease;
+    }
+    #sidebar.menu-open .sidebar-link {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    #sidebar.menu-open .sidebar-link:nth-child(1) { transition-delay: 0.08s; }
+    #sidebar.menu-open .sidebar-link:nth-child(2) { transition-delay: 0.13s; }
+    #sidebar.menu-open .sidebar-link:nth-child(3) { transition-delay: 0.18s; }
+    #sidebar.menu-open .sidebar-link:nth-child(4) { transition-delay: 0.23s; }
+    #sidebar.menu-open .sidebar-link:nth-child(5) { transition-delay: 0.28s; }
+    #sidebar.menu-open .sidebar-link:nth-child(6) { transition-delay: 0.33s; }
+    #sidebar.menu-open .sidebar-link:nth-child(7) { transition-delay: 0.38s; }
+
+    #sidebar:not(.menu-open) .sidebar-link {
+      transition-delay: 0s !important;
+      transition-duration: 0.15s !important;
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
@@ -194,40 +220,40 @@
       </div>
 
       <nav class="p-3.5 sm:p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-140px)] custom-scrollbar">
-        <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+        <a href="index.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
           <span>الرئيسية (الأنشطة والإعلانات)</span>
         </a>
-        <a href="scholarship.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+        <a href="scholarship.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="graduation-cap" class="w-4 h-4 text-slate-400"></i>
           <span>المنح الطلابية (تسجيل مباشر)</span>
         </a>
-        <a href="resources.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+        <a href="resources.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="folder-down" class="w-4 h-4 text-slate-400 shrink-0"></i>
           <div>
             <p>بنك الموارد الرقمية والامتحانات</p>
             <p class="text-[10px] text-slate-400 dark:text-slate-500">كتب PDF • نماذج سابقة • ملخصات</p>
           </div>
         </a>
-        <a href="books.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+        <a href="books.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="book-open" class="w-4 h-4 text-slate-400 shrink-0"></i>
           <div>
             <p>استعارة وتبادل الكتب الورقية</p>
             <p class="text-[10px] text-slate-400 dark:text-slate-500">حجز أو تبرع بالنسخ الفيزيائية</p>
           </div>
         </a>
-        <a href="faculty.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+        <a href="faculty.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
           <span>دليل الأساتذة والساعات المكتبية</span>
         </a>
-        <a href="guidance.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+        <a href="guidance.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="message-circle" class="w-4 h-4 text-slate-400 shrink-0"></i>
           <div>
             <p>شبكة التوجيه وممثلو الاختصاصات</p>
             <span class="text-[10px] text-slate-400 dark:text-slate-500">مجموعات الواتساب والتواصل المباشر</span>
           </div>
         </a>
-        <a href="archive.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
+        <a href="archive.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
           <i data-lucide="camera" class="w-4 h-4"></i>
           <span>أرشيف الفعاليات والأنشطة</span>
         </a>
@@ -529,11 +555,18 @@
       if (sidebar && menuOverlay) {
         sidebar.classList.remove('translate-x-full');
         menuOverlay.classList.remove('opacity-0', 'pointer-events-none');
+        // تفعيل انزلاق العناصر المتدرج بعد فتح القائمة بلحظات
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            sidebar.classList.add('menu-open');
+          }, 40);
+        });
       }
     }
 
     function closeSidebar() {
       if (sidebar && menuOverlay) {
+        sidebar.classList.remove('menu-open');
         sidebar.classList.add('translate-x-full');
         menuOverlay.classList.add('opacity-0', 'pointer-events-none');
       }
