@@ -308,7 +308,7 @@
     <!-- نافذة المحادثة المنبثقة المتجاوبة -->
     <div id="chatWindow" class="hidden mb-3 w-[calc(100vw-2rem)] sm:w-[380px] max-w-sm h-[70dvh] sm:h-[480px] max-h-[540px] rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl flex flex-col overflow-hidden transition-all">
       
-      <!-- رأس نافذة الشات الثابت دائماً -->
+      <!-- رأس نافذة الشات الثابت -->
       <div class="p-3.5 bg-slate-100 dark:bg-[#111b33] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-full bg-gold-500/20 text-gold-500 flex items-center justify-center">
@@ -333,11 +333,11 @@
         </div>
       </div>
 
-      <!-- خانة الإدخال مع التحدث الصوتي المستمر والإرسال -->
+      <!-- خانة الإدخال مع التحدث الصوتي والإرسال -->
       <form id="chatForm" class="p-2 sm:p-2.5 bg-slate-50 dark:bg-[#080e1c] border-t border-slate-200 dark:border-slate-800 flex items-center gap-1.5 sm:gap-2 shrink-0">
         <input id="chatInput" type="text" placeholder="اكتب استفسارك أو تحدث صوتياً..." required class="flex-1 text-base sm:text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition">
         
-        <button type="button" id="voiceBtn" title="تحدث صوتياً (اضغط للبدء واضغط للإيقاف)" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-gold-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition shrink-0">
+        <button type="button" id="voiceBtn" title="تحدث صوتياً" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-gold-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition shrink-0">
           <i data-lucide="mic" class="w-4 h-4"></i>
         </button>
 
@@ -391,7 +391,6 @@
       if (sidebar && menuOverlay) {
         sidebar.classList.remove('translate-x-full');
         menuOverlay.classList.remove('opacity-0', 'pointer-events-none');
-        // تفعيل انزلاق العناصر المتدرج بعد فتح القائمة بلحظات
         requestAnimationFrame(() => {
           setTimeout(() => {
             sidebar.classList.add('menu-open');
@@ -581,11 +580,12 @@
     const chatMessages = document.getElementById('chatMessages');
     const voiceBtn = document.getElementById('voiceBtn');
 
-    const GEMINI_API_KEY = "AQ.Ab8RN6JaPJEfgZ9nufs7JhCSvic8PqZ6eD5XkzxFnaSNkzRYXA";
+    // تم تحديث مفتاح الـ API المعتمد
+    const GEMINI_API_KEY = "AQ.Ab8RN6JPIZ_lmnv60KZSoY-ypPF_-fTq99qAGimo-jyJmYGKNA";
 
     let chatHistory = [];
 
-    // ==================== موسوعة التلقين الفائق والمكثف (x20) ====================
+    // موسوعة التوجيه الأكاديمي الحصرية
     const SYSTEM_INSTRUCTION = `
 أنت "المستشار الأكاديمي الرقمي الرسمي المعتمد" لمنصة "نادي الوفاء" في الجامعة اللبنانية الدولية (LIU) - فرع صور.
 أنت ذكاء اصطناعي أكاديمي فائق الفطنة، تملك معرفة شاملة بجميع لوائح وقوانين الجامعة وخدمات النادي وممثلي الأقسام في فرع صور.
@@ -625,7 +625,7 @@
 1. نظام المعدل التراكمي (GPA):
    - السلم من 4.00: A=4.0, B+=3.5, B=3.0, C+=2.5, C=2.0, D+=1.5, D=1.0, F=0.0.
    - الإنذار الأكاديمي (Academic Probation): يقع الطالب تحت الإنذار إذا نزل الـ CGPA عن 2.00/4.00.
-   - طريقة رفع المعدل الأسرع: إعادة المواد ذات العلامات (D أو D+ أو F) لأن العلامة الجديدة تمحو وتستبدل القديمة تماماً من حساب المعدل التراكمي، مما يرفع الـ GPA بقفزات سريعة.
+   - طريقة رفع المعدل الأسرع: إعادة المواد ذات العلامات (D أو D+ أو F) لأن العلامة الجديدة تمحو وتستبدل القديمة تماماً من حساب المعدل التراكمي.
    - لائحة الشرف (Dean's Honor List): تتطلب فصلاً دراسياً لا يقل عن 15 رصيداً بمعدل فصلي 3.50 فما فوق دون أي رسوب.
 
 2. العبء الدراسي والساعات (Credit Limits):
@@ -703,6 +703,24 @@
     if (closeChatBtn) closeChatBtn.addEventListener('click', closeChat);
     if (chatBackdrop) chatBackdrop.addEventListener('click', closeChat);
 
+    // دالة تنسيق الردود الذكية وتحويل الروابط لنقر مباشر بأمان
+    function formatBotReply(rawText) {
+      const escapeDiv = document.createElement('div');
+      escapeDiv.textContent = rawText;
+      let text = escapeDiv.innerHTML;
+
+      // تحويل الروابط إلى عناصر قابلة للنقر
+      text = text.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-gold-500 hover:underline font-bold break-all">$1</a>');
+      // تحويل الإيميلات
+      text = text.replace(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/g, '<a href="mailto:$1" class="text-gold-500 hover:underline font-bold">$1</a>');
+      // تنسيق العناوين العريضة
+      text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      // الأسطر الجديدة
+      text = text.replace(/\n/g, '<br>');
+
+      return text;
+    }
+
     function addMessage(text, isUser = false) {
       const msgDiv = document.createElement('div');
       msgDiv.className = isUser ? 'flex justify-end' : 'flex items-start gap-2 max-w-[90%]';
@@ -712,10 +730,15 @@
         ? 'p-3 rounded-2xl rounded-tl-none bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-medium' 
         : 'p-3 rounded-2xl rounded-tr-none bg-slate-100 dark:bg-[#131e3a] text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-800 leading-relaxed';
       
-      content.textContent = text;
+      if (isUser) {
+        content.textContent = text;
+      } else {
+        content.innerHTML = formatBotReply(text);
+      }
+
       msgDiv.appendChild(content);
       chatMessages.appendChild(msgDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+      chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
     }
 
     function getFallbackResponse(text) {
@@ -782,8 +805,11 @@
     async function queryAI(userPrompt) {
       const loadingDiv = document.createElement('div');
       loadingDiv.id = 'aiLoading';
-      loadingDiv.className = 'flex items-start gap-2 max-w-[90%] text-slate-400 text-[11px]';
-      loadingDiv.textContent = 'جاري تحليل الاستفسار الأكاديمي...';
+      loadingDiv.className = 'flex items-center gap-2 max-w-[90%] text-slate-400 text-[11px] p-2';
+      loadingDiv.innerHTML = `
+        <span class="inline-block w-2 h-2 rounded-full bg-gold-500 animate-ping"></span>
+        <span>جاري تحليل الاستفسار الأكاديمي...</span>
+      `;
       chatMessages.appendChild(loadingDiv);
       chatMessages.scrollTop = chatMessages.scrollHeight;
 
@@ -791,6 +817,11 @@
         role: "user",
         parts: [{ text: userPrompt }]
       });
+
+      // الحفاظ على سياق المحادثة خفيفاً وسريع الاستجابة
+      if (chatHistory.length > 10) {
+        chatHistory = chatHistory.slice(-10);
+      }
 
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
@@ -848,7 +879,7 @@
       });
     }
 
-    // ==================== 5. ميزة التحدث الصوتي المباشر المطور (Continuous) ====================
+    // ==================== 5. ميزة التحدث الصوتي المصححة ====================
     let recognition = null;
     let isRecording = false;
 
@@ -857,8 +888,8 @@
     if (SpeechRecognition) {
       recognition = new SpeechRecognition();
       recognition.lang = 'ar-LB';
-      recognition.continuous = true;
-      recognition.interimResults = true;
+      recognition.continuous = false;
+      recognition.interimResults = false;
 
       recognition.onstart = () => {
         isRecording = true;
@@ -866,15 +897,20 @@
           voiceBtn.classList.add('bg-rose-500', 'text-white', 'animate-pulse');
           voiceBtn.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
         }
-        chatInput.placeholder = 'جارٍ الاستماع... اضغط على المايك مرة أخرى عند الانتهاء';
+        chatInput.placeholder = 'جارٍ الاستماع إليك... تحدث الآن';
       };
 
       recognition.onresult = (event) => {
         let transcript = '';
-        for (let i = event.results.length; i < event.results.length; i++) {
+        for (let i = 0; i < event.results.length; i++) {
           transcript += event.results[i][0].transcript;
         }
         chatInput.value = transcript;
+        if (transcript.trim()) {
+          setTimeout(() => {
+            chatForm.dispatchEvent(new Event('submit'));
+          }, 400);
+        }
       };
 
       recognition.onerror = () => {
@@ -882,9 +918,7 @@
       };
 
       recognition.onend = () => {
-        if (isRecording) {
-          stopVoiceRecognition();
-        }
+        stopVoiceRecognition();
       };
     } else {
       if (voiceBtn) voiceBtn.style.display = 'none';
