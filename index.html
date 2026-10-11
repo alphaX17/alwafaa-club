@@ -531,6 +531,594 @@
     const chatMessages = document.getElementById('chatMessages');
     const voiceBtn = document.getElementById('voiceBtn');
 
+    // المفتاح الجديد
+    const GEMINI_API_KEY = "AQ.Ab8RN6LmVn2easecO0djurWryd0if1aBzMnYJ2wfUgzInKpU6Q";
+
+    let chatHistory = [];
+
+    const SYSTEM_INSTRUCTION = `
+أنت "المساعد الذكي لنادي الوفاء" في الجامعة اللبنانية الدولية (LIU) - فرع صور.
+أنت نموذج ذكاء اصطناعي فائق الذكاء، ودود، متعاون، ومتمكن جداً في الإجابة.
+
+صلاحياتك وقدراتك:
+1. تجيب على جميع استفسارات الطلاب أياً كانت:
+   - شرح الدروس والمفاهيم الأكاديمية (هندسة، طب، صيدلة، أعمال، علوم).
+   - كتابة وحل الأكواد البرمجية، المعادلات الرياضية، والفيزياء.
+   - نصائح دراسية عامة واستفسارات ثقافية وعلمية متنوعة.
+2. إذا سألك الطالب عن جامعة LIU أو نادي الوفاء (فرع صور)، قدم له معلوماتك الموثوقة:
+   - نظام الـ GPA من 4.00 (الإنذار يبدأ تحت 2.00، وأسرع طريقة لرفعه إعادة مواد D أو F).
+   - نسبة الغياب القصوى 15% (3 غيابات فقط للمادة بمحاضرتين أسبوعياً، والرابع حرمان FA).
+   - السحب والإضافة (Drop & Add) خلال الأسبوع الأول من الفصل.
+   - خدمات المنصة: استمارة المنح (scholarship.html)، بنك الامتحانات (resources.html)، استعارة الكتب (books.html)، دليل الأساتذة (faculty.html)، شبكة التوجيه (guidance.html).
+   - مسؤول هندسة الميكانيك: 71336458 | مسؤول الكمبيوتر: 03945021 | مسؤول الاتصالات: 81604305.
+   - الدائرة المالية: gheya.elsamra@liu.edu.lb | المكتبة: hiba.hammoud@liu.edu.lb.
+3. تجنب الرموز التعبيرية (Emojis) الزائدة، ورتب إجاباتك بنقاط واضحة ومباشرة.
+`;
+
+    function closeChat() {
+      chatWindow.classList.add('hidden');
+      if (chatBackdrop) chatBackdrop.classList.add('hidden');
+      stopVoiceRecognition();
+    }
+
+    if (toggleChatBtn) {
+      toggleChatBtn.addEventListener('click', () => {
+        const isOpening = chatWindow.classList.contains('hidden');
+        chatWindow.classList.toggle('hidden');
+        if (chatBackdrop) chatBackdrop.classList.toggle('hidden', !isOpening);
+        if (isOpening) {
+          if (window.innerWidth >= 640) chatInput.focus();
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        } else {
+          stopVoiceRecognition();
+        }
+      });
+    }
+
+    if (closeChatBtn) closeChatBtn.addEventListener('click', closeChat);
+    if (chatBackdrop) chatBackdrop.addEventListener('click', closeChat);
+
+    function formatBotReply(rawText) {
+      const escapeDiv = document.createElement('div');
+      escapeDiv.textContent = rawText;
+      let text = escapeDiv.innerHTML;
+      text = text.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-gold-500 underline font-bold break-all">$1</a>');
+      text = text.replace(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/g, '<a href="mailto:$1" class="text-gold-500 underline font-bold">$1</a>');
+      text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      text = text.replace(/\n/g, '<br>');
+      return text;
+    }
+
+    function addMessage(text, isUser = false) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = isUser ? 'flex justify-end' : 'flex items-start gap-2 max-w-[90%]';
+
+      const content = document.createElement('div');
+      content.className = isUser 
+        ? 'p-3 rounded-2xl rounded-tl-none bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-medium' 
+        : 'p-3 rounded-2xl rounded-tr-none bg-slate-100 dark:bg-[#131e3a] text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-800 leading-relaxed';
+      
+      if (isUser) {
+        content.textContent = text;
+      } else {
+        content.innerHTML = formatBotReply(text);
+      }
+
+      msgDiv.appendChild(content);
+      chatMessages.appendChild(msgDiv);
+      chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
+    }
+
+    async function queryAI(userPrompt) {
+      const loadingDiv = document.createElement('div');
+      loadingDiv.id = 'aiLoading';
+      loadingDiv.className = 'flex items-center gap-2 max-w-[90%] text-slate-400 text-[11px] p-2';
+      loadingDiv.innerHTML = `<span class="inline-block w-2 h-2 rounded-full bg-gold-500 animate-ping"></span><span>جاري التفكير وصياغة الإجابة...</span>`;
+      chatMessages.appendChild(loadingDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      chatHistory.push({ role: "user", parts: [{ text: userPrompt }] });
+      if (chatHistory.length > 10) chatHistory = chatHistory.slice(-10);
+
+      const payload = {
+        system_instruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
+        contents: chatHistory,
+        generationConfig: {
+          temperature: 0.5,
+          maxOutputTokens: 2048
+        }
+      };
+
+      try {
+        // 1. المحاولة الأولى: عبر ترويسة Authorization Bearer (وهو ما طلبه خادم جوجل)
+        let response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${GEMINI_API_KEY}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        // 2. المحاولة الثانية: إذا لم يستجب الـ Bearer، الإرسال عبر باراميتر الرابط ?key=
+        if (!response.ok && (response.status === 401 || response.status === 403)) {
+          response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+          });
+        }
+
+        // 3. المحاولة الثالثة: تجربة gemini-1.5-flash كاحتياط
+        if (!response.ok && response.status === 404) {
+          response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${GEMINI_API_KEY}`
+            },
+            body: JSON.stringify(payload)
+          });
+        }
+
+        const data = await response.json();
+        document.getElementById('aiLoading')?.remove();
+
+        if (response.ok && data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+          const botReply = data.candidates[0].content.parts[0].text.trim();
+          addMessage(botReply, false);
+          chatHistory.push({ role: "model", parts: [{ text: botReply }] });
+        } else {
+          chatHistory.pop();
+          const errDetail = data?.error?.message || "تعذر معالجة الطلب حالياً.";
+          addMessage(`⚠️ استجابة الخادم: ${errDetail}`, false);
+        }
+      } catch (error) {
+        document.getElementById('aiLoading')?.remove();
+        chatHistory.pop();
+        addMessage("تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت.", false);
+      }
+    }
+
+    if (chatForm) {
+      chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const userText = chatInput.value.trim();
+        if (!userText) return;
+        addMessage(userText, true);
+        chatInput.value = '';
+        stopVoiceRecognition();
+        queryAI(userText);
+      });
+    }
+
+    // التعرف الصوتي المباشر
+    let recognition = null;
+    let isRecording = false;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.lang = 'ar-LB';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onstart = () => {
+        isRecording = true;
+        if (voiceBtn) {
+          voiceBtn.classList.add('bg-rose-500', 'text-white', 'animate-pulse');
+          voiceBtn.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+        }
+        chatInput.placeholder = 'جارٍ الاستماع... تحدث الآن';
+      };
+
+      recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = 0; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        chatInput.value = transcript;
+        if (transcript.trim()) {
+          setTimeout(() => { chatForm.dispatchEvent(new Event('submit')); }, 400);
+        }
+      };
+
+      recognition.onerror = () => { stopVoiceRecognition(); };
+      recognition.onend = () => { stopVoiceRecognition(); };
+    } else {
+      if (voiceBtn) voiceBtn.style.display = 'none';
+    }
+
+    function stopVoiceRecognition() {
+      if (recognition && isRecording) { try { recognition.stop(); } catch (e) {} }
+      isRecording = false;
+      if (voiceBtn) {
+        voiceBtn.classList.remove('bg-rose-500', 'text-white', 'animate-pulse');
+        voiceBtn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+      }
+      if (chatInput) chatInput.placeholder = 'اكتب سؤالك هنا...';
+    }
+
+    if (voiceBtn && recognition) {
+      voiceBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!isRecording) {
+          try {
+            chatInput.value = '';
+            recognition.start();
+          } catch (err) { stopVoiceRecognition(); }
+        } else {
+          stopVoiceRecognition();
+        }
+      });
+    }
+
+    // محرك تثبيت PWA
+    let deferredPrompt;
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(() => {}); });
+    }
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const pwaBanner = document.getElementById('pwaInstallBanner');
+      if (pwaBanner && !localStorage.getItem('nadi_pwa_dismissed')) {
+        pwaBanner.classList.remove('hidden');
+        lucide.createIcons();
+      }
+    });
+
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((res) => {
+          if (res.outcome === 'accepted') document.getElementById('pwaInstallBanner')?.classList.add('hidden');
+          deferredPrompt = null;
+        });
+      }
+    }
+
+    function dismissPWA() {
+      document.getElementById('pwaInstallBanner')?.classList.add('hidden');
+      localStorage.setItem('nadi_pwa_dismissed', 'true');
+    }
+  </script>
+</body>
+</html>
+-cols-3 gap-4 sm:gap-6 min-h-[160px]">
+        <div class="col-span-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700">
+            <div class="h-44 w-full rounded-xl skeleton-shimmer mb-4"></div>
+            <div class="h-5 w-24 rounded-full skeleton-shimmer mb-3"></div>
+            <div class="h-6 w-3/4 rounded-lg skeleton-shimmer mb-2"></div>
+            <div class="h-4 w-full rounded skeleton-shimmer mb-1"></div>
+            <div class="h-4 w-2/3 rounded skeleton-shimmer mb-4"></div>
+            <div class="h-10 w-full rounded-xl skeleton-shimmer"></div>
+          </div>
+          <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700">
+            <div class="h-44 w-full rounded-xl skeleton-shimmer mb-4"></div>
+            <div class="h-5 w-24 rounded-full skeleton-shimmer mb-3"></div>
+            <div class="h-6 w-3/4 rounded-lg skeleton-shimmer mb-2"></div>
+            <div class="h-4 w-full rounded skeleton-shimmer mb-1"></div>
+            <div class="h-4 w-2/3 rounded skeleton-shimmer mb-4"></div>
+            <div class="h-10 w-full rounded-xl skeleton-shimmer"></div>
+          </div>
+          <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700">
+            <div class="h-44 w-full rounded-xl skeleton-shimmer mb-4"></div>
+            <div class="h-5 w-24 rounded-full skeleton-shimmer mb-3"></div>
+            <div class="h-6 w-3/4 rounded-lg skeleton-shimmer mb-2"></div>
+            <div class="h-4 w-full rounded skeleton-shimmer mb-1"></div>
+            <div class="h-4 w-2/3 rounded skeleton-shimmer mb-4"></div>
+            <div class="h-10 w-full rounded-xl skeleton-shimmer"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== التذييل السفلي ==================== -->
+  <footer class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
+    نادي الوفاء — الجامعة اللبنانية الدولية في صور • المنصة الطلابية الرسمية
+  </footer>
+
+  <!-- ==================== القائمة الجانبية (SLIDE-OVER MENU) ==================== -->
+  <div id="menuOverlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <aside id="sidebar" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0c1427] border-l border-slate-200 dark:border-clubNavy-borderDark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
+    <div>
+      <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-clubNavy-borderDark flex items-center justify-between">
+        <div>
+          <h2 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">الوصول السريع لكافة الخدمات</p>
+        </div>
+        <button id="closeMenuBtn" aria-label="إغلاق القائمة" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-red-500 transition active:scale-90">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <nav class="p-3.5 sm:p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-140px)] custom-scrollbar">
+        <a href="#" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold text-xs">
+          <i data-lucide="layout-grid" class="w-4 h-4"></i>
+          <span>الرئيسية (الأنشطة والإعلانات)</span>
+        </a>
+        <a href="scholarship.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="graduation-cap" class="w-4 h-4 text-slate-400"></i>
+          <span>المنح الطلابية (تسجيل مباشر)</span>
+        </a>
+        <a href="resources.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="folder-down" class="w-4 h-4 text-slate-400 shrink-0"></i>
+          <div>
+            <p>بنك الموارد الرقمية والامتحانات</p>
+            <p class="text-[10px] text-slate-400 dark:text-slate-500">كتب PDF • نماذج سابقة • ملخصات</p>
+          </div>
+        </a>
+        <a href="books.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="book-open" class="w-4 h-4 text-slate-400 shrink-0"></i>
+          <div>
+            <p>استعارة وتبادل الكتب الورقية</p>
+            <p class="text-[10px] text-slate-400 dark:text-slate-500">حجز أو تبرع بالنسخ الفيزيائية</p>
+          </div>
+        </a>
+        <a href="faculty.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+          <span>دليل الأساتذة والساعات المكتبية</span>
+        </a>
+        <a href="guidance.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="message-circle" class="w-4 h-4 text-slate-400"></i>
+          <div>
+            <p>شبكة التوجيه وممثلو الاختصاصات</p>
+            <span class="text-[10px] text-slate-400 dark:text-slate-500">مجموعات الواتساب والتواصل المباشر</span>
+          </div>
+        </a>
+        <a href="archive.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
+          <i data-lucide="camera" class="w-4 h-4 text-slate-400"></i>
+          <span>أرشيف الفعاليات والأنشطة</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="p-4 border-t border-slate-200 dark:border-clubNavy-borderDark text-[11px] text-slate-500 text-center">
+      نادي الوفاء — الجامعة اللبنانية الدولية في صور
+    </div>
+  </aside>
+
+  <!-- ==================== المساعد الذكي التفاعلي ==================== -->
+  <div id="chatBackdrop" class="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs hidden transition-opacity"></div>
+
+  <div class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50 flex flex-col items-start">
+    
+    <div id="chatWindow" class="hidden mb-3 w-[calc(100vw-2rem)] sm:w-[380px] max-w-sm h-[70dvh] sm:h-[480px] max-h-[540px] rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] shadow-2xl flex flex-col overflow-hidden transition-all">
+      
+      <div class="p-3.5 bg-slate-100 dark:bg-[#111b33] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-gold-500/20 text-gold-500 flex items-center justify-center">
+            <i data-lucide="bot" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-xs font-bold text-slate-900 dark:text-white">مساعد نادي الوفاء الذكي</h3>
+            <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">متصل بمحرك Gemini AI</p>
+          </div>
+        </div>
+        <button id="closeChatBtn" aria-label="إغلاق الشات" class="p-1.5 rounded-lg text-slate-500 hover:text-red-500 hover:bg-slate-200 dark:hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div id="chatMessages" class="flex-1 p-3.5 sm:p-4 overflow-y-auto space-y-3 text-xs leading-relaxed custom-scrollbar">
+        <div class="flex items-start gap-2 max-w-[90%]">
+          <div class="p-3 rounded-2xl rounded-tr-none bg-slate-100 dark:bg-[#131e3a] text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-800">
+            أهلاً بك! أنا مساعد نادي الوفاء الذكي. اسألني عن أي شيء تريده: شرح المواد والمقررات، حلول برمجية ورياضية، لوائح جامعة LIU والمعدل التراكمي (GPA)، المنح والكتب، أو أي موضوع ترغب في استكشافه.
+          </div>
+        </div>
+      </div>
+
+      <form id="chatForm" class="p-2 sm:p-2.5 bg-slate-50 dark:bg-[#080e1c] border-t border-slate-200 dark:border-slate-800 flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <input id="chatInput" type="text" placeholder="اكتب سؤالك هنا..." required class="flex-1 text-base sm:text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition">
+        
+        <button type="button" id="voiceBtn" title="تحدث صوتياً" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-gold-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition shrink-0">
+          <i data-lucide="mic" class="w-4 h-4"></i>
+        </button>
+
+        <button type="submit" id="sendBtn" title="إرسال" class="p-2.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 hover:opacity-90 transition shrink-0">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </form>
+
+    </div>
+
+    <button id="toggleChatBtn" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs shadow-lg hover:shadow-xl hover:scale-105 transition-all">
+      <i data-lucide="bot" class="w-4 h-4"></i>
+      <span>المساعد الذكي</span>
+    </button>
+
+  </div>
+
+  <!-- تثبيت تطبيق الويب PWA -->
+  <div id="pwaInstallBanner" class="hidden fixed bottom-4 inset-x-3.5 sm:inset-x-auto sm:left-6 sm:bottom-6 z-50 max-w-sm rounded-3xl border border-gold-500/40 bg-white/95 dark:bg-[#0c1427]/95 backdrop-blur-md p-4 shadow-2xl transition-all">
+    <div class="flex items-center gap-3">
+      <img src="logo.png" alt="شعار النادي" class="w-10 h-10 object-contain rounded-2xl bg-gold-500/10 p-1 shrink-0">
+      <div class="space-y-0.5 min-w-0 flex-1">
+        <h4 class="font-bold text-xs text-slate-900 dark:text-white">تطبيق نادي الوفاء</h4>
+        <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">تثبيت المنصة كتطبيق مباشر على هاتفك</p>
+      </div>
+      <button onclick="dismissPWA()" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+    <div class="mt-3 flex items-center gap-2">
+      <button onclick="installPWA()" class="flex-1 py-2.5 px-3 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow transition">
+        <i data-lucide="download" class="w-3.5 h-3.5"></i>
+        <span>تثبيت الآن</span>
+      </button>
+      <button onclick="dismissPWA()" class="py-2.5 px-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs">
+        لاحقاً
+      </button>
+    </div>
+  </div>
+
+  <!-- السكربت البرمجي -->
+  <script>
+    lucide.createIcons();
+
+    // القائمة الجانبية
+    const openMenuBtn = document.getElementById('openMenuBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const sidebar = document.getElementById('sidebar');
+
+    function openSidebar() {
+      if (sidebar && menuOverlay) {
+        sidebar.classList.remove('translate-x-full');
+        menuOverlay.classList.remove('opacity-0', 'pointer-events-none');
+        requestAnimationFrame(() => {
+          setTimeout(() => { sidebar.classList.add('menu-open'); }, 40);
+        });
+      }
+    }
+    function closeSidebar() {
+      if (sidebar && menuOverlay) {
+        sidebar.classList.remove('menu-open');
+        sidebar.classList.add('translate-x-full');
+        menuOverlay.classList.add('opacity-0', 'pointer-events-none');
+      }
+    }
+    if (openMenuBtn) openMenuBtn.addEventListener('click', openSidebar);
+    if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeSidebar);
+    if (menuOverlay) menuOverlay.addEventListener('click', closeSidebar);
+
+    // إدارة المظهر
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIconContainer = document.getElementById('themeIconContainer');
+    const themeText = document.getElementById('themeText');
+    const htmlElement = document.documentElement;
+
+    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+
+    function applyTheme(isDark) {
+      if (isDark) {
+        htmlElement.classList.add('dark');
+        if (themeText) themeText.textContent = 'الليلي';
+        if (themeIconContainer) themeIconContainer.innerHTML = moonSvg;
+      } else {
+        htmlElement.classList.remove('dark');
+        if (themeText) themeText.textContent = 'النهاري';
+        if (themeIconContainer) themeIconContainer.innerHTML = sunSvg;
+      }
+    }
+    applyTheme(localStorage.getItem('clubTheme') !== 'light');
+
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+        const isDark = !htmlElement.classList.contains('dark');
+        applyTheme(isDark);
+        localStorage.setItem('clubTheme', isDark ? 'dark' : 'light');
+      });
+    }
+
+    // جلب بيانات الفعاليات
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
+
+    function cleanDirectImageUrl(raw) {
+      if (!raw) return '';
+      const match = String(raw).trim().match(/https?:\/\/[^\s"'<>]+/);
+      return match ? match[0] : raw;
+    }
+
+    function renderHomePage(data) {
+      if (!data) return;
+      const sec = document.getElementById('announcementSection');
+      const txt = document.getElementById('announcementText');
+      const btn = document.getElementById('announcementBtn');
+      const btnTxt = document.getElementById('announcementBtnText');
+
+      if (data.announcement) {
+        if (data.announcement.active === false || String(data.announcement.active).toLowerCase() === 'false') {
+          if (sec) sec.classList.add('hidden');
+        } else {
+          if (sec) sec.classList.remove('hidden');
+          if (txt && data.announcement.text) txt.innerHTML = `<strong class="text-gold-600 dark:text-gold-400">إعلان هام:</strong> ${data.announcement.text}`;
+          if (btn && data.announcement.btnLink) btn.setAttribute('href', data.announcement.btnLink);
+          if (btnTxt && data.announcement.btnText) btnTxt.textContent = data.announcement.btnText;
+        }
+      }
+
+      if (data.activities && Array.isArray(data.activities)) {
+        const homeActivities = data.activities.filter(act => {
+          const isFeatured = String(act['عرض في الرئيسية'] || act['عرض في الرئسية'] || act.featured || '').trim() === 'نعم';
+          const isHidden = ['مخفي', 'hidden', 'معطل'].includes(String(act['الحالة'] || act.status || '').trim());
+          const hasTitle = String(act['العنوان'] || act.title || '').trim() !== '';
+          return isFeatured && !isHidden && hasTitle;
+        });
+
+        const grid = document.getElementById('activitiesGrid');
+        if (grid) {
+          if (homeActivities.length === 0) {
+            grid.innerHTML = `<div class="col-span-full py-12 text-center text-xs text-slate-400">لا توجد فعاليات معروضة حالياً في الصفحة الرئيسية.</div>`;
+          } else {
+            grid.innerHTML = homeActivities.slice(0, 3).map(act => {
+              const title = act['العنوان'] || act.title || 'فعالية جامعية';
+              const date = act['التاريخ'] || act.date || '';
+              const cat = act['التصنيف'] || act.category || 'نشاط جامعي';
+              const desc = act['التفاصيل الكاملة'] || act['الوصف المختصر'] || act.desc || '';
+              const imgs = String(act['رابط الصورة'] || act.imageUrl || '').split(',').map(cleanDirectImageUrl).filter(Boolean);
+              const coverImg = imgs[0] || '';
+
+              const imgMarkup = coverImg 
+                ? `<img src="${coverImg}" alt="${title}" referrerpolicy="no-referrer" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400\\'><i data-lucide=\\'image\\' class=\\'w-10 h-10 opacity-40\\'></i></div>'; lucide.createIcons();">`
+                : `<div class="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400"><i data-lucide="image" class="w-10 h-10 opacity-40"></i></div>`;
+
+              return `
+                <article class="rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200 shadow-sm">
+                  <div>
+                    <div class="h-44 relative flex items-center justify-center overflow-hidden bg-slate-100 dark:bg-slate-900">
+                      ${imgMarkup}
+                      <span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-clubNavy-light text-white text-[11px] font-bold shadow-sm">${cat}</span>
+                    </div>
+                    <div class="p-4 sm:p-5 space-y-2">
+                      <h4 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white line-clamp-1">${title}</h4>
+                      <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-300 line-clamp-3">${desc}</p>
+                    </div>
+                  </div>
+                  <div class="px-4 sm:px-5 py-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                    <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-3.5 h-3.5"></i> ${date}</span>
+                    <a href="archive.html" class="text-gold-600 dark:text-gold-400 font-bold hover:underline flex items-center gap-1">
+                      <span>التفاصيل</span>
+                      <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                    </a>
+                  </div>
+                </article>
+              `;
+            }).join('');
+            lucide.createIcons();
+          }
+        }
+      }
+    }
+
+    async function fetchLiveHomeData() {
+      const cached = localStorage.getItem('nadi_home_cache');
+      if (cached) { try { renderHomePage(JSON.parse(cached)); } catch (e) {} }
+      if (!SCRIPT_URL) return;
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=home&bust=${Date.now()}`);
+        const freshData = await res.json();
+        renderHomePage(freshData);
+        localStorage.setItem('nadi_home_cache', JSON.stringify(freshData));
+      } catch (err) {}
+    }
+    fetchLiveHomeData();
+
+    // ==================== المساعد الذكي ====================
+    const toggleChatBtn = document.getElementById('toggleChatBtn');
+    const closeChatBtn = document.getElementById('closeChatBtn');
+    const chatWindow = document.getElementById('chatWindow');
+    const chatBackdrop = document.getElementById('chatBackdrop');
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+    const chatMessages = document.getElementById('chatMessages');
+    const voiceBtn = document.getElementById('voiceBtn');
+
     // المفتاح المعتمد من صورتك
     const GEMINI_API_KEY = "AQ.Ab8RN6JPIZ_lmnv60KZSoY-ypPF_-fTq99qAGimo-jyJmYGKNA";
 
