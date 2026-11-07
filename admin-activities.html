@@ -116,8 +116,17 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
           <div>
-            <label class="block text-xs font-bold mb-1">تاريخ وموعد النشاط *</label>
-            <input id="actDate" type="text" required placeholder="مثال: الخميس 15 تشرين الأول 2026 - الساعة 11:00 صباحاً" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <label for="actDate" class="block text-xs font-bold mb-1 text-slate-900 dark:text-white flex items-center justify-between">
+              <span>تاريخ وموعد النشاط <span class="text-rose-500">*</span></span>
+              <span class="text-[10px] font-normal text-slate-400">تقويم تفاعلي</span>
+            </label>
+            <div class="relative">
+              <input id="actDate" type="date" required class="w-full text-xs p-3 pl-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-gold-500/40 focus:border-gold-500 transition cursor-pointer">
+              <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gold-500">
+                <i data-lucide="calendar" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div id="actDatePreview" class="min-h-[22px] mt-1.5 text-xs"></div>
           </div>
           <div>
             <label class="block text-xs font-bold mb-1">مكان النشاط (القاعة أو المنصة) *</label>
@@ -248,8 +257,17 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold mb-1">التاريخ والموعد *</label>
-            <input id="editActDate" type="text" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+            <label for="editActDate" class="block font-bold mb-1 text-slate-900 dark:text-white flex items-center justify-between">
+              <span>تاريخ الفعالية <span class="text-rose-500">*</span></span>
+              <span class="text-[10px] font-normal text-slate-400">تقويم تفاعلي</span>
+            </label>
+            <div class="relative">
+              <input id="editActDate" type="date" required class="w-full p-2.5 pl-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-gold-500/40 focus:border-gold-500 transition cursor-pointer">
+              <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gold-500">
+                <i data-lucide="calendar" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div id="editActDatePreview" class="min-h-[20px] mt-1.5 text-xs"></div>
           </div>
           <div>
             <label class="block font-bold mb-1">المكان والقاعة *</label>
@@ -800,6 +818,147 @@
       } catch(err) {}
     }
 
+    // ==================== دوال تنسيق التواريخ باللغة العربية اللبنانية ====================
+    function formatArabicActivityDate(dateString) {
+      if (!dateString) return "";
+      // Parse YYYY-MM-DD to avoid timezone shifting
+      const parts = String(dateString).trim().split('-');
+      if (parts.length !== 3) return dateString;
+      const [year, month, day] = parts.map(Number);
+      if (isNaN(year) || isNaN(month) || isNaN(day)) return dateString;
+
+      const d = new Date(year, month - 1, day);
+
+      const days = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+      const months = [
+        "كانون الثاني", "شباط", "آذار", "نيسان", "أيار", "حزيران",
+        "تموز", "آب", "أيلول", "تشرين الأول", "تشرين الثاني", "كانون الأول"
+      ];
+
+      const dayName = days[d.getDay()];
+      const monthName = months[month - 1];
+
+      return `${dayName} ${day} ${monthName} ${year}`;
+    }
+
+    function parseArabicDateToISO(dateString) {
+      if (!dateString) return "";
+      const str = String(dateString).trim();
+
+      // فحص ما إذا كان التاريخ بصيغة ISO مسبقاً
+      if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+        return str;
+      }
+
+      // تحويل الأرقام العربية إلى إنجليزية إن وُجدت
+      const normalized = str
+        .replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d))
+        .trim();
+
+      const monthMap = {
+        "كانون الثاني": "01",
+        "شباط": "02",
+        "آذار": "03",
+        "ازار": "03",
+        "نيسان": "04",
+        "أيار": "05",
+        "ايار": "05",
+        "حزيران": "06",
+        "تموز": "07",
+        "آب": "08",
+        "اب": "08",
+        "أيلول": "09",
+        "ايلول": "09",
+        "تشرين الأول": "10",
+        "تشرين الاول": "10",
+        "تشرين الثاني": "11",
+        "كانون الأول": "12",
+        "كانون الاول": "12"
+      };
+
+      // استخراج السنة (4 خانات)
+      const yearMatch = normalized.match(/\b(20\d\d|19\d\d)\b/);
+      const year = yearMatch ? yearMatch[1] : "";
+
+      // استخراج الشهر من القاموس
+      let foundMonth = "";
+      const sortedMonthKeys = Object.keys(monthMap).sort((a, b) => b.length - a.length);
+      for (const mKey of sortedMonthKeys) {
+        if (normalized.includes(mKey)) {
+          foundMonth = monthMap[mKey];
+          break;
+        }
+      }
+
+      // استخراج رقم اليوم بعد استبعاد السنة
+      let day = "";
+      const withoutYear = normalized.replace(/\b(20\d\d|19\d\d)\b/, "");
+      const dayMatch = withoutYear.match(/\b([1-9]|[12]\d|3[01])\b/);
+      if (dayMatch) {
+        day = String(dayMatch[1]).padStart(2, "0");
+      }
+
+      if (year && foundMonth && day) {
+        return `${year}-${foundMonth}-${day}`;
+      }
+
+      // محاولة بديلة عبر Date.parse
+      const parsed = Date.parse(str);
+      if (!isNaN(parsed)) {
+        const d = new Date(parsed);
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, "0");
+        const dy = String(d.getDate()).padStart(2, "0");
+        return `${y}-${m}-${dy}`;
+      }
+
+      return "";
+    }
+
+    function updateDatePreview(scope, fallbackText = '') {
+      const isAdd = (scope === 'add');
+      const input = document.getElementById(isAdd ? 'actDate' : 'editActDate');
+      const preview = document.getElementById(isAdd ? 'actDatePreview' : 'editActDatePreview');
+      if (!input || !preview) return;
+
+      const dateVal = input.value;
+      if (dateVal) {
+        const formatted = formatArabicActivityDate(dateVal);
+        preview.innerHTML = `
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gold-500/10 text-gold-600 dark:text-gold-400 font-bold border border-gold-500/20 shadow-xs">
+            <i data-lucide="calendar-check" class="w-3.5 h-3.5"></i>
+            <span>${formatted}</span>
+          </div>
+        `;
+        lucide.createIcons();
+      } else if (fallbackText) {
+        preview.innerHTML = `
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-medium">
+            <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+            <span>${fallbackText}</span>
+          </div>
+        `;
+        lucide.createIcons();
+      } else {
+        preview.innerHTML = '';
+      }
+    }
+
+    // تفعيل أحداث الاستماع لاختيار التواريخ مع المعاينة اللحظية
+    const actDateInput = document.getElementById('actDate');
+    if (actDateInput) {
+      ['change', 'input'].forEach(evt => {
+        actDateInput.addEventListener(evt, () => updateDatePreview('add'));
+      });
+    }
+
+    const editActDateInput = document.getElementById('editActDate');
+    if (editActDateInput) {
+      ['change', 'input'].forEach(evt => {
+        editActDateInput.addEventListener(evt, () => updateDatePreview('edit'));
+      });
+    }
+
     const addActivityForm = document.getElementById('addActivityForm');
     if (addActivityForm) {
       addActivityForm.addEventListener('submit', async (e) => {
@@ -811,10 +970,13 @@
         const allImagesString = addImagesArray.join(', ');
         const isFeaturedVal = document.querySelector('input[name="addFeaturedRadio"]:checked')?.value || 'لا';
 
+        const rawDateVal = document.getElementById('actDate').value;
+        const formattedDate = formatArabicActivityDate(rawDateVal) || rawDateVal;
+
         const newActivity = {
           title: document.getElementById('actTitle').value.trim(),
           category: document.getElementById('actCategory').value,
-          date: document.getElementById('actDate').value.trim(),
+          date: formattedDate,
           location: document.getElementById('actLocation').value.trim(),
           imageUrl: allImagesString,
           desc: document.getElementById('actDesc').value.trim(),
@@ -842,6 +1004,7 @@
         addActivityForm.reset();
         document.getElementById('addFeaturedNo').checked = true;
         clearAllImages('add');
+        updateDatePreview('add');
 
         switchTab('manage');
 
@@ -873,7 +1036,12 @@
 
       document.getElementById('editActTitle').value = target['العنوان'] || target['عنوان النشاط'] || target.title || '';
       document.getElementById('editActCategory').value = target['التصنيف'] || target.category || 'ورشة عمل تدريبية';
-      document.getElementById('editActDate').value = target['التاريخ'] || target.date || '';
+      
+      const storedDate = target['التاريخ'] || target.date || '';
+      const isoDate = parseArabicDateToISO(storedDate);
+      document.getElementById('editActDate').value = isoDate;
+      updateDatePreview('edit', storedDate);
+
       document.getElementById('editActLocation').value = target['المكان'] || target.location || '';
       document.getElementById('editActDesc').value = target['التفاصيل الكاملة'] || target['الوصف'] || target.desc || '';
 
@@ -918,6 +1086,7 @@
 
     function closeEditActivityModal() {
       currentEditActivityIndex = -1;
+      updateDatePreview('edit');
       editActivityModal.classList.add('hidden');
       editActivityModal.classList.remove('flex');
     }
@@ -933,10 +1102,13 @@
         const isFeaturedVal = document.querySelector('input[name="editFeaturedRadio"]:checked')?.value || 'لا';
         const currentStatusVal = oldTarget ? (oldTarget['الحالة'] || oldTarget.status || 'ظاهر') : 'ظاهر';
 
+        const rawEditDateVal = document.getElementById('editActDate').value;
+        const formattedEditDate = formatArabicActivityDate(rawEditDateVal) || rawEditDateVal;
+
         const updated = {
           title: document.getElementById('editActTitle').value.trim(),
           category: document.getElementById('editActCategory').value,
-          date: document.getElementById('editActDate').value.trim(),
+          date: formattedEditDate,
           location: document.getElementById('editActLocation').value.trim(),
           imageUrl: allImagesString,
           desc: document.getElementById('editActDesc').value.trim(),
