@@ -29,6 +29,10 @@
     }
   </script>
   <style>
+    html, body {
+      overflow-x: hidden;
+      max-width: 100%;
+    }
     body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
     .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 4px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
@@ -106,15 +110,15 @@
     <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
 
       <!-- أزرار التبديل العلوية (استعارة / تبرع) -->
-      <div class="flex justify-center mb-6 sm:mb-8">
-        <div class="w-full sm:w-auto inline-flex p-1.5 rounded-full border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] shadow-sm">
-          <button id="tabBorrow" class="flex-1 sm:flex-initial px-5 sm:px-7 py-2.5 rounded-full text-xs font-bold transition bg-[#0d172a] text-white dark:bg-gold-500 dark:text-slate-950 shadow-sm flex items-center justify-center gap-2 cursor-pointer">
-            <i data-lucide="book-open" class="w-4 h-4"></i>
-            <span class="whitespace-nowrap">الكتب المتوفرة للاستعارة</span>
+      <div class="flex justify-center mb-6 sm:mb-8 px-2 sm:px-0">
+        <div class="inline-flex items-center p-1 sm:p-1.5 rounded-full border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] shadow-sm max-w-full">
+          <button id="tabBorrow" type="button" class="flex-1 sm:flex-initial px-4 sm:px-7 py-2 sm:py-2.5 rounded-full text-xs font-bold transition bg-[#0d172a] text-white dark:bg-gold-500 dark:text-slate-950 shadow-sm flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer select-none">
+            <i data-lucide="book-open" class="w-4 h-4 shrink-0"></i>
+            <span class="whitespace-nowrap"><span class="sm:hidden">استعارة الكتب</span><span class="hidden sm:inline">الكتب المتوفرة للاستعارة</span></span>
           </button>
-          <button id="tabDonate" class="flex-1 sm:flex-initial px-5 sm:px-7 py-2.5 rounded-full text-xs font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center gap-2 cursor-pointer">
-            <i data-lucide="gift" class="w-4 h-4"></i>
-            <span class="whitespace-nowrap">تقديم / تبرع بكتاب</span>
+          <button id="tabDonate" type="button" class="flex-1 sm:flex-initial px-4 sm:px-7 py-2 sm:py-2.5 rounded-full text-xs font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer select-none">
+            <i data-lucide="gift" class="w-4 h-4 shrink-0"></i>
+            <span class="whitespace-nowrap"><span class="sm:hidden">تبرع بكتاب</span><span class="hidden sm:inline">تقديم / تبرع بكتاب</span></span>
           </button>
         </div>
       </div>
@@ -587,24 +591,43 @@
     const borrowSection = document.getElementById('borrowSection');
     const donateSection = document.getElementById('donateSection');
 
-    if (tabBorrow && tabDonate) {
-      tabBorrow.addEventListener('click', () => {
-        borrowSection.classList.remove('hidden');
-        donateSection.classList.add('hidden');
-        tabBorrow.classList.add('bg-[#0d172a]', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'shadow-sm');
-        tabBorrow.classList.remove('text-slate-600', 'dark:text-slate-400');
-        tabDonate.classList.remove('bg-[#0d172a]', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'shadow-sm');
-        tabDonate.classList.add('text-slate-600', 'dark:text-slate-400');
-      });
+    const activeTabClasses = ['bg-[#0d172a]', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'shadow-sm'];
+    const inactiveTabClasses = ['text-slate-600', 'dark:text-slate-400', 'hover:text-slate-900', 'dark:hover:text-white'];
 
-      tabDonate.addEventListener('click', () => {
-        donateSection.classList.remove('hidden');
-        borrowSection.classList.add('hidden');
-        tabDonate.classList.add('bg-[#0d172a]', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'shadow-sm');
-        tabDonate.classList.remove('text-slate-600', 'dark:text-slate-400');
-        tabBorrow.classList.remove('bg-[#0d172a]', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'shadow-sm');
-        tabBorrow.classList.add('text-slate-600', 'dark:text-slate-400');
-      });
+    function switchBooksTab(mode) {
+      if (mode === 'borrow') {
+        if (borrowSection) borrowSection.classList.remove('hidden');
+        if (donateSection) donateSection.classList.add('hidden');
+        if (tabBorrow) {
+          tabBorrow.classList.remove(...inactiveTabClasses);
+          tabBorrow.classList.add(...activeTabClasses);
+        }
+        if (tabDonate) {
+          tabDonate.classList.remove(...activeTabClasses);
+          tabDonate.classList.add(...inactiveTabClasses);
+        }
+      } else {
+        if (donateSection) donateSection.classList.remove('hidden');
+        if (borrowSection) borrowSection.classList.add('hidden');
+        if (tabDonate) {
+          tabDonate.classList.remove(...inactiveTabClasses);
+          tabDonate.classList.add(...activeTabClasses);
+        }
+        if (tabBorrow) {
+          tabBorrow.classList.remove(...activeTabClasses);
+          tabBorrow.classList.add(...inactiveTabClasses);
+        }
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    if (tabBorrow && tabDonate) {
+      tabBorrow.addEventListener('click', () => switchBooksTab('borrow'));
+      tabDonate.addEventListener('click', () => switchBooksTab('donate'));
+
+      if (window.location.hash === '#donate') {
+        switchBooksTab('donate');
+      }
     }
 
     // نافذة حجز الاستعارة
