@@ -360,6 +360,37 @@
         .replace(/'/g, '&#39;');
     }
 
+    // ==================== Universal Toast Notification System ====================
+    function showToast(message, type = 'info') {
+      let container = document.getElementById('toastContainer');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 max-w-sm w-[90vw] pointer-events-none';
+        document.body.appendChild(container);
+      }
+      const toast = document.createElement('div');
+      const borderClass = type === 'success' 
+        ? 'border-emerald-500/40 text-emerald-400' 
+        : type === 'error' 
+          ? 'border-rose-500/40 text-rose-400' 
+          : 'border-gold-500/40 text-gold-400';
+      const iconName = type === 'success' ? 'check-circle' : type === 'error' ? 'alert-triangle' : 'info';
+      toast.className = `backdrop-blur-md border rounded-2xl p-3.5 shadow-2xl flex items-center gap-3 text-xs font-bold pointer-events-auto transition-all duration-300 bg-slate-900/95 dark:bg-[#0c1427]/95 ${borderClass} opacity-0 -translate-y-2`;
+      toast.innerHTML = `<i data-lucide="${iconName}" class="w-4 h-4 shrink-0"></i><span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+      if (window.lucide) lucide.createIcons();
+      requestAnimationFrame(() => {
+        toast.classList.remove('opacity-0', '-translate-y-2');
+        toast.classList.add('opacity-100', 'translate-y-0');
+      });
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
     function detectBookCategory(faculty = '', title = '', desc = '') {
       const combined = `${faculty} ${title} ${desc}`.toLowerCase();
 
@@ -402,12 +433,13 @@
                             (status.includes('متوفر') || status === '') && 
                             (isNaN(copiesNum) || copiesNum > 0);
 
+        const displayCopies = isNaN(copiesNum) ? 1 : copiesNum;
         const badgeMarkup = isAvailable
-          ? `<span class="px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">متوفر للاستلام</span>`
-          : `<span class="px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">مُعار حالياً</span>`;
+          ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 shadow-sm"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>متوفر (${displayCopies} نسخة)</span>`
+          : `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/25">مستعار حالياً</span>`;
 
         const actionBtn = isAvailable
-          ? `<button onclick="openModalByIndex(${idx})" class="px-4 py-2 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 text-xs font-bold hover:opacity-90 transition shadow-sm">طلب استعارة</button>`
+          ? `<button onclick="openModalByIndex(${idx})" class="px-4 py-2 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 text-xs font-bold hover:opacity-90 transition shadow-sm cursor-pointer">طلب استعارة</button>`
           : `<button disabled class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 text-xs font-bold cursor-not-allowed">غير متاح</button>`;
 
         const copiesText = escapeHtml(isAvailable ? `النسخ المتاحة: ${rawCopies || '1'}` : 'يعود قريباً');
@@ -443,6 +475,7 @@
     }
 
     async function fetchLiveBooks() {
+      const startTime = Date.now();
       const cached = localStorage.getItem('nadi_avail_books_cache') || localStorage.getItem('nadi_books_cache');
       if (cached) {
         try {
@@ -457,10 +490,25 @@
         const response = await fetch(`${SCRIPT_URL}?req=availableBooks&bust=${Date.now()}`);
         const data = await response.json();
 
+        const elapsed = Date.now() - startTime;
+        if (elapsed < 250) {
+          await new Promise(r => setTimeout(r, 250 - elapsed));
+        }
+
         const list = data.availableBooks || data.books;
         if (list && Array.isArray(list)) {
           booksData = list;
-          renderBooks(booksData);
+          const grid = document.getElementById('booksGrid');
+          if (grid && !cached) {
+            grid.style.opacity = '0';
+            grid.style.transition = 'opacity 0.3s ease';
+            renderBooks(booksData);
+            requestAnimationFrame(() => {
+              grid.style.opacity = '1';
+            });
+          } else {
+            renderBooks(booksData);
+          }
           localStorage.setItem('nadi_avail_books_cache', JSON.stringify(booksData));
           localStorage.setItem('nadi_books_cache', JSON.stringify(booksData));
         }
@@ -595,7 +643,7 @@
       const cooldownMs = 30000;
       if (now - lastSub < cooldownMs) {
         const remainingSec = Math.ceil((cooldownMs - (now - lastSub)) / 1000);
-        alert(`يرجى الانتظار ${remainingSec} ثانية قبل محاولة إرسال طلب آخر.`);
+        showToast(`يرجى الانتظار ${remainingSec} ثانية قبل محاولة إرسال طلب آخر`, 'error');
         return false;
       }
       return true;
@@ -611,6 +659,7 @@
         const honeypotVal = document.getElementById('borrowHoneypot')?.value || '';
         if (honeypotVal.trim() !== '') {
           if (modalSuccess) modalSuccess.classList.remove('hidden');
+          showToast('تم تسجيل طلب الاستعارة بنجاح', 'success');
           borrowForm.reset();
           setTimeout(() => closeModal(), 1500);
           return;
@@ -647,12 +696,13 @@
 
           localStorage.setItem('nadi_books_last_sub', Date.now());
           if (modalSuccess) modalSuccess.classList.remove('hidden');
+          showToast('تم تسجيل طلب الاستعارة بنجاح', 'success');
           borrowForm.reset();
           setTimeout(() => {
             closeModal();
           }, 2000);
         } catch (err) {
-          alert('تعذر تسجيل الحجز، يرجى المحاولة لاحقاً.');
+          showToast('تعذر تسجيل الحجز، يرجى المحاولة لاحقاً', 'error');
         } finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalBtnText;
@@ -676,6 +726,7 @@
         const honeypotVal = document.getElementById('donateHoneypot')?.value || '';
         if (honeypotVal.trim() !== '') {
           if (donateSuccess) donateSuccess.classList.remove('hidden');
+          showToast('تم تسجيل بيانات التبرع بنجاح، شكراً لمساهمتك', 'success');
           donateForm.reset();
           return;
         }
@@ -725,9 +776,10 @@
 
           localStorage.setItem('nadi_books_last_sub', Date.now());
           if (donateSuccess) donateSuccess.classList.remove('hidden');
+          showToast('تم تسجيل بيانات التبرع بنجاح، شكراً لمساهمتك', 'success');
           donateForm.reset();
         } catch (err) {
-          alert('تعذر تسجيل التبرع حالياً، يرجى المحاولة لاحقاً.');
+          showToast('تعذر تسجيل التبرع حالياً، يرجى المحاولة لاحقاً', 'error');
         } finally {
           submitDonateBtn.disabled = false;
           submitDonateBtn.innerHTML = originalBtnText;
@@ -788,6 +840,28 @@
         filterBooks();
       });
     });
+
+    // ==================== زر التمرير إلى الأعلى Scroll-To-Top ====================
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+    if (scrollToTopBtn) {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 350) {
+          scrollToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+          scrollToTopBtn.classList.add('opacity-100');
+        } else {
+          scrollToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+          scrollToTopBtn.classList.remove('opacity-100');
+        }
+      });
+      scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
   </script>
+
+  <!-- ==================== زر التمرير إلى الأعلى العائم ==================== -->
+  <button id="scrollToTopBtn" aria-label="الرجوع للأعلى" class="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-slate-900/85 dark:bg-clubNavy-cardDark/90 backdrop-blur-md border border-slate-700/50 text-gold-400 shadow-2xl opacity-0 pointer-events-none transition-all duration-300 hover:scale-110 active:scale-95 hover:border-gold-500 cursor-pointer">
+    <i data-lucide="chevron-up" class="w-5 h-5"></i>
+  </button>
 </body>
 </html>

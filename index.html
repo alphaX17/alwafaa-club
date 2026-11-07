@@ -459,6 +459,37 @@
         .replace(/'/g, '&#39;');
     }
 
+    // ==================== Universal Toast Notification System ====================
+    function showToast(message, type = 'info') {
+      let container = document.getElementById('toastContainer');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 max-w-sm w-[90vw] pointer-events-none';
+        document.body.appendChild(container);
+      }
+      const toast = document.createElement('div');
+      const borderClass = type === 'success' 
+        ? 'border-emerald-500/40 text-emerald-400' 
+        : type === 'error' 
+          ? 'border-rose-500/40 text-rose-400' 
+          : 'border-gold-500/40 text-gold-400';
+      const iconName = type === 'success' ? 'check-circle' : type === 'error' ? 'alert-triangle' : 'info';
+      toast.className = `backdrop-blur-md border rounded-2xl p-3.5 shadow-2xl flex items-center gap-3 text-xs font-bold pointer-events-auto transition-all duration-300 bg-slate-900/95 dark:bg-[#0c1427]/95 ${borderClass} opacity-0 -translate-y-2`;
+      toast.innerHTML = `<i data-lucide="${iconName}" class="w-4 h-4 shrink-0"></i><span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+      if (window.lucide) lucide.createIcons();
+      requestAnimationFrame(() => {
+        toast.classList.remove('opacity-0', '-translate-y-2');
+        toast.classList.add('opacity-100', 'translate-y-0');
+      });
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
     function cleanDirectImageUrl(raw) {
       if (!raw) return '';
       let str = String(raw).trim();
@@ -471,6 +502,39 @@
       const status = String(act['الحالة'] || act['حالة النشاط'] || act.status || '').trim();
       return status === 'مخفي' || status === 'hidden' || status === 'معطل';
     }
+
+    function isRecentActivity(dateStr) {
+      if (!dateStr) return false;
+      try {
+        const clean = String(dateStr).trim();
+        let d = new Date(clean);
+        if (isNaN(d.getTime())) {
+          const parts = clean.split(/[-/]/);
+          if (parts.length === 3) {
+            if (parts[0].length === 4) d = new Date(parts[0], parts[1] - 1, parts[2]);
+            else if (parts[2].length === 4) d = new Date(parts[2], parts[1] - 1, parts[0]);
+          }
+        }
+        if (!isNaN(d.getTime())) {
+          const diffDays = (Date.now() - d.getTime()) / (1000 * 60 * 60 * 24);
+          return diffDays >= -7 && diffDays <= 45;
+        }
+      } catch (e) {}
+      return false;
+    }
+
+    let _currentHomeActivities = [];
+
+    window.openLightboxForActivity = function(idx) {
+      const act = _currentHomeActivities && _currentHomeActivities[idx];
+      if (!act) return;
+      const rawImgs = act['رابط الصورة'] || act.imageUrl || '';
+      const imgs = String(rawImgs).split(',').map(u => cleanDirectImageUrl(u)).filter(Boolean);
+      const title = act['العنوان'] || act['عنوان النشاط'] || act.title || 'فعالية جامعية';
+      if (imgs.length > 0) {
+        openImageLightbox(imgs, 0, title);
+      }
+    };
 
     function renderHomePage(data) {
       if (!data) return;
@@ -508,12 +572,14 @@
           return isFeatured && !isHidden && hasTitle;
         });
 
+        _currentHomeActivities = homeActivities;
+
         const grid = document.getElementById('activitiesGrid');
         if (grid) {
           if (homeActivities.length === 0) {
             grid.innerHTML = `<div class="col-span-full py-12 text-center text-xs text-slate-400">لا توجد فعاليات معروضة حالياً في الصفحة الرئيسية.</div>`;
           } else {
-            grid.innerHTML = homeActivities.slice(0, 3).map(act => {
+            grid.innerHTML = homeActivities.slice(0, 3).map((act, idx) => {
               const title = escapeHtml(act['العنوان'] || act['عنوان النشاط'] || act.title || 'فعالية جامعية');
               const date = escapeHtml(act['التاريخ'] || act.date || '');
               const cat = escapeHtml(act['التصنيف'] || act.category || 'نشاط جامعي');
@@ -524,7 +590,7 @@
               const coverImg = escapeHtml(imgs[0] || '');
 
               const imgMarkup = coverImg 
-                ? `<img src="${coverImg}" alt="${title}" referrerpolicy="no-referrer" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400\\'><i data-lucide=\\'image\\' class=\\'w-10 h-10 opacity-40\\'></i></div>'; lucide.createIcons();">`
+                ? `<img src="${coverImg}" alt="${title}" referrerpolicy="no-referrer" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400\\'><i data-lucide=\\'image\\' class=\\'w-10 h-10 opacity-40\\'></i></div>'; lucide.createIcons();">`
                 : `<div class="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400">
                      <i data-lucide="image" class="w-10 h-10 opacity-40"></i>
                    </div>`;
@@ -533,13 +599,23 @@
                 ? `<span class="absolute bottom-3 left-3 px-2 py-0.5 rounded bg-black/75 backdrop-blur-sm text-white text-[10px] font-bold flex items-center gap-1 shadow-sm"><i data-lucide="images" class="w-3 h-3"></i> ${imgs.length} صور</span>`
                 : '';
 
+              const isRecent = isRecentActivity(date);
+              const statusBadge = isRecent
+                ? `<span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-emerald-600/90 backdrop-blur-sm text-white text-[11px] font-bold shadow-sm flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-ping"></span>فعالية حديثة</span>`
+                : `<span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-clubNavy-light text-white text-[11px] font-bold shadow-sm">${cat}</span>`;
+
               return `
-                <article class="rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200 shadow-sm">
+                <article class="rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200 shadow-sm group">
                   <div>
-                    <div class="h-44 relative flex items-center justify-center overflow-hidden bg-slate-100 dark:bg-slate-900">
+                    <div class="h-44 relative flex items-center justify-center overflow-hidden bg-slate-100 dark:bg-slate-900 ${imgs.length > 0 ? 'cursor-pointer' : ''}" ${imgs.length > 0 ? `onclick="openLightboxForActivity(${idx})" title="عرض الصور بالحجم الكامل"` : ''}>
                       ${imgMarkup}
-                      <span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-clubNavy-light text-white text-[11px] font-bold shadow-sm">${cat}</span>
+                      ${statusBadge}
                       ${badgeMulti}
+                      ${imgs.length > 0 ? `
+                        <div class="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition flex items-center justify-center pointer-events-none">
+                          <span class="p-2 rounded-full bg-black/60 text-white backdrop-blur-sm shadow-md"><i data-lucide="maximize-2" class="w-4 h-4"></i></span>
+                        </div>
+                      ` : ''}
                     </div>
                     <div class="p-4 sm:p-5 space-y-2">
                       <h4 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white line-clamp-1">${title}</h4>
@@ -563,6 +639,7 @@
     }
 
     async function fetchLiveHomeData() {
+      const startTime = Date.now();
       const cached = localStorage.getItem('nadi_home_cache');
       if (cached) {
         try {
@@ -575,7 +652,24 @@
       try {
         const response = await fetch(`${SCRIPT_URL}?req=home&bust=${Date.now()}`);
         const freshData = await response.json();
-        renderHomePage(freshData);
+        
+        const elapsed = Date.now() - startTime;
+        if (elapsed < 250) {
+          await new Promise(r => setTimeout(r, 250 - elapsed));
+        }
+
+        const grid = document.getElementById('activitiesGrid');
+        if (grid && !cached) {
+          grid.style.opacity = '0';
+          grid.style.transition = 'opacity 0.3s ease';
+          renderHomePage(freshData);
+          requestAnimationFrame(() => {
+            grid.style.opacity = '1';
+          });
+        } else {
+          renderHomePage(freshData);
+        }
+
         localStorage.setItem('nadi_home_cache', JSON.stringify(freshData));
       } catch (err) {}
     }
@@ -1002,6 +1096,120 @@
       document.getElementById('pwaInstallBanner')?.classList.add('hidden');
       localStorage.setItem('nadi_pwa_dismissed', 'true');
     }
+
+    // ==================== زر التمرير إلى الأعلى Scroll-To-Top ====================
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+    if (scrollToTopBtn) {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 350) {
+          scrollToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+          scrollToTopBtn.classList.add('opacity-100');
+        } else {
+          scrollToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+          scrollToTopBtn.classList.remove('opacity-100');
+        }
+      });
+      scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // ==================== وحدة التحكم بنافذة عرض الصور Lightbox ====================
+    let currentLightboxImages = [];
+    let currentLightboxIndex = 0;
+    let currentLightboxCaption = '';
+
+    window.openImageLightbox = function(images, startIndex = 0, caption = '') {
+      if (!images || images.length === 0) return;
+      currentLightboxImages = images;
+      currentLightboxIndex = startIndex;
+      currentLightboxCaption = caption;
+      updateLightboxUI();
+
+      const modal = document.getElementById('imageLightboxModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      }
+    };
+
+    function updateLightboxUI() {
+      const imgEl = document.getElementById('lightboxImage');
+      const capEl = document.getElementById('lightboxCaption');
+      const cntEl = document.getElementById('lightboxCounter');
+      const prevBtn = document.getElementById('lightboxPrevBtn');
+      const nextBtn = document.getElementById('lightboxNextBtn');
+
+      if (imgEl && currentLightboxImages[currentLightboxIndex]) {
+        imgEl.src = currentLightboxImages[currentLightboxIndex];
+      }
+      if (capEl) capEl.textContent = currentLightboxCaption || '';
+      if (cntEl) {
+        if (currentLightboxImages.length > 1) {
+          cntEl.textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+          cntEl.classList.remove('hidden');
+        } else {
+          cntEl.classList.add('hidden');
+        }
+      }
+      if (prevBtn) {
+        if (currentLightboxImages.length > 1) prevBtn.classList.remove('hidden');
+        else prevBtn.classList.add('hidden');
+      }
+      if (nextBtn) {
+        if (currentLightboxImages.length > 1) nextBtn.classList.remove('hidden');
+        else nextBtn.classList.add('hidden');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    window.navigateLightbox = function(dir) {
+      if (currentLightboxImages.length <= 1) return;
+      currentLightboxIndex = (currentLightboxIndex + dir + currentLightboxImages.length) % currentLightboxImages.length;
+      updateLightboxUI();
+    };
+
+    window.closeImageLightbox = function() {
+      const modal = document.getElementById('imageLightboxModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = '';
+      }
+    };
+
+    window.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('imageLightboxModal');
+      if (modal && !modal.classList.contains('hidden')) {
+        if (e.key === 'Escape') closeImageLightbox();
+        if (e.key === 'ArrowRight') navigateLightbox(1);
+        if (e.key === 'ArrowLeft') navigateLightbox(-1);
+      }
+    });
   </script>
+
+  <!-- ==================== نافذة تكبير الصور التفاعلية Lightbox Modal ==================== -->
+  <div id="imageLightboxModal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 select-none" onclick="if(event.target === this) closeImageLightbox()">
+    <button onclick="closeImageLightbox()" class="absolute top-5 right-5 text-white/70 hover:text-white p-2.5 rounded-full bg-white/10 hover:bg-white/20 transition-all z-20 cursor-pointer" aria-label="إغلاق">
+      <i data-lucide="x" class="w-6 h-6"></i>
+    </button>
+    <button id="lightboxPrevBtn" onclick="navigateLightbox(-1)" class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-3 rounded-full bg-white/10 hover:bg-white/25 transition-all hidden z-20 cursor-pointer" aria-label="السابق">
+      <i data-lucide="chevron-left" class="w-6 h-6"></i>
+    </button>
+    <button id="lightboxNextBtn" onclick="navigateLightbox(1)" class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-3 rounded-full bg-white/10 hover:bg-white/25 transition-all hidden z-20 cursor-pointer" aria-label="التالي">
+      <i data-lucide="chevron-right" class="w-6 h-6"></i>
+    </button>
+    <div class="max-w-4xl max-h-[88vh] flex flex-col items-center justify-center pointer-events-auto w-full">
+      <img id="lightboxImage" src="" alt="صورة الفعالية" class="max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl transition-all duration-200">
+      <div id="lightboxCaption" class="mt-3 text-white/90 text-sm font-bold text-center line-clamp-2 px-4"></div>
+      <div id="lightboxCounter" class="mt-1 text-white/50 text-xs font-mono"></div>
+    </div>
+  </div>
+
+  <!-- ==================== زر التمرير إلى الأعلى العائم ==================== -->
+  <button id="scrollToTopBtn" aria-label="الرجوع للأعلى" class="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-slate-900/85 dark:bg-clubNavy-cardDark/90 backdrop-blur-md border border-slate-700/50 text-gold-400 shadow-2xl opacity-0 pointer-events-none transition-all duration-300 hover:scale-110 active:scale-95 hover:border-gold-500 cursor-pointer">
+    <i data-lucide="chevron-up" class="w-5 h-5"></i>
+  </button>
 </body>
 </html>

@@ -238,6 +238,58 @@
         .replace(/'/g, '&#39;');
     }
 
+    // ==================== Universal Toast Notification System ====================
+    function showToast(message, type = 'info') {
+      let container = document.getElementById('toastContainer');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 max-w-sm w-[90vw] pointer-events-none';
+        document.body.appendChild(container);
+      }
+      const toast = document.createElement('div');
+      const borderClass = type === 'success' 
+        ? 'border-emerald-500/40 text-emerald-400' 
+        : type === 'error' 
+          ? 'border-rose-500/40 text-rose-400' 
+          : 'border-gold-500/40 text-gold-400';
+      const iconName = type === 'success' ? 'check-circle' : type === 'error' ? 'alert-triangle' : 'info';
+      toast.className = `backdrop-blur-md border rounded-2xl p-3.5 shadow-2xl flex items-center gap-3 text-xs font-bold pointer-events-auto transition-all duration-300 bg-slate-900/95 dark:bg-[#0c1427]/95 ${borderClass} opacity-0 -translate-y-2`;
+      toast.innerHTML = `<i data-lucide="${iconName}" class="w-4 h-4 shrink-0"></i><span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+      if (window.lucide) lucide.createIcons();
+      requestAnimationFrame(() => {
+        toast.classList.remove('opacity-0', '-translate-y-2');
+        toast.classList.add('opacity-100', 'translate-y-0');
+      });
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    window.copyGroupLink = function(link, btn) {
+      if (!link || link === '#' || link.trim() === '') {
+        showToast("رابط المجموعة قيد التحديث", "error");
+        return;
+      }
+      navigator.clipboard.writeText(link).then(() => {
+        showToast("تم نسخ رابط المجموعة إلى الحافظة بنجاح", "success");
+        if (btn) {
+          const orig = btn.innerHTML;
+          btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
+          if (window.lucide) lucide.createIcons();
+          setTimeout(() => {
+            btn.innerHTML = orig;
+            if (window.lucide) lucide.createIcons();
+          }, 1800);
+        }
+      }).catch(() => {
+        showToast("تعذر نسخ الرابط", "error");
+      });
+    };
+
     function normalizeScholarshipStatus(value) {
       if (value === null || typeof value === 'undefined') return true;
       if (typeof value === 'boolean') return value;
@@ -365,19 +417,25 @@
             const tag = escapeHtml(rawTag);
             const desc = escapeHtml(rawDesc);
             const link = escapeHtml(rawLink);
+            const escapedLink = rawLink.replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
             const actionBtn = isActive
-              ? `<a href="${link}" target="_blank" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition">
+              ? `<div class="flex items-center gap-1.5 w-full">
+                  <a href="${link}" target="_blank" class="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition shadow-sm">
                     <i data-lucide="external-link" class="w-4 h-4"></i>
-                    <span>انضمام إلى المجموعة</span>
-                 </a>`
+                    <span>انضمام للمجموعة</span>
+                  </a>
+                  <button onclick="copyGroupLink('${escapedLink}', this)" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#131e3a] hover:border-gold-500 text-slate-600 dark:text-slate-300 transition shadow-sm cursor-pointer" title="نسخ رابط المجموعة">
+                    <i data-lucide="copy" class="w-4 h-4"></i>
+                  </button>
+                </div>`
               : `<button disabled class="w-full py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 font-bold text-xs flex items-center justify-center gap-2 cursor-not-allowed">
                     <i data-lucide="clock" class="w-4 h-4"></i>
                     <span>الرابط قيد التحديث قريباً</span>
                  </button>`;
 
             return `
-              <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition">
+              <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm">
                 <div class="space-y-2">
                   <span class="px-2.5 py-0.5 rounded-lg text-[10px] font-bold ${badgeBg}">${tag}</span>
                   <h4 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white line-clamp-1">${name}</h4>
@@ -404,8 +462,8 @@
             const isClosed = status.includes('ممتلئ') || status.includes('مغلق') || status.includes('تحديث');
 
             const cleanPhone = rawPhone.replace(/[^0-9]/g, '');
-            const defaultMsg = encodeURIComponent(`السلام عليكم ورحمة الله، أتواصل معك عبر منصة نادي الوفاء بخصوص ${rawName}`);
-            const rawWaLink = rawLink || (cleanPhone ? `https://wa.me/${cleanPhone}?text=${defaultMsg}` : '');
+            const promptMsg = encodeURIComponent(`السلام عليكم زميلي ممثل اختصاص ${rawFaculty} (${rawName})، أود الاستفسار حول المقررات والتسجيل الأكاديمي.`);
+            const rawWaLink = rawLink || (cleanPhone ? `https://wa.me/${cleanPhone}?text=${promptMsg}` : '');
             const hasLink = rawWaLink !== '' && rawWaLink !== '#';
             const isActive = !isClosed && hasLink;
 
@@ -425,7 +483,7 @@
             const waLink = escapeHtml(rawWaLink);
 
             const actionBtn = isActive
-              ? `<a href="${waLink}" target="_blank" class="w-full py-2 rounded-xl bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+              ? `<a href="${waLink}" target="_blank" class="w-full py-2 rounded-xl bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition shadow-sm">
                     <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                     <span>مراسلة عبر واتساب</span>
                  </a>`
@@ -439,7 +497,7 @@
               : (isActive ? '<p class="text-xs text-emerald-600 dark:text-emerald-400">تواصل مباشر متاح</p>' : '<p class="text-xs text-slate-400">قيد التحديث</p>');
 
             return `
-              <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition">
+              <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm">
                 <div class="space-y-1">
                   <span class="text-[10px] font-bold ${tagColor}">${faculty}</span>
                   <h4 class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white line-clamp-1">${name}</h4>
@@ -456,6 +514,7 @@
     }
 
     async function fetchLiveGuidance() {
+      const startTime = Date.now();
       const cached = localStorage.getItem('nadi_guidance_cache');
       if (cached) {
         try {
@@ -468,8 +527,26 @@
       try {
         const response = await fetch(SCRIPT_URL);
         const data = await response.json();
+
+        const elapsed = Date.now() - startTime;
+        if (elapsed < 250) {
+          await new Promise(r => setTimeout(r, 250 - elapsed));
+        }
+
         if (data.guidance && Array.isArray(data.guidance)) {
-          renderGuidance(data.guidance);
+          const groupsGrid = document.getElementById('groupsGrid');
+          const repsGrid = document.getElementById('repsGrid');
+          if (!cached && (groupsGrid || repsGrid)) {
+            if (groupsGrid) groupsGrid.style.opacity = '0';
+            if (repsGrid) repsGrid.style.opacity = '0';
+            renderGuidance(data.guidance);
+            requestAnimationFrame(() => {
+              if (groupsGrid) { groupsGrid.style.transition = 'opacity 0.3s ease'; groupsGrid.style.opacity = '1'; }
+              if (repsGrid) { repsGrid.style.transition = 'opacity 0.3s ease'; repsGrid.style.opacity = '1'; }
+            });
+          } else {
+            renderGuidance(data.guidance);
+          }
           localStorage.setItem('nadi_guidance_cache', JSON.stringify(data.guidance));
         }
       } catch (err) {
@@ -540,6 +617,28 @@
 
     fetchScholarshipStatus();
     fetchLiveGuidance();
+
+    // ==================== زر التمرير إلى الأعلى Scroll-To-Top ====================
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+    if (scrollToTopBtn) {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 350) {
+          scrollToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+          scrollToTopBtn.classList.add('opacity-100');
+        } else {
+          scrollToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+          scrollToTopBtn.classList.remove('opacity-100');
+        }
+      });
+      scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
   </script>
+
+  <!-- ==================== زر التمرير إلى الأعلى العائم ==================== -->
+  <button id="scrollToTopBtn" aria-label="الرجوع للأعلى" class="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-slate-900/85 dark:bg-clubNavy-cardDark/90 backdrop-blur-md border border-slate-700/50 text-gold-400 shadow-2xl opacity-0 pointer-events-none transition-all duration-300 hover:scale-110 active:scale-95 hover:border-gold-500 cursor-pointer">
+    <i data-lucide="chevron-up" class="w-5 h-5"></i>
+  </button>
 </body>
 </html>

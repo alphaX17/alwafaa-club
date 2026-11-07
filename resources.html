@@ -129,17 +129,28 @@
         </div>
 
         <!-- أزرار التصنيف والفلترة الشاملة -->
-        <div class="flex items-center gap-1.5 overflow-x-auto pt-3 border-t border-slate-100 dark:border-slate-800 custom-scrollbar pb-1">
-          <button class="filter-btn active shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 transition" data-filter="all">الكل</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="exam">امتحانات سابقة</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="summary">ملخصات وسلايدات</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="book">كتب رقمية</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="assignment">واجبات واختبارات</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="engineering">كلية الهندسة</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="business">إدارة الأعمال</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="arts_sciences">الفنون والعلوم</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="education">التربية واللغات</button>
-          <button class="filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="pharmacy">كلية الصيدلة</button>
+        <div class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1">
+            <span class="text-[11px] font-bold text-slate-400 shrink-0 ml-1">التصنيف:</span>
+            <button class="filter-btn active shrink-0 px-3 py-1 rounded-xl text-xs font-bold bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 transition" data-filter="all">الكل</button>
+            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="exam">امتحانات سابقة</button>
+            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="summary">ملخصات وسلايدات</button>
+            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="book">كتب ومراجع</button>
+            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="assignment">واجبات واختبارات</button>
+            <span class="w-px h-4 bg-slate-200 dark:bg-slate-700 shrink-0 mx-1"></span>
+            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="engineering">الهندسة</button>
+            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="arts_sciences">العلوم والحاسوب</button>
+            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="business">إدارة الأعمال</button>
+            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="pharmacy">الصيدلة والطب</button>
+            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="education">التربية واللغات</button>
+          </div>
+          <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1 pt-0.5">
+            <span class="text-[11px] font-bold text-slate-400 shrink-0 ml-1">الفصل:</span>
+            <button class="term-btn active shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-slate-800 text-white dark:bg-slate-700 dark:text-gold-400 transition" data-term="all">جميع الفصول</button>
+            <button class="term-btn shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-600 dark:text-slate-400 hover:border-gold-500/50 border border-transparent transition" data-term="fall">خريف Fall</button>
+            <button class="term-btn shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-600 dark:text-slate-400 hover:border-gold-500/50 border border-transparent transition" data-term="spring">ربيع Spring</button>
+            <button class="term-btn shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-600 dark:text-slate-400 hover:border-gold-500/50 border border-transparent transition" data-term="summer">صيف Summer</button>
+          </div>
         </div>
       </div>
 
@@ -240,6 +251,72 @@
         .replace(/'/g, '&#39;');
     }
 
+    // ==================== Universal Toast Notification System ====================
+    function showToast(message, type = 'info') {
+      let container = document.getElementById('toastContainer');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 max-w-sm w-[90vw] pointer-events-none';
+        document.body.appendChild(container);
+      }
+      const toast = document.createElement('div');
+      const borderClass = type === 'success' 
+        ? 'border-emerald-500/40 text-emerald-400' 
+        : type === 'error' 
+          ? 'border-rose-500/40 text-rose-400' 
+          : 'border-gold-500/40 text-gold-400';
+      const iconName = type === 'success' ? 'check-circle' : type === 'error' ? 'alert-triangle' : 'info';
+      toast.className = `backdrop-blur-md border rounded-2xl p-3.5 shadow-2xl flex items-center gap-3 text-xs font-bold pointer-events-auto transition-all duration-300 bg-slate-900/95 dark:bg-[#0c1427]/95 ${borderClass} opacity-0 -translate-y-2`;
+      toast.innerHTML = `<i data-lucide="${iconName}" class="w-4 h-4 shrink-0"></i><span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+      if (window.lucide) lucide.createIcons();
+      requestAnimationFrame(() => {
+        toast.classList.remove('opacity-0', '-translate-y-2');
+        toast.classList.add('opacity-100', 'translate-y-0');
+      });
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function detectFileTypeInfo(type = '', link = '', name = '') {
+      const combined = `${type} ${link} ${name}`.toLowerCase();
+      if (combined.includes('.doc') || combined.includes('.docx') || combined.includes('word')) {
+        return { label: 'Word Doc', icon: 'file', colorClass: 'text-blue-500 bg-blue-500/10 border-blue-500/20' };
+      }
+      if (combined.includes('.ppt') || combined.includes('.pptx') || combined.includes('powerpoint') || combined.includes('presentation') || combined.includes('سلايد') || combined.includes('slides')) {
+        return { label: 'Presentation', icon: 'presentation', colorClass: 'text-amber-500 bg-amber-500/10 border-amber-500/20' };
+      }
+      if (combined.includes('كتاب') || combined.includes('book') || combined.includes('مرجع')) {
+        return { label: 'كتاب / مرجع', icon: 'book-open', colorClass: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20' };
+      }
+      return { label: 'PDF مستند', icon: 'file-text', colorClass: 'text-rose-500 bg-rose-500/10 border-rose-500/20' };
+    }
+
+    window.copyResourceLink = function(link, btn) {
+      if (!link || link === '#' || link.trim() === '') {
+        showToast("رابط التحميل غير متوفر حالياً", "error");
+        return;
+      }
+      navigator.clipboard.writeText(link).then(() => {
+        showToast("تم نسخ رابط الملف إلى الحافظة", "success");
+        if (btn) {
+          const orig = btn.innerHTML;
+          btn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i>';
+          if (window.lucide) lucide.createIcons();
+          setTimeout(() => {
+            btn.innerHTML = orig;
+            if (window.lucide) lucide.createIcons();
+          }, 1800);
+        }
+      }).catch(() => {
+        showToast("تعذر نسخ الرابط إلى الحافظة", "error");
+      });
+    };
+
     // محرك الفحص الدلالي والتصنيف الذكي للمورد
     function detectResourceMetadata(faculty = '', type = '', name = '', code = '') {
       const combined = `${faculty} ${type} ${name} ${code}`.toLowerCase();
@@ -291,7 +368,7 @@
         categories.push('arts_sciences');
       }
 
-      // تحديد ألوان الشارات לפי النوع بدقة
+      // تحديد ألوان الشارات حسب النوع بدقة
       let typeBadgeClass = "bg-amber-500/10 text-amber-600 dark:text-amber-400";
       const lowerType = type.toLowerCase();
       if (lowerType.includes('كتاب') || lowerType.includes('book')) {
@@ -326,7 +403,7 @@
         const rawType = item['نوع الملف'] || item['نوع المورد'] || item.type || 'ملف دراسي';
         const rawLink = item['رابط التحميل'] || item.link || '#';
 
-        // استخراج وتنقية الفصل والسنة الدراسية: إخفاؤه تماماً إذا لم يُدخل
+        // استخراج وتنقية الفصل والسنة الدراسية
         const rawTerm = item['الفصل'] || item['الفصل والسنة الدراسية'] || item.term || '';
         const isInvalidTerm = (v) => {
           if (!v) return true;
@@ -335,11 +412,12 @@
         };
         const rawCleanTerm = isInvalidTerm(rawTerm) ? '' : String(rawTerm).trim();
 
-        // استخراج الوصف النظيف دون تكرار أو فراغ
+        // استخراج الوصف النظيف
         let rawDesc = String(item['الوصف'] || '').trim();
         if (rawDesc === rawCleanTerm || isInvalidTerm(rawDesc) || rawDesc === rawName || rawDesc === rawCode) rawDesc = '';
 
         const meta = detectResourceMetadata(rawFaculty, rawType, rawName, rawCode);
+        const fileInfo = detectFileTypeInfo(rawType, rawLink, rawName);
         const searchMetadata = escapeHtml(`${rawName} ${rawCode} ${rawFaculty} ${rawType} ${rawCleanTerm} ${rawDesc}`.toLowerCase());
 
         const name = escapeHtml(rawName);
@@ -347,11 +425,18 @@
         const faculty = escapeHtml(rawFaculty);
         const type = escapeHtml(rawType);
         const link = escapeHtml(rawLink);
+        const escapedLink = rawLink.replace(/'/g, "\\'").replace(/"/g, '&quot;');
         const term = escapeHtml(rawCleanTerm);
         const desc = escapeHtml(rawDesc);
 
+        let termCode = 'other';
+        const lowerTerm = rawCleanTerm.toLowerCase();
+        if (lowerTerm.includes('fall') || lowerTerm.includes('خريف')) termCode = 'fall';
+        else if (lowerTerm.includes('spring') || lowerTerm.includes('ربيع')) termCode = 'spring';
+        else if (lowerTerm.includes('summer') || lowerTerm.includes('صيف')) termCode = 'summer';
+
         return `
-          <div class="resource-card rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark p-4 flex flex-col hover:border-gold-500/50 transition duration-200 shadow-sm" data-category="${meta.categories}" data-name="${searchMetadata}">
+          <div class="resource-card rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark p-4 flex flex-col justify-between hover:border-gold-500/50 transition duration-200 shadow-sm" data-category="${meta.categories}" data-term="${termCode}" data-name="${searchMetadata}">
             <div class="space-y-1.5">
               <div class="flex items-center justify-between gap-2 flex-wrap">
                 <div class="flex items-center gap-1.5 flex-wrap">
@@ -364,15 +449,20 @@
               ${desc ? `<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 pt-0.5">${desc}</p>` : ''}
             </div>
             
-            <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <span class="text-[11px] text-slate-400 flex items-center gap-1 font-mono">
-                <i data-lucide="${type.includes('كتاب') ? 'book-open' : 'file-text'}" class="w-3.5 h-3.5"></i> 
-                ${type.includes('كتاب') ? 'كتاب رقمي' : 'PDF'}
+            <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded border flex items-center gap-1.5 ${fileInfo.colorClass}">
+                <i data-lucide="${fileInfo.icon}" class="w-3.5 h-3.5"></i> 
+                <span>${fileInfo.label}</span>
               </span>
-              <a href="${link}" target="_blank" class="px-3 py-1 rounded-xl bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-200 hover:bg-gold-500 hover:text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-sm">
-                <span>تحميل</span>
-                <i data-lucide="download" class="w-3.5 h-3.5"></i>
-              </a>
+              <div class="flex items-center gap-1.5">
+                <button onclick="copyResourceLink('${escapedLink}', this)" class="p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#131e3a] hover:border-gold-500 text-slate-600 dark:text-slate-300 transition shadow-sm cursor-pointer" title="نسخ رابط التحميل">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                </button>
+                <a href="${link}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-200 hover:bg-gold-500 hover:text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-sm">
+                  <span>تحميل</span>
+                  <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                </a>
+              </div>
             </div>
           </div>
         `;
@@ -383,6 +473,7 @@
     }
 
     async function fetchLiveResources() {
+      const startTime = Date.now();
       const cached = localStorage.getItem('nadi_resources_cache');
       if (cached) {
         try {
@@ -399,9 +490,24 @@
         const response = await fetch(SCRIPT_URL);
         const data = await response.json();
 
+        const elapsed = Date.now() - startTime;
+        if (elapsed < 250) {
+          await new Promise(r => setTimeout(r, 250 - elapsed));
+        }
+
         if (data.resources && Array.isArray(data.resources)) {
           resourcesData = data.resources;
-          renderResources(resourcesData);
+          const grid = document.getElementById('resourcesGrid');
+          if (grid && !cached) {
+            grid.style.opacity = '0';
+            grid.style.transition = 'opacity 0.3s ease';
+            renderResources(resourcesData);
+            requestAnimationFrame(() => {
+              grid.style.opacity = '1';
+            });
+          } else {
+            renderResources(resourcesData);
+          }
           localStorage.setItem('nadi_resources_cache', JSON.stringify(resourcesData));
         }
       } catch (err) {
@@ -475,12 +581,14 @@
       });
     }
 
-    // نظام البحث والفلترة الفورية
+    // نظام البحث والفلترة الفورية متعدد الأبعاد
     const searchInput = document.getElementById('searchInput');
     const filterButtons = document.querySelectorAll('.filter-btn');
+    const termButtons = document.querySelectorAll('.term-btn');
     const noResults = document.getElementById('noResults');
 
     let currentFilter = 'all';
+    let currentTerm = 'all';
 
     function filterResources() {
       const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
@@ -489,12 +597,14 @@
 
       cards.forEach(card => {
         const category = card.getAttribute('data-category') || '';
+        const cardTerm = card.getAttribute('data-term') || '';
         const name = card.getAttribute('data-name') || '';
 
         const matchesFilter = (currentFilter === 'all') || category.includes(currentFilter);
+        const matchesTerm = (currentTerm === 'all') || cardTerm === currentTerm;
         const matchesSearch = !query || name.includes(query);
 
-        if (matchesFilter && matchesSearch) {
+        if (matchesFilter && matchesTerm && matchesSearch) {
           card.classList.remove('hidden');
           visibleCount++;
         } else {
@@ -528,6 +638,42 @@
         filterResources();
       });
     });
+
+    termButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        termButtons.forEach(b => {
+          b.classList.remove('active', 'bg-slate-800', 'text-white', 'dark:bg-slate-700', 'dark:text-gold-400', 'font-bold');
+          b.classList.add('bg-slate-100', 'dark:bg-[#131e3a]', 'text-slate-600', 'dark:text-slate-400', 'font-medium');
+        });
+        btn.classList.remove('bg-slate-100', 'dark:bg-[#131e3a]', 'text-slate-600', 'dark:text-slate-400', 'font-medium');
+        btn.classList.add('active', 'bg-slate-800', 'text-white', 'dark:bg-slate-700', 'dark:text-gold-400', 'font-bold');
+
+        currentTerm = btn.getAttribute('data-term');
+        filterResources();
+      });
+    });
+
+    // ==================== زر التمرير إلى الأعلى Scroll-To-Top ====================
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+    if (scrollToTopBtn) {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 350) {
+          scrollToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+          scrollToTopBtn.classList.add('opacity-100');
+        } else {
+          scrollToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+          scrollToTopBtn.classList.remove('opacity-100');
+        }
+      });
+      scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
   </script>
+
+  <!-- ==================== زر التمرير إلى الأعلى العائم ==================== -->
+  <button id="scrollToTopBtn" aria-label="الرجوع للأعلى" class="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-slate-900/85 dark:bg-clubNavy-cardDark/90 backdrop-blur-md border border-slate-700/50 text-gold-400 shadow-2xl opacity-0 pointer-events-none transition-all duration-300 hover:scale-110 active:scale-95 hover:border-gold-500 cursor-pointer">
+    <i data-lucide="chevron-up" class="w-5 h-5"></i>
+  </button>
 </body>
 </html>
