@@ -568,7 +568,14 @@
               <span>مساعد AI الذكي</span>
               <span class="px-1.5 py-0.2 rounded-full text-[9px] font-mono bg-gold-500/10 text-gold-500 border border-gold-500/20">Gemini 2.0</span>
             </h3>
-            <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">متصل لخدمة الطلاب — فرع صور</p>
+            <div class="flex items-center gap-1.5 text-[10px]">
+              <span class="text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>متصل</span>
+              </span>
+              <span class="text-slate-300 dark:text-slate-700">•</span>
+              <span id="aiQuotaBadge" class="text-gold-600 dark:text-gold-400 font-bold font-mono">12 استفسار متبقٍ</span>
+            </div>
           </div>
         </div>
         <button id="closeChatBtn" aria-label="إغلاق الشات" class="p-1.5 rounded-full text-slate-500 hover:text-red-500 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer">
@@ -579,8 +586,8 @@
       <!-- صندوق الرسائل -->
       <div id="chatMessages" class="flex-1 p-3.5 sm:p-4 overflow-y-auto space-y-3 text-xs leading-relaxed custom-scrollbar">
         <div class="flex items-start gap-2 max-w-[90%]">
-          <div class="p-3.5 rounded-2xl rounded-tr-none bg-slate-100 dark:bg-[#131e3a] text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-800 text-xs">
-            أهلاً بك! أنا مساعد AI الذكي لنادي الوفاء في فرع صور. يمكنك سؤالي عن: اللوائح الأكاديمية والمعدل، التقديم للمنحة، بنك الامتحانات، إعارة الكتب، والتواصل مع الأساتذة.
+          <div class="p-3.5 rounded-2xl rounded-tr-none bg-slate-100 dark:bg-[#131e3a] text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-800 text-xs leading-relaxed">
+            مرحباً بك زميلي الطالب! أنا مساعد AI الأكاديمي لنادي الوفاء في فرع صور. يمكنك سؤالي عن كل ما يخص الجامعة: اللوائح الأكاديمية ونظام الـ GPA، خدمات الموقع (الامتحانات، الكتب، المنح، والأساتذة)، أو حتى الاستفسار والشرح في مقرراتك الدراسية ونصائح التفوق.
           </div>
         </div>
       </div>
@@ -926,102 +933,140 @@
     const chatInput = document.getElementById('chatInput');
     const chatMessages = document.getElementById('chatMessages');
     const voiceBtn = document.getElementById('voiceBtn');
+    const sendBtn = document.getElementById('sendBtn');
 
-    // تم تحديث مفتاح الـ API المعتمد
-    const GEMINI_API_KEY = "AQ.Ab8RN6JPIZ_lmnv60KZSoY-ypPF_-fTq99qAGimo-jyJmYGKNA";
+    // مفتاح Google AI Studio API المعتمد والمحدث
+    const GEMINI_API_KEY = "AQ.Ab8RN6LFmCdgROwCHc1BIEh3i-dpWXH0_ibqrSW-vButidFItw";
+
+    // ==================== نظام الحصة وإدارة استهلاك الجلسة (Rate Limiter) ====================
+    const MAX_SESSION_QUESTIONS = 12;
+    const QUOTA_WINDOW_MS = 60 * 60 * 1000; // 60 دقيقة
+    const QUOTA_STORAGE_KEY = 'nadi_ai_session_quota';
+
+    function getQuotaState() {
+      try {
+        const raw = localStorage.getItem(QUOTA_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed.count === 'number' && parsed.resetAt) {
+            if (Date.now() < parsed.resetAt) {
+              return parsed;
+            }
+          }
+        }
+      } catch (e) {}
+
+      const newState = {
+        count: MAX_SESSION_QUESTIONS,
+        resetAt: Date.now() + QUOTA_WINDOW_MS
+      };
+      saveQuotaState(newState);
+      return newState;
+    }
+
+    function saveQuotaState(state) {
+      try {
+        localStorage.setItem(QUOTA_STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {}
+    }
+
+    function updateQuotaUI() {
+      const state = getQuotaState();
+      const badge = document.getElementById('aiQuotaBadge');
+      if (badge) {
+        if (state.count <= 0) {
+          const remainingMins = Math.max(1, Math.ceil((state.resetAt - Date.now()) / 60000));
+          badge.textContent = `يتجدد بعد ${remainingMins} د`;
+          badge.className = 'text-rose-500 font-bold font-mono';
+        } else {
+          badge.textContent = `${state.count} أسئلة متبقية`;
+          badge.className = state.count <= 3 
+            ? 'text-amber-500 font-bold font-mono' 
+            : 'text-gold-600 dark:text-gold-400 font-bold font-mono';
+        }
+      }
+    }
+
+    function consumeQuota() {
+      const state = getQuotaState();
+      if (state.count > 0) {
+        state.count -= 1;
+        saveQuotaState(state);
+        updateQuotaUI();
+        return true;
+      }
+      return false;
+    }
+
+    function refundQuota() {
+      const state = getQuotaState();
+      if (state.count < MAX_SESSION_QUESTIONS) {
+        state.count += 1;
+        saveQuotaState(state);
+        updateQuotaUI();
+      }
+    }
+
+    // تهيئة حالة الحصة فور تحميل الصفحة
+    updateQuotaUI();
 
     let chatHistory = [];
+    let isAIBusy = false;
 
-    // موسوعة التوجيه الأكاديمي الحصرية
+    // ==================== موسوعة التوجيه الأكاديمي والجامعي الفائقة ====================
     const SYSTEM_INSTRUCTION = `
-أنت "المستشار الأكاديمي الرقمي الرسمي المعتمد" لمنصة "نادي الوفاء" في الجامعة اللبنانية الدولية (LIU) - فرع صور.
-أنت ذكاء اصطناعي أكاديمي فائق الفطنة، تملك معرفة شاملة بجميع لوائح وقوانين الجامعة وخدمات النادي وممثلي الأقسام في فرع صور.
+أنت "مساعد AI الأكاديمي والطلابي الرسمي" لمنصة "نادي الوفاء" في الجامعة اللبنانية الدولية (LIU) - فرع صور.
+أنت ذكاء اصطناعي أكاديمي متقدم، ذكي جداً، واسع الاطلاع، ولطيف وداعم لكل طالب يسعى للنجاح والتفوق.
 
-==================================================
-أولاً: القواعد الحاسمة للسلوك وحظر التكرار (Strict Guardrails)
-==================================================
-1. حظر الترحيب المتكرر قطعياً:
-   - يُمنع منعاً باتاً أن تبدأ إجابتك بـ "أهلاً بك" أو "مرحباً" أو أي جملة ترحيب إذا كان الطالب يسأل سؤالاً مباشراً أو استفساراً مكملاً.
-   - إذا كتب الطالب تحية مجردة في البداية ("مرحبا"، "السلام عليكم")، رد بجملة واحدة فقط: "وعليكم السلام زميلي الطالب، تفضل بسؤالك لأجيبك فوراً."
-   - في جميع الأسئلة والمتابعات، ادخل في صلب الإجابة من الكلمة الأولى.
+دورك ورسالتك الأساسية:
+1. إرشاد الطلاب في كل ما يخص موقع ومنصة نادي الوفاء وخدماته المباشرة وتوفير روابط سريعة للصفحات.
+2. الإجابة بدقة واحترافية عن جميع لوائح وقوانين الجامعة اللبنانية الدولية (فرع صور)، ونظام المعدل التراكمي (GPA)، والتسجيل، والامتحانات، والمشاكل الطلابية.
+3. تقديم الدعم الأكاديمي والدراسي العام: شرح المفاهيم العلمية والبرمجية، كتابة مسودات الإيميلات الرسمية للأساتذة والإدارة، نصائح المذاكرة والاستعداد للفحوصات، وحل المعضلات الدراسية بروح إيجابية مشجعة وعالية الذكاء.
 
-2. قاعدة الاعتذار الصريح عند الخروج عن السياق:
-   - إذا سأل الطالب عن أي موضوع لا يخص جامعة LIU أو خدمات نادي الوفاء (مثل: أسئلة سياسية، فتاوى، طبخ، برمجة عامة خارج مواد الجامعة، ألعاب، أخبار فنية أو مزاح خارج عن الإطار الجامعي)، يُحظر تقديم أي إجابة عامة أو الالتفاف.
-   - يجب الرد حصراً بهذه العبارة المحددة:
-   "أعتذر منك زميلي الطالب، دوري كمساعد ذكي لنادي الوفاء مخصص حصراً للشؤون الأكاديمية والخدمات الطلابية في الجامعة اللبنانية الدولية (فرع صور)، ولا يمكنني تقديم إجابة حول هذا الموضوع."
+أولاً: خدمات نادي الوفاء وروابط المنصة المباشرة:
+- بنك الامتحانات والموارد (resources.html): تحميل مباشر مجاني لنماذج الامتحانات النصفية (Midterms) والنهائية (Finals) والسلايدات والملخصات لجميع المقررات دون تسجيل دخول.
+- استعارة وتبادل الكتب (books.html): حجز استعارة المراجع الورقية المتاحة بالمكتبة أو التبرع بالكتب القديمة مع الاستلام داخل حرم الجامعة بفرع صور.
+- المنحة الطلابية السنوية (scholarship.html): تقديم إلكتروني مباشر لمبادرة تخفيف الأعباء الجامعية ومساعدة الطلاب المستحقين.
+- دليل الأساتذة (faculty.html): إيميلات الدكاترة، أرقام المكاتب، ومتابعة الساعات المكتبية لحظياً مع إمكانية المراسلة أو نسخ الإيميل بضغطة زر.
+- شبكة التوجيه وممثلو الاختصاصات (guidance.html): ممثلو الاختصاصات ومجموعات الواتساب الرسمية للتوجيه الأكاديمي المباشر.
+- أرشيف الفعاليات (archive.html): معرض الصور والأنشطة والورش التدريبية التي ينظمها النادي.
+* قاعدة هامة: عند توجيه الطالب لأي خدمة، ضع دائماً اسم الصفحة كاسم ملف إنجليزي (مثل: resources.html أو books.html) ليتحول تلقائياً إلى رابط مباشر يضغط عليه الطالب.
 
-3. استيعاب المصطلحات الإنجليزية والترجمة الصوتية (Phonetic Awareness):
-   - يكتب بعض الطلاب عبر الصوت كلمات إنجليزية بحروف عربية صوتية، أو بفرانكو، أو بالإنجليزية مباشرة. عليك استيعابها فوراً ومعاملتها بنفس الدقة:
-     * "جي بي اي" أو "gpa" أو "معدل" = المعدل التراكمي.
-     * "دروب اند اد" أو "دروب" أو "drop & add" = فترة السحب والإضافة.
-     * "بتيشن" أو "بيتيشن" أو "petition" = عريضة الالتماس الأكاديمية.
-     * "بريريكويزيت" أو "prerequisite" = المتطلب السابق للمادة.
-     * "كوريكويزيت" أو "corequisite" = المادة المتزامنة.
-     * "ميدتيرم" أو "midterm" = الامتحان النصفي.
-     * "فاينل" أو "final" = الامتحان النهائي.
-     * "كريدت" أو "credits" = الساعات المعتمدة / الأرصدة.
-     * "بروبيشن" أو "probation" = الإنذار الأكاديمي.
-     * "يو ام اس" أو "ums" أو "sis" = بوابة الطالب الإلكترونية.
-
-4. حظر الرموز التعبيرية (No Emojis): يُمنع منعاً باتاً وضع أي إيموجي في ردودك.
-5. الدقة والتركيز: لا تُطِل في الإجابات البسيطة، ورتّب الإجراءات في نقاط مرقمة تسلسلية (1، 2، 3).
-
-==================================================
-ثانياً: الدليل واللوائح الأكاديمية الشاملة لجامعة LIU
-==================================================
-1. نظام المعدل التراكمي (GPA):
-   - السلم من 4.00: A=4.0, B+=3.5, B=3.0, C+=2.5, C=2.0, D+=1.5, D=1.0, F=0.0.
-   - الإنذار الأكاديمي (Academic Probation): يقع الطالب تحت الإنذار إذا نزل الـ CGPA عن 2.00/4.00.
+ثانياً: لوائح وقوانين جامعة LIU الأكاديمية الرسمية:
+1. نظام المعدل التراكمي (GPA من 4.00):
+   - السلم: A=4.0, B+=3.5, B=3.0, C+=2.5, C=2.0, D+=1.5, D=1.0, F=0.0.
+   - الإنذار الأكاديمي (Academic Probation): يقع الطالب تحته إذا انخفض الـ CGPA عن 2.00/4.00.
    - طريقة رفع المعدل الأسرع: إعادة المواد ذات العلامات (D أو D+ أو F) لأن العلامة الجديدة تمحو وتستبدل القديمة تماماً من حساب المعدل التراكمي.
    - لائحة الشرف (Dean's Honor List): تتطلب فصلاً دراسياً لا يقل عن 15 رصيداً بمعدل فصلي 3.50 فما فوق دون أي رسوب.
-
-2. العبء الدراسي والساعات (Credit Limits):
-   - الفصل العادي (خريف / ربيع): الأدنى 12 رصيداً، والأقصى الطبيعي 18-19 رصيداً. يُسمح بزيادة الساعات حتى 21 رصيداً (Overload) فقط لمن معدله 3.00 فما فوق أو للخريج في فصل تخرجه الفعلي عبر عريضة رسمية.
+2. سقف الساعات (Credit Limits):
+   - الفصل العادي (خريف / ربيع): الأدنى 12 رصيداً، الأقصى الطبيعي 18-19 رصيداً. يُسمح حتى 21 رصيداً (Overload) فقط لمن معدله 3.00 فما فوق أو للخريج في فصل تخرجه الفعلي عبر عريضة رسمية (Petition).
    - الفصل الصيفي (Summer): الحد الأقصى 6 إلى 9 أرصدة فقط.
-
 3. الغيابات والحرمان (FA):
-   - الحد الأقصى المسموح للغياب هو 15% فقط من إجمالي ساعات المادة.
-   - للمواد التي تُعطى مرتين أسبوعياً (ساعة ونصف للمحاضرة): يُسمح بـ 3 غيابات فقط، والغياب الرابع يعني صدور حرمان برسوب بعلامة (FA) التي تُحسب كصفر نقطة وتدمر الـ GPA.
-
+   - الحد الأقصى المسموح للغياب هو 15% من ساعات المقرر (3 غيابات فقط للمادة التي تُعطى مرتين أسبوعياً). الغياب الرابع = صدور حرمان برسوب بعلامة FA (تُحسب كصفر نقطة وتدمر الـ GPA).
 4. السحب والإضافة (Drop & Add) والانسحاب (W):
    - السحب والإضافة: خلال الأسبوع الأول من الفصل فقط؛ تُعدل أو تُسقط المواد دون غرامة ودون أثر أكاديمي.
-   - الانسحاب المتأخر (W): يُتاح حتى منتصف الفصل تقريباً، وتُرصد علامة (W) في السجل؛ لا تؤثر على المعدل نهائياً لكن رسومها المالية لا تُسترد.
-
+   - الانسحاب المتأخر (W): متاح حتى منتصف الفصل تقريباً، لا يؤثر على المعدل نهائياً لكن رسومها المالية لا تُسترد.
 5. العرائض والالتماسات (Petitions):
-   - تُقدم إلكترونياً عبر البوابة الجامعية أو لدى عمادة الكلية بفرع صور للحالات التالية: فتح مقعد في شعبة مغلقة، تسجيل مادة متزامنة مع متطلبها السابق في فصل التخرج، طلب إعادة امتحان تغيب عنه الطالب بعذر طبي رسمي، أو طلب سقف ساعات إضافي (Overload).
+   - تُقدم إلكترونياً عبر بوابة UMS أو عمادة الكلية بفرع صور للحالات التالية: فتح مقعد في شعبة مغلقة، تسجيل مادة متزامنة مع متطلبها السابق في فصل التخرج، طلب إعادة امتحان تغيب عنه الطالب بعذر طبي رسمي، أو طلب سقف ساعات إضافي (Overload).
+6. المكاتب والتواصل بفرع صور:
+   - الدائرة المالية: مكتب الأستاذة غيا السمرة (gheya.elsamra@liu.edu.lb) للأقساط وبراءات الذمة.
+   - المكتبة الجامعية: تشرف عليها الأستاذة هبة حمود (hiba.hammoud@liu.edu.lb) للمطالعة والمراجع.
+   - منسقو الأقسام: د. هادي نور الدين (كمبيوتر)، د. علي أبو خليل (كهرباء)، د. علي حلال ود. حسن جابر (ميكانيك)، د. إحسان عساكري (علوم طبية).
+   - مجموعة الإعلانات المركزية: https://chat.whatsapp.com/H5Gvs4LV3OaH7NQsuJpYFx
+   - مجموعة التوجيه الطلابي: https://chat.whatsapp.com/Kdt9QVnMsmW2GguggFDuvs
 
-==================================================
-ثالثاً: حل المشكلات الطلابية اليومية
-==================================================
-- الشكوى من علامة امتحان: مراجعة الدكتور في ساعاته المكتبية، وإذا تعذر الحل يحق للطالب تقديم عريضة مراجعة علامة (Grade Appeal) خلال أسبوع من صدور النتائج.
-- نسيان كلمة سر بوابة UMS: مراجعة مكتب IT أو شؤون الطلاب في الطابق الأرضي بحرم صور مع البطاقة الجامعية.
-- الدائرة المالية: مكتب الأستاذة غيا السمرة (gheya.elsamra@liu.edu.lb) للأقساط وبراءات الذمة.
-- المكتبة الجامعية: تشرف عليها الأستاذة هبة حمود (hiba.hammoud@liu.edu.lb) للمطالعة والمراجع.
+ثالثاً: الدعم الأكاديمي والشرح العلمي الشامل:
+- إذا سألك الطالب عن مفهوم دراسي أو علمي (مثل: البرمجة بلغات Python أو C++ أو Java أو تقنيات الويب وقواعد البيانات، أو الرياضيات والتفاضل والتكامل، أو الفيزياء، أو المحاسبة وإدارة الأعمال):
+  * اشرح له المفاهيم بذكاء ووضوح عالٍ، مع تقديم أمثلة سهلة وتوضيح الخطوات المنطقية.
+- إذا طلب نصائح لتنظيم الوقت أو الاستعداد للامتحانات أو التعامل مع الضغط الدراسي:
+  * قدّم له نصائح عملية، منهجية، ومثبتة علمياً بأسلوب تحفيزي راقٍ.
+- إذا طلب صياغة إيميل رسمي لدكتور أو للإدارة:
+  * اكتب له الإيميل جاهزاً بصيغة أكاديمية محترمة ومهنية (بالعربية أو الإنجليزية حسب طلبه).
 
-==================================================
-رابعاً: القاعدة المعرفية لخدمات نادي الوفاء (فرع صور)
-==================================================
-1. المنحة الطلابية (scholarship.html): استمارة إلكترونية بالموقع دون أي ملفات PDF، وتخضع لتدقيق نسب الحسم والتواصل هاتفياً.
-2. بنك الموارد (resources.html): امتحانات نصفية ونهائية سابقة وسلايدات مجاناً وبتحميل مباشر بدون تسجيل دخول.
-3. الكتب الورقية (books.html): حجز أو تبرع بالمراجع المطبوعة والتسليم يداً بيد داخل حرم فرع صور.
-4. دليل الأساتذة (faculty.html): إيميلات ومواعيد المكاتب مع إمكانية النسخ بضغطة زر.
-5. شبكة التوجيه (guidance.html): روابط الواتساب الرسمية وأرقام مسؤولي الاختصاصات للتواصل الفردي.
-
-==================================================
-خامساً: دليل الاتصال وممثلو الاختصاصات (فرع صور)
-==================================================
-- واتساب نادي الوفاء المركزي: https://chat.whatsapp.com/H5Gvs4LV3OaH7NQsuJpYFx
-- مجموعة التوجيه الطلابي: https://chat.whatsapp.com/Kdt9QVnMsmW2GguggFDuvs
-- منسق هندسة الميكانيك: 71336458 (+961 71 336 458)
-- منسق هندسة الكمبيوتر: 03945021 (+961 3 945 021)
-- منسق هندسة الاتصالات: 81604305 (+961 81 604 305)
-- د. هادي نور الدين (كمبيوتر واتصالات): hadi.noureddine@liu.edu.lb
-- د. علي أبو خليل (كهرباء): ali.aboukhalil@liu.edu.lb
-- د. علي حلال (ميكانيك): ali.halal@liu.edu.lb
-- د. حسن جابر (ميكانيك): hassan.jaber@liu.edu.lb
-- د. إحسان عساكري (علوم طبية): ihsan.asakereh@liu.edu.lb
-- د. مايا بسام / د. شيراز قاسم / د. علي سرور (قسم الرياضيات): متاحون عبر دليل الأساتذة.
-- أ. علي اللبن (قسم اللغة الإنجليزية): ali.ellaban@liu.edu.lb
+رابعاً: أسلوب الرد والضوابط (Tone & Guardrails):
+- الالتزام التام بسياسة خلو المنصة من الإيموجيز المشوهة (Zero Emojis Policy) - استخدم التنسيق النصي الراقي.
+- نسّق إجاباتك بتنسيق Markdown أنيق ومريح للقراءة (استخدم العناوين، النقاط المرقمة، والخط العريض للمصطلحات).
+- كن مرناً وذكياً، ولا ترفض أي استفسار دراسي أو جامعي أو علمي مفيد. الرفض اللطيف يكون حصراً في حال طُرحت مواضيع مسيئة تماماً أو سياسية أو خارجة عن إطار الأخلاقيات والآداب العامة.
 `;
 
     function closeChat() {
@@ -1037,6 +1082,7 @@
         if (chatBackdrop) chatBackdrop.classList.toggle('hidden', !isOpening);
 
         if (isOpening) {
+          updateQuotaUI();
           if (window.innerWidth >= 640) {
             chatInput.focus();
           }
@@ -1056,10 +1102,12 @@
       escapeDiv.textContent = rawText;
       let text = escapeDiv.innerHTML;
 
-      // تحويل الروابط إلى عناصر قابلة للنقر
+      // تحويل الروابط الكاملة
       text = text.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-gold-500 hover:underline font-bold break-all">$1</a>');
       // تحويل الإيميلات
       text = text.replace(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/g, '<a href="mailto:$1" class="text-gold-500 hover:underline font-bold">$1</a>');
+      // تحويل أسماء صفحات الموقع إلى روابط داخلية مباشرة
+      text = text.replace(/\b(resources\.html|books\.html|scholarship\.html|faculty\.html|guidance\.html|archive\.html)\b/g, '<a href="$1" class="text-gold-500 underline font-bold hover:opacity-80">$1</a>');
       // تنسيق العناوين العريضة
       text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       // الأسطر الجديدة
@@ -1088,74 +1136,60 @@
       chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
     }
 
-    function getFallbackResponse(text) {
+    function getFriendlyFallbackResponse(text) {
       const q = text.toLowerCase().trim();
 
-      if (q.includes('غيا') || q.includes('سمرة') || q.includes('مالية') || q.includes('المالي') || q.includes('قسط') || q.includes('دفع')) {
+      if (q.includes('غيا') || q.includes('سمرة') || q.includes('مالية') || q.includes('قسط')) {
         return 'الدائرة المالية في فرع صور تشرف عليها الأستاذة غيا السمرة: gheya.elsamra@liu.edu.lb لمتابعة الأقساط وبراءات الذمة المالية.';
       }
-      if (q.includes('هبة') || q.includes('حمود') || q.includes('مكتبة') || q.includes('المكتبة')) {
+      if (q.includes('هبة') || q.includes('حمود') || q.includes('مكتبة')) {
         return 'المكتبة العامة في حرم فرع صور تشرف عليها الأستاذة هبة حمود: hiba.hammoud@liu.edu.lb وتوفر قاعات المطالعة والمراجع الأكاديمية.';
       }
-      if (q.includes('هادي') || q.includes('نور الدين')) {
-        return 'د. هادي نور الدين (هندسة الكمبيوتر والاتصالات): hadi.noureddine@liu.edu.lb';
+      if (q.includes('منحة') || q.includes('حسم')) {
+        return 'للتقديم على المنحة الطلابية السنوية: تفضل بزيارة صفحة scholarship.html واملأ الاستمارة الإلكترونية مباشرة.';
       }
-      if (q.includes('أبو خليل') || (q.includes('علي') && q.includes('كهرباء'))) {
-        return 'د. علي أبو خليل (هندسة الكهرباء): ali.aboukhalil@liu.edu.lb';
+      if (q.includes('كتاب') || q.includes('استعارة') || q.includes('تبرع')) {
+        return 'لحجز استعارة كتاب ورقي أو التبرع به لمكتبة النادي: تفضل بزيارة صفحة books.html وسيتواصل معك فريق النادي للتسليم داخل الحرم الجامعي.';
       }
-      if (q.includes('حلال') || (q.includes('علي') && q.includes('ميكانيك'))) {
-        return 'د. علي حلال (هندسة الميكانيك): ali.halal@liu.edu.lb';
+      if (q.includes('امتحان') || q.includes('دورات') || q.includes('سلايد') || q.includes('ملخص')) {
+        return 'نماذج الامتحانات السابقة والسلايدات متوفرة للتحميل المباشر والمجاني في صفحة بنك الموارد: resources.html.';
       }
-      if (q.includes('جابر') || (q.includes('حسن') && q.includes('ميكانيك'))) {
-        return 'د. حسن جابر (هندسة الميكانيك): hassan.jaber@liu.edu.lb';
+      if (q.includes('أستاذ') || q.includes('دكتور') || q.includes('مكتب') || q.includes('ساعات مكتبية')) {
+        return 'عناوين التواصل والساعات المكتبية لجميع دكاترة الكليات متوفرة في دليل الأساتذة: faculty.html.';
       }
-      if (q.includes('عساكري') || q.includes('إحسان') || q.includes('طب')) {
-        return 'د. إحسان عساكري (العلوم الطبية والطب): ihsan.asakereh@liu.edu.lb';
+      if (q.includes('توجيه') || q.includes('ممثل') || q.includes('واتساب') || q.includes('جروب')) {
+        return 'روابط مجموعات الواتساب الرسمية وأرقام مسؤولي الاختصاصات للتواصل المباشر تجدها في صفحة: guidance.html.';
       }
-      if (q.includes('ميكانيك')) {
-        return 'مسؤول اختصاص هندسة الميكانيك (واتساب مباشر): 71336458 (+961 71 336 458).';
-      }
-      if (q.includes('كمبيوتر') || q.includes('حاسوب') || q.includes('cs')) {
-        return 'مسؤول اختصاص هندسة الكمبيوتر (واتساب مباشر): 03945021 (+961 3 945 021).';
-      }
-      if (q.includes('اتصالات')) {
-        return 'مسؤول اختصاص هندسة الاتصالات (واتساب مباشر): 81604305 (+961 81 604 305).';
-      }
-      if (q.includes('جروب') || q.includes('مجموعة') || q.includes('واتساب') || q.includes('رابط') || q.includes('لينك')) {
-        return 'روابط مجموعات نادي الوفاء الرسمية:\n- مجموعة الإعلانات: https://chat.whatsapp.com/H5Gvs4LV3OaH7NQsuJpYFx\n- مجموعة التوجيه: https://chat.whatsapp.com/Kdt9QVnMsmW2GguggFDuvs';
-      }
-      if (q.includes('منحة') || q.includes('حسم') || q.includes('تقديم') || q.includes('طلب')) {
-        return 'للتقديم على المنحة الطلابية: توجه إلى صفحة "المنح الطلابية" (scholarship.html) عبر القائمة واملأ الاستمارة الإلكترونية مباشرة.';
-      }
-      if (q.includes('كتاب') || q.includes('كتب') || q.includes('استعارة') || q.includes('تبرع')) {
-        return 'لحجز كتاب ورقي أو التبرع به: ادخل إلى صفحة "الكتب والمراجع الورقية" (books.html) وسيتواصل معك النادي للتسليم داخل الحرم الجامعي.';
-      }
-      if (q.includes('امتحان') || q.includes('دورات') || q.includes('pdf') || q.includes('مراجع') || q.includes('سلايد') || q.includes('ميدتيرم') || q.includes('فاينل')) {
-        return 'جميع الامتحانات النصفية والنهائية السابقة والمراجع متوفرة للتحميل المباشر المجاني في صفحة "بنك الموارد الرقمية" (resources.html).';
-      }
-      if (q.includes('معدل') || q.includes('gpa') || q.includes('جي بي اي') || q.includes('إنذار') || q.includes('بروبيشن')) {
-        return 'المعدل التراكمي في LIU من 4.00. يقع الإنذار إذا نزل الـ GPA عن 2.00، وأسرع طريقة لرفعه هي إعادة المواد التي نلت فيها D أو F لأن درجتها الجديدة تمحو القديمة تماماً.';
-      }
-      if (q.includes('غياب') || q.includes('حرمان') || q.includes('fa')) {
-        return 'الحد الأقصى للغياب هو 15% من ساعات المادة (3 غيابات فقط للمادة التي تُعطى مرتين أسبوعياً). تجاوز النسبة يسبب حرماناً برسوب كامل بعلامة FA.';
-      }
-      if (q.includes('دروب') || q.includes('drop') || q.includes('سحب') || q.includes('اضافة') || q.includes('إضافة')) {
-        return 'فترة السحب والإضافة (Drop & Add) متاحة خلال الأسبوع الأول من الفصل لتعديل المواد دون غرامة ودون تسجيل علامة W.';
-      }
-      if (q.includes('بتيشن') || q.includes('عريضة') || q.includes('petition')) {
-        return 'عريضة الالتماس (Petition) تُرفع عبر البوابة الإلكترونية أو عمادة الكلية بفرع صور لحالات فتح شعبة مغلقة، كسر متطلب سابق، أو زيادة سقف الساعات للخريجين.';
+      if (q.includes('معدل') || q.includes('gpa') || q.includes('إنذار')) {
+        return 'المعدل التراكمي في جامعة LIU يُحسب من 4.00. يقع الطالب تحت الإنذار الأكاديمي إذا انخفض المعدل عن 2.00، وأسرع وسيلة لرفعه هي إعادة المواد التي نال فيها علامة D أو F لأن درجتها الجديدة تستبدل السابقة كلياً.';
       }
 
-      return 'أعتذر منك زميلي الطالب، دوري كمساعد ذكي لنادي الوفاء مخصص حصراً للشؤون الأكاديمية والخدمات الطلابية في الجامعة اللبنانية الدولية (فرع صور)، ولا يمكنني تقديم إجابة حول هذا الموضوع.';
+      return 'عذراً زميلي الطالب، يبدو أن هناك ضغطاً مؤقتاً على خوادم الذكاء الاصطناعي المجانية. تفضل بتكرار سؤالك بعد ثوانٍ قليلة، أو استعرض خدمات الموقع المباشرة (resources.html، books.html، faculty.html).';
     }
 
     async function queryAI(userPrompt) {
+      if (isAIBusy) return;
+
+      // 1. فحص الحصة المتبقية للجلسة
+      const quotaState = getQuotaState();
+      if (quotaState.count <= 0) {
+        const remainingMins = Math.max(1, Math.ceil((quotaState.resetAt - Date.now()) / 60000));
+        addMessage(`وصلت إلى الحد الأقصى للاستفسارات في هذه الجلسة (${MAX_SESSION_QUESTIONS} استفساراً).\n\nسيتجدد رصيدك تلقائياً خلال **${remainingMins} دقيقة** حرصاً على إتاحة خدمة الذكاء الاصطناعي لجميع الطلاب بالتساوي.\n\nيمكنك في هذه الأثناء مراجعة صفحات الموقع أو التواصل المباشر مع ممثلي الاختصاصات في صفحة guidance.html.`, false);
+        return;
+      }
+
+      // 2. استهلاك سؤال من الحصة وتحديث الواجهة
+      consumeQuota();
+      isAIBusy = true;
+      if (chatInput) chatInput.disabled = true;
+      if (sendBtn) sendBtn.disabled = true;
+
       const loadingDiv = document.createElement('div');
       loadingDiv.id = 'aiLoading';
       loadingDiv.className = 'flex items-center gap-2 max-w-[90%] text-slate-400 text-[11px] p-2';
       loadingDiv.innerHTML = `
         <span class="inline-block w-2 h-2 rounded-full bg-gold-500 animate-ping"></span>
-        <span>جاري تحليل الاستفسار الأكاديمي...</span>
+        <span>مساعد AI يحلل الاستفسار الأكاديمي...</span>
       `;
       chatMessages.appendChild(loadingDiv);
       chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -1165,7 +1199,7 @@
         parts: [{ text: userPrompt }]
       });
 
-      // الحفاظ على سياق المحادثة خفيفاً وسريع الاستجابة
+      // سياق محادثة نشط ورشيق
       if (chatHistory.length > 10) {
         chatHistory = chatHistory.slice(-10);
       }
@@ -1182,7 +1216,7 @@
             },
             contents: chatHistory,
             generationConfig: {
-              temperature: 0.2,
+              temperature: 0.65,
               maxOutputTokens: 2048
             }
           })
@@ -1200,16 +1234,27 @@
             parts: [{ text: botReply }]
           });
         } else {
+          // استرداد الحصة للطالب في حال فشل الطلب
+          refundQuota();
           chatHistory.pop();
-          const fallback = getFallbackResponse(userPrompt);
+          const fallback = getFriendlyFallbackResponse(userPrompt);
           addMessage(fallback, false);
         }
       } catch (error) {
         const loading = document.getElementById('aiLoading');
         if (loading) loading.remove();
+        // استرداد الحصة للطالب
+        refundQuota();
         chatHistory.pop();
-        const fallback = getFallbackResponse(userPrompt);
+        const fallback = getFriendlyFallbackResponse(userPrompt);
         addMessage(fallback, false);
+      } finally {
+        isAIBusy = false;
+        if (chatInput) {
+          chatInput.disabled = false;
+          if (window.innerWidth >= 640) chatInput.focus();
+        }
+        if (sendBtn) sendBtn.disabled = false;
       }
     }
 
@@ -1217,7 +1262,7 @@
       chatForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const userText = chatInput.value.trim();
-        if (!userText) return;
+        if (!userText || isAIBusy) return;
 
         addMessage(userText, true);
         chatInput.value = '';
