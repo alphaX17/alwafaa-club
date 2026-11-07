@@ -985,6 +985,14 @@
             : 'text-gold-600 dark:text-gold-400 font-bold font-mono';
         }
       }
+      if (chatInput && !isAIBusy) {
+        if (state.count <= 0) {
+          const remainingMins = Math.max(1, Math.ceil((state.resetAt - Date.now()) / 60000));
+          chatInput.placeholder = `انتهى رصيد الجلسة (يتجدد بعد ${remainingMins} دقيقة)`;
+        } else {
+          chatInput.placeholder = 'اسألني عن المواد، الدكاترة، الـ GPA، أو الاستعارة...';
+        }
+      }
     }
 
     function consumeQuota() {
@@ -1210,8 +1218,7 @@
         const response = await fetch(endpoint, {
           method: "POST",
           headers: { 
-            "Content-Type": "application/json",
-            "x-goog-api-key": GEMINI_API_KEY
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
             system_instruction: {
@@ -1238,17 +1245,14 @@
           });
         } else {
           console.error("Gemini API Error details:", data);
-          // استرداد الحصة للطالب في حال فشل الطلب
-          refundQuota();
           chatHistory.pop();
           const fallback = getFriendlyFallbackResponse(userPrompt);
           addMessage(fallback, false);
         }
       } catch (error) {
+        console.error("Gemini Network/Fetch Error:", error);
         const loading = document.getElementById('aiLoading');
         if (loading) loading.remove();
-        // استرداد الحصة للطالب
-        refundQuota();
         chatHistory.pop();
         const fallback = getFriendlyFallbackResponse(userPrompt);
         addMessage(fallback, false);
