@@ -137,6 +137,44 @@
       transition-delay: 0s !important;
       transition-duration: 0.15s !important;
     }
+
+    /* بطاقات الأقسام والخدمات («ماذا يقدّم النادي») - تدرج لوني سينمائي أنيق بين الأزرق الهادئ والكحلي المريح للعين مع لمسة دافئة هادئة */
+    .service-card {
+      position: relative;
+      overflow: hidden;
+      background-color: #ffffff;
+      background-image: 
+        radial-gradient(circle at 12% 15%, rgba(59, 130, 246, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(217, 119, 6, 0.04) 0%, transparent 40%),
+        linear-gradient(145deg, #ffffff 0%, #f7f9fd 60%, #edf2f7 100%);
+      border: 1px solid rgba(217, 119, 6, 0.14);
+      box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.06);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .service-card:hover {
+      border-color: rgba(180, 123, 43, 0.45);
+      box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.12);
+      transform: translateY(-3px);
+    }
+
+    .dark .service-card {
+      background-color: #070d1c;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.13) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(217, 119, 6, 0.06) 0%, transparent 40%),
+        linear-gradient(145deg, #132448 0%, #0c1630 55%, #060b18 100%);
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.55), inset 0 1px 1px 0 rgba(255, 255, 255, 0.08);
+    }
+    .dark .service-card:hover {
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.20) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(217, 119, 6, 0.10) 0%, transparent 40%),
+        linear-gradient(145deg, #182e5b 0%, #0f1c3d 55%, #080f20 100%);
+      border-color: rgba(217, 119, 6, 0.5);
+      box-shadow: 0 18px 42px -10px rgba(14, 28, 65, 0.6), 0 0 25px -5px rgba(56, 189, 248, 0.15), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+      transform: translateY(-3px);
+    }
   </style>
 </head>
 <body class="bg-[#faf8f5] bg-[radial-gradient(ellipse_90%_60%_at_50%_-15%,rgba(217,119,6,0.08),rgba(30,58,138,0.04),transparent)] text-[#0d172a] dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
@@ -258,102 +296,132 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-stretch">
         
         <!-- كرت 1: استعارة الكتب الورقية -->
-        <a href="books.html" class="group p-5 sm:p-6 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col justify-between h-full">
+        <a href="books.html" class="service-card group p-5 sm:p-6 rounded-3xl flex flex-col justify-between h-full">
           <div>
-            <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
-              <i data-lucide="book-open" class="w-5 h-5 text-gold-500"></i>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10 flex items-center justify-center text-gold-500 group-hover:scale-110 transition-transform">
+                <i data-lucide="book-open" class="w-5 h-5 text-gold-500"></i>
+              </div>
+              <span class="w-8 h-8 rounded-full border border-slate-200/70 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-gold-500 dark:group-hover:text-gold-400 group-hover:border-gold-500/40 transition-colors">
+                <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+              </span>
             </div>
             <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">استعارة الكتب الورقية</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               استعارة نسخ ورقية مطبوعة من مراجع ومقررات الجامعة بفرع صور أو تقديم كتبك ليستفيد منها زملاؤك.
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-gold-500 group-hover:translate-x-[-4px] transition-transform">
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 group-hover:translate-x-[-4px] transition-transform">
             <span>طلب واستعارة كتاب</span>
             <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
           </div>
         </a>
 
         <!-- كرت 2: بنك الامتحانات والموارد -->
-        <a href="resources.html" class="group p-5 sm:p-6 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col justify-between h-full">
+        <a href="resources.html" class="service-card group p-5 sm:p-6 rounded-3xl flex flex-col justify-between h-full">
           <div>
-            <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
-              <i data-lucide="folder-down" class="w-5 h-5 text-gold-500"></i>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10 flex items-center justify-center text-gold-500 group-hover:scale-110 transition-transform">
+                <i data-lucide="folder-down" class="w-5 h-5 text-gold-500"></i>
+              </div>
+              <span class="w-8 h-8 rounded-full border border-slate-200/70 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-gold-500 dark:group-hover:text-gold-400 group-hover:border-gold-500/40 transition-colors">
+                <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+              </span>
             </div>
             <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">بنك الامتحانات والموارد</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               نماذج امتحانات سابقة نصفية ونهائية، ملخصات دراسية معتمدة، وسلايدات المقررات لكافة الكليات.
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-gold-500 group-hover:translate-x-[-4px] transition-transform">
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 group-hover:translate-x-[-4px] transition-transform">
             <span>تصفح الملفات</span>
             <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
           </div>
         </a>
 
         <!-- كرت 3: المنحة الطلابية -->
-        <a href="scholarship.html" class="group p-5 sm:p-6 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col justify-between h-full">
+        <a href="scholarship.html" class="service-card group p-5 sm:p-6 rounded-3xl flex flex-col justify-between h-full">
           <div>
-            <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
-              <i data-lucide="graduation-cap" class="w-5 h-5 text-gold-500"></i>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10 flex items-center justify-center text-gold-500 group-hover:scale-110 transition-transform">
+                <i data-lucide="graduation-cap" class="w-5 h-5 text-gold-500"></i>
+              </div>
+              <span class="w-8 h-8 rounded-full border border-slate-200/70 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-gold-500 dark:group-hover:text-gold-400 group-hover:border-gold-500/40 transition-colors">
+                <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+              </span>
             </div>
             <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">المنحة الطلابية</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               مبادرة نادي الوفاء السنوية لتخفيف الأعباء الجامعية ومساعدة الطلاب المستحقين في مسيرتهم.
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-gold-500 group-hover:translate-x-[-4px] transition-transform">
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 group-hover:translate-x-[-4px] transition-transform">
             <span>تفاصيل وتقديم المنحة</span>
             <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
           </div>
         </a>
 
         <!-- كرت 4: دليل الأساتذة -->
-        <a href="faculty.html" class="group p-5 sm:p-6 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col justify-between h-full">
+        <a href="faculty.html" class="service-card group p-5 sm:p-6 rounded-3xl flex flex-col justify-between h-full">
           <div>
-            <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
-              <i data-lucide="users" class="w-5 h-5 text-gold-500"></i>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10 flex items-center justify-center text-gold-500 group-hover:scale-110 transition-transform">
+                <i data-lucide="users" class="w-5 h-5 text-gold-500"></i>
+              </div>
+              <span class="w-8 h-8 rounded-full border border-slate-200/70 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-gold-500 dark:group-hover:text-gold-400 group-hover:border-gold-500/40 transition-colors">
+                <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+              </span>
             </div>
             <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">دليل الأساتذة</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               وسائل التواصل والبريد الجامعي لأساتذة الكليات، أماكن المكاتب، ومتابعة الساعات المكتبية لحظياً.
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-gold-500 group-hover:translate-x-[-4px] transition-transform">
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 group-hover:translate-x-[-4px] transition-transform">
             <span>دليل الأساتذة</span>
             <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
           </div>
         </a>
 
         <!-- كرت 5: شبكة التوجيه وممثلو الاختصاصات -->
-        <a href="guidance.html" class="group p-5 sm:p-6 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col justify-between h-full">
+        <a href="guidance.html" class="service-card group p-5 sm:p-6 rounded-3xl flex flex-col justify-between h-full">
           <div>
-            <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
-              <i data-lucide="message-circle" class="w-5 h-5 text-gold-500"></i>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10 flex items-center justify-center text-gold-500 group-hover:scale-110 transition-transform">
+                <i data-lucide="message-circle" class="w-5 h-5 text-gold-500"></i>
+              </div>
+              <span class="w-8 h-8 rounded-full border border-slate-200/70 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-gold-500 dark:group-hover:text-gold-400 group-hover:border-gold-500/40 transition-colors">
+                <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+              </span>
             </div>
             <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">شبكة التوجيه وممثلو الاختصاصات</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               ممثلو الاختصاصات ومجموعات الواتساب الرسمية للإرشاد الأكاديمي والإجابة عن استفسارات المواد.
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-gold-500 group-hover:translate-x-[-4px] transition-transform">
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 group-hover:translate-x-[-4px] transition-transform">
             <span>التواصل مع الممثلين</span>
             <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
           </div>
         </a>
 
         <!-- كرت 6: أرشيف الفعاليات والأنشطة -->
-        <a href="archive.html" class="group p-5 sm:p-6 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col justify-between h-full">
+        <a href="archive.html" class="service-card group p-5 sm:p-6 rounded-3xl flex flex-col justify-between h-full">
           <div>
-            <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
-              <i data-lucide="camera" class="w-5 h-5 text-gold-500"></i>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10 flex items-center justify-center text-gold-500 group-hover:scale-110 transition-transform">
+                <i data-lucide="camera" class="w-5 h-5 text-gold-500"></i>
+              </div>
+              <span class="w-8 h-8 rounded-full border border-slate-200/70 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-gold-500 dark:group-hover:text-gold-400 group-hover:border-gold-500/40 transition-colors">
+                <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+              </span>
             </div>
             <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">أرشيف الفعاليات والأنشطة</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               سجل الأنشطة والورش التخصصية، الدورات التدريبية، والمبادرات الطلابية التي ينظمها النادي.
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-gold-500 group-hover:translate-x-[-4px] transition-transform">
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 group-hover:translate-x-[-4px] transition-transform">
             <span>سجل الفعاليات</span>
             <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
           </div>
@@ -364,7 +432,7 @@
 
     <!-- ==================== مقولة وفلسفة النادي ==================== -->
     <section class="max-w-4xl mx-auto px-4 my-14 sm:my-20 text-center">
-      <div class="relative p-7 sm:p-12 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)]">
+      <div class="relative p-7 sm:p-12 rounded-3xl border border-amber-900/10 dark:border-blue-500/20 bg-white/85 dark:bg-gradient-to-br dark:from-[#11203d] dark:via-[#0c1527] dark:to-[#070b16] backdrop-blur-md shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)]">
         <div class="flex justify-center mb-4"><span class="w-10 h-10 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10 flex items-center justify-center text-gold-500"><i data-lucide="feather" class="w-5 h-5"></i></span></div>
         <blockquote class="text-base sm:text-xl lg:text-2xl font-bold text-[#0d172a] dark:text-slate-100 leading-relaxed max-w-2xl mx-auto">
           "نادي الوفاء جمعية طلابية يديرها طلاب فرع صور، تجمع ما تعلّمناه في فصولنا ليجده من يأتي بعدنا جاهزاً: الامتحانات، الكتب، والأشخاص الذين يعرفون الطريق."
@@ -389,7 +457,7 @@
       <!-- شبكة كروت الأنشطة المعروضة بالرئيسية -->
       <div id="activitiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 min-h-[160px]">
         <div class="col-span-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md rounded-3xl p-4 shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] border border-amber-900/10 dark:border-[#152033]">
+          <div class="bg-white/85 dark:bg-gradient-to-br dark:from-[#11203d] dark:via-[#0c1527] dark:to-[#070b16] backdrop-blur-md rounded-3xl p-4 shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] border border-amber-900/10 dark:border-blue-500/20">
             <div class="h-44 w-full rounded-2xl skeleton-shimmer mb-4"></div>
             <div class="h-5 w-24 rounded-full skeleton-shimmer mb-3"></div>
             <div class="h-6 w-3/4 rounded-full skeleton-shimmer mb-2"></div>
@@ -397,7 +465,7 @@
             <div class="h-4 w-2/3 rounded-full skeleton-shimmer mb-4"></div>
             <div class="h-10 w-full rounded-full skeleton-shimmer"></div>
           </div>
-          <div class="bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md rounded-3xl p-4 shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] border border-amber-900/10 dark:border-[#152033]">
+          <div class="bg-white/85 dark:bg-gradient-to-br dark:from-[#11203d] dark:via-[#0c1527] dark:to-[#070b16] backdrop-blur-md rounded-3xl p-4 shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] border border-amber-900/10 dark:border-blue-500/20">
             <div class="h-44 w-full rounded-2xl skeleton-shimmer mb-4"></div>
             <div class="h-5 w-24 rounded-full skeleton-shimmer mb-3"></div>
             <div class="h-6 w-3/4 rounded-full skeleton-shimmer mb-2"></div>
@@ -405,7 +473,7 @@
             <div class="h-4 w-2/3 rounded-full skeleton-shimmer mb-4"></div>
             <div class="h-10 w-full rounded-full skeleton-shimmer"></div>
           </div>
-          <div class="bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md rounded-3xl p-4 shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] border border-amber-900/10 dark:border-[#152033]">
+          <div class="bg-white/85 dark:bg-gradient-to-br dark:from-[#11203d] dark:via-[#0c1527] dark:to-[#070b16] backdrop-blur-md rounded-3xl p-4 shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] border border-amber-900/10 dark:border-blue-500/20">
             <div class="h-44 w-full rounded-2xl skeleton-shimmer mb-4"></div>
             <div class="h-5 w-24 rounded-full skeleton-shimmer mb-3"></div>
             <div class="h-6 w-3/4 rounded-full skeleton-shimmer mb-2"></div>
@@ -778,7 +846,7 @@
                 : `<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-[#0d172a] text-white text-[11px] font-bold shadow-sm">${cat}</span>`;
 
               return `
-                <article class="rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md overflow-hidden flex flex-col justify-between hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition duration-200 shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] group">
+                <article class="rounded-3xl border border-amber-900/10 dark:border-blue-500/20 bg-white/85 dark:bg-gradient-to-br dark:from-[#11203d] dark:via-[#0c1527] dark:to-[#070b16] backdrop-blur-md overflow-hidden flex flex-col justify-between hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition duration-200 shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] group">
                   <div>
                     <div class="h-48 relative flex items-center justify-center overflow-hidden bg-slate-100 dark:bg-slate-900 ${imgs.length > 0 ? 'cursor-pointer' : ''}" ${imgs.length > 0 ? `onclick="openLightboxForActivity(${idx})" title="عرض الصور بالحجم الكامل"` : ''}>
                       ${imgMarkup}
