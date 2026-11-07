@@ -427,12 +427,15 @@
     function getDirectWhatsAppChatUrl(phoneOrLink) {
       if (!phoneOrLink) return "";
       let str = String(phoneOrLink).trim();
-      if (str.includes("wa.me/") || str.includes("chat.whatsapp.com/")) return str;
+      // إذا كان رابطاً، نضمن أن يكون آمناً ويبدأ حصراً بـ https://wa.me/ أو https://chat.whatsapp.com/
+      if (/^https:\/\/(wa\.me|chat\.whatsapp\.com)\//i.test(str)) {
+        return str;
+      }
       let cleaned = str.replace(/\D/g, '');
       if (cleaned.startsWith('00961')) cleaned = cleaned.substring(5);
       else if (cleaned.startsWith('961')) cleaned = cleaned.substring(3);
       else if (cleaned.startsWith('0')) cleaned = cleaned.substring(1);
-      return cleaned ? `https://wa.me/961${cleaned}` : "";
+      return (cleaned && cleaned.length >= 7) ? `https://wa.me/961${cleaned}` : "";
     }
 
     function parseDonationInfo(rawText = '') {
@@ -874,7 +877,8 @@
 
       if (!SCRIPT_URL) return;
       try {
-        const res = await fetch(`${SCRIPT_URL}?req=loanedBooks&bust=${Date.now()}`);
+        const token = sessionStorage.getItem('nadi_admin_token') || '';
+        const res = await fetch(`${SCRIPT_URL}?req=loanedBooks&adminToken=${encodeURIComponent(token)}&bust=${Date.now()}`);
         const data = await res.json();
         if (data.loanedBooks && Array.isArray(data.loanedBooks)) {
           liveLoanedBooksList = data.loanedBooks;
@@ -998,7 +1002,7 @@
                   <span>تعديل</span>
                 </button>
                 ${directWaLink ? `
-                  <a href="${directWaLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition border border-emerald-500/30">
+                  <a href="${escapeHtml(directWaLink)}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition border border-emerald-500/30">
                     <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                     <span>واتساب</span>
                   </a>
@@ -1015,7 +1019,7 @@
                   <span>قبول</span>
                 </button>
                 ${directWaLink ? `
-                  <a href="${directWaLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition border border-emerald-500/30">
+                  <a href="${escapeHtml(directWaLink)}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-bold flex items-center gap-1.5 transition border border-emerald-500/30">
                     <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                     <span>واتساب</span>
                   </a>
@@ -1053,7 +1057,8 @@
     async function fetchRequests(forceFresh = false) {
       if (!SCRIPT_URL) return;
       try {
-        const res = await fetch(`${SCRIPT_URL}?req=bookRequests&bust=${Date.now()}`);
+        const token = sessionStorage.getItem('nadi_admin_token') || '';
+        const res = await fetch(`${SCRIPT_URL}?req=bookRequests&adminToken=${encodeURIComponent(token)}&bust=${Date.now()}`);
         const data = await res.json();
         if (data.bookRequests && Array.isArray(data.bookRequests)) {
           liveBookRequestsList = data.bookRequests;

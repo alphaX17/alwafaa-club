@@ -9,6 +9,13 @@ function doPost(e) {
     var timestamp = new Date().toLocaleString("ar-LB", { timeZone: "Asia/Beirut" });
 
     // =====================================================================
+    // 0. فحص حقل فخ الروبوتات (Honeypot) - إحباط فوري دون استهلاك موارد الخادم
+    // =====================================================================
+    if (data.honeypot && String(data.honeypot).trim() !== "") {
+      return createJsonResponse({ status: "success", message: "Accepted" });
+    }
+
+    // =====================================================================
     // 1. التحقق الأمني السحابي من تسجيل دخول المشرفين وتوليد التوكن
     // =====================================================================
     if (data.action === "admin_login") {
@@ -19,6 +26,14 @@ function doPost(e) {
 
       var sId = String(data.studentId || "").trim().toLowerCase();
       var pass = String(data.passcode || "").trim();
+
+      // تتبع محاولات التخمين الفاشلة (Brute-Force Protection: 5 محاولات كحد أقصى)
+      var loginAttemptKey = "LOGIN_ATTEMPTS_" + sId;
+      var failedAttempts = parseInt(CacheService.getScriptCache().get(loginAttemptKey) || "0", 10);
+      if (failedAttempts >= 5) {
+        return createJsonResponse({ status: "error", message: "تم قفل الحساب مؤقتاً لمدة 15 دقيقة بسبب تكرار المحاولات الخاطئة." });
+      }
+
       var values = sheetAdmins.getDataRange().getValues();
 
       for (var i = 1; i < values.length; i++) {
@@ -31,6 +46,10 @@ function doPost(e) {
           if (rowStatus === "معطل") {
             return createJsonResponse({ status: "error", message: "هذا الحساب معطل حالياً من قِبل الإدارة" });
           }
+
+          // تصفير عداد المحاولات الفاشلة عند تسجيل الدخول بنجاح
+          CacheService.getScriptCache().remove(loginAttemptKey);
+
           var sessionToken = Utilities.getUuid();
           // أقصى مدة للكاش في Google Apps Script هي 21600 ثانية (6 ساعات)
           CacheService.getScriptCache().put("SESSION_" + sessionToken, rowId, 21600);
@@ -49,6 +68,9 @@ function doPost(e) {
           });
         }
       }
+
+      // زيادة عداد المحاولات الفاشلة مع صلاحية 15 دقيقة
+      CacheService.getScriptCache().put(loginAttemptKey, String(failedAttempts + 1), 900);
       return createJsonResponse({ status: "error", message: "رقم الملف الجامعي أو رمز الدخول غير صحيح" });
     }
 
@@ -350,7 +372,7 @@ function doPost(e) {
     }
 
     // =====================================================================
-    // 4. استمارات الطلاب الواردة من المنصة (متاحة للعموم دون توكن)
+    // 4. استمارات الطلاب الواردة من المنصة (متاحة للعموم مع الحماية والتعقيم)
     // =====================================================================
     if (data.formType === "book_borrow" || data.formType === "book_donate") {
       var sheetRequests = ss.getSheetByName("الكتب");
@@ -360,24 +382,42 @@ function doPost(e) {
       sheetRequests.appendRow([
         timestamp,
         typeLabel,
-        data.fullName || "",
-        data.studentId || "",
-        data.phone || "",
-        data.bookTitle || ""
+        sanitizeSheetCell(data.fullName),
+        sanitizeSheetCell(data.studentId),
+        sanitizeSheetCell(data.phone),
+        sanitizeSheetCell(data.bookTitle)
       ]);
       SpreadsheetApp.flush();
       return createJsonResponse({ status: "success", message: "تم تسجيل الطلب بنجاح" });
     }
 
     if (data.formType === "scholarship") {
+      var currentSchStatus = PropertiesService.getScriptProperties().getProperty("SCHOLARSHIP_STATUS") || "open";
+      if (currentSchStatus === "closed") {
+        return createJsonResponse({ status: "error", message: "عذراً، تم إغلاق باب استقبال المنح رسمياً." });
+      }
+
       var sheetSch = ss.getSheetByName("المنح");
       if (sheetSch) {
         sheetSch.appendRow([
-          timestamp, data.fullName || "", data.fatherName || "", data.lastName || "",
-          data.motherName || "", data.originTown || "", data.currentAddress || "",
-          data.gender || "", data.birthDate || "", data.phone || "", data.fatherJob || "",
-          data.university || "", data.major || "", data.academicYear || "",
-          data.studentId || "", data.bacGrade || "", data.hasScholarship || "", data.reason || ""
+          timestamp,
+          sanitizeSheetCell(data.fullName),
+          sanitizeSheetCell(data.fatherName),
+          sanitizeSheetCell(data.lastName),
+          sanitizeSheetCell(data.motherName),
+          sanitizeSheetCell(data.originTown),
+          sanitizeSheetCell(data.currentAddress),
+          sanitizeSheetCell(data.gender),
+          sanitizeSheetCell(data.birthDate),
+          sanitizeSheetCell(data.phone),
+          sanitizeSheetCell(data.fatherJob),
+          sanitizeSheetCell(data.university),
+          sanitizeSheetCell(data.major),
+          sanitizeSheetCell(data.academicYear),
+          sanitizeSheetCell(data.studentId),
+          sanitizeSheetCell(data.bacGrade),
+          sanitizeSheetCell(data.hasScholarship),
+          sanitizeSheetCell(data.reason)
         ]);
         SpreadsheetApp.flush();
       }
@@ -531,15 +571,37 @@ function doGet(e) {
       return createJsonResponse({ status: currentPropStatus, scholarshipStatus: currentPropStatus, value: (currentPropStatus === "open" ? 1 : 0) });
     }
 
-    // جلب كامل بيانات الموقع الاعتيادية مضافاً إليها حالة المنح
+    // التحقق من صلاحية المشرف لحماية خصوصية بيانات الطلاب
+    var callerToken = e && e.parameter ? (e.parameter.adminToken || e.parameter.token || "") : "";
+    var isVerifiedAdmin = isValidSessionToken(callerToken);
+
+    if (e && e.parameter && e.parameter.req === "availableBooks") {
+      return createJsonResponse({ availableBooks: getSheetData(ss, "الكتب_المتوفرة") });
+    }
+
+    if (e && e.parameter && e.parameter.req === "loanedBooks") {
+      if (!isVerifiedAdmin) {
+        return createJsonResponse({ status: "unauthorized", loanedBooks: [] });
+      }
+      return createJsonResponse({ loanedBooks: getSheetData(ss, "الكتب_المستعارة") });
+    }
+
+    if (e && e.parameter && e.parameter.req === "bookRequests") {
+      if (!isVerifiedAdmin) {
+        return createJsonResponse({ status: "unauthorized", bookRequests: [] });
+      }
+      return createJsonResponse({ bookRequests: getSheetData(ss, "الكتب") });
+    }
+
+    // جلب كامل بيانات الموقع الاعتيادية مضافاً إليها حالة المنح (مع حجب البيانات الشخصية إلا للمشرفين المعتمدين)
     var activeScholarshipStatus = PropertiesService.getScriptProperties().getProperty("SCHOLARSHIP_STATUS") || "open";
 
     return createJsonResponse({
       scholarshipStatus: activeScholarshipStatus,
       announcement: getAnnouncementData(ss),
       availableBooks: getSheetData(ss, "الكتب_المتوفرة"),
-      loanedBooks: getSheetData(ss, "الكتب_المستعارة"),
-      bookRequests: getSheetData(ss, "الكتب"),
+      loanedBooks: isVerifiedAdmin ? getSheetData(ss, "الكتب_المستعارة") : [],
+      bookRequests: isVerifiedAdmin ? getSheetData(ss, "الكتب") : [],
       faculty: getSheetData(ss, "الأساتذة"),
       guidance: getSheetData(ss, "التوجيه_والتواصل"),
       resources: getSheetData(ss, "الموارد"),
@@ -656,4 +718,15 @@ function isValidSessionToken(token) {
   } catch (e) {}
 
   return false;
+}
+
+// دالة تعقيم خلايا الجداول ضد هجمات Formula / CSV Injection
+function sanitizeSheetCell(val) {
+  if (val === null || val === undefined) return "";
+  var str = String(val).trim();
+  // إبطال مفعول صيغ ومعادلات الجداول الخطرة (=, +, -, @)
+  if (/^[=+\-@]/.test(str)) {
+    return "'" + str;
+  }
+  return str;
 }

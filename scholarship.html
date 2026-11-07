@@ -354,6 +354,11 @@
             تختلف نسبة الحسم بحسب الجامعة والاتفاقيات المتاحة، كما فإن تقديم الطلب لا يعني الحصول على الحسم تلقائياً.
           </div>
 
+          <!-- حقل أمني فخ لمنع الروبوتات والسبام (Honeypot) -->
+          <div class="hidden" tabindex="-1" autocomplete="off" style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+            <input type="text" id="scholarshipHoneypot" name="website_url" tabindex="-1" autocomplete="off">
+          </div>
+
           <!-- زر الإرسال -->
           <div class="pt-2">
             <button id="scholarshipSubmitBtn" type="submit" class="w-full py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md">
@@ -589,6 +594,30 @@
       }
     }
 
+    // دالة التنبيهات المنبثقة التفاعلية
+    function showScholarshipToast(message, type = 'info') {
+      let toast = document.getElementById('scholarshipToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'scholarshipToast';
+        document.body.appendChild(toast);
+      }
+      const styles = {
+        success: 'border-emerald-500/30 bg-emerald-500/15 text-emerald-800 dark:text-emerald-300',
+        error: 'border-rose-500/30 bg-rose-500/15 text-rose-800 dark:text-rose-300',
+        info: 'border-amber-500/30 bg-amber-500/15 text-amber-800 dark:text-amber-300'
+      };
+      toast.className = `fixed bottom-5 right-5 z-[99] max-w-sm rounded-2xl border px-4 py-3 text-xs font-bold shadow-xl backdrop-blur-md transition-all duration-300 ${styles[type] || styles.info}`;
+      toast.textContent = message;
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateY(0)';
+      clearTimeout(showScholarshipToast.timeoutId);
+      showScholarshipToast.timeoutId = setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+      }, 4000);
+    }
+
     // 4. معالجة إرسال النموذج
     const form = document.getElementById('officialScholarshipForm');
     const successNotice = document.getElementById('successNotice');
@@ -597,9 +626,29 @@
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // حماية إضافية تمنع الإرسال إذا كانت الاستمارة مقفلة
+        // 1. حماية تمنع الإرسال إذا كانت الاستمارة مقفلة سحابياً
         if (!isScholarshipOpen) {
-          alert('عذراً، باب التقديم للمنحة مغلق حالياً.');
+          showScholarshipToast('عذراً، باب التقديم للمنحة مغلق حالياً.', 'error');
+          return;
+        }
+
+        // 2. التحقق من مهلة الانتظار بين الطلبات (Cooldown 60s) لمنع الإغراق
+        const lastSub = parseInt(localStorage.getItem('nadi_scholarship_last_sub') || '0', 10);
+        const now = Date.now();
+        const cooldownMs = 60000;
+        if (now - lastSub < cooldownMs) {
+          const remainingSec = Math.ceil((cooldownMs - (now - lastSub)) / 1000);
+          showScholarshipToast(`يرجى الانتظار ${remainingSec} ثانية قبل محاولة إرسال استمارة أخرى.`, 'error');
+          return;
+        }
+
+        // 3. فحص حقل فخ الروبوتات (Honeypot)
+        const honeypotVal = document.getElementById('scholarshipHoneypot')?.value || '';
+        if (honeypotVal.trim() !== '') {
+          // إذا تمت تعبئة الحقل الخفي بواسطة بوت، نحاكي النجاح فوراً بدون إرسال أي طلب للخادم
+          if (successNotice) successNotice.classList.remove('hidden');
+          form.reset();
+          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
           return;
         }
 
@@ -607,12 +656,20 @@
         const originalBtnContent = submitBtn.innerHTML;
 
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span>جاري إرسال الطلب...</span>';
+        submitBtn.innerHTML = `
+          <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-current inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>جاري إرسال الطلب بأمان...</span>
+        `;
 
-        const textInputs = form.querySelectorAll('input[type="text"]');
+        // استبعاد حقل الهوني بوت لضمان تطابق ترتيب الحقول النصية بدقة
+        const textInputs = form.querySelectorAll('input[type="text"]:not([name="website_url"])');
 
         const formData = {
           formType: "scholarship",
+          honeypot: honeypotVal,
           fullName: textInputs[0]?.value || "",
           fatherName: textInputs[1]?.value || "",
           lastName: textInputs[2]?.value || "",
@@ -636,15 +693,16 @@
           await fetch(SCRIPT_URL, {
             method: "POST",
             mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData)
           });
 
+          localStorage.setItem('nadi_scholarship_last_sub', Date.now());
           if (successNotice) successNotice.classList.remove('hidden');
           form.reset();
           window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+          showScholarshipToast('تم إرسال طلبك بنجاح!', 'success');
         } catch (err) {
-          alert('تعذر إرسال الطلب، يرجى التأكد من الاتصال بالإنترنت.');
+          showScholarshipToast('تعذر إرسال الطلب، يرجى التأكد من الاتصال بالإنترنت.', 'error');
         } finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalBtnContent;

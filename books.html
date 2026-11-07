@@ -211,6 +211,11 @@
               </div>
             </div>
 
+            <!-- حقل أمني لمنع روبوتات السبام (Honeypot) -->
+            <div class="hidden" tabindex="-1" autocomplete="off" style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+              <input type="text" id="donateHoneypot" name="website_url" tabindex="-1" autocomplete="off">
+            </div>
+
             <button id="submitDonateBtn" type="submit" class="w-full py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md mt-6">
               <i data-lucide="check" class="w-4 h-4"></i>
               <span>تأكيد تسجيل التبرع بالكتاب</span>
@@ -254,6 +259,11 @@
         <div>
           <label class="block text-xs font-bold mb-1.5">رقم الهاتف (واتساب) *</label>
           <input type="tel" required placeholder="03xxxxxx / 70xxxxxx" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+        </div>
+
+        <!-- حقل أمني لمنع روبوتات السبام (Honeypot) -->
+        <div class="hidden" tabindex="-1" autocomplete="off" style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+          <input type="text" id="borrowHoneypot" name="website_url" tabindex="-1" autocomplete="off">
         </div>
 
         <button type="submit" class="w-full py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md mt-2">
@@ -576,18 +586,50 @@
       }
     }
 
+    // التحقق من مهلة الانتظار بين الطلبات للحد من السبام (Cooldown: 30s)
+    function checkBooksCooldown() {
+      const lastSub = parseInt(localStorage.getItem('nadi_books_last_sub') || '0', 10);
+      const now = Date.now();
+      const cooldownMs = 30000;
+      if (now - lastSub < cooldownMs) {
+        const remainingSec = Math.ceil((cooldownMs - (now - lastSub)) / 1000);
+        alert(`يرجى الانتظار ${remainingSec} ثانية قبل محاولة إرسال طلب آخر.`);
+        return false;
+      }
+      return true;
+    }
+
     if (borrowForm) {
       borrowForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        if (!checkBooksCooldown()) return;
+
+        // فحص حقل فخ الروبوتات
+        const honeypotVal = document.getElementById('borrowHoneypot')?.value || '';
+        if (honeypotVal.trim() !== '') {
+          if (modalSuccess) modalSuccess.classList.remove('hidden');
+          borrowForm.reset();
+          setTimeout(() => closeModal(), 1500);
+          return;
+        }
+
         const submitBtn = borrowForm.querySelector('button[type="submit"]');
         const originalBtnText = submitBtn.innerHTML;
 
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span>جاري تأكيد الحجز...</span>';
+        submitBtn.innerHTML = `
+          <svg class="animate-spin -ml-1 mr-2 h-3.5 w-3.5 text-current inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>جاري تأكيد الحجز...</span>
+        `;
 
-        const inputs = borrowForm.querySelectorAll('input');
+        const inputs = borrowForm.querySelectorAll('input:not([name="website_url"])');
         const payload = {
           formType: "book_borrow",
+          honeypot: honeypotVal,
           fullName: inputs[0]?.value || "",
           studentId: inputs[1]?.value || "",
           phone: inputs[2]?.value || "",
@@ -598,10 +640,10 @@
           await fetch(SCRIPT_URL, {
             method: "POST",
             mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
 
+          localStorage.setItem('nadi_books_last_sub', Date.now());
           if (modalSuccess) modalSuccess.classList.remove('hidden');
           borrowForm.reset();
           setTimeout(() => {
@@ -625,10 +667,27 @@
     if (donateForm) {
       donateForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        if (!checkBooksCooldown()) return;
+
+        // فحص حقل فخ الروبوتات
+        const honeypotVal = document.getElementById('donateHoneypot')?.value || '';
+        if (honeypotVal.trim() !== '') {
+          if (donateSuccess) donateSuccess.classList.remove('hidden');
+          donateForm.reset();
+          return;
+        }
+
         const originalBtnText = submitDonateBtn.innerHTML;
 
         submitDonateBtn.disabled = true;
-        submitDonateBtn.innerHTML = '<span>جاري تسجيل التبرع...</span>';
+        submitDonateBtn.innerHTML = `
+          <svg class="animate-spin -ml-1 mr-2 h-3.5 w-3.5 text-current inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>جاري تسجيل التبرع...</span>
+        `;
 
         const fullName = document.getElementById('donatorName').value.trim();
         const studentId = document.getElementById('donatorId').value.trim();
@@ -643,6 +702,7 @@
 
         const payload = {
           formType: "book_donate",
+          honeypot: honeypotVal,
           fullName: fullName,
           studentId: studentId,
           phone: phone,
@@ -658,10 +718,10 @@
           await fetch(SCRIPT_URL, {
             method: "POST",
             mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
 
+          localStorage.setItem('nadi_books_last_sub', Date.now());
           if (donateSuccess) donateSuccess.classList.remove('hidden');
           donateForm.reset();
         } catch (err) {
