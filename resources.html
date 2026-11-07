@@ -29,7 +29,22 @@
     }
   </script>
   <style>
+    html, body {
+      overflow-x: hidden;
+      max-width: 100%;
+    }
     body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+    /* خلفية متدرجة سينمائية هادئة ومريحة للعين في الوضع الليلي */
+    .dark body {
+      background-color: #060913;
+      background-image: 
+        radial-gradient(ellipse 70% 50% at 0% 0%, rgba(37, 99, 235, 0.28) 0%, rgba(29, 78, 216, 0.12) 40%, transparent 70%),
+        radial-gradient(ellipse 60% 45% at 100% 20%, rgba(30, 58, 138, 0.18) 0%, transparent 55%),
+        radial-gradient(ellipse 55% 50% at 10% 60%, rgba(29, 78, 216, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 75% 60% at 85% 90%, rgba(37, 99, 235, 0.12) 0%, transparent 60%),
+        linear-gradient(180deg, #070b14 0%, #060a14 50%, #050811 100%);
+      background-attachment: fixed;
+    }
     .gold-gradient-text {
       background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
       -webkit-background-clip: text;
@@ -67,6 +82,13 @@
   </style>
 </head>
 <body class="bg-[#fbfbf9] text-[#0d172a] dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
+
+  <!-- خلفيات التوهج المتدرج اللوني في الوضع الليلي (Dark Mode Ambient Gradients) -->
+  <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden hidden dark:block" aria-hidden="true">
+    <div class="absolute -top-28 -left-28 w-[620px] h-[620px] rounded-full bg-gradient-to-br from-blue-600/22 via-indigo-600/12 to-transparent blur-[115px]"></div>
+    <div class="absolute top-[35%] -right-20 w-[520px] h-[520px] rounded-full bg-gradient-to-bl from-blue-700/14 via-blue-950/10 to-transparent blur-[135px]"></div>
+    <div class="absolute -bottom-20 left-[20%] w-[620px] h-[520px] rounded-full bg-gradient-to-t from-blue-800/12 via-indigo-950/10 to-transparent blur-[125px]"></div>
+  </div>
 
   <div>
     <!-- ==================== الشريط العلوي (Floating Pill Navbar) ==================== -->
@@ -111,13 +133,13 @@
     <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
 
       <!-- بنر تعريفي مع شريط البحث والفرز للكليات والمواد -->
-      <div class="p-6 sm:p-8 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] shadow-sm space-y-4">
+      <div class="p-6 sm:p-8 rounded-3xl border border-[#eae7dc] dark:border-[#152033] bg-white dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] shadow-sm space-y-4">
         <div class="max-w-2xl space-y-1.5">
           <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold border border-gold-500/30 bg-gold-500/10 text-gold-600 dark:text-gold-400">
             <i data-lucide="download-cloud" class="w-3.5 h-3.5"></i>
             تحميل مجاني مباشر دون تسجيل
           </span>
-          <h2 class="text-xl sm:text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">
+          <h2 class="text-xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 leading-tight">
             امتحانات سابقة، ملخصات، وكتب. مجاناً.
           </h2>
           <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -128,7 +150,7 @@
         <!-- حقل البحث السريع -->
         <div class="relative pt-1">
           <i data-lucide="search" class="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-          <input id="searchInput" type="text" placeholder="ابحث باسم المادة أو الرمز (مثال: MATH 200, MECH, CSC, BIO, FIN)..." class="w-full text-xs p-3 pr-10 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition">
+          <input id="searchInput" type="text" placeholder="ابحث باسم المادة أو الرمز (مثال: MATH 200, MECH, CSC, BIO, FIN)..." class="w-full text-xs p-3 pr-10 rounded-full border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500 transition">
         </div>
 
         <!-- أزرار التصنيف والفلترة الشاملة -->
@@ -439,17 +461,17 @@
         else if (lowerTerm.includes('summer') || lowerTerm.includes('صيف')) termCode = 'summer';
 
         return `
-          <div class="resource-card rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] p-5 flex flex-col justify-between hover:border-gold-500/50 transition duration-200 shadow-sm" data-category="${meta.categories}" data-term="${termCode}" data-name="${searchMetadata}">
+          <div class="resource-card rounded-3xl border border-[#eae7dc] dark:border-[#152033] bg-white dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] p-5 flex flex-col justify-between hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition duration-200 shadow-sm" data-category="${meta.categories}" data-term="${termCode}" data-name="${searchMetadata}">
             <div class="space-y-2">
               <div class="flex items-center justify-between gap-2 flex-wrap">
                 <div class="flex items-center gap-1.5 flex-wrap">
                   ${code ? `<span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold text-[11px] font-mono">${code}</span>` : ''}
-                  ${term ? `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400" dir="ltr">${term}</span>` : ''}
+                  ${term ? `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-slate-100 dark:bg-[#0b1222] border border-transparent dark:border-[#152033] text-slate-500 dark:text-slate-400" dir="ltr">${term}</span>` : ''}
                 </div>
                 <span class="px-3 py-0.5 rounded-full ${meta.typeBadgeClass} font-bold text-[10px]">${type}</span>
               </div>
-              <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white pt-0.5 leading-snug">${name}</h3>
-              ${desc ? `<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 pt-0.5">${desc}</p>` : ''}
+              <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-slate-100 pt-0.5 leading-snug">${name}</h3>
+              ${desc ? `<p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2 pt-0.5">${desc}</p>` : ''}
             </div>
             
             <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2">
@@ -458,10 +480,10 @@
                 <span>${fileInfo.label}</span>
               </span>
               <div class="flex items-center gap-1.5">
-                <button onclick="copyResourceLink('${escapedLink}', this)" class="p-2 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#131e3a] hover:border-gold-500 text-slate-600 dark:text-slate-300 transition shadow-sm cursor-pointer" title="نسخ رابط التحميل">
+                <button onclick="copyResourceLink('${escapedLink}', this)" class="p-2 rounded-full border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] hover:border-gold-500 text-slate-600 dark:text-slate-300 transition shadow-sm cursor-pointer" title="نسخ رابط التحميل">
                   <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                 </button>
-                <a href="${link}" target="_blank" rel="noopener noreferrer" class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-200 hover:bg-gold-500 hover:text-white font-bold text-xs flex items-center gap-1.5 transition shadow-sm">
+                <a href="${link}" target="_blank" rel="noopener noreferrer" class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-[#0b1222] border border-transparent dark:border-[#152033] text-slate-700 dark:text-slate-200 hover:bg-gold-500 hover:text-white dark:hover:bg-gold-500 dark:hover:text-white font-bold text-xs flex items-center gap-1.5 transition shadow-sm">
                   <span>تحميل</span>
                   <i data-lucide="download" class="w-3.5 h-3.5"></i>
                 </a>

@@ -29,7 +29,22 @@
     }
   </script>
   <style>
+    html, body {
+      overflow-x: hidden;
+      max-width: 100%;
+    }
     body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+    /* خلفية متدرجة سينمائية هادئة ومريحة للعين في الوضع الليلي */
+    .dark body {
+      background-color: #060913;
+      background-image: 
+        radial-gradient(ellipse 70% 50% at 0% 0%, rgba(37, 99, 235, 0.28) 0%, rgba(29, 78, 216, 0.12) 40%, transparent 70%),
+        radial-gradient(ellipse 60% 45% at 100% 20%, rgba(30, 58, 138, 0.18) 0%, transparent 55%),
+        radial-gradient(ellipse 55% 50% at 10% 60%, rgba(29, 78, 216, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 75% 60% at 85% 90%, rgba(37, 99, 235, 0.12) 0%, transparent 60%),
+        linear-gradient(180deg, #070b14 0%, #060a14 50%, #050811 100%);
+      background-attachment: fixed;
+    }
     .gold-gradient-text {
       background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
       -webkit-background-clip: text;
@@ -67,6 +82,13 @@
   </style>
 </head>
 <body class="bg-[#fbfbf9] text-[#0d172a] dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
+
+  <!-- خلفيات التوهج المتدرج اللوني في الوضع الليلي (Dark Mode Ambient Gradients) -->
+  <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden hidden dark:block" aria-hidden="true">
+    <div class="absolute -top-28 -left-28 w-[620px] h-[620px] rounded-full bg-gradient-to-br from-blue-600/22 via-indigo-600/12 to-transparent blur-[115px]"></div>
+    <div class="absolute top-[35%] -right-20 w-[520px] h-[520px] rounded-full bg-gradient-to-bl from-blue-700/14 via-blue-950/10 to-transparent blur-[135px]"></div>
+    <div class="absolute -bottom-20 left-[20%] w-[620px] h-[520px] rounded-full bg-gradient-to-t from-blue-800/12 via-indigo-950/10 to-transparent blur-[125px]"></div>
+  </div>
 
   <div>
     <!-- ==================== الشريط العلوي (Floating Pill Navbar) ==================== -->
@@ -111,13 +133,13 @@
     <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6 sm:space-y-8">
 
       <!-- بنر تعريفي وشريط البحث والتصفية -->
-      <div class="p-6 sm:p-8 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] shadow-sm space-y-5">
+      <div class="p-6 sm:p-8 rounded-3xl border border-[#eae7dc] dark:border-[#152033] bg-white dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] shadow-sm space-y-5">
         <div class="max-w-2xl space-y-2">
           <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold border border-gold-500/30 bg-gold-500/10 text-gold-600 dark:text-gold-400">
             <i data-lucide="camera" class="w-3.5 h-3.5"></i>
             معرض الصور والتوثيق الميداني
           </span>
-          <h2 class="text-xl sm:text-3xl font-black text-slate-900 dark:text-white leading-tight">
+          <h2 class="text-xl sm:text-3xl font-black text-slate-900 dark:text-slate-100 leading-tight">
             سجل المحطات الطلابية والأكاديمية
           </h2>
           <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -128,7 +150,7 @@
         <!-- أدوات الفرز والبحث -->
         <div class="flex flex-col md:flex-row gap-3.5 sm:gap-4 justify-between items-center pt-4 border-t border-slate-100 dark:border-slate-800">
           <div class="relative w-full md:w-80">
-            <input id="archiveSearch" type="text" placeholder="ابحث باسم الفعالية، المكان أو الموضوع..." class="w-full text-xs p-3 pr-10 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition">
+            <input id="archiveSearch" type="text" placeholder="ابحث باسم الفعالية، المكان أو الموضوع..." class="w-full text-xs p-3 pr-10 rounded-full border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500 transition">
             <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3.5 right-3.5"></i>
           </div>
 
@@ -157,11 +179,11 @@
 
   <!-- ==================== نافذة تفاصيل الفعالية ومعرض الصور (Modal) ==================== -->
   <div id="eventModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="w-full max-w-xl rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0c1427] p-6 sm:p-7 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
+    <div class="w-full max-w-xl rounded-3xl border border-[#eae7dc] dark:border-[#152033] bg-white dark:bg-[#0a0f1d] p-6 sm:p-7 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
       
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
         <span id="modalCategory" class="px-3 py-1 rounded-full text-xs font-bold bg-gold-500/10 text-gold-600 dark:text-gold-400"></span>
-        <button onclick="closeEventModal()" aria-label="إغلاق" class="p-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500 transition cursor-pointer">
+        <button onclick="closeEventModal()" aria-label="إغلاق" class="p-1.5 rounded-full bg-slate-100 dark:bg-[#0b1222] text-slate-500 hover:text-red-500 transition cursor-pointer">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
@@ -183,7 +205,7 @@
       </div>
 
       <div class="space-y-2">
-        <h3 id="modalTitle" class="font-bold text-base sm:text-lg text-slate-900 dark:text-white"></h3>
+        <h3 id="modalTitle" class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100"></h3>
         
         <div class="flex items-center gap-4 text-xs text-slate-400 flex-wrap">
           <span class="text-gold-500 font-medium flex items-center gap-1.5">
@@ -429,7 +451,7 @@
         const searchMetadata = escapeHtml(`${rawTitle} ${rawCat} ${rawDesc} ${rawLocation}`.toLowerCase());
 
         return `
-          <article class="event-card rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200 shadow-sm group" data-category="${catCode}" data-title="${searchMetadata}">
+          <article class="event-card rounded-3xl border border-[#eae7dc] dark:border-[#152033] bg-white dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] overflow-hidden flex flex-col justify-between hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition duration-200 shadow-sm group" data-category="${catCode}" data-title="${searchMetadata}">
             <div>
               <div class="h-48 relative flex items-center justify-center overflow-hidden bg-slate-100 dark:bg-slate-900 ${imgs.length > 0 ? 'cursor-pointer' : ''}" ${imgs.length > 0 ? `onclick="openEventLightboxByIndex(${idx})" title="تكبير الصور"` : ''}>
                 ${imgMarkup}
@@ -454,14 +476,14 @@
                     </span>
                   ` : ''}
                 </div>
-                <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white mb-2 line-clamp-1">${title}</h3>
-                <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-3">
+                <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-slate-100 mb-2 line-clamp-1">${title}</h3>
+                <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-400 line-clamp-3">
                   ${desc}
                 </p>
               </div>
             </div>
             <div class="p-5 pt-0">
-              <button onclick="openEventModalByIndex(${idx})" class="w-full py-2.5 rounded-full border border-slate-200 dark:border-slate-700 hover:border-gold-500 bg-slate-50 dark:bg-[#131e3a] text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-2 transition shadow-sm cursor-pointer">
+              <button onclick="openEventModalByIndex(${idx})" class="w-full py-2.5 rounded-full border border-slate-200 dark:border-[#152033] hover:border-gold-500 bg-slate-50 dark:bg-[#0b1222] text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-2 transition shadow-sm cursor-pointer">
                 <i data-lucide="eye" class="w-3.5 h-3.5"></i>
                 <span>عرض تفاصيل الفعالية</span>
               </button>
