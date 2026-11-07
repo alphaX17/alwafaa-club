@@ -21,8 +21,8 @@
         extend: {
           fontFamily: { sans: ['Tajawal', 'sans-serif'] },
           colors: {
-            gold: { 400: '#fbbf24', 500: '#d97706', 600: '#b45309' },
-            clubNavy: { light: '#1e3a8a', dark: '#070b14', cardDark: '#111b33', borderDark: '#1e293b' }
+            gold: { 400: '#fbbf24', 500: '#b47b2b', 600: '#925f1c' },
+            clubNavy: { light: '#0d172a', dark: '#070b14', cardDark: '#0e1726', borderDark: '#1e293b' }
           }
         }
       }
@@ -66,56 +66,59 @@
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
+<body class="bg-[#fbfbf9] text-[#0d172a] dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
 
   <div>
-    <!-- ==================== الشريط العلوي (HEADER / NAVBAR) ==================== -->
-    <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-3.5 sm:px-6 lg:px-8 py-2.5 sm:py-3 transition-colors">
-      <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+    <!-- ==================== الشريط العلوي (Floating Pill Navbar) ==================== -->
+    <header class="sticky top-0 z-40 px-3 sm:px-6 py-2.5 sm:py-3 pointer-events-none transition-colors">
+      <nav class="rounded-full max-w-6xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3 border backdrop-blur-md bg-white/85 dark:bg-[#0c1427]/85 border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center justify-between pointer-events-auto transition-colors">
         
-        <!-- الجهة اليمنى: زر القائمة الجانبية (☰) وهوية الصفحة -->
-        <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
-          <button id="openMenuBtn" aria-label="فتح القائمة" class="p-2 sm:p-2.5 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition shrink-0" title="القائمة الرئيسية">
-            <i data-lucide="menu" class="w-5 h-5 sm:w-6 sm:h-6"></i>
-          </button>
-
-          <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-            <img src="logo.png" alt="شعار نادي الوفاء" class="w-9 h-9 sm:w-10 sm:h-10 object-contain shrink-0">
-            <div class="min-w-0">
-              <h1 class="text-xs sm:text-base font-bold text-slate-900 dark:text-white whitespace-nowrap">بنك الموارد الرقمية</h1>
-              <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 truncate">نماذج امتحانات وملخصات المقررات</p>
-            </div>
+        <!-- الجهة اليمنى: شعار النادي والعنوان -->
+        <a href="index.html" class="flex items-center gap-2.5 sm:gap-3 min-w-0 group">
+          <img src="logo.png" alt="شعار نادي الوفاء" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 drop-shadow-sm group-hover:scale-105 transition-transform">
+          <div class="min-w-0">
+            <span class="text-sm sm:text-base font-extrabold tracking-tight text-[#0d172a] dark:text-white whitespace-nowrap block">نادي الوفاء</span>
+            <span class="text-[9px] sm:text-[11px] text-slate-500 dark:text-slate-400 truncate block">الجامعة اللبنانية الدولية — صور</span>
           </div>
+        </a>
+
+        <!-- الوسط (شاشات الكمبيوتر): روابط التنقل المباشرة -->
+        <div class="hidden md:flex items-center gap-1 lg:gap-2">
+          <a href="resources.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-gold-500/15 text-gold-600 dark:text-gold-400">بنك الامتحانات</a>
+          <a href="books.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">الكتب</a>
+          <a href="scholarship.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">المنحة</a>
+          <a href="faculty.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">الأساتذة</a>
+          <a href="guidance.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">التوجيه</a>
+          <a href="archive.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">الأرشيف</a>
         </div>
 
-        <!-- الجهة اليسرى: محول المظهر (Dark/Light) وزر الرئيسية -->
+        <!-- الجهة اليسرى: محول المظهر وزر القائمة للجوال -->
         <div class="flex items-center gap-2 shrink-0">
-          <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center justify-center p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition shrink-0" title="تبديل المظهر">
-            <span id="themeIconContainer" class="flex items-center justify-center"></span>
-            <span id="themeText" class="hidden sm:inline mr-1.5 text-xs font-semibold">الليلي</span>
+          <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-xs font-bold transition hover:border-gold-500/50 cursor-pointer">
+            <i data-lucide="sun" class="w-3.5 h-3.5 hidden dark:inline text-gold-500"></i>
+            <i data-lucide="moon" class="w-3.5 h-3.5 inline dark:hidden text-slate-700"></i>
+            <span id="themeLabel" class="hidden sm:inline">المظهر</span>
           </button>
-
-          <a href="index.html" class="flex items-center justify-center gap-1.5 p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 transition shrink-0" title="الصفحة الرئيسية">
-            <i data-lucide="home" class="w-4 h-4"></i>
-            <span class="hidden sm:inline">الرئيسية</span>
-          </a>
+          <button id="openMenuBtn" aria-label="فتح القائمة" class="md:hidden p-2 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-gold-500/50 transition cursor-pointer">
+            <i data-lucide="menu" class="w-4 h-4"></i>
+          </button>
         </div>
 
-      </div>
+      </nav>
     </header>
 
     <!-- ==================== المحتوى الأساسي ==================== -->
-    <main class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
 
       <!-- بنر تعريفي مع شريط البحث والفرز للكليات والمواد -->
-      <div class="p-5 sm:p-7 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark shadow-sm space-y-4">
+      <div class="p-6 sm:p-8 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] shadow-sm space-y-4">
         <div class="max-w-2xl space-y-1.5">
           <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold border border-gold-500/30 bg-gold-500/10 text-gold-600 dark:text-gold-400">
             <i data-lucide="download-cloud" class="w-3.5 h-3.5"></i>
             تحميل مجاني مباشر دون تسجيل
           </span>
-          <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900 dark:text-white leading-tight">
-            أرشيف الامتحانات والمراجع والكتب الأكاديمية
+          <h2 class="text-xl sm:text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">
+            امتحانات سابقة، ملخصات، وكتب. مجاناً.
           </h2>
           <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
             ابحث باسم المادة، الرمز (Course Code)، أو الكلية للوصول المباشر إلى النماذج النصفية والنهائية السابقة، الكتب الرقمية، والملخصات المعتمدة.
@@ -125,31 +128,31 @@
         <!-- حقل البحث السريع -->
         <div class="relative pt-1">
           <i data-lucide="search" class="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-          <input id="searchInput" type="text" placeholder="ابحث باسم المادة أو الرمز (مثال: MATH 200, MECH, CSC, BIO, FIN)..." class="w-full text-xs p-3 pr-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition">
+          <input id="searchInput" type="text" placeholder="ابحث باسم المادة أو الرمز (مثال: MATH 200, MECH, CSC, BIO, FIN)..." class="w-full text-xs p-3 pr-10 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition">
         </div>
 
         <!-- أزرار التصنيف والفلترة الشاملة -->
-        <div class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-          <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1">
+        <div class="space-y-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+          <div class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1">
             <span class="text-[11px] font-bold text-slate-400 shrink-0 ml-1">التصنيف:</span>
-            <button class="filter-btn active shrink-0 px-3 py-1 rounded-xl text-xs font-bold bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 transition" data-filter="all">الكل</button>
-            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="exam">امتحانات سابقة</button>
-            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="summary">ملخصات وسلايدات</button>
-            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="book">كتب ومراجع</button>
-            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="assignment">واجبات واختبارات</button>
-            <span class="w-px h-4 bg-slate-200 dark:bg-slate-700 shrink-0 mx-1"></span>
-            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="engineering">الهندسة</button>
-            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="arts_sciences">العلوم والحاسوب</button>
-            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="business">إدارة الأعمال</button>
-            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="pharmacy">الصيدلة والطب</button>
-            <button class="filter-btn shrink-0 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="education">التربية واللغات</button>
+            <button class="filter-btn active shrink-0 px-4 py-1.5 rounded-full text-xs font-bold bg-gold-500 text-white shadow-sm transition" data-filter="all">الكل</button>
+            <button class="filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-filter="exam">امتحانات سابقة</button>
+            <button class="filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-filter="summary">ملخصات وسلايدات</button>
+            <button class="filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-filter="book">كتب ومراجع</button>
+            <button class="filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-filter="assignment">واجبات واختبارات</button>
+            <span class="w-px h-4 bg-slate-200 dark:border-slate-700 shrink-0 mx-1"></span>
+            <button class="filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-filter="engineering">الهندسة</button>
+            <button class="filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-filter="arts_sciences">العلوم والحاسوب</button>
+            <button class="filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-filter="business">إدارة الأعمال</button>
+            <button class="filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-filter="pharmacy">الصيدلة والطب</button>
+            <button class="filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-filter="education">التربية واللغات</button>
           </div>
-          <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1 pt-0.5">
+          <div class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1 pt-0.5">
             <span class="text-[11px] font-bold text-slate-400 shrink-0 ml-1">الفصل:</span>
-            <button class="term-btn active shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-slate-800 text-white dark:bg-slate-700 dark:text-gold-400 transition" data-term="all">جميع الفصول</button>
-            <button class="term-btn shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-600 dark:text-slate-400 hover:border-gold-500/50 border border-transparent transition" data-term="fall">خريف Fall</button>
-            <button class="term-btn shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-600 dark:text-slate-400 hover:border-gold-500/50 border border-transparent transition" data-term="spring">ربيع Spring</button>
-            <button class="term-btn shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-600 dark:text-slate-400 hover:border-gold-500/50 border border-transparent transition" data-term="summer">صيف Summer</button>
+            <button class="term-btn active shrink-0 px-3 py-1 rounded-full text-xs font-bold bg-[#0d172a] text-white dark:bg-slate-700 dark:text-gold-400 transition" data-term="all">جميع الفصول</button>
+            <button class="term-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-gold-500 transition" data-term="fall">خريف Fall</button>
+            <button class="term-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-gold-500 transition" data-term="spring">ربيع Spring</button>
+            <button class="term-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-gold-500 transition" data-term="summer">صيف Summer</button>
           </div>
         </div>
       </div>
@@ -436,29 +439,29 @@
         else if (lowerTerm.includes('summer') || lowerTerm.includes('صيف')) termCode = 'summer';
 
         return `
-          <div class="resource-card rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark p-4 flex flex-col justify-between hover:border-gold-500/50 transition duration-200 shadow-sm" data-category="${meta.categories}" data-term="${termCode}" data-name="${searchMetadata}">
-            <div class="space-y-1.5">
+          <div class="resource-card rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] p-5 flex flex-col justify-between hover:border-gold-500/50 transition duration-200 shadow-sm" data-category="${meta.categories}" data-term="${termCode}" data-name="${searchMetadata}">
+            <div class="space-y-2">
               <div class="flex items-center justify-between gap-2 flex-wrap">
                 <div class="flex items-center gap-1.5 flex-wrap">
-                  ${code ? `<span class="px-2 py-0.5 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold text-[11px] font-mono">${code}</span>` : ''}
-                  ${term ? `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400" dir="ltr">${term}</span>` : ''}
+                  ${code ? `<span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold text-[11px] font-mono">${code}</span>` : ''}
+                  ${term ? `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400" dir="ltr">${term}</span>` : ''}
                 </div>
-                <span class="px-2.5 py-0.5 rounded-lg ${meta.typeBadgeClass} font-bold text-[10px]">${type}</span>
+                <span class="px-3 py-0.5 rounded-full ${meta.typeBadgeClass} font-bold text-[10px]">${type}</span>
               </div>
               <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white pt-0.5 leading-snug">${name}</h3>
               ${desc ? `<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 pt-0.5">${desc}</p>` : ''}
             </div>
             
-            <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded border flex items-center gap-1.5 ${fileInfo.colorClass}">
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2">
+              <span class="text-[10px] font-mono px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 ${fileInfo.colorClass}">
                 <i data-lucide="${fileInfo.icon}" class="w-3.5 h-3.5"></i> 
                 <span>${fileInfo.label}</span>
               </span>
               <div class="flex items-center gap-1.5">
-                <button onclick="copyResourceLink('${escapedLink}', this)" class="p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#131e3a] hover:border-gold-500 text-slate-600 dark:text-slate-300 transition shadow-sm cursor-pointer" title="نسخ رابط التحميل">
+                <button onclick="copyResourceLink('${escapedLink}', this)" class="p-2 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#131e3a] hover:border-gold-500 text-slate-600 dark:text-slate-300 transition shadow-sm cursor-pointer" title="نسخ رابط التحميل">
                   <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                 </button>
-                <a href="${link}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-200 hover:bg-gold-500 hover:text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-sm">
+                <a href="${link}" target="_blank" rel="noopener noreferrer" class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-200 hover:bg-gold-500 hover:text-white font-bold text-xs flex items-center gap-1.5 transition shadow-sm">
                   <span>تحميل</span>
                   <i data-lucide="download" class="w-3.5 h-3.5"></i>
                 </a>
@@ -550,23 +553,15 @@
 
     // إدارة التبديل بين المظهر الصباحي والليلي
     const themeToggleBtn = document.getElementById('themeToggleBtn');
-    const themeIconContainer = document.getElementById('themeIconContainer');
-    const themeText = document.getElementById('themeText');
     const htmlElement = document.documentElement;
-
-    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
-    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
 
     function applyTheme(isDark) {
       if (isDark) {
         htmlElement.classList.add('dark');
-        if (themeText) themeText.textContent = 'الليلي';
-        if (themeIconContainer) themeIconContainer.innerHTML = moonSvg;
       } else {
         htmlElement.classList.remove('dark');
-        if (themeText) themeText.textContent = 'النهاري';
-        if (themeIconContainer) themeIconContainer.innerHTML = sunSvg;
       }
+      if (window.lucide) lucide.createIcons();
     }
 
     const savedTheme = localStorage.getItem('clubTheme');
@@ -628,11 +623,11 @@
     filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         filterButtons.forEach(b => {
-          b.classList.remove('active', 'bg-clubNavy-light', 'dark:bg-gold-500', 'text-white', 'dark:text-slate-950', 'font-bold');
-          b.classList.add('bg-slate-100', 'dark:bg-[#131e3a]', 'text-slate-700', 'dark:text-slate-300', 'font-medium');
+          b.classList.remove('active', 'bg-gold-500', 'text-white', 'shadow-sm');
+          b.classList.add('border', 'border-slate-200', 'dark:border-slate-700', 'text-slate-600', 'dark:text-slate-300', 'font-medium');
         });
-        btn.classList.remove('bg-slate-100', 'dark:bg-[#131e3a]', 'text-slate-700', 'dark:text-slate-300', 'font-medium');
-        btn.classList.add('active', 'bg-clubNavy-light', 'dark:bg-gold-500', 'text-white', 'dark:text-slate-950', 'font-bold');
+        btn.classList.remove('border', 'border-slate-200', 'dark:border-slate-700', 'text-slate-600', 'dark:text-slate-300', 'font-medium');
+        btn.classList.add('active', 'bg-gold-500', 'text-white', 'shadow-sm');
 
         currentFilter = btn.getAttribute('data-filter');
         filterResources();
@@ -642,11 +637,11 @@
     termButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         termButtons.forEach(b => {
-          b.classList.remove('active', 'bg-slate-800', 'text-white', 'dark:bg-slate-700', 'dark:text-gold-400', 'font-bold');
-          b.classList.add('bg-slate-100', 'dark:bg-[#131e3a]', 'text-slate-600', 'dark:text-slate-400', 'font-medium');
+          b.classList.remove('active', 'bg-[#0d172a]', 'text-white', 'dark:bg-slate-700', 'dark:text-gold-400', 'font-bold');
+          b.classList.add('border', 'border-slate-200', 'dark:border-slate-700', 'text-slate-600', 'dark:text-slate-400', 'font-medium');
         });
-        btn.classList.remove('bg-slate-100', 'dark:bg-[#131e3a]', 'text-slate-600', 'dark:text-slate-400', 'font-medium');
-        btn.classList.add('active', 'bg-slate-800', 'text-white', 'dark:bg-slate-700', 'dark:text-gold-400', 'font-bold');
+        btn.classList.remove('border', 'border-slate-200', 'dark:border-slate-700', 'text-slate-600', 'dark:text-slate-400', 'font-medium');
+        btn.classList.add('active', 'bg-[#0d172a]', 'text-white', 'dark:bg-slate-700', 'dark:text-gold-400', 'font-bold');
 
         currentTerm = btn.getAttribute('data-term');
         filterResources();

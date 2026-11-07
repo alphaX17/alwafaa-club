@@ -21,8 +21,8 @@
         extend: {
           fontFamily: { sans: ['Tajawal', 'sans-serif'] },
           colors: {
-            gold: { 400: '#fbbf24', 500: '#d97706', 600: '#b45309' },
-            clubNavy: { light: '#1e3a8a', dark: '#070b14', cardDark: '#111b33', borderDark: '#1e293b' }
+            gold: { 400: '#fbbf24', 500: '#b47b2b', 600: '#925f1c' },
+            clubNavy: { light: '#0d172a', dark: '#070b14', cardDark: '#0e1726', borderDark: '#1e293b' }
           }
         }
       }
@@ -61,53 +61,58 @@
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
+<body class="bg-[#fbfbf9] text-[#0d172a] dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
 
   <div>
-    <!-- ==================== الشريط العلوي (HEADER / NAVBAR) ==================== -->
-    <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#080e1c]/95 backdrop-blur-md border-b border-slate-200 dark:border-clubNavy-borderDark px-3.5 sm:px-6 lg:px-8 py-2.5 sm:py-3 transition-colors">
-      <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+    <!-- ==================== الشريط العلوي (Floating Pill Navbar) ==================== -->
+    <header class="sticky top-0 z-40 px-3 sm:px-6 py-2.5 sm:py-3 pointer-events-none transition-colors">
+      <nav class="rounded-full max-w-6xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3 border backdrop-blur-md bg-white/85 dark:bg-[#0c1427]/85 border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center justify-between pointer-events-auto transition-colors">
         
-        <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
-          <button id="openMenuBtn" aria-label="فتح القائمة" class="p-2 sm:p-2.5 rounded-xl bg-slate-100 dark:bg-[#131e3a] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition shrink-0" title="القائمة الرئيسية">
-            <i data-lucide="menu" class="w-5 h-5 sm:w-6 sm:h-6"></i>
-          </button>
-
-          <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-            <img src="logo.png" alt="شعار نادي الوفاء" class="w-9 h-9 sm:w-10 sm:h-10 object-contain shrink-0">
-            <div class="min-w-0">
-              <h1 class="text-xs sm:text-base font-bold text-slate-900 dark:text-white whitespace-nowrap">الكتب والمراجع الورقية</h1>
-              <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 truncate">استعارة وتبادل النسخ الملموسة</p>
-            </div>
+        <!-- الجهة اليمنى: شعار النادي والعنوان -->
+        <a href="index.html" class="flex items-center gap-2.5 sm:gap-3 min-w-0 group">
+          <img src="logo.png" alt="شعار نادي الوفاء" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 drop-shadow-sm group-hover:scale-105 transition-transform">
+          <div class="min-w-0">
+            <span class="text-sm sm:text-base font-extrabold tracking-tight text-[#0d172a] dark:text-white whitespace-nowrap block">نادي الوفاء</span>
+            <span class="text-[9px] sm:text-[11px] text-slate-500 dark:text-slate-400 truncate block">الجامعة اللبنانية الدولية — صور</span>
           </div>
+        </a>
+
+        <!-- الوسط (شاشات الكمبيوتر): روابط التنقل المباشرة -->
+        <div class="hidden md:flex items-center gap-1 lg:gap-2">
+          <a href="resources.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">بنك الامتحانات</a>
+          <a href="books.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-gold-500/15 text-gold-600 dark:text-gold-400">الكتب</a>
+          <a href="scholarship.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">المنحة</a>
+          <a href="faculty.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">الأساتذة</a>
+          <a href="guidance.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">التوجيه</a>
+          <a href="archive.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">الأرشيف</a>
         </div>
 
+        <!-- الجهة اليسرى: محول المظهر وزر القائمة للجوال -->
         <div class="flex items-center gap-2 shrink-0">
-          <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center justify-center p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] hover:border-gold-500/50 text-xs font-semibold transition shrink-0" title="تبديل المظهر">
-            <span id="themeIconContainer" class="flex items-center justify-center"></span>
-            <span id="themeText" class="hidden sm:inline mr-1.5 text-xs font-semibold">الليلي</span>
+          <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-xs font-bold transition hover:border-gold-500/50 cursor-pointer">
+            <i data-lucide="sun" class="w-3.5 h-3.5 hidden dark:inline text-gold-500"></i>
+            <i data-lucide="moon" class="w-3.5 h-3.5 inline dark:hidden text-slate-700"></i>
+            <span id="themeLabel" class="hidden sm:inline">المظهر</span>
           </button>
-
-          <a href="index.html" class="flex items-center justify-center gap-1.5 p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#131e3a] text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 transition shrink-0" title="الصفحة الرئيسية">
-            <i data-lucide="home" class="w-4 h-4"></i>
-            <span class="hidden sm:inline">الرئيسية</span>
-          </a>
+          <button id="openMenuBtn" aria-label="فتح القائمة" class="md:hidden p-2 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-gold-500/50 transition cursor-pointer">
+            <i data-lucide="menu" class="w-4 h-4"></i>
+          </button>
         </div>
 
-      </div>
+      </nav>
     </header>
 
     <!-- ==================== المحتوى الرئيسي ==================== -->
-    <main class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
 
       <!-- أزرار التبديل العلوية (استعارة / تبرع) -->
       <div class="flex justify-center mb-6 sm:mb-8">
-        <div class="w-full sm:w-auto inline-flex p-1.5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-100 dark:bg-[#0c1427]">
-          <button id="tabBorrow" class="flex-1 sm:flex-initial px-4 sm:px-6 py-2.5 rounded-xl text-xs font-bold transition bg-white dark:bg-clubNavy-light text-slate-900 dark:text-white shadow-sm flex items-center justify-center gap-2">
-            <i data-lucide="book-open" class="w-4 h-4 text-gold-500"></i>
+        <div class="w-full sm:w-auto inline-flex p-1.5 rounded-full border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] shadow-sm">
+          <button id="tabBorrow" class="flex-1 sm:flex-initial px-5 sm:px-7 py-2.5 rounded-full text-xs font-bold transition bg-[#0d172a] text-white dark:bg-gold-500 dark:text-slate-950 shadow-sm flex items-center justify-center gap-2 cursor-pointer">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
             <span class="whitespace-nowrap">الكتب المتوفرة للاستعارة</span>
           </button>
-          <button id="tabDonate" class="flex-1 sm:flex-initial px-4 sm:px-6 py-2.5 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center gap-2">
+          <button id="tabDonate" class="flex-1 sm:flex-initial px-5 sm:px-7 py-2.5 rounded-full text-xs font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center gap-2 cursor-pointer">
             <i data-lucide="gift" class="w-4 h-4"></i>
             <span class="whitespace-nowrap">تقديم / تبرع بكتاب</span>
           </button>
@@ -117,24 +122,27 @@
       <!-- ================= القسم الأول: استعارة كتاب ================= -->
       <section id="borrowSection" class="space-y-6">
         
-        <div class="p-4 sm:p-5 rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark space-y-4 shadow-sm">
+        <div class="p-6 sm:p-8 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] space-y-4 shadow-sm">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              اختر الكتاب الذي تحتاجه واضغط على <strong>طلب استعارة</strong>، ثم أدخل اسمك ورقمك الجامعي وهاتفك لتأكيد الحجز والاستلام داخل حرم الجامعة بفرع صور.
-            </p>
+            <div class="space-y-1">
+              <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">كتاب واحد، يمرّ على طلاب كثيرين.</h2>
+              <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                اختر الكتاب الذي تحتاجه واضغط على <strong>طلب استعارة</strong>، ثم أدخل بياناتك لتأكيد الحجز والاستلام داخل حرم الجامعة بفرع صور.
+              </p>
+            </div>
             <div class="relative w-full sm:w-80 shrink-0">
-              <input id="bookSearchInput" type="text" placeholder="ابحث باسم الكتاب، المادة أو الكلية..." class="w-full text-xs p-2.5 sm:p-3 pr-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
-              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3 sm:top-3.5 right-3"></i>
+              <input id="bookSearchInput" type="text" placeholder="ابحث باسم الكتاب، المادة أو الكلية..." class="w-full text-xs p-3 pr-10 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500">
+              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute top-3.5 right-3.5"></i>
             </div>
           </div>
 
-          <div class="flex items-center gap-1.5 overflow-x-auto pt-3 border-t border-slate-100 dark:border-slate-800 custom-scrollbar pb-1">
-            <button class="book-filter-btn active shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 transition" data-filter="all">الكل</button>
-            <button class="book-filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="engineering">كلية الهندسة</button>
-            <button class="book-filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="business">إدارة الأعمال</button>
-            <button class="book-filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="arts_sciences">الفنون والعلوم</button>
-            <button class="book-filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="education">التربية واللغات</button>
-            <button class="book-filter-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-[#131e3a] text-slate-700 dark:text-slate-300 hover:border-gold-500/50 border border-transparent transition" data-filter="pharmacy">كلية الصيدلة</button>
+          <div class="flex items-center gap-2 overflow-x-auto pt-4 border-t border-slate-100 dark:border-slate-800 custom-scrollbar pb-1">
+            <button class="book-filter-btn active shrink-0 px-4 py-1.5 rounded-full text-xs font-bold bg-gold-500 text-white shadow-sm transition" data-filter="all">الكل</button>
+            <button class="book-filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-filter="engineering">كلية الهندسة</button>
+            <button class="book-filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-filter="business">إدارة الأعمال</button>
+            <button class="book-filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-filter="arts_sciences">الفنون والعلوم</button>
+            <button class="book-filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-filter="education">التربية واللغات</button>
+            <button class="book-filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-gold-500 transition" data-filter="pharmacy">كلية الصيدلة</button>
           </div>
         </div>
 
@@ -218,7 +226,7 @@
               <input type="text" id="donateHoneypot" name="website_url" tabindex="-1" autocomplete="off">
             </div>
 
-            <button id="submitDonateBtn" type="submit" class="w-full py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md mt-6">
+            <button id="submitDonateBtn" type="submit" class="w-full py-3.5 rounded-full bg-gold-500 text-white font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md mt-6 cursor-pointer">
               <i data-lucide="check" class="w-4 h-4"></i>
               <span>تأكيد تسجيل التبرع بالكتاب</span>
             </button>
@@ -236,13 +244,13 @@
 
   <!-- ==================== نافذة حجز الاستعارة المنبثقة ==================== -->
   <div id="borrowModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="w-full max-w-md rounded-3xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-[#0c1427] p-6 shadow-2xl space-y-4">
+    <div class="w-full max-w-md rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0c1427] p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
         <div>
           <h3 class="font-bold text-sm text-slate-900 dark:text-white">تأكيد حجز استعارة كتاب</h3>
           <p id="modalBookName" class="text-xs text-gold-500 font-semibold mt-0.5"></p>
         </div>
-        <button onclick="closeModal()" aria-label="إغلاق" class="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500 transition">
+        <button onclick="closeModal()" aria-label="إغلاق" class="p-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500 transition cursor-pointer">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
@@ -268,7 +276,7 @@
           <input type="text" id="borrowHoneypot" name="website_url" tabindex="-1" autocomplete="off">
         </div>
 
-        <button type="submit" class="w-full py-3.5 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md mt-2">
+        <button type="submit" class="w-full py-3.5 rounded-full bg-gold-500 text-white font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md mt-2 cursor-pointer">
           <i data-lucide="bookmark-check" class="w-4 h-4"></i>
           <span>تأكيد الحجز المباشر</span>
         </button>
@@ -435,12 +443,12 @@
 
         const displayCopies = isNaN(copiesNum) ? 1 : copiesNum;
         const badgeMarkup = isAvailable
-          ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 shadow-sm"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>متوفر (${displayCopies} نسخة)</span>`
-          : `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/25">مستعار حالياً</span>`;
+          ? `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 shadow-sm"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>متوفر (${displayCopies} نسخة)</span>`
+          : `<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/25">مستعار حالياً</span>`;
 
         const actionBtn = isAvailable
-          ? `<button onclick="openModalByIndex(${idx})" class="px-4 py-2 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 text-xs font-bold hover:opacity-90 transition shadow-sm cursor-pointer">طلب استعارة</button>`
-          : `<button disabled class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 text-xs font-bold cursor-not-allowed">غير متاح</button>`;
+          ? `<button onclick="openModalByIndex(${idx})" class="px-5 py-2 rounded-full bg-gold-500 text-white text-xs font-bold hover:opacity-90 transition shadow-sm cursor-pointer">طلب استعارة</button>`
+          : `<button disabled class="px-5 py-2 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 text-xs font-bold cursor-not-allowed">غير متاح</button>`;
 
         const copiesText = escapeHtml(isAvailable ? `النسخ المتاحة: ${rawCopies || '1'}` : 'يعود قريباً');
         const cardOpacity = isAvailable ? '' : 'opacity-70';
@@ -453,7 +461,7 @@
         const desc = escapeHtml(rawDesc);
 
         return `
-          <div class="book-card p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}" data-category="${categoryCode}" data-title="${searchMetadata}">
+          <div class="book-card p-6 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}" data-category="${categoryCode}" data-title="${searchMetadata}">
             <div class="space-y-2">
               <div class="flex items-center justify-between gap-2">
                 ${badgeMarkup}
@@ -462,7 +470,7 @@
               <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white line-clamp-1">${title}</h3>
               <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2">${desc}</p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
               <span class="text-[11px] text-slate-400 font-mono">${copiesText}</span>
               ${actionBtn}
             </div>
@@ -550,23 +558,15 @@
 
     // إدارة المظهر
     const themeToggleBtn = document.getElementById('themeToggleBtn');
-    const themeIconContainer = document.getElementById('themeIconContainer');
-    const themeText = document.getElementById('themeText');
     const htmlElement = document.documentElement;
-
-    const sunSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
-    const moonSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
 
     function applyTheme(isDark) {
       if (isDark) {
         htmlElement.classList.add('dark');
-        if (themeText) themeText.textContent = 'الليلي';
-        if (themeIconContainer) themeIconContainer.innerHTML = moonSvg;
       } else {
         htmlElement.classList.remove('dark');
-        if (themeText) themeText.textContent = 'النهاري';
-        if (themeIconContainer) themeIconContainer.innerHTML = sunSvg;
       }
+      if (window.lucide) lucide.createIcons();
     }
 
     const savedTheme = localStorage.getItem('clubTheme');
@@ -591,18 +591,18 @@
       tabBorrow.addEventListener('click', () => {
         borrowSection.classList.remove('hidden');
         donateSection.classList.add('hidden');
-        tabBorrow.classList.add('bg-white', 'dark:bg-clubNavy-light', 'text-slate-900', 'dark:text-white', 'shadow-sm');
+        tabBorrow.classList.add('bg-[#0d172a]', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'shadow-sm');
         tabBorrow.classList.remove('text-slate-600', 'dark:text-slate-400');
-        tabDonate.classList.remove('bg-white', 'dark:bg-clubNavy-light', 'text-slate-900', 'dark:text-white', 'shadow-sm');
+        tabDonate.classList.remove('bg-[#0d172a]', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'shadow-sm');
         tabDonate.classList.add('text-slate-600', 'dark:text-slate-400');
       });
 
       tabDonate.addEventListener('click', () => {
         donateSection.classList.remove('hidden');
         borrowSection.classList.add('hidden');
-        tabDonate.classList.add('bg-white', 'dark:bg-clubNavy-light', 'text-slate-900', 'dark:text-white', 'shadow-sm');
+        tabDonate.classList.add('bg-[#0d172a]', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'shadow-sm');
         tabDonate.classList.remove('text-slate-600', 'dark:text-slate-400');
-        tabBorrow.classList.remove('bg-white', 'dark:bg-clubNavy-light', 'text-slate-900', 'dark:text-white', 'shadow-sm');
+        tabBorrow.classList.remove('bg-[#0d172a]', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'shadow-sm');
         tabBorrow.classList.add('text-slate-600', 'dark:text-slate-400');
       });
     }
@@ -830,11 +830,11 @@
     bookFilterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         bookFilterBtns.forEach(b => {
-          b.classList.remove('active', 'bg-clubNavy-light', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'font-bold');
-          b.classList.add('bg-slate-100', 'dark:bg-[#131e3a]', 'text-slate-700', 'dark:text-slate-300', 'font-medium');
+          b.classList.remove('active', 'bg-gold-500', 'text-white', 'shadow-sm');
+          b.classList.add('border', 'border-slate-200', 'dark:border-slate-700', 'text-slate-600', 'dark:text-slate-300', 'font-medium');
         });
-        btn.classList.remove('bg-slate-100', 'dark:bg-[#131e3a]', 'text-slate-700', 'dark:text-slate-300', 'font-medium');
-        btn.classList.add('active', 'bg-clubNavy-light', 'text-white', 'dark:bg-gold-500', 'dark:text-slate-950', 'font-bold');
+        btn.classList.remove('border', 'border-slate-200', 'dark:border-slate-700', 'text-slate-600', 'dark:text-slate-300', 'font-medium');
+        btn.classList.add('active', 'bg-gold-500', 'text-white', 'shadow-sm');
 
         currentBookFilter = btn.getAttribute('data-filter');
         filterBooks();
