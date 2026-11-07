@@ -935,6 +935,9 @@
     const voiceBtn = document.getElementById('voiceBtn');
     const sendBtn = document.getElementById('sendBtn');
 
+    let chatHistory = [];
+    let isAIBusy = false;
+
     // مفتاح Google AI Studio API المعتمد والمحدث
     const GEMINI_API_KEY = "AQ.Ab8RN6IVXwgyoQifvEBwkTH8FvkPW0u0TPes4vwJ41XtNSrY6A";
 
@@ -1017,9 +1020,6 @@
 
     // تهيئة حالة الحصة فور تحميل الصفحة
     updateQuotaUI();
-
-    let chatHistory = [];
-    let isAIBusy = false;
 
     // ==================== موسوعة التوجيه الأكاديمي والجامعي الفائقة ====================
     const SYSTEM_INSTRUCTION = `
