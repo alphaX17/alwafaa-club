@@ -50,6 +50,24 @@ function doPost(e) {
           // تصفير عداد المحاولات الفاشلة عند تسجيل الدخول بنجاح
           CacheService.getScriptCache().remove(loginAttemptKey);
 
+          // تنظيف دوري ذاتي لأي جلسات قديمة منتهية (أكثر من 12 ساعة) لمنع تراكم الخصائص
+          try {
+            var allProps = PropertiesService.getScriptProperties().getProperties();
+            var nowTs = new Date().getTime();
+            for (var pKey in allProps) {
+              if (pKey.indexOf("SESSION_") === 0) {
+                try {
+                  var pData = JSON.parse(allProps[pKey]);
+                  if (nowTs - (pData.time || 0) > 43200000) {
+                    PropertiesService.getScriptProperties().deleteProperty(pKey);
+                  }
+                } catch (pe) {
+                  PropertiesService.getScriptProperties().deleteProperty(pKey);
+                }
+              }
+            }
+          } catch (cleanErr) {}
+
           var sessionToken = Utilities.getUuid();
           // أقصى مدة للكاش في Google Apps Script هي 21600 ثانية (6 ساعات)
           CacheService.getScriptCache().put("SESSION_" + sessionToken, rowId, 21600);
@@ -75,6 +93,20 @@ function doPost(e) {
     }
 
     // =====================================================================
+    // 1.1 تسجيل الخروج السحابي وإبطال التوكن فوراً
+    // =====================================================================
+    if (data.action === "admin_logout") {
+      var tokenToLogout = String(data.adminToken || "").trim();
+      if (tokenToLogout) {
+        CacheService.getScriptCache().remove("SESSION_" + tokenToLogout);
+        try {
+          PropertiesService.getScriptProperties().deleteProperty("SESSION_" + tokenToLogout);
+        } catch (e) {}
+      }
+      return createJsonResponse({ status: "success", message: "تم تسجيل الخروج بنجاح" });
+    }
+
+    // =====================================================================
     // صمام التحقق الأمني من صلاحية الجلسة لجميع العمليات الإدارية الحساسة
     // =====================================================================
     var adminActions = [
@@ -82,8 +114,8 @@ function doPost(e) {
       "add_guidance", "edit_guidance", "delete_guidance",
       "add_activity", "edit_activity", "delete_activity",
       "add_book", "edit_book", "delete_book", "approve_book_borrow", "return_book", "approve_book_donation", "delete_book_request",
-      "add_faculty", "delete_faculty",
-      "add_resource", "delete_resource"
+      "add_faculty", "edit_faculty", "delete_faculty",
+      "add_resource", "edit_resource", "delete_resource"
     ];
 
     if (adminActions.indexOf(data.action) !== -1) {
@@ -430,11 +462,55 @@ function doPost(e) {
     if (data.action === "add_faculty") {
       var s = ss.getSheetByName("الأساتذة");
       if (s) {
-        s.appendRow([data.name || "", data.college || "", data.title || "", data.email || "", "كادر", "دكتور", "فعال", data.office || "", data.hours || ""]);
+        s.appendRow([
+          sanitizeSheetCell(data.name),
+          sanitizeSheetCell(data.college),
+          sanitizeSheetCell(data.title),
+          sanitizeSheetCell(data.email),
+          "كادر",
+          "دكتور",
+          "فعال",
+          sanitizeSheetCell(data.office),
+          sanitizeSheetCell(data.hours)
+        ]);
         SpreadsheetApp.flush();
       }
       return createJsonResponse({ status: "success" });
     }
+
+    if (data.action === "edit_faculty") {
+      var lockFac = LockService.getScriptLock();
+      lockFac.waitLock(10000);
+      try {
+        var sFac = ss.getSheetByName("الأساتذة");
+        if (!sFac) return createJsonResponse({ status: "error", message: "ورقة الأساتذة غير موجودة" });
+
+        var targetName = String(data.originalName || data.oldName || data.name || "").trim().toLowerCase();
+        var targetEmail = String(data.originalEmail || "").trim().toLowerCase();
+        var valuesFac = sFac.getDataRange().getValues();
+
+        for (var f = 1; f < valuesFac.length; f++) {
+          var rowName = String(valuesFac[f][0] || "").trim().toLowerCase();
+          var rowEmail = String(valuesFac[f][3] || "").trim().toLowerCase();
+
+          if ((targetName && rowName === targetName) || (targetEmail && rowEmail === targetEmail)) {
+            var rowIndex = f + 1;
+            if (data.name !== undefined) sFac.getRange(rowIndex, 1).setValue(sanitizeSheetCell(data.name));
+            if (data.college !== undefined) sFac.getRange(rowIndex, 2).setValue(sanitizeSheetCell(data.college));
+            if (data.title !== undefined) sFac.getRange(rowIndex, 3).setValue(sanitizeSheetCell(data.title));
+            if (data.email !== undefined) sFac.getRange(rowIndex, 4).setValue(sanitizeSheetCell(data.email));
+            if (data.office !== undefined) sFac.getRange(rowIndex, 8).setValue(sanitizeSheetCell(data.office));
+            if (data.hours !== undefined) sFac.getRange(rowIndex, 9).setValue(sanitizeSheetCell(data.hours));
+            SpreadsheetApp.flush();
+            return createJsonResponse({ status: "success", message: "تم تعديل بيانات الأستاذ بنجاح" });
+          }
+        }
+        return createJsonResponse({ status: "error", message: "لم يتم العثور على الأستاذ المطلوب تعديله" });
+      } finally {
+        lockFac.releaseLock();
+      }
+    }
+
     if (data.action === "delete_faculty") {
       deleteSimpleRow(ss.getSheetByName("الأساتذة"), 0, data.name);
       SpreadsheetApp.flush();
@@ -444,11 +520,50 @@ function doPost(e) {
     if (data.action === "add_resource") {
       var s = ss.getSheetByName("الموارد");
       if (s) {
-        s.appendRow([data.name || data.title || "", data.code || "", data.college || "", data.type || "", data.link || "", data.term || ""]);
+        s.appendRow([
+          sanitizeSheetCell(data.name || data.title),
+          sanitizeSheetCell(data.code),
+          sanitizeSheetCell(data.college),
+          sanitizeSheetCell(data.type),
+          sanitizeSheetCell(data.link),
+          sanitizeSheetCell(data.term)
+        ]);
         SpreadsheetApp.flush();
       }
       return createJsonResponse({ status: "success" });
     }
+
+    if (data.action === "edit_resource") {
+      var lockRes = LockService.getScriptLock();
+      lockRes.waitLock(10000);
+      try {
+        var sRes = ss.getSheetByName("الموارد");
+        if (!sRes) return createJsonResponse({ status: "error", message: "ورقة الموارد غير موجودة" });
+
+        var targetTitle = String(data.originalTitle || data.oldTitle || data.title || data.name || "").trim().toLowerCase();
+        var valuesRes = sRes.getDataRange().getValues();
+
+        for (var r = 1; r < valuesRes.length; r++) {
+          var rowTitle = String(valuesRes[r][0] || "").trim().toLowerCase();
+          if (targetTitle && rowTitle === targetTitle) {
+            var rowIndex = r + 1;
+            var newTitle = data.title || data.name;
+            if (newTitle !== undefined) sRes.getRange(rowIndex, 1).setValue(sanitizeSheetCell(newTitle));
+            if (data.code !== undefined) sRes.getRange(rowIndex, 2).setValue(sanitizeSheetCell(data.code));
+            if (data.college !== undefined) sRes.getRange(rowIndex, 3).setValue(sanitizeSheetCell(data.college));
+            if (data.type !== undefined) sRes.getRange(rowIndex, 4).setValue(sanitizeSheetCell(data.type));
+            if (data.link !== undefined) sRes.getRange(rowIndex, 5).setValue(sanitizeSheetCell(data.link));
+            if (data.term !== undefined) sRes.getRange(rowIndex, 6).setValue(sanitizeSheetCell(data.term));
+            SpreadsheetApp.flush();
+            return createJsonResponse({ status: "success", message: "تم تعديل المورد الأكاديمي بنجاح" });
+          }
+        }
+        return createJsonResponse({ status: "error", message: "لم يتم العثور على المورد المطلوب تعديله" });
+      } finally {
+        lockRes.releaseLock();
+      }
+    }
+
     if (data.action === "delete_resource") {
       deleteSimpleRow(ss.getSheetByName("الموارد"), 0, data.title);
       SpreadsheetApp.flush();
