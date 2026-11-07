@@ -32,7 +32,15 @@ function doPost(e) {
             return createJsonResponse({ status: "error", message: "هذا الحساب معطل حالياً من قِبل الإدارة" });
           }
           var sessionToken = Utilities.getUuid();
-          CacheService.getScriptCache().put("SESSION_" + sessionToken, rowId, 43200); // 12 ساعة
+          // أقصى مدة للكاش في Google Apps Script هي 21600 ثانية (6 ساعات)
+          CacheService.getScriptCache().put("SESSION_" + sessionToken, rowId, 21600);
+          try {
+            PropertiesService.getScriptProperties().setProperty("SESSION_" + sessionToken, JSON.stringify({
+              adminId: rowId,
+              adminName: rowName,
+              time: new Date().getTime()
+            }));
+          } catch (propErr) {}
           return createJsonResponse({
             status: "success",
             adminName: rowName,
@@ -58,8 +66,7 @@ function doPost(e) {
 
     if (adminActions.indexOf(data.action) !== -1) {
       var token = String(data.adminToken || "").trim();
-      var cachedAdmin = token ? CacheService.getScriptCache().get("SESSION_" + token) : null;
-      if (!cachedAdmin) {
+      if (!isValidSessionToken(token)) {
         return createJsonResponse({ status: "unauthorized", message: "جلسة العمل منتهية أو غير مصرح بها." });
       }
     }
@@ -505,14 +512,23 @@ function doGet(e) {
     // فحص صلاحية توكن المشرف السحابي
     if (e && e.parameter && e.parameter.req === "verify_token") {
       var token = String(e.parameter.token || "").trim();
-      var cachedAdmin = token ? CacheService.getScriptCache().get("SESSION_" + token) : null;
-      return createJsonResponse({ valid: !!cachedAdmin });
+      return createJsonResponse({ valid: isValidSessionToken(token) });
     }
 
-    // فحص طلب استعلام حالة المنح المنفصل (قراءة آمنة ومحايدة تماماً دون أي تعديل)
+    // فحص أو تحديث حالة المنح
     if (e && e.parameter && e.parameter.req === "scholarship_status") {
+      // قناة احتياطية مؤمنة: إذا أرسل المشرف توكن صالح مع قيمة جديدة للحالة يتم التحديث فوراً
+      if (e.parameter.status && e.parameter.adminToken) {
+        if (!isValidSessionToken(e.parameter.adminToken)) {
+          return createJsonResponse({ status: "unauthorized", message: "جلسة العمل غير مصرح بها" });
+        }
+        var reqStatus = (e.parameter.status === "open" || e.parameter.status === "opened" || e.parameter.status === "1") ? "open" : "closed";
+        PropertiesService.getScriptProperties().setProperty("SCHOLARSHIP_STATUS", reqStatus);
+        return createJsonResponse({ status: "success", scholarshipStatus: reqStatus, value: (reqStatus === "open" ? 1 : 0) });
+      }
+
       var currentPropStatus = PropertiesService.getScriptProperties().getProperty("SCHOLARSHIP_STATUS") || "open";
-      return createJsonResponse({ status: currentPropStatus, value: (currentPropStatus === "open" ? 1 : 0) });
+      return createJsonResponse({ status: currentPropStatus, scholarshipStatus: currentPropStatus, value: (currentPropStatus === "open" ? 1 : 0) });
     }
 
     // جلب كامل بيانات الموقع الاعتيادية مضافاً إليها حالة المنح
@@ -612,4 +628,32 @@ function deleteSimpleRow(sheet, colIndex, targetValue) {
 function createJsonResponse(data) {
   return ContentService.createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+// دالة التحقق الأمني المزدوج من صلاحية توكن المشرف (كاش + خصائص دائمة)
+function isValidSessionToken(token) {
+  if (!token) return false;
+  var strToken = String(token).trim();
+  if (!strToken) return false;
+
+  // 1. التحقق من الكاش السريع
+  var cached = CacheService.getScriptCache().get("SESSION_" + strToken);
+  if (cached) return true;
+
+  // 2. التحقق من الخصائص الدائمة (كصمام أمان في حال إفراغ الكاش سحابياً - صلاحية 12 ساعة)
+  try {
+    var rawProp = PropertiesService.getScriptProperties().getProperty("SESSION_" + strToken);
+    if (rawProp) {
+      var parsed = JSON.parse(rawProp);
+      var now = new Date().getTime();
+      if (now - (parsed.time || 0) < 43200000) {
+        CacheService.getScriptCache().put("SESSION_" + strToken, parsed.adminId || "admin", 21600);
+        return true;
+      } else {
+        PropertiesService.getScriptProperties().deleteProperty("SESSION_" + strToken);
+      }
+    }
+  } catch (e) {}
+
+  return false;
 }

@@ -526,7 +526,7 @@
         if (['closed', 'disabled', 'off', 'false', '0', 'مغلق', 'متوقف', 'غير متاح'].includes(clean)) return false;
       }
       if (typeof raw === 'object') {
-        const nested = raw.status ?? raw.value ?? raw.scholarshipStatus ?? raw.data ?? raw.result;
+        const nested = raw.scholarshipStatus ?? (raw.status !== 'success' && raw.status !== 'error' ? raw.status : undefined) ?? raw.value ?? raw.data ?? raw.result;
         if (nested !== undefined) return normalizeScholarshipStatus(nested);
       }
       return true;

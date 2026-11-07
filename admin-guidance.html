@@ -320,7 +320,7 @@
         if (['closed', 'disabled', 'off', 'false', '0', 'مغلق', 'متوقف', 'غير متاح'].includes(clean)) return false;
       }
       if (typeof raw === 'object') {
-        const nested = raw.status ?? raw.value ?? raw.scholarshipStatus ?? raw.data ?? raw.result;
+        const nested = raw.scholarshipStatus ?? (raw.status !== 'success' && raw.status !== 'error' ? raw.status : undefined) ?? raw.value ?? raw.data ?? raw.result;
         if (nested !== undefined) return normalizeScholarshipStatus(nested);
       }
       return true;
@@ -409,30 +409,63 @@
 
     async function updateScholarshipStatus(isOpen) {
       const nextStatus = isOpen ? 'open' : 'closed';
+      const toggle = document.getElementById('scholarshipToggle');
+      if (toggle) toggle.disabled = true;
+
       localStorage.setItem(SCHOLARSHIP_STATUS_KEY, nextStatus);
       setScholarshipToggleUI(isOpen);
 
+      const adminToken = sessionStorage.getItem('nadi_admin_token') || '';
+      let saveSuccess = false;
+
+      // 1. إرسال الطلب عبر POST دون وضع Content-Type: application/json لتجنب حظر الـ CORS Preflight (OPTIONS)
       try {
+        const payload = JSON.stringify({
+          adminToken: adminToken,
+          action: 'save_scholarship_status',
+          status: nextStatus,
+          value: isOpen ? 1 : 0
+        });
+
         const res = await fetch(SCRIPT_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            adminToken: sessionStorage.getItem('nadi_admin_token') || '',
-            action: 'save_scholarship_status',
-            status: nextStatus,
-            value: isOpen ? 1 : 0
-          })
+          body: payload
         });
+
         const resData = await res.json().catch(() => null);
         if (resData && resData.status === "unauthorized") {
+          if (toggle) toggle.disabled = false;
           handleUnauthorized();
           return;
         }
+        if (resData && (resData.status === "success" || resData.scholarshipStatus === nextStatus)) {
+          saveSuccess = true;
+        }
       } catch (err) {
-        console.warn('تعذر إرسال حالة المنح إلى السيرفر:', err);
+        console.warn('تعذر إرسال حالة المنح عبر POST، جاري استخدام القناة البديلة:', err);
       }
 
-      showToast(isOpen ? 'تم فتح باب استقبال المنح بنجاح.' : 'تم إغلاق باب استقبال المنح بنجاح.', 'success');
+      // 2. قناة احتياطية فورية عبر GET في حال تم اعتراض طلب الـ POST في المتصفح
+      if (!saveSuccess && adminToken) {
+        try {
+          const fallbackRes = await fetch(`${SCRIPT_URL}?req=scholarship_status&status=${nextStatus}&adminToken=${encodeURIComponent(adminToken)}&_=${Date.now()}`);
+          const fallbackData = await fallbackRes.json().catch(() => null);
+          if (fallbackData && (fallbackData.status === "success" || fallbackData.scholarshipStatus === nextStatus)) {
+            saveSuccess = true;
+          }
+        } catch (fbErr) {
+          console.warn('تعذر تحديث حالة المنح عبر القناة البديلة:', fbErr);
+        }
+      }
+
+      if (toggle) toggle.disabled = false;
+
+      if (saveSuccess) {
+        showToast(isOpen ? 'تم فتح باب استقبال المنح بنجاح وحفظ الحالة سحابياً.' : 'تم إغلاق باب استقبال المنح بنجاح وحفظ الحالة سحابياً.', 'success');
+      } else {
+        showToast('حدث خطأ أثناء حفظ الحالة سحابياً، يرجى المحاولة مرة أخرى.', 'error');
+        fetchScholarshipStatus();
+      }
     }
 
     // إدارة المظهر
