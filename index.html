@@ -146,10 +146,11 @@
 
         <!-- الجهة اليسرى: محول المظهر وزر القائمة للجوال -->
         <div class="flex items-center gap-2 shrink-0">
-          <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-xs font-bold transition hover:border-gold-500/50 cursor-pointer">
-            <i data-lucide="sun" class="w-3.5 h-3.5 hidden dark:inline text-gold-500"></i>
-            <i data-lucide="moon" class="w-3.5 h-3.5 inline dark:hidden text-slate-700"></i>
-            <span id="themeLabel" class="hidden sm:inline">المظهر</span>
+          <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-xs font-bold transition hover:border-gold-500/50 active:scale-95 cursor-pointer">
+            <span id="themeIconContainer" class="flex items-center justify-center">
+              <i data-lucide="sun" class="w-4 h-4 text-gold-500"></i>
+            </span>
+            <span id="themeText">النهاري</span>
           </button>
           <button id="openMenuBtn" aria-label="فتح القائمة" class="md:hidden p-2 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-gold-500/50 transition cursor-pointer">
             <i data-lucide="menu" class="w-4 h-4"></i>
@@ -188,7 +189,7 @@
       </div>
 
       <!-- العنوان الرئيسي والشعار التوجيهي -->
-      <div class="max-w-3xl mx-auto space-y-4 sm:space-y-6">
+      <div class="text-center mx-auto flex flex-col items-center justify-center max-w-4xl px-4 space-y-4 sm:space-y-6">
         <p class="text-xs sm:text-sm font-bold text-gold-500 tracking-wider">— من الطلاب، للطلاب • فرع صور</p>
         
         <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#0d172a] dark:text-white leading-[1.25] tracking-tight">
@@ -206,13 +207,14 @@
         </p>
 
         <!-- أزرار الإجراء السريع (CTA Buttons) -->
-        <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+        <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
           <a href="resources.html" class="px-6 py-3 rounded-full bg-[#0d172a] dark:bg-white text-white dark:text-[#0d172a] hover:bg-slate-800 dark:hover:bg-slate-100 font-bold text-xs sm:text-sm transition flex items-center gap-2 shadow-md hover:scale-105 active:scale-95">
             <span>ابحث في بنك الامتحانات</span>
             <i data-lucide="arrow-left" class="w-4 h-4"></i>
           </a>
           <a href="scholarship.html" class="px-6 py-3 rounded-full border border-slate-300 dark:border-slate-700 bg-white/80 dark:bg-[#0e1726]/80 backdrop-blur-sm text-slate-800 dark:text-slate-200 hover:border-gold-500 font-bold text-xs sm:text-sm transition flex items-center gap-2 shadow-sm hover:scale-105 active:scale-95">
             <span>قدّم على المنحة</span>
+            <i data-lucide="graduation-cap" class="w-4 h-4 text-gold-500"></i>
           </a>
         </div>
       </div>
@@ -228,13 +230,30 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-stretch">
         
-        <!-- كرت 1: بنك الامتحانات والموارد -->
-        <a href="resources.html" class="group p-5 sm:p-6 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] hover:border-gold-500/50 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
+        <!-- كرت 1: استعارة الكتب الورقية -->
+        <a href="books.html" class="group p-5 sm:p-6 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] hover:border-gold-500/50 hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full">
           <div>
-            <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
-              <i data-lucide="file-text" class="w-6 h-6"></i>
+            <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="book-open" class="w-5 h-5 text-gold-500"></i>
+            </div>
+            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">استعارة الكتب الورقية</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              استعارة نسخ ورقية مطبوعة من مراجع ومقررات الجامعة بفرع صور أو تقديم كتبك ليستفيد منها زملاؤك.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-gold-500 group-hover:translate-x-[-4px] transition-transform">
+            <span>طلب واستعارة كتاب</span>
+            <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+          </div>
+        </a>
+
+        <!-- كرت 2: بنك الامتحانات والموارد -->
+        <a href="resources.html" class="group p-5 sm:p-6 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] hover:border-gold-500/50 hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full">
+          <div>
+            <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="folder-down" class="w-5 h-5 text-gold-500"></i>
             </div>
             <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">بنك الامتحانات والموارد</h3>
             <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -247,30 +266,13 @@
           </div>
         </a>
 
-        <!-- كرت 2: إعارة واستعارة الكتب -->
-        <a href="books.html" class="group p-5 sm:p-6 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] hover:border-gold-500/50 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
+        <!-- كرت 3: المنحة الطلابية -->
+        <a href="scholarship.html" class="group p-5 sm:p-6 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] hover:border-gold-500/50 hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full">
           <div>
-            <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
-              <i data-lucide="book-open" class="w-6 h-6"></i>
+            <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="graduation-cap" class="w-5 h-5 text-gold-500"></i>
             </div>
-            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">إعارة واستعارة الكتب</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              استعارة نسخ ورقية مطبوعة من مراجع ومقررات الجامعة بفرع صور أو تقديم كتبك ليستفيد منها زملاؤك.
-            </p>
-          </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-gold-500 group-hover:translate-x-[-4px] transition-transform">
-            <span>طلب واستعارة كتاب</span>
-            <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
-          </div>
-        </a>
-
-        <!-- كرت 3: المنحة الطلابية السنوية -->
-        <a href="scholarship.html" class="group p-5 sm:p-6 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] hover:border-gold-500/50 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
-              <i data-lucide="graduation-cap" class="w-6 h-6"></i>
-            </div>
-            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">المنحة الطلابية السنوية</h3>
+            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">المنحة الطلابية</h3>
             <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               مبادرة نادي الوفاء السنوية لتخفيف الأعباء الجامعية ومساعدة الطلاب المستحقين في مسيرتهم.
             </p>
@@ -281,13 +283,13 @@
           </div>
         </a>
 
-        <!-- كرت 4: دليل الهيئة التعليمية -->
-        <a href="faculty.html" class="group p-5 sm:p-6 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] hover:border-gold-500/50 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
+        <!-- كرت 4: دليل الأساتذة -->
+        <a href="faculty.html" class="group p-5 sm:p-6 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] hover:border-gold-500/50 hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full">
           <div>
-            <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
-              <i data-lucide="users" class="w-6 h-6"></i>
+            <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="users" class="w-5 h-5 text-gold-500"></i>
             </div>
-            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">دليل الهيئة التعليمية</h3>
+            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">دليل الأساتذة</h3>
             <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               وسائل التواصل والبريد الجامعي لأساتذة الكليات، أماكن المكاتب، ومتابعة الساعات المكتبية لحظياً.
             </p>
@@ -298,13 +300,13 @@
           </div>
         </a>
 
-        <!-- كرت 5: شبكة التوجيه الأكاديمي -->
-        <a href="guidance.html" class="group p-5 sm:p-6 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] hover:border-gold-500/50 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
+        <!-- كرت 5: شبكة التوجيه وممثلو الاختصاصات -->
+        <a href="guidance.html" class="group p-5 sm:p-6 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] hover:border-gold-500/50 hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full">
           <div>
-            <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
-              <i data-lucide="compass" class="w-6 h-6"></i>
+            <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="message-circle" class="w-5 h-5 text-gold-500"></i>
             </div>
-            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">شبكة التوجيه الأكاديمي</h3>
+            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">شبكة التوجيه وممثلو الاختصاصات</h3>
             <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               ممثلو الاختصاصات ومجموعات الواتساب الرسمية للإرشاد الأكاديمي والإجابة عن استفسارات المواد.
             </p>
@@ -315,13 +317,13 @@
           </div>
         </a>
 
-        <!-- كرت 6: أرشيف الأنشطة والفعاليات -->
-        <a href="archive.html" class="group p-5 sm:p-6 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] hover:border-gold-500/50 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
+        <!-- كرت 6: أرشيف الفعاليات والأنشطة -->
+        <a href="archive.html" class="group p-5 sm:p-6 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white dark:bg-[#0e1726] hover:border-gold-500/50 hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full">
           <div>
-            <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
-              <i data-lucide="calendar" class="w-6 h-6"></i>
+            <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500 mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="camera" class="w-5 h-5 text-gold-500"></i>
             </div>
-            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">أرشيف الأنشطة والفعاليات</h3>
+            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">أرشيف الفعاليات والأنشطة</h3>
             <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               سجل الأنشطة والورش التخصصية، الدورات التدريبية، والمبادرات الطلابية التي ينظمها النادي.
             </p>
@@ -338,9 +340,7 @@
     <!-- ==================== مقولة وفلسفة النادي ==================== -->
     <section class="max-w-4xl mx-auto px-4 my-14 sm:my-20 text-center">
       <div class="relative p-7 sm:p-12 rounded-3xl border border-[#eae7dc] dark:border-[#1e293b] bg-white/70 dark:bg-[#0e1726]/70 backdrop-blur-sm shadow-sm">
-        <div class="w-10 h-10 rounded-full bg-gold-500/10 text-gold-500 flex items-center justify-center mx-auto mb-4">
-          <i data-lucide="quote" class="w-5 h-5"></i>
-        </div>
+        <div class="flex justify-center mb-4"><span class="w-10 h-10 rounded-full bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500"><i data-lucide="feather" class="w-5 h-5"></i></span></div>
         <blockquote class="text-base sm:text-xl lg:text-2xl font-bold text-[#0d172a] dark:text-slate-100 leading-relaxed max-w-2xl mx-auto">
           "نادي الوفاء جمعية طلابية يديرها طلاب فرع صور، تجمع ما تعلّمناه في فصولنا ليجده من يأتي بعدنا جاهزاً: الامتحانات، الكتب، والأشخاص الذين يعرفون الطريق."
         </blockquote>
@@ -454,7 +454,7 @@
   <div id="chatBackdrop" class="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs hidden transition-opacity"></div>
 
   <!-- الزر العائم -->
-  <button id="toggleChatBtn" aria-label="مساعد AI" class="fixed bottom-5 left-5 z-40 bg-white/95 dark:bg-[#0e1726]/95 backdrop-blur-md text-slate-900 dark:text-white px-4 py-2.5 rounded-full border border-slate-200/80 dark:border-slate-800 shadow-xl flex items-center gap-2 text-xs font-bold hover:scale-105 transition active:scale-95 cursor-pointer">
+  <button id="toggleChatBtn" aria-label="مساعد AI" class="fixed bottom-5 left-5 z-50 flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#0e1726]/95 backdrop-blur-md text-slate-900 dark:text-white text-xs font-bold shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer">
     <i data-lucide="sparkles" class="w-4 h-4 text-gold-500"></i>
     <span>مساعد AI</span>
   </button>
@@ -566,29 +566,31 @@
 
     // 2. إدارة المظهر (النهاري والليلي) بأيقونات فيكتور رسمية
     const themeToggleBtn = document.getElementById('themeToggleBtn');
-    const htmlElement = document.documentElement;
+    const themeIconContainer = document.getElementById('themeIconContainer');
+    const themeText = document.getElementById('themeText');
+    const html = document.documentElement;
 
     function applyTheme(isDark) {
       if (isDark) {
-        htmlElement.classList.add('dark');
+        html.classList.add('dark');
+        if (themeText) themeText.textContent = 'الليلي';
+        if (themeIconContainer) themeIconContainer.innerHTML = '<i data-lucide="moon" class="w-4 h-4 text-blue-400"></i>';
       } else {
-        htmlElement.classList.remove('dark');
+        html.classList.remove('dark');
+        if (themeText) themeText.textContent = 'النهاري';
+        if (themeIconContainer) themeIconContainer.innerHTML = '<i data-lucide="sun" class="w-4 h-4 text-gold-500"></i>';
       }
-      if (window.lucide) lucide.createIcons();
+      lucide.createIcons();
     }
 
-    const savedTheme = localStorage.getItem('clubTheme');
-    applyTheme(savedTheme !== 'light');
+    const savedTheme = localStorage.getItem('clubTheme') !== 'light';
+    applyTheme(savedTheme);
 
     if (themeToggleBtn) {
       themeToggleBtn.addEventListener('click', () => {
-        const isDarkCurrently = htmlElement.classList.contains('dark');
-        const newThemeIsDark = !isDarkCurrently;
-        applyTheme(newThemeIsDark);
-        localStorage.setItem('clubTheme', newThemeIsDark ? 'dark' : 'light');
-      });
-    }
-        localStorage.setItem('clubTheme', newThemeIsDark ? 'dark' : 'light');
+        const isDark = !html.classList.contains('dark');
+        applyTheme(isDark);
+        localStorage.setItem('clubTheme', isDark ? 'dark' : 'light');
       });
     }
 
