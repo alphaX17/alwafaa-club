@@ -9,16 +9,7 @@ function doPost(e) {
     var timestamp = new Date().toLocaleString("ar-LB", { timeZone: "Asia/Beirut" });
 
     // =====================================================================
-    // 0. حفظ وتحديث حالة استقبال المنح سحابياً
-    // =====================================================================
-    if (data.action === "save_scholarship_status") {
-      var nextState = (data.status === "open" || data.status === "opened" || data.value === 1) ? "open" : "closed";
-      PropertiesService.getScriptProperties().setProperty("SCHOLARSHIP_STATUS", nextState);
-      return createJsonResponse({ status: "success", scholarshipStatus: nextState });
-    }
-
-    // =====================================================================
-    // 1. التحقق الأمني السحابي من تسجيل دخول المشرفين
+    // 1. التحقق الأمني السحابي من تسجيل دخول المشرفين وتوليد التوكن
     // =====================================================================
     if (data.action === "admin_login") {
       var sheetAdmins = ss.getSheetByName("المشرفون");
@@ -40,14 +31,46 @@ function doPost(e) {
           if (rowStatus === "معطل") {
             return createJsonResponse({ status: "error", message: "هذا الحساب معطل حالياً من قِبل الإدارة" });
           }
+          var sessionToken = Utilities.getUuid();
+          CacheService.getScriptCache().put("SESSION_" + sessionToken, rowId, 43200); // 12 ساعة
           return createJsonResponse({
             status: "success",
             adminName: rowName,
-            studentId: rowId
+            studentId: rowId,
+            adminToken: sessionToken
           });
         }
       }
       return createJsonResponse({ status: "error", message: "رقم الملف الجامعي أو رمز الدخول غير صحيح" });
+    }
+
+    // =====================================================================
+    // صمام التحقق الأمني من صلاحية الجلسة لجميع العمليات الإدارية الحساسة
+    // =====================================================================
+    var adminActions = [
+      "save_scholarship_status", "update_announcement",
+      "add_guidance", "edit_guidance", "delete_guidance",
+      "add_activity", "edit_activity", "delete_activity",
+      "add_book", "edit_book", "delete_book", "approve_book_borrow", "return_book", "approve_book_donation", "delete_book_request",
+      "add_faculty", "delete_faculty",
+      "add_resource", "delete_resource"
+    ];
+
+    if (adminActions.indexOf(data.action) !== -1) {
+      var token = String(data.adminToken || "").trim();
+      var cachedAdmin = token ? CacheService.getScriptCache().get("SESSION_" + token) : null;
+      if (!cachedAdmin) {
+        return createJsonResponse({ status: "unauthorized", message: "جلسة العمل منتهية أو غير مصرح بها." });
+      }
+    }
+
+    // =====================================================================
+    // 0. حفظ وتحديث حالة استقبال المنح سحابياً
+    // =====================================================================
+    if (data.action === "save_scholarship_status") {
+      var nextState = (data.status === "open" || data.status === "opened" || data.value === 1) ? "open" : "closed";
+      PropertiesService.getScriptProperties().setProperty("SCHOLARSHIP_STATUS", nextState);
+      return createJsonResponse({ status: "success", scholarshipStatus: nextState });
     }
 
     // =====================================================================
@@ -320,7 +343,7 @@ function doPost(e) {
     }
 
     // =====================================================================
-    // 4. استمارات الطلاب الواردة من المنصة
+    // 4. استمارات الطلاب الواردة من المنصة (متاحة للعموم دون توكن)
     // =====================================================================
     if (data.formType === "book_borrow" || data.formType === "book_donate") {
       var sheetRequests = ss.getSheetByName("الكتب");
@@ -473,21 +496,21 @@ function doPost(e) {
 }
 
 // =========================================================================
-// تزويد الموقع بالبيانات الحية وحالة المنح
+// تزويد الموقع بالبيانات الحية وحالة المنح (قراءة آمنة فقط - Read-Only)
 // =========================================================================
 function doGet(e) {
   try {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-    // فحص طلب استعلام حالة المنح المنفصل (من زر الأدمن أو صفحة المنح)
-    if (e && e.parameter && e.parameter.req === "scholarship_status") {
-      // دعم إمكانية التحديث عبر GET في حال طُلب ذلك
-      if (e.parameter.status) {
-        var cleanStatus = (e.parameter.status === "open" || e.parameter.status === "opened") ? "open" : "closed";
-        PropertiesService.getScriptProperties().setProperty("SCHOLARSHIP_STATUS", cleanStatus);
-        return createJsonResponse({ status: "success", scholarshipStatus: cleanStatus });
-      }
+    // فحص صلاحية توكن المشرف السحابي
+    if (e && e.parameter && e.parameter.req === "verify_token") {
+      var token = String(e.parameter.token || "").trim();
+      var cachedAdmin = token ? CacheService.getScriptCache().get("SESSION_" + token) : null;
+      return createJsonResponse({ valid: !!cachedAdmin });
+    }
 
+    // فحص طلب استعلام حالة المنح المنفصل (قراءة آمنة ومحايدة تماماً دون أي تعديل)
+    if (e && e.parameter && e.parameter.req === "scholarship_status") {
       var currentPropStatus = PropertiesService.getScriptProperties().getProperty("SCHOLARSHIP_STATUS") || "open";
       return createJsonResponse({ status: currentPropStatus, value: (currentPropStatus === "open" ? 1 : 0) });
     }

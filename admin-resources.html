@@ -35,7 +35,7 @@
 
   <!-- فحص الحماية والجلسة فوراً قبل تحميل الصفحة -->
   <script>
-    if (!sessionStorage.getItem('nadi_admin_session')) {
+    if (!sessionStorage.getItem('nadi_admin_session') || !sessionStorage.getItem('nadi_admin_token')) {
       window.location.replace('admin.html');
     }
   </script>
@@ -303,6 +303,36 @@
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
 
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function handleUnauthorized() {
+      alert("انتهت صلاحية جلسة العمل أو تم تسجيل الخروج. يرجى إعادة تسجيل الدخول.");
+      sessionStorage.removeItem('nadi_admin_session');
+      sessionStorage.removeItem('nadi_admin_token');
+      window.location.replace('admin.html');
+    }
+
+    async function verifyAdminAuth() {
+      const token = sessionStorage.getItem('nadi_admin_token');
+      if (!token) return handleUnauthorized();
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=verify_token&token=${encodeURIComponent(token)}&bust=${Date.now()}`);
+        const data = await res.json();
+        if (!data || !data.valid) {
+          handleUnauthorized();
+        }
+      } catch(e) {}
+    }
+    verifyAdminAuth();
+
     let liveResourcesList = [];
     let currentFilter = 'all';
     let deleteCallback = null;
@@ -439,10 +469,11 @@
 
       container.innerHTML = filtered.map(item => {
         const trueIndex = liveResourcesList.indexOf(item);
-        const title = item['اسم المادة'] || item.name || item.title || 'مقرر بدون اسم';
-        const code = item['رمز المادة'] || item.code || '';
-        const col = item['الكلية'] || item.college || 'عام';
-        const type = item['نوع الملف'] || item['نوع المورد'] || item.type || 'ملف دراسي';
+        const title = escapeHtml(item['اسم المادة'] || item.name || item.title || 'مقرر بدون اسم');
+        const code = escapeHtml(item['رمز المادة'] || item.code || '');
+        const col = escapeHtml(item['الكلية'] || item.college || 'عام');
+        const rawType = item['نوع الملف'] || item['نوع المورد'] || item.type || 'ملف دراسي';
+        const type = escapeHtml(rawType);
         
         const rawTerm = item['الفصل'] || item['الفصل والسنة الدراسية'] || item.term || '';
         const isInvalidTerm = (v) => {
@@ -450,14 +481,15 @@
           const s = String(v).trim().toLowerCase();
           return s === '' || s === 'غير محدد' || s === 'لا يوجد' || s === 'null' || s === 'undefined' || s === '-';
         };
-        const term = isInvalidTerm(rawTerm) ? '' : String(rawTerm).trim();
+        const term = escapeHtml(isInvalidTerm(rawTerm) ? '' : String(rawTerm).trim());
 
         // استخراج الوصف النظيف
         const rawDesc = item['الوصف'] || item.desc || '';
-        const desc = isInvalidTerm(rawDesc) || rawDesc === term ? '' : String(rawDesc).trim();
+        const desc = escapeHtml(isInvalidTerm(rawDesc) || rawDesc === rawTerm ? '' : String(rawDesc).trim());
 
-        const link = item['رابط التحميل'] || item.link || '#';
-        const typeBadgeStyle = getTypeBadgeClass(type);
+        const rawLink = item['رابط التحميل'] || item.link || '#';
+        const link = escapeHtml(rawLink);
+        const typeBadgeStyle = getTypeBadgeClass(rawType);
 
         return `
           <div class="p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:border-gold-500/40 transition">
@@ -552,11 +584,10 @@
         switchTab('manage');
 
         try {
-          await fetch(SCRIPT_URL, {
+          const res = await fetch(SCRIPT_URL, {
             method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              adminToken: sessionStorage.getItem('nadi_admin_token') || '',
               action: "add_resource",
               ...newRes,
               "اسم المادة": newRes.title,
@@ -570,6 +601,11 @@
               "رابط التحميل": newRes.link
             })
           });
+          const resData = await res.json().catch(() => null);
+          if (resData && resData.status === "unauthorized") {
+            handleUnauthorized();
+            return;
+          }
         } catch(err) {} finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4"></i><span>نشر المورد في بنك الامتحانات فوراً</span>`;
@@ -662,11 +698,10 @@
         closeEditModal();
 
         try {
-          await fetch(SCRIPT_URL, {
+          const res = await fetch(SCRIPT_URL, {
             method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              adminToken: sessionStorage.getItem('nadi_admin_token') || '',
               action: "edit_resource",
               originalTitle: origTitle,
               ...updatedRes,
@@ -681,6 +716,11 @@
               "رابط التحميل": updatedRes.link
             })
           });
+          const resData = await res.json().catch(() => null);
+          if (resData && resData.status === "unauthorized") {
+            handleUnauthorized();
+            return;
+          }
         } catch(err) {} finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalBtnContent;
@@ -702,15 +742,19 @@
         renderResourceList(liveResourcesList);
 
         try {
-          await fetch(SCRIPT_URL, {
+          const res = await fetch(SCRIPT_URL, {
             method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              adminToken: sessionStorage.getItem('nadi_admin_token') || '',
               action: "delete_resource",
               title: targetTitle
             })
           });
+          const resData = await res.json().catch(() => null);
+          if (resData && resData.status === "unauthorized") {
+            handleUnauthorized();
+            return;
+          }
         } catch(e) {}
       });
     }

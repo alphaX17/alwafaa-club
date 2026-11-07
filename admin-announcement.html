@@ -32,9 +32,13 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 4px; }
   </style>
 
-  <!-- فحص الجلسة قبل التحميل -->
+  <!-- فحص الجلسة والتوكن قبل التحميل -->
   <script>
-    if (!sessionStorage.getItem('nadi_admin_session')) {
+    const adminToken = sessionStorage.getItem('nadi_admin_token');
+    const adminSession = sessionStorage.getItem('nadi_admin_session');
+    if (!adminToken || !adminSession) {
+      sessionStorage.removeItem('nadi_admin_session');
+      sessionStorage.removeItem('nadi_admin_token');
       window.location.replace('admin.html');
     }
   </script>
@@ -187,6 +191,43 @@
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
 
+    // دالة حماية وترميز النصوص ضد ثغرات الحقن (Safe HTML Escaping)
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function handleUnauthorized() {
+      alert('جلسة العمل غير مصرح بها أو منتهية، يرجى إعادة تسجيل الدخول.');
+      sessionStorage.removeItem('nadi_admin_session');
+      sessionStorage.removeItem('nadi_admin_token');
+      window.location.replace('admin.html');
+    }
+
+    async function verifyAdminAuth() {
+      const token = sessionStorage.getItem('nadi_admin_token');
+      if (!token) {
+        window.location.replace('admin.html');
+        return;
+      }
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=verify_token&token=${encodeURIComponent(token)}&bust=${Date.now()}`);
+        const data = await res.json();
+        if (data && data.valid === false) {
+          sessionStorage.removeItem('nadi_admin_session');
+          sessionStorage.removeItem('nadi_admin_token');
+          alert('انتهت صلاحية جلسة العمل، يرجى تسجيل الدخول مجدداً.');
+          window.location.replace('admin.html');
+        }
+      } catch(e) {}
+    }
+    verifyAdminAuth();
+
     const activeAdmin = sessionStorage.getItem('nadi_admin_session');
     if (activeAdmin) {
       document.getElementById('welcomeAdmin').textContent = `المشرف: ${activeAdmin}`;
@@ -263,6 +304,7 @@
         const targetLink = document.getElementById('annTargetPage').value;
 
         const payload = {
+          adminToken: sessionStorage.getItem('nadi_admin_token') || '',
           action: "update_announcement",
           text: annText.value.trim(),
           btnText: annBtnText.value.trim(),
@@ -271,12 +313,15 @@
         };
 
         try {
-          await fetch(SCRIPT_URL, {
+          const res = await fetch(SCRIPT_URL, {
             method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
+          const resData = await res.json().catch(() => null);
+          if (resData && resData.status === "unauthorized") {
+            handleUnauthorized();
+            return;
+          }
 
           // تفريغ كاش الصفحة الرئيسية محلياً لكي ينعكس التعديل فوراً
           localStorage.removeItem('nadi_home_cache');

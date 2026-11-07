@@ -273,6 +273,16 @@
     let activitiesData = [];
     let displayedActivities = [];
 
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     function cleanDirectImageUrl(raw) {
       if (!raw) return '';
       let str = String(raw).trim();
@@ -309,13 +319,19 @@
       }
 
       grid.innerHTML = displayedActivities.map((act, idx) => {
-        const title = act['العنوان'] || act['عنوان النشاط'] || act.title || 'فعالية بدون عنوان';
-        const date = act['التاريخ'] || act.date || '';
-        const location = act['المكان'] || act.location || '';
+        const rawTitle = act['العنوان'] || act['عنوان النشاط'] || act.title || 'فعالية بدون عنوان';
+        const rawDate = act['التاريخ'] || act.date || '';
+        const rawLocation = act['المكان'] || act.location || '';
         const rawCat = act['التصنيف'] || act.category || 'فعالية عامة';
-        const desc = act['التفاصيل الكاملة'] || act['الوصف'] || act['الوصف المختصر'] || act.desc || '';
+        const rawDesc = act['التفاصيل الكاملة'] || act['الوصف'] || act['الوصف المختصر'] || act.desc || '';
         const imgs = parseImages(act['رابط الصورة'] || act.imageUrl);
-        const coverImg = imgs[0] || '';
+        const coverImg = escapeHtml(imgs[0] || '');
+
+        const title = escapeHtml(rawTitle);
+        const date = escapeHtml(rawDate);
+        const location = escapeHtml(rawLocation);
+        const cat = escapeHtml(rawCat);
+        const desc = escapeHtml(rawDesc);
 
         let catCode = 'scientific';
         const lowerCat = rawCat.toLowerCase();
@@ -344,14 +360,14 @@
           ? `<span class="absolute bottom-3 left-3 px-2 py-0.5 rounded bg-black/75 backdrop-blur-sm text-white text-[10px] font-bold flex items-center gap-1 shadow-sm"><i data-lucide="images" class="w-3 h-3"></i> ${imgs.length} صور</span>`
           : '';
 
-        const searchMetadata = `${title} ${rawCat} ${desc} ${location}`.toLowerCase();
+        const searchMetadata = escapeHtml(`${rawTitle} ${rawCat} ${rawDesc} ${rawLocation}`.toLowerCase());
 
         return `
           <article class="event-card rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark overflow-hidden flex flex-col justify-between hover:border-gold-500/50 transition duration-200 shadow-sm" data-category="${catCode}" data-title="${searchMetadata}">
             <div>
               <div class="h-44 sm:h-48 relative flex items-center justify-center overflow-hidden bg-slate-100 dark:bg-slate-900">
                 ${imgMarkup}
-                <span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg ${badgeBg} text-white text-[11px] font-bold shadow-sm">${rawCat}</span>
+                <span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg ${badgeBg} text-white text-[11px] font-bold shadow-sm">${cat}</span>
                 ${badgeMulti}
               </div>
               <div class="p-4 sm:p-5">

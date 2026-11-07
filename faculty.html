@@ -248,6 +248,16 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
     let facultyData = [];
 
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     // محرك الفرز الذكي لجميع اختصاصات الجامعة الـ 5 + الإدارة
     function detectCollegeCategory(college = '', title = '', rawCat = '') {
       const combined = `${college} ${title} ${rawCat}`.toLowerCase();
@@ -394,20 +404,26 @@
       }
 
       grid.innerHTML = list.map(item => {
-        const name = item['الاسم واللقب'] || item['الاسم'] || item.name || '';
-        const college = item['الكلية أو القسم'] || item['الكلية'] || item.college || 'الهيئة التعليمية';
-        const title = item['الاختصاص أو الصفة'] || item['الصفة'] || item.title || '';
-        const email = item['البريد الجامعي'] || item['البريد الإلكتروني'] || item.email || '';
+        const rawName = item['الاسم واللقب'] || item['الاسم'] || item.name || '';
+        const rawCollege = item['الكلية أو القسم'] || item['الكلية'] || item.college || 'الهيئة التعليمية';
+        const rawTitle = item['الاختصاص أو الصفة'] || item['الصفة'] || item.title || '';
+        const rawEmail = item['البريد الجامعي'] || item['البريد الإلكتروني'] || item.email || '';
         const rawCat = item['التصنيف البرمجي'] || '';
 
-        const { office: officeRoom, hours: officeHours } = extractOfficeAndHours(item);
+        const extracted = extractOfficeAndHours(item);
+        const officeRoom = escapeHtml(extracted.office);
+        const officeHours = escapeHtml(extracted.hours);
 
-        const detection = detectCollegeCategory(college, title, rawCat);
+        const detection = detectCollegeCategory(rawCollege, rawTitle, rawCat);
         const catCode = detection.code;
         const badgeColor = detection.badgeColor;
 
-        const roleTag = item['الصفة الوظيفية'] || (catCode === 'admin' ? 'الجهاز الإداري' : 'عضو هيئة تعليمية');
-        const escapedEmail = email.replace(/'/g, "\\'");
+        const roleTag = escapeHtml(item['الصفة الوظيفية'] || (catCode === 'admin' ? 'الجهاز الإداري' : 'عضو هيئة تعليمية'));
+        const name = escapeHtml(rawName);
+        const college = escapeHtml(rawCollege);
+        const title = escapeHtml(rawTitle);
+        const email = escapeHtml(rawEmail);
+        const escapedEmail = rawEmail.replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
         const hasOfficeDetails = officeRoom !== '' || officeHours !== '';
         const officeDetailsMarkup = hasOfficeDetails ? `

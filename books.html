@@ -338,6 +338,16 @@
     let booksData = [];
     let currentBookFilter = 'all';
 
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     function detectBookCategory(faculty = '', title = '', desc = '') {
       const combined = `${faculty} ${title} ${desc}`.toLowerCase();
 
@@ -368,10 +378,10 @@
         return;
       }
 
-      grid.innerHTML = booksList.map(book => {
-        const title = book['عنوان الكتاب'] || '';
-        const faculty = book['الكلية'] || 'الجامعة اللبنانية الدولية';
-        const desc = book['الوصف والطبعة'] || 'النسخة المطبوعة المعتمدة';
+      grid.innerHTML = booksList.map((book, idx) => {
+        const rawTitle = book['عنوان الكتاب'] || '';
+        const rawFaculty = book['الكلية'] || 'الجامعة اللبنانية الدولية';
+        const rawDesc = book['الوصف والطبعة'] || 'النسخة المطبوعة المعتمدة';
         const rawCopies = String(book['عدد النسخ'] || '').trim();
         const copiesNum = parseInt(rawCopies, 10);
         const status = String(book['الحالة'] || '').trim();
@@ -384,16 +394,19 @@
           ? `<span class="px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">متوفر للاستلام</span>`
           : `<span class="px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">مُعار حالياً</span>`;
 
-        const escapedTitle = title.replace(/'/g, "\\'");
         const actionBtn = isAvailable
-          ? `<button onclick="openModal('${escapedTitle}')" class="px-4 py-2 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 text-xs font-bold hover:opacity-90 transition shadow-sm">طلب استعارة</button>`
+          ? `<button onclick="openModalByIndex(${idx})" class="px-4 py-2 rounded-xl bg-clubNavy-light dark:bg-gold-500 text-white dark:text-slate-950 text-xs font-bold hover:opacity-90 transition shadow-sm">طلب استعارة</button>`
           : `<button disabled class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 text-xs font-bold cursor-not-allowed">غير متاح</button>`;
 
-        const copiesText = isAvailable ? `النسخ المتاحة: ${rawCopies || '1'}` : 'يعود قريباً';
+        const copiesText = escapeHtml(isAvailable ? `النسخ المتاحة: ${rawCopies || '1'}` : 'يعود قريباً');
         const cardOpacity = isAvailable ? '' : 'opacity-70';
 
-        const categoryCode = detectBookCategory(faculty, title, desc);
-        const searchMetadata = `${title} ${faculty} ${desc} ${categoryCode}`.toLowerCase();
+        const categoryCode = detectBookCategory(rawFaculty, rawTitle, rawDesc);
+        const searchMetadata = escapeHtml(`${rawTitle} ${rawFaculty} ${rawDesc} ${categoryCode}`.toLowerCase());
+
+        const title = escapeHtml(rawTitle);
+        const faculty = escapeHtml(rawFaculty);
+        const desc = escapeHtml(rawDesc);
 
         return `
           <div class="book-card p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark flex flex-col justify-between hover:border-gold-500/50 transition shadow-sm ${cardOpacity}" data-category="${categoryCode}" data-title="${searchMetadata}">
@@ -539,6 +552,12 @@
     const modalBookName = document.getElementById('modalBookName');
     const borrowForm = document.getElementById('borrowForm');
     const modalSuccess = document.getElementById('modalSuccess');
+
+    function openModalByIndex(idx) {
+      const book = booksData[idx];
+      const title = book ? (book['عنوان الكتاب'] || '') : '';
+      openModal(title);
+    }
 
     function openModal(bookTitle) {
       if (modalBookName) modalBookName.textContent = bookTitle;

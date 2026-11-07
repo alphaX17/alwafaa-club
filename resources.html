@@ -228,6 +228,16 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
     let resourcesData = [];
 
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     // محرك الفحص الدلالي والتصنيف الذكي للمورد
     function detectResourceMetadata(faculty = '', type = '', name = '', code = '') {
       const combined = `${faculty} ${type} ${name} ${code}`.toLowerCase();
@@ -308,11 +318,11 @@
       }
 
       grid.innerHTML = list.map(item => {
-        const name = item['اسم المادة'] || item.name || item.title || '';
-        const code = item['رمز المادة'] || item.code || '';
-        const faculty = item['الكلية'] || item.college || 'عام';
-        const type = item['نوع الملف'] || item['نوع المورد'] || item.type || 'ملف دراسي';
-        const link = item['رابط التحميل'] || item.link || '#';
+        const rawName = item['اسم المادة'] || item.name || item.title || '';
+        const rawCode = item['رمز المادة'] || item.code || '';
+        const rawFaculty = item['الكلية'] || item.college || 'عام';
+        const rawType = item['نوع الملف'] || item['نوع المورد'] || item.type || 'ملف دراسي';
+        const rawLink = item['رابط التحميل'] || item.link || '#';
 
         // استخراج وتنقية الفصل والسنة الدراسية: إخفاؤه تماماً إذا لم يُدخل
         const rawTerm = item['الفصل'] || item['الفصل والسنة الدراسية'] || item.term || '';
@@ -321,14 +331,22 @@
           const s = String(v).trim().toLowerCase();
           return s === '' || s === 'غير محدد' || s === 'لا يوجد' || s === 'null' || s === 'undefined' || s === '-';
         };
-        const term = isInvalidTerm(rawTerm) ? '' : String(rawTerm).trim();
+        const rawCleanTerm = isInvalidTerm(rawTerm) ? '' : String(rawTerm).trim();
 
         // استخراج الوصف النظيف دون تكرار أو فراغ
-        let desc = String(item['الوصف'] || '').trim();
-        if (desc === term || isInvalidTerm(desc) || desc === name || desc === code) desc = '';
+        let rawDesc = String(item['الوصف'] || '').trim();
+        if (rawDesc === rawCleanTerm || isInvalidTerm(rawDesc) || rawDesc === rawName || rawDesc === rawCode) rawDesc = '';
 
-        const meta = detectResourceMetadata(faculty, type, name, code);
-        const searchMetadata = `${name} ${code} ${faculty} ${type} ${term} ${desc}`.toLowerCase();
+        const meta = detectResourceMetadata(rawFaculty, rawType, rawName, rawCode);
+        const searchMetadata = escapeHtml(`${rawName} ${rawCode} ${rawFaculty} ${rawType} ${rawCleanTerm} ${rawDesc}`.toLowerCase());
+
+        const name = escapeHtml(rawName);
+        const code = escapeHtml(rawCode);
+        const faculty = escapeHtml(rawFaculty);
+        const type = escapeHtml(rawType);
+        const link = escapeHtml(rawLink);
+        const term = escapeHtml(rawCleanTerm);
+        const desc = escapeHtml(rawDesc);
 
         return `
           <div class="resource-card rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-white dark:bg-clubNavy-cardDark p-4 flex flex-col hover:border-gold-500/50 transition duration-200 shadow-sm" data-category="${meta.categories}" data-name="${searchMetadata}">

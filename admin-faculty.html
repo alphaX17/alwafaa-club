@@ -35,7 +35,7 @@
 
   <!-- فحص الحماية والجلسة فوراً قبل تحميل الصفحة -->
   <script>
-    if (!sessionStorage.getItem('nadi_admin_session')) {
+    if (!sessionStorage.getItem('nadi_admin_session') || !sessionStorage.getItem('nadi_admin_token')) {
       window.location.replace('admin.html');
     }
   </script>
@@ -284,6 +284,36 @@
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
 
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function handleUnauthorized() {
+      alert("انتهت صلاحية جلسة العمل أو تم تسجيل الخروج. يرجى إعادة تسجيل الدخول.");
+      sessionStorage.removeItem('nadi_admin_session');
+      sessionStorage.removeItem('nadi_admin_token');
+      window.location.replace('admin.html');
+    }
+
+    async function verifyAdminAuth() {
+      const token = sessionStorage.getItem('nadi_admin_token');
+      if (!token) return handleUnauthorized();
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=verify_token&token=${encodeURIComponent(token)}&bust=${Date.now()}`);
+        const data = await res.json();
+        if (!data || !data.valid) {
+          handleUnauthorized();
+        }
+      } catch(e) {}
+    }
+    verifyAdminAuth();
+
     let liveFacultyList = [];
     let currentFilter = 'all';
     let deleteCallback = null;
@@ -457,13 +487,15 @@
 
       container.innerHTML = filtered.map(fac => {
         const trueIndex = liveFacultyList.indexOf(fac);
-        const name = fac['الاسم واللقب'] || fac['الاسم'] || fac.name || 'أستاذ';
-        const col = fac['الكلية'] || fac['الكلية أو القسم'] || fac.college || 'عام';
-        const title = fac['الاختصاص أو الصفة'] || fac['الصفة'] || fac.title || '';
-        const email = fac['البريد الجامعي'] || fac['البريد الإلكتروني'] || fac.email || '';
+        const name = escapeHtml(fac['الاسم واللقب'] || fac['الاسم'] || fac.name || 'أستاذ');
+        const col = escapeHtml(fac['الكلية'] || fac['الكلية أو القسم'] || fac.college || 'عام');
+        const title = escapeHtml(fac['الاختصاص أو الصفة'] || fac['الصفة'] || fac.title || '');
+        const email = escapeHtml(fac['البريد الجامعي'] || fac['البريد الإلكتروني'] || fac.email || '');
         
         // استخراج مكان المكتب والساعات بدقة متناهية
-        const { office, hours } = extractOfficeAndHours(fac);
+        const extracted = extractOfficeAndHours(fac);
+        const office = escapeHtml(extracted.office);
+        const hours = escapeHtml(extracted.hours);
 
         return `
           <div class="p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:border-gold-500/40 transition">
@@ -576,11 +608,10 @@
         switchTab('manage');
 
         try {
-          await fetch(SCRIPT_URL, {
+          const res = await fetch(SCRIPT_URL, {
             method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              adminToken: sessionStorage.getItem('nadi_admin_token') || '',
               action: "add_faculty",
               ...newFac,
               "الاسم واللقب": newFac.name,
@@ -596,6 +627,11 @@
               "الساعات المكتبية": newFac.hours
             })
           });
+          const resData = await res.json().catch(() => null);
+          if (resData && resData.status === "unauthorized") {
+            handleUnauthorized();
+            return;
+          }
         } catch(err) {} finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4"></i><span>إدراج في دليل الأساتذة فوراً</span>`;
@@ -683,11 +719,10 @@
         closeEditModal();
 
         try {
-          await fetch(SCRIPT_URL, {
+          const res = await fetch(SCRIPT_URL, {
             method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              adminToken: sessionStorage.getItem('nadi_admin_token') || '',
               action: "edit_faculty",
               originalName: origName,
               originalEmail: origEmail,
@@ -705,6 +740,11 @@
               "الساعات المكتبية": updatedFac.hours
             })
           });
+          const resData = await res.json().catch(() => null);
+          if (resData && resData.status === "unauthorized") {
+            handleUnauthorized();
+            return;
+          }
         } catch(err) {} finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalBtnContent;
@@ -727,16 +767,20 @@
         renderFacultyList(liveFacultyList);
 
         try {
-          await fetch(SCRIPT_URL, {
+          const res = await fetch(SCRIPT_URL, {
             method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              adminToken: sessionStorage.getItem('nadi_admin_token') || '',
               action: "delete_faculty",
               name: targetName,
               email: targetEmail
             })
           });
+          const resData = await res.json().catch(() => null);
+          if (resData && resData.status === "unauthorized") {
+            handleUnauthorized();
+            return;
+          }
         } catch(e) {}
       });
     }

@@ -35,7 +35,7 @@
 
   <!-- فحص الحماية والجلسة فوراً قبل تحميل الصفحة -->
   <script>
-    if (!sessionStorage.getItem('nadi_admin_session')) {
+    if (!sessionStorage.getItem('nadi_admin_session') || !sessionStorage.getItem('nadi_admin_token')) {
       window.location.replace('admin.html');
     }
   </script>
@@ -269,6 +269,36 @@
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
 
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function handleUnauthorized() {
+      alert("انتهت صلاحية جلسة العمل أو تم تسجيل الخروج. يرجى إعادة تسجيل الدخول.");
+      sessionStorage.removeItem('nadi_admin_session');
+      sessionStorage.removeItem('nadi_admin_token');
+      window.location.replace('admin.html');
+    }
+
+    async function verifyAdminAuth() {
+      const token = sessionStorage.getItem('nadi_admin_token');
+      if (!token) return handleUnauthorized();
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=verify_token&token=${encodeURIComponent(token)}&bust=${Date.now()}`);
+        const data = await res.json();
+        if (!data || !data.valid) {
+          handleUnauthorized();
+        }
+      } catch(e) {}
+    }
+    verifyAdminAuth();
+
     let liveGuidanceList = [];
     let currentEditGuidanceIndex = -1;
     let deleteCallback = null;
@@ -383,23 +413,23 @@
       setScholarshipToggleUI(isOpen);
 
       try {
-        await fetch(SCRIPT_URL, {
+        const res = await fetch(SCRIPT_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            adminToken: sessionStorage.getItem('nadi_admin_token') || '',
             action: 'save_scholarship_status',
             status: nextStatus,
             value: isOpen ? 1 : 0
           })
         });
+        const resData = await res.json().catch(() => null);
+        if (resData && resData.status === "unauthorized") {
+          handleUnauthorized();
+          return;
+        }
       } catch (err) {
         console.warn('تعذر إرسال حالة المنح إلى السيرفر:', err);
-      }
-
-      try {
-        await fetch(`${SCRIPT_URL}?req=scholarship_status&status=${nextStatus}`);
-      } catch (err) {
-        console.warn('تعذر تحديث حالة المنح عبر الاستعلام:', err);
       }
 
       showToast(isOpen ? 'تم فتح باب استقبال المنح بنجاح.' : 'تم إغلاق باب استقبال المنح بنجاح.', 'success');
@@ -524,11 +554,12 @@
       }
 
       container.innerHTML = filtered.map((item, idx) => {
-        const major = item['الكلية أو الاختصاص'] || item['التخصص'] || 'عام';
-        const type = item['النوع'] || 'توجيه طلابي';
-        const leader = item['الاسم أو الصفة'] || item['مسؤول التخصص'] || 'المسؤول';
-        const phone = item['رقم الهاتف'] || item['هاتف المسؤول'] || '';
-        const link = item['رابط الواتساب'] || item['رابط المجموعة'] || '';
+        const major = escapeHtml(item['الكلية أو الاختصاص'] || item['التخصص'] || 'عام');
+        const type = escapeHtml(item['النوع'] || 'توجيه طلابي');
+        const leader = escapeHtml(item['الاسم أو الصفة'] || item['مسؤول التخصص'] || 'المسؤول');
+        const phone = escapeHtml(item['رقم الهاتف'] || item['هاتف المسؤول'] || '');
+        const rawLink = item['رابط الواتساب'] || item['رابط المجموعة'] || '';
+        const link = escapeHtml(rawLink);
 
         return `
           <div class="p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -619,15 +650,19 @@
         switchTab('manage');
 
         try {
-          await fetch(SCRIPT_URL, {
+          const res = await fetch(SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+              adminToken: sessionStorage.getItem('nadi_admin_token') || '',
               action: 'add_guidance',
               ...newGuid
             })
           });
+          const resData = await res.json().catch(() => null);
+          if (resData && resData.status === "unauthorized") {
+            handleUnauthorized();
+            return;
+          }
         } catch(err) {} finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = '<i data-lucide="plus-circle" class="w-4 h-4"></i><span>إدراج في دليل التوجيه فوراً</span>';
@@ -692,16 +727,20 @@
         closeEditGuidanceModal();
 
         try {
-          await fetch(SCRIPT_URL, {
+          const res = await fetch(SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+              adminToken: sessionStorage.getItem('nadi_admin_token') || '',
               action: 'edit_guidance',
               oldName: oldName,
               ...updated
             })
           });
+          const resData = await res.json().catch(() => null);
+          if (resData && resData.status === "unauthorized") {
+            handleUnauthorized();
+            return;
+          }
         } catch(err) {}
       });
     }
@@ -719,15 +758,19 @@
         renderGuidanceList(liveGuidanceList);
 
         try {
-          await fetch(SCRIPT_URL, {
+          const res = await fetch(SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+              adminToken: sessionStorage.getItem('nadi_admin_token') || '',
               action: 'delete_guidance',
               name: targetName
             })
           });
+          const resData = await res.json().catch(() => null);
+          if (resData && resData.status === "unauthorized") {
+            handleUnauthorized();
+            return;
+          }
         } catch(e) {}
       });
     }

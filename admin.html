@@ -297,15 +297,40 @@
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
 
+    // دالة حماية وترميز النصوص ضد ثغرات الحقن (Safe HTML Escaping)
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     // إدارة الجلسة والعرض
+    async function verifyTokenAsync(token) {
+      if (!SCRIPT_URL || !token) return;
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=verify_token&token=${encodeURIComponent(token)}&bust=${Date.now()}`);
+        const data = await res.json();
+        if (data && data.valid === false) {
+          sessionStorage.removeItem('nadi_admin_session');
+          sessionStorage.removeItem('nadi_admin_token');
+          checkSession();
+        }
+      } catch (e) {}
+    }
+
     function checkSession() {
       const activeAdmin = sessionStorage.getItem('nadi_admin_session');
+      const activeToken = sessionStorage.getItem('nadi_admin_token');
       const loginView = document.getElementById('loginView');
       const dashboardView = document.getElementById('dashboardView');
       const logoutBtn = document.getElementById('logoutBtn');
       const welcomeTitle = document.getElementById('adminWelcomeTitle');
 
-      if (activeAdmin) {
+      if (activeAdmin && activeToken) {
         if (loginView) loginView.classList.add('hidden');
         if (dashboardView) dashboardView.classList.remove('hidden');
         if (logoutBtn) {
@@ -313,8 +338,11 @@
           logoutBtn.classList.add('flex');
         }
         if (welcomeTitle) welcomeTitle.textContent = `أهلاً بك، ${activeAdmin}`;
+        verifyTokenAsync(activeToken);
         loadNotifications();
       } else {
+        sessionStorage.removeItem('nadi_admin_session');
+        sessionStorage.removeItem('nadi_admin_token');
         if (loginView) loginView.classList.remove('hidden');
         if (dashboardView) dashboardView.classList.add('hidden');
         if (logoutBtn) {
@@ -353,6 +381,9 @@
 
           if (data.status === "success") {
             sessionStorage.setItem('nadi_admin_session', data.adminName || 'مشرف معتمد');
+            if (data.adminToken) {
+              sessionStorage.setItem('nadi_admin_token', data.adminToken);
+            }
             adminLoginForm.reset();
             checkSession();
           } else {
@@ -395,6 +426,7 @@
     function confirmLogoutAction() {
       closeLogoutModal();
       sessionStorage.removeItem('nadi_admin_session');
+      sessionStorage.removeItem('nadi_admin_token');
       checkSession();
     }
 
@@ -451,13 +483,13 @@
           if (notifCountText) notifCountText.textContent = `${items.length} تنبيهات`;
           if (notifList) {
             notifList.innerHTML = items.map(item => `
-              <a href="${item.link}" class="p-2.5 rounded-xl bg-slate-50 dark:bg-[#131e3a] hover:bg-gold-500/10 flex items-start gap-2.5 transition block">
+              <a href="${escapeHtml(item.link)}" class="p-2.5 rounded-xl bg-slate-50 dark:bg-[#131e3a] hover:bg-gold-500/10 flex items-start gap-2.5 transition block">
                 <div class="p-1.5 rounded-lg bg-gold-500/10 text-gold-500 shrink-0">
-                  <i data-lucide="${item.icon}" class="w-3.5 h-3.5"></i>
+                  <i data-lucide="${escapeHtml(item.icon)}" class="w-3.5 h-3.5"></i>
                 </div>
                 <div class="space-y-0.5">
-                  <p class="font-bold text-[11px] text-slate-800 dark:text-slate-200">${item.title}</p>
-                  <p class="text-[10px] text-slate-400">${item.desc}</p>
+                  <p class="font-bold text-[11px] text-slate-800 dark:text-slate-200">${escapeHtml(item.title)}</p>
+                  <p class="text-[10px] text-slate-400">${escapeHtml(item.desc)}</p>
                 </div>
               </a>
             `).join('');

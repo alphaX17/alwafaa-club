@@ -226,6 +226,16 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
     const SCHOLARSHIP_STATUS_KEY = 'club_scholarship_status';
 
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     function normalizeScholarshipStatus(value) {
       if (value === null || typeof value === 'undefined') return true;
       if (typeof value === 'boolean') return value;
@@ -336,18 +346,23 @@
           groupsGrid.innerHTML = '<div class="col-span-full py-8 text-center text-xs text-slate-400">لا توجد مجموعات مسجلة حالياً.</div>';
         } else {
           groupsGrid.innerHTML = groups.map(g => {
-            const name = g['الاسم أو الصفة'] || 'مجموعة رسمية';
-            const tag = g['الكلية أو الاختصاص'] || 'قناة إعلانية';
-            const link = String(g['رابط الواتساب'] || '').trim();
+            const rawName = g['الاسم أو الصفة'] || 'مجموعة رسمية';
+            const rawTag = g['الكلية أو الاختصاص'] || 'قناة إعلانية';
+            const rawLink = String(g['رابط الواتساب'] || '').trim();
             const status = String(g['الحالة'] || '').trim();
             const isClosed = status.includes('ممتلئ') || status.includes('مغلق') || status.includes('تحديث');
-            const isActive = !isClosed && link !== '' && link !== '#';
+            const isActive = !isClosed && rawLink !== '' && rawLink !== '#';
 
-            const desc = g['الوصف'] || 'القناة الرسمية المخصصة للتواصل، الإعلانات الأكاديمية ومساعدة الطلاب في حرم الجامعة.';
+            const rawDesc = g['الوصف'] || 'القناة الرسمية المخصصة للتواصل، الإعلانات الأكاديمية ومساعدة الطلاب في حرم الجامعة.';
 
             let badgeBg = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400';
-            if (name.includes('إخوة') || tag.includes('إخوة')) badgeBg = 'bg-blue-500/10 text-blue-600 dark:text-blue-400';
-            if (name.includes('أخوات') || tag.includes('أخوات')) badgeBg = 'bg-purple-500/10 text-purple-600 dark:text-purple-400';
+            if (rawName.includes('إخوة') || rawTag.includes('إخوة')) badgeBg = 'bg-blue-500/10 text-blue-600 dark:text-blue-400';
+            if (rawName.includes('أخوات') || rawTag.includes('أخوات')) badgeBg = 'bg-purple-500/10 text-purple-600 dark:text-purple-400';
+
+            const name = escapeHtml(rawName);
+            const tag = escapeHtml(rawTag);
+            const desc = escapeHtml(rawDesc);
+            const link = escapeHtml(rawLink);
 
             const actionBtn = isActive
               ? `<a href="${link}" target="_blank" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition">
@@ -379,28 +394,33 @@
           repsGrid.innerHTML = '<div class="col-span-full py-8 text-center text-xs text-slate-400">لا يوجد ممثلو اختصاصات مسجلون حالياً.</div>';
         } else {
           repsGrid.innerHTML = reps.map(r => {
-            const name = r['الاسم أو الصفة'] || 'مسؤول اختصاص';
-            const faculty = r['الكلية أو الاختصاص'] || 'كلية الهندسة';
-            const phone = String(r['رقم الهاتف'] || '').trim();
+            const rawName = r['الاسم أو الصفة'] || 'مسؤول اختصاص';
+            const rawFaculty = r['الكلية أو الاختصاص'] || 'كلية الهندسة';
+            const rawPhone = String(r['رقم الهاتف'] || '').trim();
             const rawLink = String(r['رابط الواتساب'] || '').trim();
             const status = String(r['الحالة'] || '').trim();
             const isClosed = status.includes('ممتلئ') || status.includes('مغلق') || status.includes('تحديث');
 
-            const cleanPhone = phone.replace(/[^0-9]/g, '');
-            const defaultMsg = encodeURIComponent(`السلام عليكم ورحمة الله، أتواصل معك عبر منصة نادي الوفاء بخصوص ${name}`);
-            const waLink = rawLink || (cleanPhone ? `https://wa.me/${cleanPhone}?text=${defaultMsg}` : '');
-            const hasLink = waLink !== '' && waLink !== '#';
+            const cleanPhone = rawPhone.replace(/[^0-9]/g, '');
+            const defaultMsg = encodeURIComponent(`السلام عليكم ورحمة الله، أتواصل معك عبر منصة نادي الوفاء بخصوص ${rawName}`);
+            const rawWaLink = rawLink || (cleanPhone ? `https://wa.me/${cleanPhone}?text=${defaultMsg}` : '');
+            const hasLink = rawWaLink !== '' && rawWaLink !== '#';
             const isActive = !isClosed && hasLink;
 
             let tagColor = 'text-gold-500';
-            const lowerFac = faculty.toLowerCase();
-            const lowerName = name.toLowerCase();
+            const lowerFac = rawFaculty.toLowerCase();
+            const lowerName = rawName.toLowerCase();
             if (lowerFac.includes('علوم') || lowerName.includes('حاسوب') || lowerName.includes('cs')) tagColor = 'text-blue-500';
             if (lowerFac.includes('صيدلة')) tagColor = 'text-teal-500';
             if (lowerName.includes('طبي') || lowerName.includes('biomedical')) tagColor = 'text-rose-500';
             if (lowerFac.includes('هندس')) tagColor = 'text-blue-500';
             if (lowerFac.includes('إدار') || lowerFac.includes('اعمال') || lowerFac.includes('أعمال') || lowerFac.includes('business')) tagColor = 'text-amber-500';
             if (lowerFac.includes('تربي') || lowerFac.includes('لغات') || lowerFac.includes('education')) tagColor = 'text-purple-500';
+
+            const name = escapeHtml(rawName);
+            const faculty = escapeHtml(rawFaculty);
+            const phone = escapeHtml(rawPhone);
+            const waLink = escapeHtml(rawWaLink);
 
             const actionBtn = isActive
               ? `<a href="${waLink}" target="_blank" class="w-full py-2 rounded-xl bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1.5 transition">
@@ -412,7 +432,7 @@
                     <span>الرقم قريباً</span>
                  </button>`;
 
-            const phoneText = phone
+            const phoneText = rawPhone
               ? `<p class="text-xs font-mono text-slate-600 dark:text-slate-300" dir="ltr">${phone}</p>`
               : (isActive ? '<p class="text-xs text-emerald-600 dark:text-emerald-400">تواصل مباشر متاح</p>' : '<p class="text-xs text-slate-400">قيد التحديث</p>');
 

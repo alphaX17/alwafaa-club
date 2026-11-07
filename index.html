@@ -447,6 +447,16 @@
     // ==================== 3. جلب وعرض البيانات الحية ====================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
 
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     function cleanDirectImageUrl(raw) {
       if (!raw) return '';
       let str = String(raw).trim();
@@ -474,7 +484,7 @@
         } else {
           if (sec) sec.classList.remove('hidden');
           if (txt && data.announcement.text) {
-            txt.innerHTML = `<strong class="text-gold-600 dark:text-gold-400">إعلان هام:</strong> ${data.announcement.text}`;
+            txt.innerHTML = `<strong class="text-gold-600 dark:text-gold-400">إعلان هام:</strong> ${escapeHtml(data.announcement.text)}`;
           }
           if (btn && data.announcement.btnLink) {
             btn.setAttribute('href', data.announcement.btnLink);
@@ -502,14 +512,14 @@
             grid.innerHTML = `<div class="col-span-full py-12 text-center text-xs text-slate-400">لا توجد فعاليات معروضة حالياً في الصفحة الرئيسية.</div>`;
           } else {
             grid.innerHTML = homeActivities.slice(0, 3).map(act => {
-              const title = act['العنوان'] || act['عنوان النشاط'] || act.title || 'فعالية جامعية';
-              const date = act['التاريخ'] || act.date || '';
-              const cat = act['التصنيف'] || act.category || 'نشاط جامعي';
-              const desc = act['التفاصيل الكاملة'] || act['الوصف المختصر'] || act['الوصف'] || act.desc || '';
+              const title = escapeHtml(act['العنوان'] || act['عنوان النشاط'] || act.title || 'فعالية جامعية');
+              const date = escapeHtml(act['التاريخ'] || act.date || '');
+              const cat = escapeHtml(act['التصنيف'] || act.category || 'نشاط جامعي');
+              const desc = escapeHtml(act['التفاصيل الكاملة'] || act['الوصف المختصر'] || act['الوصف'] || act.desc || '');
               
               const rawImgs = act['رابط الصورة'] || act.imageUrl || '';
               const imgs = String(rawImgs).split(',').map(u => cleanDirectImageUrl(u)).filter(Boolean);
-              const coverImg = imgs[0] || '';
+              const coverImg = escapeHtml(imgs[0] || '');
 
               const imgMarkup = coverImg 
                 ? `<img src="${coverImg}" alt="${title}" referrerpolicy="no-referrer" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400\\'><i data-lucide=\\'image\\' class=\\'w-10 h-10 opacity-40\\'></i></div>'; lucide.createIcons();">`

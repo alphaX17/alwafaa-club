@@ -35,7 +35,11 @@
 
   <!-- فحص الحماية والجلسة فوراً قبل تحميل الصفحة -->
   <script>
-    if (!sessionStorage.getItem('nadi_admin_session')) {
+    const adminToken = sessionStorage.getItem('nadi_admin_token');
+    const adminSession = sessionStorage.getItem('nadi_admin_session');
+    if (!adminToken || !adminSession) {
+      sessionStorage.removeItem('nadi_admin_session');
+      sessionStorage.removeItem('nadi_admin_token');
       window.location.replace('admin.html');
     }
   </script>
@@ -370,6 +374,43 @@
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
 
+    // دالة حماية وترميز النصوص ضد ثغرات الحقن (Safe HTML Escaping)
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function handleUnauthorized() {
+      alert('جلسة العمل غير مصرح بها أو منتهية، يرجى إعادة تسجيل الدخول.');
+      sessionStorage.removeItem('nadi_admin_session');
+      sessionStorage.removeItem('nadi_admin_token');
+      window.location.replace('admin.html');
+    }
+
+    async function verifyAdminAuth() {
+      const token = sessionStorage.getItem('nadi_admin_token');
+      if (!token) {
+        window.location.replace('admin.html');
+        return;
+      }
+      try {
+        const res = await fetch(`${SCRIPT_URL}?req=verify_token&token=${encodeURIComponent(token)}&bust=${Date.now()}`);
+        const data = await res.json();
+        if (data && data.valid === false) {
+          sessionStorage.removeItem('nadi_admin_session');
+          sessionStorage.removeItem('nadi_admin_token');
+          alert('انتهت صلاحية جلسة العمل، يرجى تسجيل الدخول مجدداً.');
+          window.location.replace('admin.html');
+        }
+      } catch(e) {}
+    }
+    verifyAdminAuth();
+
     let liveAvailableBooksList = [];
     let liveLoanedBooksList = [];
     let liveBookRequestsList = [];
@@ -565,10 +606,10 @@
       }
 
       container.innerHTML = list.map((book, index) => {
-        const title = book['عنوان الكتاب'] || 'بدون عنوان';
-        const college = book['الكلية'] || 'عام';
-        const desc = book['الوصف والطبعة'] || '';
-        const copies = book['عدد النسخ'] || '1';
+        const title = escapeHtml(book['عنوان الكتاب'] || 'بدون عنوان');
+        const college = escapeHtml(book['الكلية'] || 'عام');
+        const desc = escapeHtml(book['الوصف والطبعة'] || '');
+        const copies = escapeHtml(book['عدد النسخ'] || '1');
 
         return `
           <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
@@ -654,11 +695,10 @@
         switchTab('manage');
 
         try {
-          await fetch(SCRIPT_URL, {
+          const res = await fetch(SCRIPT_URL, {
             method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              adminToken: sessionStorage.getItem('nadi_admin_token') || '',
               action: "add_book",
               title: newBook['عنوان الكتاب'],
               college: newBook['الكلية'],
@@ -666,6 +706,11 @@
               copies: newBook['عدد النسخ']
             })
           });
+          const resData = await res.json().catch(() => null);
+          if (resData && resData.status === "unauthorized") {
+            handleUnauthorized();
+            return;
+          }
         } catch(err) {} finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4"></i><span>إدراج في الكتب المتوفرة فوراً</span>`;
@@ -718,11 +763,10 @@
         closeEditBookModal();
 
         try {
-          await fetch(SCRIPT_URL, {
+          const res = await fetch(SCRIPT_URL, {
             method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              adminToken: sessionStorage.getItem('nadi_admin_token') || '',
               action: "edit_book",
               originalTitle: oldTitle,
               title: updated['عنوان الكتاب'],
@@ -731,6 +775,11 @@
               copies: updated['عدد النسخ']
             })
           });
+          const resData = await res.json().catch(() => null);
+          if (resData && resData.status === "unauthorized") {
+            handleUnauthorized();
+            return;
+          }
         } catch(err) {}
       });
     }
@@ -739,16 +788,24 @@
       const target = liveAvailableBooksList[idx];
       if (!target) return;
       openGenericDeleteModal(`هل أنت متأكد من حذف كتاب (${target['عنوان الكتاب']}) من الكتب المتوفرة نهائياً؟`, async () => {
+        const titleToDelete = target['عنوان الكتاب'];
         liveAvailableBooksList.splice(idx, 1);
         localStorage.setItem('nadi_avail_books_cache', JSON.stringify(liveAvailableBooksList));
         renderAvailableBooks(liveAvailableBooksList);
         try {
-          await fetch(SCRIPT_URL, {
+          const res = await fetch(SCRIPT_URL, {
             method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "delete_book", title: target['عنوان الكتاب'] })
+            body: JSON.stringify({
+              adminToken: sessionStorage.getItem('nadi_admin_token') || '',
+              action: "delete_book",
+              title: titleToDelete
+            })
           });
+          const resData = await res.json().catch(() => null);
+          if (resData && resData.status === "unauthorized") {
+            handleUnauthorized();
+            return;
+          }
         } catch(e) {}
       });
     }
@@ -764,14 +821,14 @@
         return;
       }
 
-      container.innerHTML = list.map((item) => {
-        const title = item['عنوان الكتاب'] || 'بدون عنوان';
-        const college = item['الكلية'] || 'عام';
-        const borrowerName = item['اسم المستعير'] || 'طالب مستعير';
-        const borrowerPhone = item['رقم هاتف المستعير'] || '';
-        const borrowerId = item['رقم ملف المستعير'] || '';
-        const loanDate = item['تاريخ الاستعارة'] || '';
-        const directWaLink = getDirectWhatsAppChatUrl(borrowerPhone);
+      container.innerHTML = list.map((item, index) => {
+        const title = escapeHtml(item['عنوان الكتاب'] || 'بدون عنوان');
+        const college = escapeHtml(item['الكلية'] || 'عام');
+        const borrowerName = escapeHtml(item['اسم المستعير'] || 'طالب مستعير');
+        const borrowerPhone = escapeHtml(item['رقم هاتف المستعير'] || '');
+        const borrowerId = escapeHtml(item['رقم ملف المستعير'] || '');
+        const loanDate = escapeHtml(item['تاريخ الاستعارة'] || '');
+        const directWaLink = getDirectWhatsAppChatUrl(item['رقم هاتف المستعير'] || '');
 
         return `
           <div class="p-4 rounded-2xl border border-slate-200 dark:border-clubNavy-borderDark bg-slate-50/50 dark:bg-[#0c1427] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold-500/40 transition">
@@ -795,7 +852,7 @@
                   <span>مراسلة للاسترداد</span>
                 </a>
               ` : ''}
-              <button onclick="returnBook('${title}')" class="px-3.5 py-2 rounded-xl bg-clubNavy-light hover:bg-clubNavy-light/90 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-slate-950 text-xs font-bold flex items-center gap-1.5 transition shadow-sm" title="إرجاع الكتاب للمكتبة وحذفه من المستعارة">
+              <button onclick="returnBook(${index})" class="px-3.5 py-2 rounded-xl bg-clubNavy-light hover:bg-clubNavy-light/90 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-slate-950 text-xs font-bold flex items-center gap-1.5 transition shadow-sm" title="إرجاع الكتاب للمكتبة وحذفه من المستعارة">
                 <i data-lucide="corner-up-left" class="w-3.5 h-3.5"></i>
                 <span>تأكيد الاسترداد (إرجاع)</span>
               </button>
@@ -827,17 +884,28 @@
       } catch(err) {}
     }
 
-    async function returnBook(bookTitle) {
-      if (!bookTitle) return;
+    async function returnBook(indexOrTitle) {
+      let bookTitle = '';
+      let college = 'عام';
 
-      const loanIndex = liveLoanedBooksList.findIndex(b => (b['عنوان الكتاب'] || '').trim().toLowerCase() === String(bookTitle).trim().toLowerCase());
-      let college = "عام";
-      if (loanIndex !== -1) {
-        college = liveLoanedBooksList[loanIndex]['الكلية'] || 'عام';
-        liveLoanedBooksList.splice(loanIndex, 1);
-        localStorage.setItem('nadi_loans_cache', JSON.stringify(liveLoanedBooksList));
-        renderLoanedBooks(liveLoanedBooksList);
+      if (typeof indexOrTitle === 'number') {
+        const target = liveLoanedBooksList[indexOrTitle];
+        if (!target) return;
+        bookTitle = target['عنوان الكتاب'] || '';
+        college = target['الكلية'] || 'عام';
+        liveLoanedBooksList.splice(indexOrTitle, 1);
+      } else {
+        bookTitle = String(indexOrTitle || '');
+        if (!bookTitle) return;
+        const loanIndex = liveLoanedBooksList.findIndex(b => (b['عنوان الكتاب'] || '').trim().toLowerCase() === bookTitle.trim().toLowerCase());
+        if (loanIndex !== -1) {
+          college = liveLoanedBooksList[loanIndex]['الكلية'] || 'عام';
+          liveLoanedBooksList.splice(loanIndex, 1);
+        }
       }
+
+      localStorage.setItem('nadi_loans_cache', JSON.stringify(liveLoanedBooksList));
+      renderLoanedBooks(liveLoanedBooksList);
 
       liveAvailableBooksList.push({
         'عنوان الكتاب': bookTitle,
@@ -849,15 +917,19 @@
       renderAvailableBooks(liveAvailableBooksList);
 
       try {
-        await fetch(SCRIPT_URL, {
+        const res = await fetch(SCRIPT_URL, {
           method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            adminToken: sessionStorage.getItem('nadi_admin_token') || '',
             action: "return_book",
             bookTitle: bookTitle
           })
         });
+        const resData = await res.json().catch(() => null);
+        if (resData && resData.status === "unauthorized") {
+          handleUnauthorized();
+          return;
+        }
       } catch(e) {}
     }
 
@@ -873,11 +945,12 @@
         } else {
           const reversed = [...list].reverse();
           notifContainer.innerHTML = reversed.slice(0, 8).map((req) => {
-            const type = req['نوع الطلب'] || 'طلب استعارة';
-            const name = req['الاسم الكامل'] || 'طالب';
-            const book = req['عنوان الكتاب / المقرر'] || 'كتاب';
-            const time = req['تاريخ الإرسال'] || '';
-            const isDonate = type.includes('تبرع');
+            const rawType = req['نوع الطلب'] || 'طلب استعارة';
+            const type = escapeHtml(rawType);
+            const name = escapeHtml(req['الاسم الكامل'] || 'طالب');
+            const book = escapeHtml(req['عنوان الكتاب / المقرر'] || 'كتاب');
+            const time = escapeHtml(req['تاريخ الإرسال'] || '');
+            const isDonate = rawType.includes('تبرع');
             const typeBadgeColor = isDonate ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" : "bg-amber-500/10 text-amber-600 dark:text-amber-400";
 
             return `
@@ -901,15 +974,17 @@
           tableContainer.innerHTML = `<div class="py-12 text-center text-xs text-slate-400">لا توجد طلبات استعارة أو تبرعات مسجلة حالياً في قاعدة البيانات.</div>`;
         } else {
           tableContainer.innerHTML = list.map((req, index) => {
-            const type = req['نوع الطلب'] || 'طلب استعارة';
-            const name = req['الاسم الكامل'] || 'طالب';
-            const studentId = req['رقم الملف ID'] || 'غير محدد';
-            const phone = req['رقم الهاتف'] || '';
-            const bookRaw = req['عنوان الكتاب / المقرر'] || 'كتاب';
-            const time = req['تاريخ الإرسال'] || '';
-            const isDonate = type.includes('تبرع');
+            const rawType = req['نوع الطلب'] || 'طلب استعارة';
+            const rawPhone = req['رقم الهاتف'] || '';
+            const type = escapeHtml(rawType);
+            const name = escapeHtml(req['الاسم الكامل'] || 'طالب');
+            const studentId = escapeHtml(req['رقم الملف ID'] || 'غير محدد');
+            const phone = escapeHtml(rawPhone);
+            const bookRaw = escapeHtml(req['عنوان الكتاب / المقرر'] || 'كتاب');
+            const time = escapeHtml(req['تاريخ الإرسال'] || '');
+            const isDonate = rawType.includes('تبرع');
             const typeBadgeColor = isDonate ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" : "bg-amber-500/10 text-amber-600 dark:text-amber-400";
-            const directWaLink = getDirectWhatsAppChatUrl(phone);
+            const directWaLink = getDirectWhatsAppChatUrl(rawPhone);
 
             let actionButtonsMarkup = '';
             if (isDonate) {
@@ -1020,11 +1095,10 @@
       renderRequests(liveBookRequestsList);
 
       try {
-        await fetch(SCRIPT_URL, {
+        const res = await fetch(SCRIPT_URL, {
           method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            adminToken: sessionStorage.getItem('nadi_admin_token') || '',
             action: "approve_book_borrow",
             bookTitle: bookTitle,
             studentName: studentName,
@@ -1033,6 +1107,11 @@
             college: college
           })
         });
+        const resData = await res.json().catch(() => null);
+        if (resData && resData.status === "unauthorized") {
+          handleUnauthorized();
+          return;
+        }
       } catch(e) {}
     }
 
@@ -1056,11 +1135,10 @@
       renderRequests(liveBookRequestsList);
 
       try {
-        await fetch(SCRIPT_URL, {
+        const res = await fetch(SCRIPT_URL, {
           method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            adminToken: sessionStorage.getItem('nadi_admin_token') || '',
             action: "approve_book_donation",
             title: parsed.title,
             college: parsed.college,
@@ -1071,6 +1149,11 @@
             originalRequestTitle: rawBook
           })
         });
+        const resData = await res.json().catch(() => null);
+        if (resData && resData.status === "unauthorized") {
+          handleUnauthorized();
+          return;
+        }
       } catch(e) {}
     }
 
@@ -1086,17 +1169,21 @@
       renderRequests(liveBookRequestsList);
 
       try {
-        await fetch(SCRIPT_URL, {
+        const res = await fetch(SCRIPT_URL, {
           method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            adminToken: sessionStorage.getItem('nadi_admin_token') || '',
             action: "delete_book_request",
             studentId: sId,
             phone: phone,
             bookTitle: bookTitle
           })
         });
+        const resData = await res.json().catch(() => null);
+        if (resData && resData.status === "unauthorized") {
+          handleUnauthorized();
+          return;
+        }
       } catch(e) {}
     }
 
@@ -1154,11 +1241,10 @@
         closeEditDonationModal();
 
         try {
-          await fetch(SCRIPT_URL, {
+          const res = await fetch(SCRIPT_URL, {
             method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              adminToken: sessionStorage.getItem('nadi_admin_token') || '',
               action: "approve_book_donation",
               title: newBook['عنوان الكتاب'],
               college: newBook['الكلية'],
@@ -1169,6 +1255,11 @@
               originalRequestTitle: target['عنوان الكتاب / المقرر'] || ''
             })
           });
+          const resData = await res.json().catch(() => null);
+          if (resData && resData.status === "unauthorized") {
+            handleUnauthorized();
+            return;
+          }
         } catch(err) {} finally {
           submitDonApprovalBtn.disabled = false;
           submitDonApprovalBtn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i><span>تأكيد ونشر بالمتوفرة فوراً</span>`;
