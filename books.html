@@ -33,7 +33,13 @@
       overflow-x: hidden;
       max-width: 100%;
     }
-    body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+    body {
+      font-family: 'Tajawal', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      background-color: #faf8f5;
+      background-image: radial-gradient(ellipse 90% 60% at 50% -15%, rgba(217, 119, 6, 0.08), rgba(30, 58, 138, 0.04), transparent);
+      background-attachment: fixed;
+    }
     /* خلفية متدرجة سينمائية هادئة ومريحة للعين في الوضع الليلي */
     .dark body {
       background-color: #060913;
@@ -76,7 +82,7 @@
     }
   </style>
 </head>
-<body class="bg-[#fbfbf9] text-[#0d172a] dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
+<body class="bg-[#faf8f5] bg-[radial-gradient(ellipse_90%_60%_at_50%_-15%,rgba(217,119,6,0.08),rgba(30,58,138,0.04),transparent)] text-[#0d172a] dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
 
   <!-- خلفيات التوهج المتدرج اللوني في الوضع الليلي (Dark Mode Ambient Gradients) -->
   <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden hidden dark:block" aria-hidden="true">
@@ -129,7 +135,7 @@
 
       <!-- أزرار التبديل العلوية (استعارة / تبرع) -->
       <div class="flex justify-center mb-6 sm:mb-8 px-2 sm:px-0">
-        <div class="inline-flex items-center p-1 sm:p-1.5 rounded-full border border-[#eae7dc] dark:border-[#152033] bg-white dark:bg-[#0b1222] shadow-sm max-w-full">
+        <div class="inline-flex items-center p-1 sm:p-1.5 rounded-full border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-[#0b1222] backdrop-blur-md shadow-sm max-w-full">
           <button id="tabBorrow" type="button" class="flex-1 sm:flex-initial px-4 sm:px-7 py-2 sm:py-2.5 rounded-full text-xs font-bold transition bg-[#0d172a] text-white dark:bg-gold-500 dark:text-slate-950 shadow-sm flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer select-none">
             <i data-lucide="book-open" class="w-4 h-4 shrink-0"></i>
             <span class="whitespace-nowrap"><span class="sm:hidden">استعارة الكتب</span><span class="hidden sm:inline">الكتب المتوفرة للاستعارة</span></span>
@@ -144,7 +150,7 @@
       <!-- ================= القسم الأول: استعارة كتاب ================= -->
       <section id="borrowSection" class="space-y-6">
         
-        <div class="p-6 sm:p-8 rounded-3xl border border-[#eae7dc] dark:border-[#152033] bg-white dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] space-y-4 shadow-sm">
+        <div class="p-6 sm:p-8 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
             <div class="space-y-1">
               <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100">كتاب واحد، يمرّ على طلاب كثيرين.</h2>
@@ -180,7 +186,7 @@
 
       <!-- ================= القسم الثاني: التبرع بكتاب ================= -->
       <section id="donateSection" class="hidden max-w-2xl mx-auto">
-        <div class="p-5 sm:p-8 rounded-3xl border border-slate-200 dark:border-[#152033] bg-white dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] shadow-sm space-y-6">
+        <div class="p-5 sm:p-8 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] space-y-6">
           <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
             <div class="flex items-center gap-2 text-gold-500 mb-1">
               <i data-lucide="gift" class="w-4 h-4"></i>
@@ -266,7 +272,7 @@
 
   <!-- ==================== نافذة حجز الاستعارة المنبثقة ==================== -->
   <div id="borrowModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="w-full max-w-md rounded-3xl border border-[#eae7dc] dark:border-[#152033] bg-white dark:bg-[#0a0f1d] p-6 shadow-2xl space-y-4">
+    <div class="w-full max-w-md rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/95 dark:bg-[#0a0f1d] backdrop-blur-md p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
         <div>
           <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100">تأكيد حجز استعارة كتاب</h3>
@@ -483,7 +489,7 @@
         const desc = escapeHtml(rawDesc);
 
         return `
-          <div class="book-card p-6 rounded-3xl border border-[#eae7dc] dark:border-[#152033] bg-white dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] flex flex-col justify-between hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition duration-200 shadow-sm ${cardOpacity}" data-category="${categoryCode}" data-title="${searchMetadata}">
+          <div class="book-card p-6 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md flex flex-col justify-between hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition duration-200 shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] ${cardOpacity}" data-category="${categoryCode}" data-title="${searchMetadata}">
             <div class="space-y-2">
               <div class="flex items-center justify-between gap-2">
                 ${badgeMarkup}

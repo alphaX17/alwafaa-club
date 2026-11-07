@@ -33,7 +33,13 @@
       overflow-x: hidden;
       max-width: 100%;
     }
-    body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+    body {
+      font-family: 'Tajawal', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      background-color: #faf8f5;
+      background-image: radial-gradient(ellipse 90% 60% at 50% -15%, rgba(217, 119, 6, 0.08), rgba(30, 58, 138, 0.04), transparent);
+      background-attachment: fixed;
+    }
     /* خلفية متدرجة سينمائية هادئة ومريحة للعين في الوضع الليلي */
     .dark body {
       background-color: #060913;
@@ -100,7 +106,7 @@
     }
   </style>
 </head>
-<body class="bg-[#fbfbf9] text-[#0d172a] dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
+<body class="bg-[#faf8f5] bg-[radial-gradient(ellipse_90%_60%_at_50%_-15%,rgba(217,119,6,0.08),rgba(30,58,138,0.04),transparent)] text-[#0d172a] dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
 
   <!-- خلفيات التوهج المتدرج اللوني في الوضع الليلي (Dark Mode Ambient Gradients) -->
   <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden hidden dark:block" aria-hidden="true">
@@ -149,8 +155,8 @@
     </header>
 
     <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8 sm:space-y-10">
-      <div class="p-6 sm:p-8 rounded-3xl border border-[#eae7dc] dark:border-[#152033] bg-white dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] shadow-sm space-y-3">
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20">
+      <div class="p-6 sm:p-8 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] space-y-3">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-gold-500/10 text-gold-600 dark:text-gold-400 border border-gold-500/20 shadow-sm shadow-amber-500/10">
           <i data-lucide="compass" class="w-3.5 h-3.5"></i>
           خدمة التوجيه الأكاديمي المباشر
         </span>
@@ -466,7 +472,7 @@
                  </button>`;
 
             return `
-              <div class="p-6 rounded-3xl border border-[#eae7dc] dark:border-[#152033] bg-white dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] flex flex-col justify-between hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition duration-200 shadow-sm">
+              <div class="p-6 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md flex flex-col justify-between hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition duration-200 shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)]">
                 <div class="space-y-2">
                   <span class="px-3 py-1 rounded-full text-[10px] font-bold ${badgeBg}">${tag}</span>
                   <h4 class="font-bold text-sm sm:text-base text-slate-900 dark:text-slate-100 line-clamp-1">${name}</h4>
@@ -528,7 +534,7 @@
               : (isActive ? '<p class="text-xs text-emerald-600 dark:text-emerald-400">تواصل مباشر متاح</p>' : '<p class="text-xs text-slate-400">قيد التحديث</p>');
 
             return `
-              <div class="p-5 rounded-3xl border border-[#eae7dc] dark:border-[#152033] bg-white dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] flex flex-col justify-between hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition duration-200 shadow-sm">
+              <div class="p-5 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md flex flex-col justify-between hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition duration-200 shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)]">
                 <div class="space-y-1">
                   <span class="text-[10px] font-bold ${tagColor}">${faculty}</span>
                   <h4 class="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 line-clamp-1">${name}</h4>
