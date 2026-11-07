@@ -16,6 +16,123 @@ function doPost(e) {
     }
 
     // =====================================================================
+    // 0.1 بوابة مساعد الذكاء الاصطناعي الأكاديمي والطلابي (Gemini AI Proxy)
+    // =====================================================================
+    if (data.action === "ask_ai") {
+      var userPrompt = String(data.prompt || "").trim();
+      if (!userPrompt) {
+        return createJsonResponse({ status: "error", message: "الرجاء إدخال استفسار أكاديمي صالح." });
+      }
+
+      // جلب المفتاح السحابي من إعدادات السكربت أو استخدام المفتاح المعتمد
+      var apiKey = PropertiesService.getScriptProperties().getProperty("GEMINI_API_KEY") || "AQ.Ab8RN6IVXwgyoQifvEBwkTH8FvkPW0u0TPes4vwJ41XtNSrY6A";
+
+      // بناء سياق وتاريخ المحادثة
+      var history = Array.isArray(data.history) ? data.history : [];
+      var contents = [];
+
+      for (var h = 0; h < history.length; h++) {
+        var item = history[h];
+        if (item && item.role && item.parts && Array.isArray(item.parts)) {
+          contents.push({
+            role: item.role === "user" ? "user" : "model",
+            parts: item.parts
+          });
+        }
+      }
+
+      contents.push({
+        role: "user",
+        parts: [{ text: userPrompt }]
+      });
+
+      if (contents.length > 10) {
+        contents = contents.slice(-10);
+      }
+
+      var systemInstructionText = "أنت مساعد AI الأكاديمي والطلابي الرسمي لمنصة نادي الوفاء في الجامعة اللبنانية الدولية (LIU) - فرع صور.\n" +
+        "أنت ذكاء اصطناعي أكاديمي متقدم، ذكي جداً، واسع الاطلاع، ولطيف وداعم لكل طالب يسعى للنجاح والتفوق.\n" +
+        "أولاً: خدمات نادي الوفاء وروابط المنصة المباشرة:\n" +
+        "- بنك الامتحانات والموارد (resources.html): تحميل مباشر مجاني لنماذج الامتحانات والسلايدات والملخصات دون تسجيل.\n" +
+        "- استعارة وتبادل الكتب (books.html): حجز استعارة المراجع الورقية أو التبرع بها مع الاستلام داخل حرم الجامعة بفرع صور.\n" +
+        "- المنحة الطلابية السنوية (scholarship.html): تقديم إلكتروني مباشر لمساعدة الطلاب المستحقين.\n" +
+        "- دليل الأساتذة (faculty.html): إيميلات الدكاترة ومتابعة الساعات المكتبية لحظياً.\n" +
+        "- شبكة التوجيه وممثلو الاختصاصات (guidance.html): أرقام ممثلي الاختصاصات ومجموعات الواتساب الرسمية.\n" +
+        "- أرشيف الفعاليات (archive.html): معرض أنشطة وورش النادي.\n" +
+        "قاعدة هامة: عند توجيه الطالب لأي خدمة، ضع دائماً اسم الصفحة كاسم ملف إنجليزي (مثل: resources.html) ليتحول تلقائياً إلى رابط مباشر.\n" +
+        "ثانياً: لوائح وقوانين جامعة LIU (فرع صور):\n" +
+        "- نظام المعدل التراكمي (GPA من 4.00): السلم A=4.0, B+=3.5, B=3.0, C+=2.5, C=2.0, D+=1.5, D=1.0, F=0.0. الإنذار الأكاديمي يقع إذا انخفض المعدل عن 2.00. أسرع وسيلة لرفعه هي إعادة المواد ذات العلامات (D, D+, F) لأن الجديدة تمحو القديمة تماماً.\n" +
+        "- سقف الساعات: 12 كحد أدنى بالفصل العادي، و18-19 كحد أقصى طبيعي. يسمح حتى 21 رصيداً (Overload) فقط لمن معدله 3.00 فما فوق أو للخريج بعريضة. الفصل الصيفي 6 إلى 9 أرصدة.\n" +
+        "- الغيابات والحرمان (FA): الحد الأقصى 15% (3 غيابات للمادة التي تُعطى مرتين أسبوعياً). الغياب الرابع = رسوب بحرمان FA (صفر نقطة وتدمر المعدل).\n" +
+        "- المكاتب بفرع صور: المالية تشرف عليها الأستاذة غيا السمرة (gheya.elsamra@liu.edu.lb). المكتبة العامة تشرف عليها الأستاذة هبة حمود (hiba.hammoud@liu.edu.lb).\n" +
+        "- منسقو الأقسام: د. هادي نور الدين (كمبيوتر)، د. علي أبو خليل (كهرباء)، د. علي حلال ود. حسن جابر (ميكانيك)، د. إحسان عساكري (علوم طبية).\n" +
+        "ثالثاً: الدعم الأكاديمي الشامل:\n" +
+        "- اشرح المفاهيم العلمية والبرمجية (بايثون، C++، جافا، الويب، الرياضيات، الفيزياء، المحاسبة) بذكاء وخطوات منطقية.\n" +
+        "- اكتب مسودات الإيميلات الرسمية للدكاترة والإدارة عند طلبها بدقة واحترافية.\n" +
+        "- التزم بالرد الذكي والموجز والمهني وتنسيق Markdown الأنيق مع خلو المنصة التام من الإيموجيز.";
+
+      var payload = {
+        system_instruction: {
+          parts: [{ text: systemInstructionText }]
+        },
+        contents: contents,
+        generationConfig: {
+          temperature: 0.65,
+          maxOutputTokens: 2048
+        }
+      };
+
+      var models = ["gemini-2.5-flash", "gemini-flash-latest", "gemini-2.0-flash", "gemini-1.5-flash"];
+      var generatedText = "";
+      var lastError = "";
+
+      for (var m = 0; m < models.length; m++) {
+        try {
+          var apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/" + models[m] + ":generateContent?key=" + encodeURIComponent(apiKey);
+          var options = {
+            method: "post",
+            contentType: "application/json",
+            payload: JSON.stringify(payload),
+            muteHttpExceptions: true
+          };
+
+          var response = UrlFetchApp.fetch(apiUrl, options);
+          var responseCode = response.getResponseCode();
+          var responseText = response.getContentText();
+          var jsonRes = JSON.parse(responseText);
+
+          if (responseCode === 200 && jsonRes.candidates && jsonRes.candidates[0] && jsonRes.candidates[0].content && jsonRes.candidates[0].content.parts) {
+            var parts = jsonRes.candidates[0].content.parts;
+            var textParts = [];
+            for (var p = 0; p < parts.length; p++) {
+              if (parts[p].text) textParts.push(parts[p].text);
+            }
+            generatedText = textParts.join("").trim();
+            if (generatedText) {
+              break;
+            }
+          } else {
+            lastError = (jsonRes.error && jsonRes.error.message) ? jsonRes.error.message : ("HTTP " + responseCode);
+          }
+        } catch (fetchErr) {
+          lastError = fetchErr.toString();
+        }
+      }
+
+      if (generatedText) {
+        return createJsonResponse({
+          status: "success",
+          reply: generatedText
+        });
+      } else {
+        return createJsonResponse({
+          status: "error",
+          message: "تعذر الاتصال بخدمة الذكاء الاصطناعي حالياً (" + lastError + "). يرجى إعادة المحاولة بعد لحظات."
+        });
+      }
+    }
+
+    // =====================================================================
     // 1. التحقق الأمني السحابي من تسجيل دخول المشرفين وتوليد التوكن
     // =====================================================================
     if (data.action === "admin_login") {
