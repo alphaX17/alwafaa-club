@@ -110,7 +110,83 @@
       "footer.about": "عن النادي والجامعة",
       "footer.campus": "الجامعة اللبنانية الدولية — فرع صور",
       "footer.portal": "بوابة UMS الطلابية",
-      "footer.rights": "جميع الحقوق محفوظة © {year} نادي الوفاء — فرع صور."
+      "footer.rights": "جميع الحقوق محفوظة © {year} نادي الوفاء — فرع صور.",
+
+      // مفاتيح الصفحات الفرعية
+      "nav.theme": "المظهر",
+      "resources.badge": "تحميل مجاني مباشر دون تسجيل",
+      "resources.title": "امتحانات سابقة، ملخصات، وكتب. مجاناً.",
+      "resources.desc": "ابحث باسم المادة، الرمز (Course Code)، أو الكلية للوصول المباشر إلى النماذج النصفية والنهائية السابقة، الكتب الرقمية، والملخصات المعتمدة.",
+      "resources.searchPlaceholder": "ابحث باسم المادة أو الرمز (مثال: MATH 200, MECH, CSC, BIO, FIN)...",
+      "resources.filterCategory": "التصنيف:",
+      "resources.filterAll": "الكل",
+      "resources.filterExam": "امتحانات سابقة",
+      "resources.filterSummary": "ملخصات وسلايدات",
+      "resources.filterBook": "كتب ومراجع",
+      "resources.filterAssignment": "واجبات واختبارات",
+      "resources.facultyEngineering": "الهندسة",
+      "resources.facultyScience": "العلوم والحاسوب",
+      "resources.facultyBusiness": "إدارة الأعمال",
+      "resources.facultyPharmacy": "الصيدلة والطب",
+      "resources.facultyEducation": "التربية واللغات",
+      "resources.filterTerm": "الفصل:",
+      "resources.termAll": "جميع الفصول",
+      "resources.termFall": "خريف Fall",
+      "resources.termSpring": "ربيع Spring",
+      "resources.termSummer": "صيف Summer",
+      "resources.noResultsTitle": "لم يتم العثور على أي ملفات مطابقة",
+      "resources.noResultsDesc": "تأكد من كتابة اسم المادة أو رمزها بشكل صحيح، أو تواصل مع شبكة التوجيه لتوفيرها.",
+      "resources.footer": "نادي الوفاء — الجامعة اللبنانية الدولية في صور • بنك الموارد الرقمية والامتحانات",
+
+      "books.tabBorrow": "الكتب المتوفرة للاستعارة",
+      "books.tabDonate": "تقديم / تبرع بكتاب",
+      "books.borrowTitle": "كتاب واحد، يمرّ على طلاب كثيرين.",
+      "books.borrowDesc": "اختر الكتاب الذي تحتاجه واضغط على طلب استعارة، ثم أدخل بياناتك لتأكيد الحجز والاستلام داخل حرم الجامعة بفرع صور.",
+      "books.searchPlaceholder": "ابحث بعنوان الكتاب، اسم المقرر، أو الكلية...",
+      "books.availableBadge": "متوفر للاستعارة",
+      "books.borrowedBadge": "تمت استعارته حالياً",
+      "books.btnRequest": "طلب استعارة",
+      "books.donateTitle": "تبرع بكتبك ودع زملاءك يستفيدون.",
+      "books.donateDesc": "يمكنك التبرع بأي مراجع أو كتب مقررات انتهيت من دراستها ليقوم النادي بفهرستها وإعارتها للطلاب المحتاجين.",
+      "books.footer": "نادي الوفاء — الجامعة اللبنانية الدولية في صور • منصة استعارة وتبادل الكتب",
+
+      "scholarship.badge": "المنحة الطلابية السنوية",
+      "scholarship.title": "نموذج التقديم الإلكتروني المباشر.",
+      "scholarship.desc": "مبادرة سنوية يطلقها نادي الوفاء لدعم ومساعدة الطلاب المستحقين في الجامعة اللبنانية الدولية بفرع صور.",
+      "scholarship.footer": "نادي الوفاء — الجامعة اللبنانية الدولية في صور • المنحة الطلابية السنوية",
+
+      "faculty.badge": "الهيئة التعليمية والأكاديمية",
+      "faculty.title": "دليل الأساتذة والساعات المكتبية.",
+      "faculty.desc": "بيانات التواصل، البريد الإلكتروني الجامعي، أماكن المكاتب، ومتابعة فورية للساعات المكتبية لأساتذة الكليات بفرع صور.",
+      "faculty.searchPlaceholder": "ابحث باسم الدكتور، الكلية، أو التخصص...",
+      "faculty.filterAdmin": "الجهاز الإداري",
+      "faculty.noResults": "لم يتم العثور على أي نتيجة مطابقة",
+      "faculty.noResultsDesc": "تأكد من كتابة الاسم بدقة أو اختر كلية أخرى من الأعلى.",
+      "faculty.footer": "نادي الوفاء — الجامعة اللبنانية الدولية في صور • دليل الأساتذة والساعات المكتبية",
+
+      "guidance.badge": "الإرشاد والتوجيه الطلابي",
+      "guidance.title": "شبكة التوجيه وممثلو الاختصاصات.",
+      "guidance.desc": "تواصل مباشر مع ممثلي الكليات والاختصاصات ومجموعات الواتساب الرسمية للإرشاد وحل الاستفسارات الدراسية.",
+      "guidance.groupsTitle": "مجموعات الدعم والإعلانات المركزية",
+      "guidance.officialWhatsapp": "واتساب الرسمي",
+      "guidance.loadingGroups": "جاري تحميل المجموعات...",
+      "guidance.repsTitle": "ممثلو الاختصاصات للتواصل المباشر (واتساب)",
+      "guidance.tyreCampus": "فرع صور",
+      "guidance.loadingReps": "جاري تحميل شبكة التوجيه...",
+      "guidance.footer": "نادي الوفاء — الجامعة اللبنانية الدولية في صور • شبكة التوجيه الأكاديمي",
+
+      "archive.badge": "الميدان الجامعي والأنشطة",
+      "archive.badgePhoto": "معرض الصور والتوثيق الميداني",
+      "archive.title": "سجل المحطات الطلابية والأكاديمية.",
+      "archive.desc": "هنا نخلد ذكريات وإنجازات نادي الوفاء في الجامعة اللبنانية الدولية - فرع صور.",
+      "archive.searchPlaceholder": "ابحث باسم الفعالية، المكان أو الموضوع...",
+      "archive.filterWorkshop": "ورش وتدريب",
+      "archive.filterScientific": "معارض وندوات",
+      "archive.filterService": "مبادرات وتطوع",
+      "archive.filterHonoring": "ثقافي وتكريم",
+      "archive.noResults": "لم يتم العثور على أي نشاط مطابق",
+      "archive.noResultsDesc": "جرب البحث بكلمة أخرى أو اختر تصنيفاً مختلفاً من الأعلى.",
+      "archive.footer": "نادي الوفاء — الجامعة اللبنانية الدولية في صور • أرشيف الفعاليات والأنشطة"
     },
 
     en: {
@@ -203,7 +279,83 @@
       "footer.about": "About Club & Campus",
       "footer.campus": "Lebanese International University — Tyre Campus",
       "footer.portal": "UMS Student Portal",
-      "footer.rights": "All rights reserved © {year} Al-Wafaa Club — Tyre Campus."
+      "footer.rights": "All rights reserved © {year} Al-Wafaa Club — Tyre Campus.",
+
+      // Secondary Pages Keys
+      "nav.theme": "Theme",
+      "resources.badge": "Direct Free Download • No Login Required",
+      "resources.title": "Past Exams, Summaries & Books. Free.",
+      "resources.desc": "Search by course title, code (e.g. MATH 200, MECH, CSC), or faculty for instant access to past exams, textbooks, and verified notes.",
+      "resources.searchPlaceholder": "Search by course name or code (e.g., MATH 200, MECH, CSC, BIO, FIN)...",
+      "resources.filterCategory": "Category:",
+      "resources.filterAll": "All",
+      "resources.filterExam": "Past Exams",
+      "resources.filterSummary": "Summaries & Slides",
+      "resources.filterBook": "Books & References",
+      "resources.filterAssignment": "Assignments & Quizzes",
+      "resources.facultyEngineering": "Engineering",
+      "resources.facultyScience": "Arts & Sciences",
+      "resources.facultyBusiness": "Business",
+      "resources.facultyPharmacy": "Pharmacy & Medicine",
+      "resources.facultyEducation": "Education & Languages",
+      "resources.filterTerm": "Semester:",
+      "resources.termAll": "All Semesters",
+      "resources.termFall": "Fall Semester",
+      "resources.termSpring": "Spring Semester",
+      "resources.termSummer": "Summer Semester",
+      "resources.noResultsTitle": "No Matching Files Found",
+      "resources.noResultsDesc": "Make sure course title or code is typed correctly, or contact our student mentors to request the file.",
+      "resources.footer": "Al-Wafaa Club — LIU Tyre Campus • Digital Resources & Exams Bank",
+
+      "books.tabBorrow": "Available Books to Borrow",
+      "books.tabDonate": "Donate / Offer a Book",
+      "books.borrowTitle": "One Book, Passed Through Many Hands.",
+      "books.borrowDesc": "Choose the textbook you need and click Request Book, then fill in your details to confirm pickup inside LIU Tyre campus.",
+      "books.searchPlaceholder": "Search by book title, course, or faculty...",
+      "books.availableBadge": "Available to Borrow",
+      "books.borrowedBadge": "Currently Borrowed",
+      "books.btnRequest": "Request Book",
+      "books.donateTitle": "Donate Your Books and Support Your Peers.",
+      "books.donateDesc": "Donate any textbooks or course materials you completed so the club can catalog and lend them to fellow students in need.",
+      "books.footer": "Al-Wafaa Club — LIU Tyre Campus • Peer Book Lending & Exchange",
+
+      "scholarship.badge": "Annual Student Scholarship",
+      "scholarship.title": "Direct Online Application Form.",
+      "scholarship.desc": "An annual initiative launched by Al-Wafaa Club to ease university financial burdens and support deserving students at LIU Tyre.",
+      "scholarship.footer": "Al-Wafaa Club — LIU Tyre Campus • Annual Student Scholarship",
+
+      "faculty.badge": "Faculty & Academic Staff",
+      "faculty.title": "Faculty Directory & Office Hours.",
+      "faculty.desc": "Contact info, official university emails, office locations, and real-time office hours tracking for LIU Tyre professors.",
+      "faculty.searchPlaceholder": "Search by professor name, faculty, or major...",
+      "faculty.filterAdmin": "Administration",
+      "faculty.noResults": "No matching faculty found",
+      "faculty.noResultsDesc": "Please check the spelling or select another faculty above.",
+      "faculty.footer": "Al-Wafaa Club — LIU Tyre Campus • Faculty Directory & Office Hours",
+
+      "guidance.badge": "Student Academic Advising",
+      "guidance.title": "Academic Mentors & Major Representatives.",
+      "guidance.desc": "Direct connection with student major representatives and official WhatsApp academic mentoring groups.",
+      "guidance.groupsTitle": "Central Announcements & Support Groups",
+      "guidance.officialWhatsapp": "Official WhatsApp",
+      "guidance.loadingGroups": "Loading support groups...",
+      "guidance.repsTitle": "Major Representatives for Direct Contact",
+      "guidance.tyreCampus": "Tyre Campus",
+      "guidance.loadingReps": "Loading guidance network...",
+      "guidance.footer": "Al-Wafaa Club — LIU Tyre Campus • Academic Guidance Network",
+
+      "archive.badge": "Campus Life & Activities",
+      "archive.badgePhoto": "Photo Gallery & Field Documentation",
+      "archive.title": "Campus Events & Student Activities Archive.",
+      "archive.desc": "Documenting student memories and achievements of Al-Wafaa Club at LIU Tyre.",
+      "archive.searchPlaceholder": "Search by event title, venue, or topic...",
+      "archive.filterWorkshop": "Workshops & Training",
+      "archive.filterScientific": "Exhibitions & Seminars",
+      "archive.filterService": "Volunteer & Initiatives",
+      "archive.filterHonoring": "Cultural & Honors",
+      "archive.noResults": "No matching events found",
+      "archive.noResultsDesc": "Try another search term or choose a different category above.",
+      "archive.footer": "Al-Wafaa Club — LIU Tyre Campus • Events & Activities Archive"
     },
 
     fr: {
@@ -296,7 +448,83 @@
       "footer.about": "À Propos du Club",
       "footer.campus": "Université Internationale Libanaise — Campus de Tyr",
       "footer.portal": "Portail Étudiant UMS",
-      "footer.rights": "Tous droits réservés © {year} Club Al-Wafaa — Campus de Tyr."
+      "footer.rights": "Tous droits réservés © {year} Club Al-Wafaa — Campus de Tyr.",
+
+      // Clés des Pages Secondaires
+      "nav.theme": "Thème",
+      "resources.badge": "Téléchargement Direct Gratuit • Sans Inscription",
+      "resources.title": "Anciens Examens, Résumés & Livres. Gratuit.",
+      "resources.desc": "Recherchez par nom de cours, code (ex: MATH 200, MECH, CSC) ou faculté pour un accès direct aux examens, manuels et résumés vérifiés.",
+      "resources.searchPlaceholder": "Rechercher par cours ou code (ex: MATH 200, MECH, CSC, BIO, FIN)...",
+      "resources.filterCategory": "Catégorie :",
+      "resources.filterAll": "Tous",
+      "resources.filterExam": "Anciens Examens",
+      "resources.filterSummary": "Résumés & Diapositives",
+      "resources.filterBook": "Livres & Références",
+      "resources.filterAssignment": "Devoirs & Quiz",
+      "resources.facultyEngineering": "Ingénierie",
+      "resources.facultyScience": "Arts & Sciences",
+      "resources.facultyBusiness": "Gestion & Affaires",
+      "resources.facultyPharmacy": "Pharmacie & Santé",
+      "resources.facultyEducation": "Éducation & Langues",
+      "resources.filterTerm": "Semestre :",
+      "resources.termAll": "Tous les Semestres",
+      "resources.termFall": "Semestre d'Automne",
+      "resources.termSpring": "Semestre de Printemps",
+      "resources.termSummer": "Semestre d'Été",
+      "resources.noResultsTitle": "Aucun Fichier Correspondant",
+      "resources.noResultsDesc": "Vérifiez l'orthographe du titre ou du code, ou contactez notre réseau d'orientation étudiante.",
+      "resources.footer": "Club Al-Wafaa — LIU Tyr • Banque de Ressources Numériques & Examens",
+
+      "books.tabBorrow": "Livres Disponibles à l'Emprunt",
+      "books.tabDonate": "Faire un Don / Offrir un Livre",
+      "books.borrowTitle": "Un Livre, Partagé Entre de Nombreux Étudiants.",
+      "books.borrowDesc": "Choisissez le manuel scolaire nécessaire et cliquez sur Demander le Livre pour confirmer le retrait au campus de Tyr.",
+      "books.searchPlaceholder": "Rechercher par titre de livre, cours ou faculté...",
+      "books.availableBadge": "Disponible à l'Emprunt",
+      "books.borrowedBadge": "Actuellement Emprunté",
+      "books.btnRequest": "Demander l'Emprunt",
+      "books.donateTitle": "Donnez Vos Livres et Soutenez Vos Camarades.",
+      "books.donateDesc": "Faites don des manuels scolaires que vous avez terminés afin que le club puisse les répertorier et les prêter aux étudiants.",
+      "books.footer": "Club Al-Wafaa — LIU Tyr • Prêt & Échange de Livres Étudiants",
+
+      "scholarship.badge": "Bourse Étudiante Annuelle",
+      "scholarship.title": "Formulaire de Candidature en Ligne Direct.",
+      "scholarship.desc": "Une initiative annuelle lancée par le Club Al-Wafaa pour alléger les frais universitaires et soutenir les étudiants méritants de l'LIU Tyr.",
+      "scholarship.footer": "Club Al-Wafaa — LIU Tyr • Bourse Étudiante Annuelle",
+
+      "faculty.badge": "Corps Professoral & Académique",
+      "faculty.title": "Annuaire des Professeurs & Permanences.",
+      "faculty.desc": "Coordonnées, courriels universitaires, bureaux et suivi en direct des heures de permanence des professeurs de Tyr.",
+      "faculty.searchPlaceholder": "Rechercher par nom de professeur, faculté ou filière...",
+      "faculty.filterAdmin": "Administration",
+      "faculty.noResults": "Aucun résultat correspondant trouvé",
+      "faculty.noResultsDesc": "Veuillez vérifier l'orthographe ou sélectionner une autre faculté ci-dessus.",
+      "faculty.footer": "Club Al-Wafaa — LIU Tyr • Annuaire des Professeurs & Permanences",
+
+      "guidance.badge": "Orientation & Conseil Étudiant",
+      "guidance.title": "Réseau d'Orientation & Délégués de Filières.",
+      "guidance.desc": "Contact direct avec les délégués étudiants de filières et groupes WhatsApp officiels d'orientation académique.",
+      "guidance.groupsTitle": "Groupes de Soutien & Annonces Centrales",
+      "guidance.officialWhatsapp": "WhatsApp Officiel",
+      "guidance.loadingGroups": "Chargement des groupes...",
+      "guidance.repsTitle": "Délégués de Filières pour Contact Direct",
+      "guidance.tyreCampus": "Campus de Tyr",
+      "guidance.loadingReps": "Chargement du réseau d'orientation...",
+      "guidance.footer": "Club Al-Wafaa — LIU Tyr • Réseau d'Orientation Académique",
+
+      "archive.badge": "Vie Étudiante & Événements",
+      "archive.badgePhoto": "Galerie Photos & Documentation de Terrain",
+      "archive.title": "Archives des Événements & Activités Étudiantes.",
+      "archive.desc": "Préservation des souvenirs et réalisations du Club Al-Wafaa à l'LIU Tyr.",
+      "archive.searchPlaceholder": "Rechercher par titre, lieu ou sujet...",
+      "archive.filterWorkshop": "Ateliers & Formations",
+      "archive.filterScientific": "Expositions & Séminaires",
+      "archive.filterService": "Initiatives & Bénévolat",
+      "archive.filterHonoring": "Culture & Hommages",
+      "archive.noResults": "Aucun événement correspondant trouvé",
+      "archive.noResultsDesc": "Essayez un autre mot-clé ou sélectionnez une catégorie différente ci-dessus.",
+      "archive.footer": "Club Al-Wafaa — LIU Tyr • Archives des Événements & Activités"
     }
   };
 
@@ -364,6 +592,9 @@
     // تحديث أزرار عرض اللغة في الواجهة
     updateLanguageUI(lang);
 
+    const langMenu = document.getElementById('langDropdownMenu');
+    if (langMenu) langMenu.classList.add('hidden');
+
     // تحديث الأيقونات
     if (window.lucide) {
       lucide.createIcons();
@@ -403,6 +634,20 @@
       if (targetLang) {
         setLanguage(targetLang);
       }
+    }
+  });
+
+  // إدارة فتح وإغلاق القائمة المنسدلة لاختيار اللغة
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('#langDropdownBtn');
+    const menu = document.getElementById('langDropdownMenu');
+    if (btn && menu) {
+      e.stopPropagation();
+      menu.classList.toggle('hidden');
+      return;
+    }
+    if (menu && !menu.contains(e.target)) {
+      menu.classList.add('hidden');
     }
   });
 
