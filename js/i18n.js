@@ -595,6 +595,9 @@
     const langMenu = document.getElementById('langDropdownMenu');
     if (langMenu) langMenu.classList.add('hidden');
 
+    // إزالة فئة الحماية من الوميض لإظهار المحتوى المترجم فوراً
+    document.documentElement.classList.remove('i18n-loading');
+
     // تحديث الأيقونات
     if (window.lucide) {
       lucide.createIcons();
@@ -615,7 +618,7 @@
       currentLangCode.textContent = lang.toUpperCase();
     }
 
-    // تمييز اللغة المحددة في القوائم المنسدلة
+    // تمييز اللغة المحددة في القوائم المنسدلة والقوائم الجانبية
     document.querySelectorAll('[data-set-lang]').forEach((btn) => {
       const targetLang = btn.getAttribute('data-set-lang');
       if (targetLang === lang) {
@@ -637,19 +640,23 @@
     }
   });
 
-  // إدارة فتح وإغلاق القائمة المنسدلة لاختيار اللغة
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest('#langDropdownBtn');
+  // إدارة فتح وإغلاق القائمة المنسدلة لاختيار اللغة بشكل مباشر وموثوق
+  function setupLangDropdown() {
+    const btn = document.getElementById('langDropdownBtn');
     const menu = document.getElementById('langDropdownMenu');
     if (btn && menu) {
-      e.stopPropagation();
-      menu.classList.toggle('hidden');
-      return;
+      btn.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        menu.classList.toggle('hidden');
+      };
+      document.addEventListener('click', function(e) {
+        if (!menu.contains(e.target) && !btn.contains(e.target)) {
+          menu.classList.add('hidden');
+        }
+      });
     }
-    if (menu && !menu.contains(e.target)) {
-      menu.classList.add('hidden');
-    }
-  });
+  }
 
   // ==================== إتاحة الدوال للبيئة العامة ====================
   window.i18n = {
@@ -663,9 +670,13 @@
 
   // تهيئة اللغة مباشرة عند بدء تحميل الـ DOM
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => setLanguage(getCurrentLang()));
+    document.addEventListener('DOMContentLoaded', () => {
+      setLanguage(getCurrentLang());
+      setupLangDropdown();
+    });
   } else {
     setLanguage(getCurrentLang());
+    setupLangDropdown();
   }
 
 })();
