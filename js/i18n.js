@@ -709,20 +709,20 @@
       document.body.style.fontFamily = "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
     }
 
-    // ترجمة جميع العناصر الحاملة لسمة data-i18n
+    // ترجمة جميع العناصر الحاملة لسمة data-i18n (مع الحماية من عرض أسماء المفاتيح الخام)
     document.querySelectorAll('[data-i18n]').forEach((el) => {
       const key = el.getAttribute('data-i18n');
       const translated = t(key, lang);
-      if (translated) {
+      if (translated && translated !== key) {
         el.innerHTML = translated;
       }
     });
 
-    // ترجمة سمات الـ placeholder
+    // ترجمة سمات الـ placeholder (مع الحماية من عرض أسماء المفاتيح الخام)
     document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
       const key = el.getAttribute('data-i18n-placeholder');
       const translated = t(key, lang);
-      if (translated) {
+      if (translated && translated !== key) {
         el.setAttribute('placeholder', translated);
       }
     });
@@ -731,7 +731,7 @@
     document.querySelectorAll('[data-i18n-title]').forEach((el) => {
       const key = el.getAttribute('data-i18n-title');
       const translated = t(key, lang);
-      if (translated) {
+      if (translated && translated !== key) {
         el.setAttribute('title', translated);
       }
     });
