@@ -27,7 +27,7 @@
 
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- محرك اللغات والترجمة الشامل (i18n Engine) -->
-  <script src="js/i18n.js?v=2.2"></script>
+  <script src="js/i18n.js?v=3.0"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -600,16 +600,275 @@
       });
     }
 
+    // دالة استرجاع النصوص الآمنة مع حماية قطعية ضد ظهور أسماء مفاتيح الترجمة
+    function getSafeText(key, arFallback, enFallback, frFallback) {
+      const lang = (window.getCurrentLang ? window.getCurrentLang() : 'ar') || 'ar';
+      let val = '';
+      try {
+        val = (window.t && typeof window.t === 'function') ? window.t(key) : '';
+      } catch (e) {
+        val = '';
+      }
+      if (!val || val === key || val.startsWith('faculty.') || val.startsWith('resources.') || val.startsWith('common.') || val.startsWith('nav.')) {
+        if (lang === 'en') return enFallback;
+        if (lang === 'fr') return frFallback || enFallback;
+        return arFallback;
+      }
+      return val;
+    }
+
+    // تعريب وترجمة الصفة الوظيفية
+    function localizeFacultyRole(role, catCode, lang) {
+      const r = String(role || '').trim().toLowerCase();
+      if (lang === 'ar') {
+        if (r.includes('doctor') || r === 'dr' || r === 'dr.' || r === 'دكتور' || r === 'د.') return 'دكتور';
+        if (r.includes('admin') || r.includes('إداري') || catCode === 'admin') return 'الجهاز الإداري';
+        if (r.includes('lecturer') || r.includes('محاضر')) return 'أستاذ محاضر';
+        if (r.includes('librarian') || r.includes('مكتب')) return 'أمانة المكتبة';
+        if (r.includes('finance') || r.includes('مالي')) return 'الشؤون المالية';
+        if (r.includes('student') || r.includes('شؤون')) return 'شؤون الطلاب';
+        if (r.includes('head') || r.includes('coordinator') || r.includes('منسق') || r.includes('رئيس')) return 'منسق قسم';
+        return role || 'عضو هيئة تعليمية';
+      } else if (lang === 'fr') {
+        if (r.includes('doctor') || r === 'dr' || r === 'dr.' || r === 'دكتور' || r === 'د.') return 'Docteur';
+        if (r.includes('admin') || r.includes('إداري') || catCode === 'admin') return 'Personnel Administratif';
+        if (r.includes('lecturer') || r.includes('محاضر')) return 'Enseignant';
+        if (r.includes('librarian') || r.includes('مكتب')) return 'Bibliothécaire';
+        if (r.includes('finance') || r.includes('مالي')) return 'Affaires Financières';
+        if (r.includes('student') || r.includes('شؤون')) return 'Affaires Étudiantes';
+        if (r.includes('head') || r.includes('coordinator') || r.includes('منسق') || r.includes('رئيس')) return 'Coordinateur';
+        return 'Membre du Corps Professoral';
+      } else {
+        if (r.includes('doctor') || r === 'dr' || r === 'dr.' || r === 'دكتور' || r === 'د.') return 'Doctor';
+        if (r.includes('admin') || r.includes('إداري') || catCode === 'admin') return 'Administrative Staff';
+        if (r.includes('lecturer') || r.includes('محاضر')) return 'Lecturer';
+        if (r.includes('librarian') || r.includes('مكتب')) return 'Librarian';
+        if (r.includes('finance') || r.includes('مالي')) return 'Financial Affairs';
+        if (r.includes('student') || r.includes('شؤون')) return 'Student Affairs';
+        if (r.includes('head') || r.includes('coordinator') || r.includes('منسق') || r.includes('رئيس')) return 'Department Coordinator';
+        return 'Faculty Member';
+      }
+    }
+
+    // تعريب وترجمة أسماء الدكاترة والإداريين
+    function localizeFacultyName(rawName, lang) {
+      if (!rawName) return '';
+      const n = String(rawName).trim();
+      const clean = n.replace(/^(دكتور|د\.|Dr\.|Doctor|الأستاذة|الاستاذة|الأستاذ|الاستاذ|Mr\.|Ms\.|Mrs\.)\s*/i, '').trim();
+
+      const knownFaculty = {
+        'هادي نور الدين': { ar: 'د. هادي نور الدين', en: 'Dr. Hadi Noureddine', fr: 'Dr. Hadi Noureddine' },
+        'hadi noureddine': { ar: 'د. هادي نور الدين', en: 'Dr. Hadi Noureddine', fr: 'Dr. Hadi Noureddine' },
+        'علي أبو خليل': { ar: 'د. علي أبو خليل', en: 'Dr. Ali Abou Khalil', fr: 'Dr. Ali Abou Khalil' },
+        'ali abou khalil': { ar: 'د. علي أبو خليل', en: 'Dr. Ali Abou Khalil', fr: 'Dr. Ali Abou Khalil' },
+        'علي حلال': { ar: 'د. علي حلال', en: 'Dr. Ali Hallal', fr: 'Dr. Ali Hallal' },
+        'ali hallal': { ar: 'د. علي حلال', en: 'Dr. Ali Hallal', fr: 'Dr. Ali Hallal' },
+        'حسن جابر': { ar: 'د. حسن جابر', en: 'Dr. Hassan Jaber', fr: 'Dr. Hassan Jaber' },
+        'حسان جابر': { ar: 'د. حسن جابر', en: 'Dr. Hassan Jaber', fr: 'Dr. Hassan Jaber' },
+        'hassan jaber': { ar: 'د. حسن جابر', en: 'Dr. Hassan Jaber', fr: 'Dr. Hassan Jaber' },
+        'إحسان عساكرة': { ar: 'د. إحسان عساكرة', en: 'Dr. Ihsan Asakereh', fr: 'Dr. Ihsan Asakereh' },
+        'إحسان عساكري': { ar: 'د. إحسان عساكرة', en: 'Dr. Ihsan Asakereh', fr: 'Dr. Ihsan Asakereh' },
+        'احسان عساكرة': { ar: 'د. إحسان عساكرة', en: 'Dr. Ihsan Asakereh', fr: 'Dr. Ihsan Asakereh' },
+        'احسان عساكري': { ar: 'د. إحسان عساكرة', en: 'Dr. Ihsan Asakereh', fr: 'Dr. Ihsan Asakereh' },
+        'ihsan asakereh': { ar: 'د. إحسان عساكرة', en: 'Dr. Ihsan Asakereh', fr: 'Dr. Ihsan Asakereh' },
+        'غيا السمرة': { ar: 'الأستاذة غيا السمرة', en: 'Ms. Gheya El Samra', fr: 'Mme Gheya El Samra' },
+        'gheya el samra': { ar: 'الأستاذة غيا السمرة', en: 'Ms. Gheya El Samra', fr: 'Mme Gheya El Samra' },
+        'gheya elsamra': { ar: 'الأستاذة غيا السمرة', en: 'Ms. Gheya El Samra', fr: 'Mme Gheya El Samra' },
+        'هبة حمود': { ar: 'الأستاذة هبة حمود', en: 'Ms. Hiba Hammoud', fr: 'Mme Hiba Hammoud' },
+        'hiba hammoud': { ar: 'الأستاذة هبة حمود', en: 'Ms. Hiba Hammoud', fr: 'Mme Hiba Hammoud' }
+      };
+
+      const lookupKey = clean.toLowerCase();
+      if (knownFaculty[lookupKey]) {
+        return knownFaculty[lookupKey][lang] || knownFaculty[lookupKey].ar;
+      }
+
+      const isDoctor = /^(دكتور|د\.|Dr\.|Doctor)\b/i.test(n);
+      const isMs = /^(الأستاذة|الاستاذة|Ms\.|Mrs\.)\b/i.test(n);
+      const isMr = /^(الأستاذ|الاستاذ|Mr\.)\b/i.test(n);
+
+      if (lang === 'ar') {
+        if (isDoctor) return 'د. ' + clean;
+        if (isMs) return 'الأستاذة ' + clean;
+        if (isMr) return 'الأستاذ ' + clean;
+        return n;
+      } else {
+        const prefix = isDoctor ? 'Dr. ' : (isMs ? (lang === 'fr' ? 'Mme ' : 'Ms. ') : (isMr ? (lang === 'fr' ? 'M. ' : 'Mr. ') : ''));
+        return prefix + clean;
+      }
+    }
+
+    // تعريب وترجمة الاختصاص أو الصفة الأكاديمية
+    function localizeFacultyTitle(rawTitle, lang) {
+      if (!rawTitle) return '';
+      const t = String(rawTitle).trim();
+      if (lang === 'ar') {
+        if (/lecturer.*computer/i.test(t) || /computer.*advisor/i.test(t)) {
+          return 'أستاذ محاضر في قسم هندسة الكومبيوتر والمستشار الطلابي في كلية الهندسة';
+        }
+        return t;
+      }
+
+      if (t.includes('أستاذ محاضر في قسم هندسة الكومبيوتر والمستشار الطلابي في كلية الهندسة') ||
+          (t.includes('هندسة الكومبيوتر') && (t.includes('مستشار') || t.includes('محاضر')))) {
+        return lang === 'fr'
+          ? 'Enseignant en génie informatique & Conseiller académique en ingénierie'
+          : 'Lecturer in Computer Engineering & Academic Advisor in College of Engineering';
+      }
+      if (t.includes('منسق قسم هندسة الكومبيوتر') || t.includes('هندسة الكومبيوتر')) {
+        return lang === 'fr' ? 'Génie Informatique & Télécommunications' : 'Computer & Communications Engineering';
+      }
+      if (t.includes('هندسة الكهرباء') || t.includes('كهرباء')) {
+        return lang === 'fr' ? 'Génie Électrique & Électronique' : 'Electrical & Electronics Engineering';
+      }
+      if (t.includes('هندسة الميكانيك') || t.includes('ميكانيك')) {
+        return lang === 'fr' ? 'Génie Mécanique' : 'Mechanical Engineering';
+      }
+      if (t.includes('العلوم الطبية') || t.includes('علوم طبية')) {
+        return lang === 'fr' ? 'Sciences Biomédicales' : 'Biomedical Sciences';
+      }
+      if (t.includes('المكتبة') || t.includes('أمين المكتبة') || t.includes('أمانة المكتبة')) {
+        return lang === 'fr' ? 'Responsable de la Bibliothèque Universitaire' : 'University Library Coordinator';
+      }
+      if (t.includes('المالية') || t.includes('الشؤون المالية')) {
+        return lang === 'fr' ? 'Département des Affaires Financières' : 'Financial Affairs Department';
+      }
+      if (t.includes('شؤون الطلاب') || t.includes('شؤون الطلبة')) {
+        return lang === 'fr' ? 'Bureau des Affaires Étudiantes' : 'Student Affairs Office';
+      }
+      if (t.includes('إدارة الأعمال') || t.includes('إدارة أعمال')) {
+        return lang === 'fr' ? 'Gestion & Administration des Affaires' : 'Business Administration & Management';
+      }
+
+      let localized = t;
+      if (lang === 'fr') {
+        localized = localized
+          .replace(/أستاذ محاضر/g, 'Enseignant')
+          .replace(/أستاذ/g, 'Professeur')
+          .replace(/دكتور/g, 'Docteur')
+          .replace(/مستشار طلابي/g, 'Conseiller étudiant')
+          .replace(/مستشار/g, 'Conseiller')
+          .replace(/في قسم/g, 'au département de ')
+          .replace(/في كلية/g, 'à la faculté de ')
+          .replace(/كلية الهندسة/g, 'Faculté de Génie')
+          .replace(/كلية إدارة الأعمال/g, 'Faculté de Gestion')
+          .replace(/كلية الفنون والعلوم/g, 'Faculté des Arts et des Sciences')
+          .replace(/رئيس قسم/g, 'Chef de département')
+          .replace(/منسق قسم/g, 'Coordinateur de filière');
+      } else {
+        localized = localized
+          .replace(/أستاذ محاضر/g, 'Lecturer')
+          .replace(/أستاذ/g, 'Professor')
+          .replace(/دكتور/g, 'Doctor')
+          .replace(/مستشار طلابي/g, 'Academic Advisor')
+          .replace(/مستشار/g, 'Advisor')
+          .replace(/في قسم/g, 'in Dept. of ')
+          .replace(/في كلية/g, 'in School of ')
+          .replace(/كلية الهندسة/g, 'College of Engineering')
+          .replace(/كلية إدارة الأعمال/g, 'School of Business')
+          .replace(/كلية الفنون والعلوم/g, 'School of Arts & Sciences')
+          .replace(/رئيس قسم/g, 'Department Head')
+          .replace(/منسق قسم/g, 'Department Coordinator');
+      }
+      return localized;
+    }
+
+    // تعريب وترجمة مكان المكتب
+    function localizeOffice(rawOffice, lang) {
+      if (!rawOffice) return '';
+      let off = String(rawOffice).trim();
+      if (lang === 'ar') {
+        return off
+          .replace(/Block\s*([A-Za-z])/gi, 'مبنى $1')
+          .replace(/Bldg\s*([A-Za-z])/gi, 'مبنى $1')
+          .replace(/Room\s*(\d+)/gi, 'غرفة $1')
+          .replace(/Floor\s*(\d+)/gi, 'طابق $1')
+          .replace(/1st\s*floor/gi, 'الطابق الأول')
+          .replace(/2nd\s*floor/gi, 'الطابق الثاني')
+          .replace(/3rd\s*floor/gi, 'الطابق الثالث')
+          .replace(/4th\s*floor/gi, 'الطابق الرابع')
+          .replace(/Ground\s*floor/gi, 'الطابق الأرضي');
+      } else if (lang === 'fr') {
+        return off
+          .replace(/مبنى\s*([A-Za-z])/gi, 'Bâtiment $1')
+          .replace(/Block\s*([A-Za-z])/gi, 'Bâtiment $1')
+          .replace(/غرفة\s*(\d+)/gi, 'Salle $1')
+          .replace(/Room\s*(\d+)/gi, 'Salle $1')
+          .replace(/الطابق الأول|1st\s*floor/gi, '1er Étage')
+          .replace(/الطابق الثاني|2nd\s*floor/gi, '2ème Étage')
+          .replace(/الطابق الثالث|3rd\s*floor/gi, '3ème Étage')
+          .replace(/الطابق الرابع|4th\s*floor/gi, '4ème Étage')
+          .replace(/الطابق الأرضي|Ground\s*floor/gi, 'Rez-de-chaussée');
+      } else {
+        return off
+          .replace(/مبنى\s*([A-Za-z])/gi, 'Block $1')
+          .replace(/غرفة\s*(\d+)/gi, 'Room $1')
+          .replace(/الطابق الأول/gi, '1st Floor')
+          .replace(/الطابق الثاني/gi, '2nd Floor')
+          .replace(/الطابق الثالث/gi, '3rd Floor')
+          .replace(/الطابق الرابع/gi, '4th Floor')
+          .replace(/الطابق الأرضي/gi, 'Ground Floor');
+      }
+    }
+
+    // تعريب وترجمة الساعات المكتبية
+    function localizeHours(rawHours, lang) {
+      if (!rawHours) return '';
+      let h = String(rawHours).trim();
+      if (lang === 'ar') {
+        return h
+          .replace(/\bMon\b|Monday/gi, 'الإثنين')
+          .replace(/\bTue\b|Tuesday/gi, 'الثلاثاء')
+          .replace(/\bWed\b|Wednesday/gi, 'الأربعاء')
+          .replace(/\bThu\b|Thursday/gi, 'الخميس')
+          .replace(/\bFri\b|Friday/gi, 'الجمعة')
+          .replace(/\bSat\b|Saturday/gi, 'السبت')
+          .replace(/\bSun\b|Sunday/gi, 'الأحد')
+          .replace(/\bto\b/gi, 'إلى');
+      } else if (lang === 'fr') {
+        return h
+          .replace(/الإثنين|الاثنين/g, 'Lun')
+          .replace(/الثلاثاء/g, 'Mar')
+          .replace(/الأربعاء|الاربعاء/g, 'Mer')
+          .replace(/الخميس/g, 'Jeu')
+          .replace(/الجمعة/g, 'Ven')
+          .replace(/السبت/g, 'Sam')
+          .replace(/الأحد|الاحد/g, 'Dim')
+          .replace(/إلى/g, 'à')
+          .replace(/\bto\b/gi, 'à');
+      } else {
+        return h
+          .replace(/الإثنين|الاثنين/g, 'Mon')
+          .replace(/الثلاثاء/g, 'Tue')
+          .replace(/الأربعاء|الاربعاء/g, 'Wed')
+          .replace(/الخميس/g, 'Thu')
+          .replace(/الجمعة/g, 'Fri')
+          .replace(/السبت/g, 'Sat')
+          .replace(/الأحد|الاحد/g, 'Sun')
+          .replace(/إلى/g, 'to');
+      }
+    }
+
     function getLocalizedCollege(catCode, rawCollege) {
       const curLang = window.getCurrentLang ? window.getCurrentLang() : 'ar';
-      if (curLang === 'ar') return rawCollege;
+      if (curLang === 'ar') {
+        const colMapAr = {
+          engineering: 'كلية الهندسة',
+          business: 'كلية إدارة الأعمال',
+          arts_sciences: 'كلية الفنون والعلوم',
+          education: 'كلية التربية واللغات',
+          pharmacy: 'كلية الصيدلة',
+          admin: 'الجهاز الإداري'
+        };
+        return colMapAr[catCode] || rawCollege;
+      }
       const colMap = {
-        engineering: window.t('resources.facultyEngineering'),
-        business: window.t('resources.facultyBusiness'),
-        arts_sciences: window.t('faculty.filterScience'),
-        education: window.t('resources.facultyEducation'),
-        pharmacy: window.t('resources.facultyPharmacy'),
-        admin: window.t('faculty.filterAdmin')
+        engineering: getSafeText('resources.facultyEngineering', 'كلية الهندسة', 'Engineering', 'Génie'),
+        business: getSafeText('resources.facultyBusiness', 'كلية إدارة الأعمال', 'Business', 'Gestion'),
+        arts_sciences: getSafeText('faculty.filterScience', 'الفنون والعلوم', 'Arts & Sciences', 'Arts & Sciences'),
+        education: getSafeText('resources.facultyEducation', 'التربية واللغات', 'Education', 'Éducation'),
+        pharmacy: getSafeText('resources.facultyPharmacy', 'كلية الصيدلة', 'Pharmacy', 'Pharmacie'),
+        admin: getSafeText('faculty.filterAdmin', 'الجهاز الإداري', 'Administration', 'Administration')
       };
       return colMap[catCode] || rawCollege;
     }
@@ -618,19 +877,21 @@
       const grid = document.getElementById('facultyGrid');
       if (!grid) return;
 
+      const currentLang = (window.getCurrentLang ? window.getCurrentLang() : 'ar') || 'ar';
+
       if (!list || list.length === 0) {
-        const emptyMsg = window.t ? window.t('faculty.empty') : 'لا توجد بيانات مسجلة حالياً للأساتذة في قاعدة البيانات.';
+        const emptyMsg = getSafeText('faculty.empty', 'لا توجد بيانات مسجلة حالياً للأساتذة في قاعدة البيانات.', 'No faculty data currently recorded in the database.', 'Aucune donnée de professeur actuellement enregistrée.');
         grid.innerHTML = `<div class="col-span-full py-16 text-center text-xs text-slate-400">${emptyMsg}</div>`;
         return;
       }
 
-      const inOfficeText = window.t ? window.t('faculty.statusInOffice') : 'متواجد الآن في المكتب';
-      const outOfficeText = window.t ? window.t('faculty.statusOutsideHours') : 'خارج الساعات المكتبية';
-      const hoursLabel = window.t ? window.t('faculty.lblHours') : 'الساعات:';
-      const mailBtnText = window.t ? window.t('faculty.btnMail') : 'مراسلة';
-      const mailTitle = window.t ? window.t('faculty.mailTitle') : 'مراسلة الأستاذ مباشرة';
-      const copyBtnText = window.t ? window.t('faculty.btnCopy') : 'نسخ';
-      const copyTitle = window.t ? window.t('faculty.copyTitle') : 'نسخ البريد الإلكتروني';
+      const inOfficeText = getSafeText('faculty.statusInOffice', 'متواجد الآن في المكتب', 'In Office Now', 'Présent au Bureau');
+      const outOfficeText = getSafeText('faculty.statusOutsideHours', 'خارج الساعات المكتبية', 'Outside Office Hours', 'Hors Permanences');
+      const hoursLabel = getSafeText('faculty.lblHours', 'الساعات:', 'Hours:', 'Permanences :');
+      const mailBtnText = getSafeText('faculty.btnMail', 'مراسلة', 'Email', 'Courriel');
+      const mailTitle = getSafeText('faculty.mailTitle', 'مراسلة الأستاذ مباشرة', 'Email professor directly', 'Contacter directement');
+      const copyBtnText = getSafeText('faculty.btnCopy', 'نسخ', 'Copy', 'Copier');
+      const copyTitle = getSafeText('faculty.copyTitle', 'نسخ البريد الإلكتروني', 'Copy email address', 'Copier le courriel');
 
       grid.innerHTML = list.map(item => {
         const rawName = item['الاسم واللقب'] || item['الاسم'] || item.name || '';
@@ -640,8 +901,10 @@
         const rawCat = item['التصنيف البرمجي'] || '';
 
         const extracted = extractOfficeAndHours(item);
-        const officeRoom = escapeHtml(extracted.office);
-        const officeHours = escapeHtml(extracted.hours);
+        const localizedOffice = localizeOffice(extracted.office, currentLang);
+        const localizedHours = localizeHours(extracted.hours, currentLang);
+        const officeRoom = escapeHtml(localizedOffice);
+        const officeHours = escapeHtml(localizedHours);
 
         const liveStatus = isOfficeHourActive(extracted.hours);
         const statusBadge = liveStatus === true
@@ -653,12 +916,13 @@
         const badgeColor = detection.badgeColor;
 
         const defaultRole = catCode === 'admin'
-          ? (window.t ? window.t('faculty.roleAdmin') : 'الجهاز الإداري')
-          : (window.t ? window.t('faculty.roleFaculty') : 'عضو هيئة تعليمية');
-        const roleTag = escapeHtml(item['الصفة الوظيفية'] || defaultRole);
-        const name = escapeHtml(rawName);
+          ? (getSafeText('faculty.roleAdmin', 'الجهاز الإداري', 'Administrative Staff', 'Personnel Administratif'))
+          : (getSafeText('faculty.roleFaculty', 'عضو هيئة تعليمية', 'Faculty Member', 'Membre du Corps Professoral'));
+        const rawRole = item['الصفة الوظيفية'] || defaultRole;
+        const roleTag = escapeHtml(localizeFacultyRole(rawRole, catCode, currentLang));
+        const name = escapeHtml(localizeFacultyName(rawName, currentLang));
         const college = escapeHtml(getLocalizedCollege(catCode, rawCollege));
-        const title = escapeHtml(rawTitle);
+        const title = escapeHtml(localizeFacultyTitle(rawTitle, currentLang));
         const email = escapeHtml(rawEmail);
         const escapedEmail = rawEmail.replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
@@ -683,8 +947,10 @@
           </div>
         ` : '';
 
+        const searchKeywords = escapeHtml(`${rawName} ${rawTitle} ${name} ${title}`);
+
         return `
-          <div class="faculty-card p-6 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md flex flex-col justify-between hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition duration-200 shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)]" data-category="${catCode}">
+          <div class="faculty-card p-6 rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-gradient-to-b dark:from-[#0a0f1d] dark:to-[#050811] backdrop-blur-md flex flex-col justify-between hover:border-gold-500/50 dark:hover:border-blue-500/40 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition duration-200 shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)]" data-category="${catCode}" data-search="${searchKeywords}">
             <div>
               <div class="flex items-center justify-between mb-2 gap-2">
                 <span class="px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold ${badgeColor}">${college}</span>
@@ -837,13 +1103,13 @@
     // وظيفة نسخ البريد الإلكتروني بضغطة واحدة
     function copyEmail(email, btn) {
       if (!email || email.trim() === '') {
-        showToast(window.t ? window.t('faculty.noEmail') : "البريد الإلكتروني غير متوفر حالياً", "error");
+        showToast(getSafeText('faculty.noEmail', 'البريد الإلكتروني غير متوفر حالياً', 'Email is currently unavailable', 'Courriel actuellement indisponible'), 'error');
         return;
       }
       navigator.clipboard.writeText(email).then(() => {
-        showToast(window.t ? window.t('faculty.emailCopied') : "تم نسخ البريد الإلكتروني للأستاذ بنجاح", "success");
+        showToast(getSafeText('faculty.emailCopied', 'تم نسخ البريد الإلكتروني للأستاذ بنجاح', "Professor's email copied successfully", 'Courriel du professeur copié avec succès'), 'success');
         const originalHTML = btn.innerHTML;
-        const copiedText = window.t ? window.t('faculty.btnCopied') : 'تم';
+        const copiedText = getSafeText('faculty.btnCopied', 'تم', 'Copied', 'Copié');
         btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i><span class="text-emerald-500">${copiedText}</span>`;
         btn.classList.add('border-emerald-500/50');
         lucide.createIcons();
@@ -854,7 +1120,7 @@
           lucide.createIcons();
         }, 1800);
       }).catch(() => {
-        showToast(window.t ? window.t('faculty.copyFailed') : "تعذر نسخ البريد الإلكتروني", "error");
+        showToast(getSafeText('faculty.copyFailed', 'تعذر نسخ البريد الإلكتروني', 'Failed to copy email', 'Impossible de copier le courriel'), 'error');
       });
     }
 
@@ -871,7 +1137,7 @@
       let visibleCount = 0;
 
       facultyCards.forEach(card => {
-        const cardText = card.innerText.toLowerCase();
+        const cardText = (card.innerText + ' ' + (card.getAttribute('data-search') || '')).toLowerCase();
         const cardCategory = card.getAttribute('data-category');
 
         const matchesQuery = !query || cardText.includes(query);
@@ -939,7 +1205,5 @@
   <button id="scrollToTopBtn" aria-label="الرجوع للأعلى" class="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-slate-900/85 dark:bg-clubNavy-cardDark/90 backdrop-blur-md border border-slate-700/50 text-gold-400 shadow-2xl opacity-0 pointer-events-none transition-all duration-300 hover:scale-110 active:scale-95 hover:border-gold-500 cursor-pointer">
     <i data-lucide="chevron-up" class="w-5 h-5"></i>
   </button>
-</body>
-</html>
 </body>
 </html>
