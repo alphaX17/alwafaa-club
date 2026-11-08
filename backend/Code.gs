@@ -1,3 +1,6 @@
+function testAuth() {
+  UrlFetchApp.fetch("https://www.google.com");
+}
 // =========================================================================
 // منظومة نادي الوفاء - فرع صور (Google Apps Script Backend الكامل والشامل)
 // =========================================================================
@@ -24,8 +27,8 @@ function doPost(e) {
         return createJsonResponse({ status: "error", message: "الرجاء إدخال استفسار أكاديمي صالح." });
       }
 
-      // جلب المفتاح السحابي من إعدادات السكربت أو استخدام المفتاح المعتمد
-      var apiKey = PropertiesService.getScriptProperties().getProperty("GEMINI_API_KEY") || "AQ.Ab8RN6IVXwgyoQifvEBwkTH8FvkPW0u0TPes4vwJ41XtNSrY6A";
+      // المفتاح المعتمد للذكاء الاصطناعي
+      var apiKey = "AQ.Ab8RN6IvWik3BwTeS6_dy8EUqohIeZr16IbDjhxdhLhLKd3YyQ";
 
       // بناء سياق وتاريخ المحادثة
       var history = Array.isArray(data.history) ? data.history : [];
@@ -82,16 +85,59 @@ function doPost(e) {
         }
       };
 
-      var models = ["gemini-2.5-flash", "gemini-flash-latest", "gemini-2.0-flash", "gemini-1.5-flash"];
+      var targets = [
+        { version: "v1", model: "gemini-1.5-flash" },
+        { version: "v1beta", model: "gemini-1.5-flash-latest" },
+        { version: "v1beta", model: "gemini-2.0-flash" },
+        { version: "v1beta", model: "gemini-2.0-flash-exp" },
+        { version: "v1", model: "gemini-1.5-pro" },
+        { version: "v1beta", model: "gemini-1.5-flash" },
+        { version: "v1beta", model: "gemini-2.5-flash" }
+      ];
+
+      // استكشاف النماذج المدعومة والمتاحة للمفتاح تلقائياً من خوادم جوجل
+      try {
+        var listUrl = "https://generativelanguage.googleapis.com/v1beta/models?key=" + encodeURIComponent(apiKey);
+        var listResp = UrlFetchApp.fetch(listUrl, { muteHttpExceptions: true });
+        if (listResp.getResponseCode() === 200) {
+          var listData = JSON.parse(listResp.getContentText());
+          if (listData.models && Array.isArray(listData.models)) {
+            var discovered = [];
+            for (var lm = 0; lm < listData.models.length; lm++) {
+              var mObj = listData.models[lm];
+              var mMethods = mObj.supportedGenerationMethods || [];
+              if (mMethods.indexOf("generateContent") !== -1) {
+                var rawName = String(mObj.name || "").replace(/^models\//, "");
+                if (rawName) {
+                  if (rawName.indexOf("flash") !== -1) {
+                    discovered.unshift({ version: "v1beta", model: rawName });
+                  } else {
+                    discovered.push({ version: "v1beta", model: rawName });
+                  }
+                }
+              }
+            }
+            if (discovered.length > 0) {
+              targets = discovered.concat(targets);
+            }
+          }
+        }
+      } catch (eList) {}
+
       var generatedText = "";
       var lastError = "";
 
-      for (var m = 0; m < models.length; m++) {
+      for (var m = 0; m < targets.length; m++) {
         try {
-          var apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/" + models[m] + ":generateContent?key=" + encodeURIComponent(apiKey);
+          var targetVer = targets[m].version;
+          var targetMod = targets[m].model;
+          var apiUrl = "https://generativelanguage.googleapis.com/" + targetVer + "/models/" + targetMod + ":generateContent?key=" + encodeURIComponent(apiKey);
           var options = {
             method: "post",
             contentType: "application/json",
+            headers: {
+              "x-goog-api-key": apiKey
+            },
             payload: JSON.stringify(payload),
             muteHttpExceptions: true
           };
