@@ -797,26 +797,8 @@
       });
     }
 
-    // إدارة القائمة المنسدلة لاختيار اللغة
-    const langDropdownBtn = document.getElementById('langDropdownBtn');
-    const langDropdownMenu = document.getElementById('langDropdownMenu');
-
-    if (langDropdownBtn && langDropdownMenu) {
-      langDropdownBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        langDropdownMenu.classList.toggle('hidden');
-      });
-
-      document.addEventListener('click', (e) => {
-        if (!langDropdownMenu.contains(e.target) && !langDropdownBtn.contains(e.target)) {
-          langDropdownMenu.classList.add('hidden');
-        }
-      });
-    }
-
     // الاستماع لحدث تبديل اللغة لتحديث المكونات الديناميكية
     window.addEventListener('languageChanged', () => {
-      if (langDropdownMenu) langDropdownMenu.classList.add('hidden');
       const isDark = html.classList.contains('dark');
       applyTheme(isDark);
       if (_lastHomeData) {

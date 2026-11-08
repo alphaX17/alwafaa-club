@@ -640,23 +640,30 @@
     }
   });
 
-  // إدارة فتح وإغلاق القائمة المنسدلة لاختيار اللغة بشكل مباشر وموثوق
+  // إدارة فتح وإغلاق القائمة المنسدلة لاختيار اللغة بشكل موحد وموثوق
   function setupLangDropdown() {
     const btn = document.getElementById('langDropdownBtn');
     const menu = document.getElementById('langDropdownMenu');
-    if (btn && menu) {
-      btn.onclick = function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        menu.classList.toggle('hidden');
-      };
-      document.addEventListener('click', function(e) {
-        if (!menu.contains(e.target) && !btn.contains(e.target)) {
-          menu.classList.add('hidden');
-        }
-      });
-    }
+    if (!btn || !menu) return;
+
+    btn.onclick = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      menu.classList.toggle('hidden');
+    };
   }
+
+  // إغلاق قائمة اللغات المنسدلة تلقائياً عند النقر في أي مكان خارجها
+  document.addEventListener('click', (e) => {
+    const menu = document.getElementById('langDropdownMenu');
+    const btn = document.getElementById('langDropdownBtn');
+    if (!menu || menu.classList.contains('hidden')) return;
+
+    if (btn && btn.contains(e.target)) return;
+    if (menu.contains(e.target)) return;
+
+    menu.classList.add('hidden');
+  });
 
   // ==================== إتاحة الدوال للبيئة العامة ====================
   window.i18n = {
