@@ -73,13 +73,26 @@
       aiQuotaBadge = document.getElementById('aiQuotaBadge');
     }
 
-    const t = window.t || ((k, p) => {
+    const t = (k, p) => {
+      if (window.t) return window.t(k, p);
+      const activeLang = (window.getCurrentLang && window.getCurrentLang()) || 'ar';
+      if (activeLang === 'en') {
+        if (k === 'ai.quotaRemaining') return `${p?.count ?? 12} questions remaining`;
+        if (k === 'ai.quotaReset') return `Renews in ${p?.mins ?? 60}m`;
+        if (k === 'ai.quotaExhausted') return `Session quota exhausted (renews in ${p?.mins ?? 60}m)`;
+        if (k === 'ai.inputPlaceholder') return 'Ask AI anything you need...';
+      } else if (activeLang === 'fr') {
+        if (k === 'ai.quotaRemaining') return `${p?.count ?? 12} requêtes restantes`;
+        if (k === 'ai.quotaReset') return `Renouvellement dans ${p?.mins ?? 60}m`;
+        if (k === 'ai.quotaExhausted') return `Quota épuisé (renouvellement dans ${p?.mins ?? 60}m)`;
+        if (k === 'ai.inputPlaceholder') return "Demandez à l'IA tout ce dont vous avez besoin...";
+      }
       if (k === 'ai.quotaRemaining') return `${p?.count ?? 12} أسئلة متبقية`;
       if (k === 'ai.quotaReset') return `يتجدد بعد ${p?.mins ?? 60} د`;
       if (k === 'ai.quotaExhausted') return `انتهى رصيد الجلسة (يتجدد بعد ${p?.mins ?? 60} دقيقة)`;
       if (k === 'ai.inputPlaceholder') return 'اسأل الـ AI عن أي شيء تحتاجه...';
       return '';
-    });
+    };
 
     if (aiQuotaBadge) {
       if (state.count <= 0) {

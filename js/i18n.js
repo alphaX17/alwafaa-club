@@ -155,6 +155,9 @@
       "books.copiesAvailable": "النسخ المتاحة: {copies}",
       "books.returnsSoon": "يعود قريباً",
       "books.btnRequest": "طلب استعارة",
+      "books.emptyLib": "لا توجد كتب متوفرة حالياً في المكتبة.",
+      "books.noResultsTitle": "لم يتم العثور على أي كتاب مطابق",
+      "books.noResultsDesc": "تأكد من كتابة الاسم بدقة أو اختر كلية أخرى من الأعلى.",
       "books.donateTitle": "تبرع بكتبك ودع زملاءك يستفيدون.",
       "books.donateDesc": "يمكنك التبرع بأي مراجع أو كتب مقررات انتهيت من دراستها ليقوم النادي بفهرستها وإعارتها للطلاب المحتاجين.",
       "books.footer": "نادي الوفاء — الجامعة اللبنانية الدولية في صور • منصة استعارة وتبادل الكتب",
@@ -333,6 +336,9 @@
       "books.copiesAvailable": "Available copies: {copies}",
       "books.returnsSoon": "Returning soon",
       "books.btnRequest": "Request Book",
+      "books.emptyLib": "No books currently available in the library.",
+      "books.noResultsTitle": "No matching books found",
+      "books.noResultsDesc": "Make sure the title is typed correctly or select another faculty above.",
       "books.donateTitle": "Donate Your Books and Support Your Peers.",
       "books.donateDesc": "Donate any textbooks or course materials you completed so the club can catalog and lend them to fellow students in need.",
       "books.footer": "Al-Wafaa Club — LIU Tyre Campus • Peer Book Lending & Exchange",
@@ -511,6 +517,9 @@
       "books.copiesAvailable": "Exemplaires dispo: {copies}",
       "books.returnsSoon": "Bientôt disponible",
       "books.btnRequest": "Demander l'Emprunt",
+      "books.emptyLib": "Aucun livre actuellement disponible dans la bibliothèque.",
+      "books.noResultsTitle": "Aucun livre correspondant trouvé",
+      "books.noResultsDesc": "Vérifiez l'orthographe du titre ou sélectionnez une autre faculté ci-dessus.",
       "books.donateTitle": "Donnez Vos Livres et Soutenez Vos Camarades.",
       "books.donateDesc": "Faites don des manuels scolaires que vous avez terminés afin que le club puisse les répertorier et les prêter aux étudiants.",
       "books.footer": "Club Al-Wafaa — LIU Tyr • Prêt & Échange de Livres Étudiants",
@@ -561,13 +570,22 @@
     return localStorage.getItem(STORAGE_KEY) || DEFAULT_LANG;
   }
 
-  function t(key, lang = null, params = {}) {
-    const activeLang = lang || getCurrentLang();
+  function t(key, arg2 = null, arg3 = {}) {
+    let lang = null;
+    let params = {};
+    if (typeof arg2 === 'string') {
+      lang = arg2;
+      params = (typeof arg3 === 'object' && arg3 !== null) ? arg3 : {};
+    } else if (typeof arg2 === 'object' && arg2 !== null) {
+      params = arg2;
+      lang = (typeof arg3 === 'string') ? arg3 : null;
+    }
+    const activeLang = (lang && translations[lang]) ? lang : getCurrentLang();
     const dict = translations[activeLang] || translations[DEFAULT_LANG];
-    let val = dict[key] || translations[DEFAULT_LANG][key] || key;
+    let val = dict[key] !== undefined ? dict[key] : (translations[DEFAULT_LANG][key] !== undefined ? translations[DEFAULT_LANG][key] : key);
 
     for (const p in params) {
-      val = val.replace(new RegExp(`{${p}}`, 'g'), params[p]);
+      val = val.replace(new RegExp(`\\{${p}\\}`, 'g'), params[p]);
     }
     return val;
   }
@@ -701,6 +719,7 @@
   };
 
   window.t = t;
+  window.getCurrentLang = getCurrentLang;
 
   // تهيئة اللغة مباشرة عند بدء تحميل الـ DOM
   if (document.readyState === 'loading') {
