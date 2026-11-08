@@ -1,7 +1,8 @@
-const CACHE_NAME = 'nadi-alwafaa-cache-v3';
+const CACHE_NAME = 'nadi-alwafaa-cache-v4';
 const STATIC_ASSETS = [
   './',
   './index.html',
+  './js/i18n.js',
   './js/ai-assistant.js',
   './scholarship.html',
   './resources.html',

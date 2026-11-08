@@ -25,6 +25,9 @@
   <!-- مكتبة الأيقونات الاحترافية Lucide -->
   <script src="https://unpkg.com/lucide@latest"></script>
   
+  <!-- محرك اللغات والترجمة الشامل (i18n Engine) -->
+  <script src="js/i18n.js"></script>
+
   <!-- Tailwind CSS عبر CDN مع ضبط الألوان الخاصة -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -223,24 +226,48 @@
         <a href="index.html" class="flex items-center gap-2.5 sm:gap-3 min-w-0 group">
           <img src="logo.png" alt="شعار نادي الوفاء" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 drop-shadow-sm group-hover:scale-105 transition-transform">
           <div class="min-w-0">
-            <span class="text-sm sm:text-base font-extrabold tracking-tight text-[#0d172a] dark:text-white whitespace-nowrap block">نادي الوفاء</span>
-            <span class="text-[9px] sm:text-[11px] text-slate-500 dark:text-slate-400 truncate block">الجامعة اللبنانية الدولية — صور</span>
+            <span class="text-sm sm:text-base font-extrabold tracking-tight text-[#0d172a] dark:text-white whitespace-nowrap block" data-i18n="nav.clubName">نادي الوفاء</span>
+            <span class="text-[9px] sm:text-[11px] text-slate-500 dark:text-slate-400 truncate block" data-i18n="nav.campusSubtitle">الجامعة اللبنانية الدولية — صور</span>
           </div>
         </a>
 
         <!-- الوسط (شاشات الكمبيوتر): روابط التنقل المباشرة -->
         <div class="hidden md:flex items-center gap-1 lg:gap-2">
-          <a href="resources.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">بنك الامتحانات</a>
-          <a href="books.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">الكتب</a>
-          <a href="scholarship.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">المنحة</a>
-          <a href="faculty.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">الأساتذة</a>
-          <a href="guidance.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">التوجيه</a>
-          <a href="archive.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition">الأرشيف</a>
+          <a href="resources.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition" data-i18n="nav.examBank">بنك الامتحانات</a>
+          <a href="books.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition" data-i18n="nav.books">الكتب</a>
+          <a href="scholarship.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition" data-i18n="nav.scholarship">المنحة</a>
+          <a href="faculty.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition" data-i18n="nav.faculty">الأساتذة</a>
+          <a href="guidance.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition" data-i18n="nav.guidance">التوجيه</a>
+          <a href="archive.html" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-gold-500 hover:bg-slate-100 dark:hover:bg-[#131e3a] transition" data-i18n="nav.archive">الأرشيف</a>
         </div>
 
-        <!-- الجهة اليسرى: محول المظهر وزر القائمة للجوال -->
+        <!-- الجهة اليسرى: محدد اللغة، محول المظهر، وزر القائمة للجوال -->
         <div class="flex items-center gap-2 shrink-0">
-          <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-xs font-bold transition hover:border-gold-500/50 active:scale-95 cursor-pointer">
+          
+          <!-- قائمة تحديد اللغة الثلاثية -->
+          <div class="relative" id="langDropdownContainer">
+            <button id="langDropdownBtn" type="button" aria-label="اختيار اللغة" class="flex items-center gap-1.5 px-3 py-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-xs font-bold transition hover:border-gold-500/50 active:scale-95 cursor-pointer">
+              <i data-lucide="globe" class="w-4 h-4 text-gold-500 shrink-0"></i>
+              <span id="currentLangLabel">العربية</span>
+              <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400 shrink-0"></i>
+            </button>
+            <div id="langDropdownMenu" class="hidden absolute top-full mt-2 rtl:left-0 ltr:right-0 w-36 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#0c1427]/95 backdrop-blur-md shadow-xl py-1.5 z-50">
+              <button type="button" data-set-lang="ar" class="w-full text-start px-3.5 py-2 text-xs font-bold hover:bg-slate-100 dark:hover:bg-[#131e3a] transition flex items-center justify-between cursor-pointer">
+                <span>العربية</span>
+                <span class="text-[10px] text-slate-400 font-mono">AR</span>
+              </button>
+              <button type="button" data-set-lang="en" class="w-full text-start px-3.5 py-2 text-xs font-bold hover:bg-slate-100 dark:hover:bg-[#131e3a] transition flex items-center justify-between cursor-pointer">
+                <span>English</span>
+                <span class="text-[10px] text-slate-400 font-mono">EN</span>
+              </button>
+              <button type="button" data-set-lang="fr" class="w-full text-start px-3.5 py-2 text-xs font-bold hover:bg-slate-100 dark:hover:bg-[#131e3a] transition flex items-center justify-between cursor-pointer">
+                <span>Français</span>
+                <span class="text-[10px] text-slate-400 font-mono">FR</span>
+              </button>
+            </div>
+          </div>
+
+          <button id="themeToggleBtn" aria-label="تبديل المظهر" class="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-xs font-bold transition hover:border-gold-500/50 active:scale-95 cursor-pointer">
             <span id="themeIconContainer" class="flex items-center justify-center">
               <i data-lucide="sun" class="w-4 h-4 text-gold-500"></i>
             </span>
@@ -270,36 +297,36 @@
       <div id="announcementSection" class="max-w-2xl mx-auto mb-6 sm:mb-8 transition-all">
         <div class="rounded-full border border-gold-500/30 bg-amber-500/10 dark:bg-gradient-to-r dark:from-[#13203f]/90 dark:to-[#0c1529]/90 dark:border-blue-500/30 px-4 py-2 sm:px-5 sm:py-2.5 flex items-center justify-between gap-3 text-xs sm:text-sm shadow-sm shadow-amber-500/10 backdrop-blur-sm">
           <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
-            <span class="shrink-0 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-extrabold bg-gold-500 text-slate-950 shadow-sm shadow-amber-500/10">إعلان</span>
-            <p id="announcementText" class="text-slate-800 dark:text-slate-200 font-medium text-xs sm:text-sm truncate">
+            <span class="shrink-0 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-extrabold bg-gold-500 text-slate-950 shadow-sm shadow-amber-500/10" data-i18n="announcement.badge">إعلان</span>
+            <p id="announcementText" class="text-slate-800 dark:text-slate-200 font-medium text-xs sm:text-sm truncate" data-i18n="announcement.defaultText">
               تم فتح باب التقديم للمنحة الطلابية السنوية التابعة لنادي الوفاء.
             </p>
           </div>
           <a id="announcementBtn" href="scholarship.html" class="shrink-0 px-4 py-1.5 rounded-full bg-[#0d172a] dark:bg-white text-white dark:text-[#0d172a] hover:opacity-90 font-bold text-xs transition flex items-center gap-1.5 shadow-sm">
-            <span id="announcementBtnText">قدّم الآن</span>
-            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+            <span id="announcementBtnText" data-i18n="announcement.btn">قدّم الآن</span>
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5 rtl:rotate-0 ltr:rotate-180 transition-transform"></i>
           </a>
         </div>
       </div>
 
       <!-- العنوان الرئيسي والشعار التوجيهي -->
       <div class="text-center mx-auto flex flex-col items-center justify-center max-w-4xl px-4 space-y-4 sm:space-y-6">
-        <p class="text-xs sm:text-sm font-bold text-gold-500 tracking-wider inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10">— من الطلاب، للطلاب • فرع صور</p>
+        <p class="text-xs sm:text-sm font-bold text-gold-500 tracking-wider inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10" data-i18n="hero.tagline">— من الطلاب، للطلاب • فرع صور</p>
         
         <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#0d172a] dark:text-white leading-[1.25] tracking-tight">
-          كل ما تحتاجه لفصلك
+          <span data-i18n="hero.titleLine1">كل ما تحتاجه لفصلك</span>
           <br class="hidden sm:inline">
-          القادم <span class="text-gold-500">في مكان واحد.</span>
+          <span data-i18n="hero.titleLine2">القادم</span> <span class="text-gold-500" data-i18n="hero.titleHighlight">في مكان واحد.</span>
         </h1>
 
-        <p class="text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 max-w-xl mx-auto leading-relaxed">
+        <p class="text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 max-w-xl mx-auto leading-relaxed" data-i18n="hero.description">
           مرجع شامل لطلاب الجامعة اللبنانية الدولية في صور: بنك الموارد الأكاديمية ونماذج الامتحانات، استعارة وتبادل المراجع الدراسية، وشبكة التوجيه الأكاديمي المباشر.
         </p>
 
         <!-- زر التمرير السريع للأنشطة والفعاليات الجامعية -->
         <div class="flex items-center justify-center mt-5">
           <a href="#activitiesSection" onclick="event.preventDefault(); document.getElementById('activitiesSection')?.scrollIntoView({ behavior: 'smooth' });" class="group px-6 py-3 rounded-full border border-amber-900/10 dark:border-[#152033] bg-white/85 dark:bg-[#0a0f1d] hover:border-gold-500/60 dark:hover:border-gold-500/60 shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)] hover:shadow-md backdrop-blur-md transition-all duration-300 flex items-center gap-2.5 text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 hover:text-gold-600 dark:hover:text-gold-400 active:scale-95 cursor-pointer">
-            <span>الأنشطة والفعاليات الجامعية</span>
+            <span data-i18n="hero.activitiesBtn">الأنشطة والفعاليات الجامعية</span>
             <span class="w-6 h-6 rounded-full bg-gold-500/10 text-gold-500 flex items-center justify-center group-hover:translate-y-0.5 transition-transform shadow-sm shadow-amber-500/10">
               <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
             </span>
@@ -313,8 +340,8 @@
     <section class="max-w-6xl mx-auto px-4 my-8 sm:my-12">
       <div class="flex items-center justify-between mb-6 sm:mb-8">
         <div>
-          <span class="text-xs font-bold text-gold-500 tracking-wider block mb-1">الخدمات الطلابية</span>
-          <h2 class="text-xl sm:text-2xl font-extrabold text-[#0d172a] dark:text-white">ماذا يقدّم النادي</h2>
+          <span class="text-xs font-bold text-gold-500 tracking-wider block mb-1" data-i18n="services.subtitle">الخدمات الطلابية</span>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-[#0d172a] dark:text-white" data-i18n="services.title">ماذا يقدّم النادي</h2>
         </div>
       </div>
 
@@ -328,17 +355,17 @@
                 <i data-lucide="book-open" class="w-5 h-5 text-gold-500"></i>
               </div>
               <span class="w-8 h-8 rounded-full border border-slate-200/70 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-gold-500 dark:group-hover:text-gold-400 group-hover:border-gold-500/40 transition-colors">
-                <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+                <i data-lucide="arrow-up-left" class="w-4 h-4 rtl:scale-x-100 ltr:-scale-x-100 transition-transform"></i>
               </span>
             </div>
-            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">استعارة الكتب الورقية</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2" data-i18n="services.books.title">استعارة الكتب الورقية</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="services.books.desc">
               استعارة نسخ ورقية مطبوعة من مراجع ومقررات الجامعة بفرع صور أو تقديم كتبك ليستفيد منها زملاؤك.
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 group-hover:translate-x-[-4px] transition-transform">
-            <span>طلب واستعارة كتاب</span>
-            <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 rtl:group-hover:translate-x-[-4px] ltr:group-hover:translate-x-[4px] transition-transform">
+            <span data-i18n="services.books.link">طلب واستعارة كتاب</span>
+            <i data-lucide="arrow-up-left" class="w-4 h-4 rtl:scale-x-100 ltr:-scale-x-100 transition-transform"></i>
           </div>
         </a>
 
@@ -350,17 +377,17 @@
                 <i data-lucide="folder-down" class="w-5 h-5 text-gold-500"></i>
               </div>
               <span class="w-8 h-8 rounded-full border border-slate-200/70 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-gold-500 dark:group-hover:text-gold-400 group-hover:border-gold-500/40 transition-colors">
-                <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+                <i data-lucide="arrow-up-left" class="w-4 h-4 rtl:scale-x-100 ltr:-scale-x-100 transition-transform"></i>
               </span>
             </div>
-            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">بنك الامتحانات والموارد</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2" data-i18n="services.resources.title">بنك الامتحانات والموارد</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="services.resources.desc">
               نماذج امتحانات سابقة نصفية ونهائية، ملخصات دراسية معتمدة، وسلايدات المقررات لكافة الكليات.
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 group-hover:translate-x-[-4px] transition-transform">
-            <span>تصفح الملفات</span>
-            <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 rtl:group-hover:translate-x-[-4px] ltr:group-hover:translate-x-[4px] transition-transform">
+            <span data-i18n="services.resources.link">تصفح الملفات</span>
+            <i data-lucide="arrow-up-left" class="w-4 h-4 rtl:scale-x-100 ltr:-scale-x-100 transition-transform"></i>
           </div>
         </a>
 
@@ -372,17 +399,17 @@
                 <i data-lucide="graduation-cap" class="w-5 h-5 text-gold-500"></i>
               </div>
               <span class="w-8 h-8 rounded-full border border-slate-200/70 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-gold-500 dark:group-hover:text-gold-400 group-hover:border-gold-500/40 transition-colors">
-                <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+                <i data-lucide="arrow-up-left" class="w-4 h-4 rtl:scale-x-100 ltr:-scale-x-100 transition-transform"></i>
               </span>
             </div>
-            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">المنحة الطلابية</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2" data-i18n="services.scholarship.title">المنحة الطلابية</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="services.scholarship.desc">
               مبادرة نادي الوفاء السنوية لتخفيف الأعباء الجامعية ومساعدة الطلاب المستحقين في مسيرتهم.
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 group-hover:translate-x-[-4px] transition-transform">
-            <span>تفاصيل وتقديم المنحة</span>
-            <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 rtl:group-hover:translate-x-[-4px] ltr:group-hover:translate-x-[4px] transition-transform">
+            <span data-i18n="services.scholarship.link">تفاصيل وتقديم المنحة</span>
+            <i data-lucide="arrow-up-left" class="w-4 h-4 rtl:scale-x-100 ltr:-scale-x-100 transition-transform"></i>
           </div>
         </a>
 
@@ -394,17 +421,17 @@
                 <i data-lucide="users" class="w-5 h-5 text-gold-500"></i>
               </div>
               <span class="w-8 h-8 rounded-full border border-slate-200/70 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-gold-500 dark:group-hover:text-gold-400 group-hover:border-gold-500/40 transition-colors">
-                <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+                <i data-lucide="arrow-up-left" class="w-4 h-4 rtl:scale-x-100 ltr:-scale-x-100 transition-transform"></i>
               </span>
             </div>
-            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">دليل الأساتذة</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2" data-i18n="services.faculty.title">دليل الأساتذة</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="services.faculty.desc">
               وسائل التواصل والبريد الجامعي لأساتذة الكليات، أماكن المكاتب، ومتابعة الساعات المكتبية لحظياً.
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 group-hover:translate-x-[-4px] transition-transform">
-            <span>دليل الأساتذة</span>
-            <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 rtl:group-hover:translate-x-[-4px] ltr:group-hover:translate-x-[4px] transition-transform">
+            <span data-i18n="services.faculty.link">دليل الأساتذة</span>
+            <i data-lucide="arrow-up-left" class="w-4 h-4 rtl:scale-x-100 ltr:-scale-x-100 transition-transform"></i>
           </div>
         </a>
 
@@ -416,17 +443,17 @@
                 <i data-lucide="message-circle" class="w-5 h-5 text-gold-500"></i>
               </div>
               <span class="w-8 h-8 rounded-full border border-slate-200/70 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-gold-500 dark:group-hover:text-gold-400 group-hover:border-gold-500/40 transition-colors">
-                <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+                <i data-lucide="arrow-up-left" class="w-4 h-4 rtl:scale-x-100 ltr:-scale-x-100 transition-transform"></i>
               </span>
             </div>
-            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">شبكة التوجيه وممثلو الاختصاصات</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2" data-i18n="services.guidance.title">شبكة التوجيه وممثلو الاختصاصات</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="services.guidance.desc">
               ممثلو الاختصاصات ومجموعات الواتساب الرسمية للإرشاد الأكاديمي والإجابة عن استفسارات المواد.
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 group-hover:translate-x-[-4px] transition-transform">
-            <span>التواصل مع الممثلين</span>
-            <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 rtl:group-hover:translate-x-[-4px] ltr:group-hover:translate-x-[4px] transition-transform">
+            <span data-i18n="services.guidance.link">التواصل مع الممثلين</span>
+            <i data-lucide="arrow-up-left" class="w-4 h-4 rtl:scale-x-100 ltr:-scale-x-100 transition-transform"></i>
           </div>
         </a>
 
@@ -438,17 +465,17 @@
                 <i data-lucide="camera" class="w-5 h-5 text-gold-500"></i>
               </div>
               <span class="w-8 h-8 rounded-full border border-slate-200/70 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-gold-500 dark:group-hover:text-gold-400 group-hover:border-gold-500/40 transition-colors">
-                <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+                <i data-lucide="arrow-up-left" class="w-4 h-4 rtl:scale-x-100 ltr:-scale-x-100 transition-transform"></i>
               </span>
             </div>
-            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2">أرشيف الفعاليات والأنشطة</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <h3 class="font-extrabold text-base sm:text-lg text-[#0d172a] dark:text-white mb-2" data-i18n="services.archive.title">أرشيف الفعاليات والأنشطة</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="services.archive.desc">
               سجل الأنشطة والورش التخصصية، الدورات التدريبية، والمبادرات الطلابية التي ينظمها النادي.
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 group-hover:translate-x-[-4px] transition-transform">
-            <span>سجل الفعاليات</span>
-            <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+          <div class="mt-5 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-gold-500 dark:text-gold-400 rtl:group-hover:translate-x-[-4px] ltr:group-hover:translate-x-[4px] transition-transform">
+            <span data-i18n="services.archive.link">سجل الفعاليات</span>
+            <i data-lucide="arrow-up-left" class="w-4 h-4 rtl:scale-x-100 ltr:-scale-x-100 transition-transform"></i>
           </div>
         </a>
 
@@ -459,10 +486,10 @@
     <section class="max-w-4xl mx-auto px-4 my-14 sm:my-20 text-center">
       <div class="relative p-7 sm:p-12 rounded-3xl border border-amber-900/10 dark:border-blue-500/20 bg-white/85 dark:bg-gradient-to-br dark:from-[#11203d] dark:via-[#0c1527] dark:to-[#070b16] backdrop-blur-md shadow-[0_15px_40px_-15px_rgba(15,23,42,0.06)]">
         <div class="flex justify-center mb-4"><span class="w-10 h-10 rounded-full bg-gold-500/10 border border-gold-500/20 shadow-sm shadow-amber-500/10 flex items-center justify-center text-gold-500"><i data-lucide="feather" class="w-5 h-5"></i></span></div>
-        <blockquote class="text-base sm:text-xl lg:text-2xl font-bold text-[#0d172a] dark:text-slate-100 leading-relaxed max-w-2xl mx-auto">
+        <blockquote class="text-base sm:text-xl lg:text-2xl font-bold text-[#0d172a] dark:text-slate-100 leading-relaxed max-w-2xl mx-auto" data-i18n="quote.text">
           "نادي الوفاء جمعية طلابية يديرها طلاب فرع صور، تجمع ما تعلّمناه في فصولنا ليجده من يأتي بعدنا جاهزاً: الامتحانات، الكتب، والأشخاص الذين يعرفون الطريق."
         </blockquote>
-        <p class="mt-4 text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400">— الهيئة الإدارية، نادي الوفاء صور</p>
+        <p class="mt-4 text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400" data-i18n="quote.author">— الهيئة الإدارية، نادي الوفاء صور</p>
       </div>
     </section>
 
@@ -470,12 +497,12 @@
     <main id="activitiesSection" class="max-w-6xl mx-auto px-4 my-10 sm:my-14 space-y-5 scroll-mt-24">
       <div class="flex items-center justify-between">
         <div>
-          <span class="text-xs font-bold text-gold-500 tracking-wider block mb-1">الميدان الجامعي</span>
-          <h2 class="text-xl sm:text-2xl font-extrabold text-[#0d172a] dark:text-white">الأنشطة والفعاليات الجامعية</h2>
+          <span class="text-xs font-bold text-gold-500 tracking-wider block mb-1" data-i18n="activities.subtitle">الميدان الجامعي</span>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-[#0d172a] dark:text-white" data-i18n="activities.title">الأنشطة والفعاليات الجامعية</h2>
         </div>
         <a href="archive.html" class="px-4 py-2 rounded-full border border-slate-200 dark:border-[#152033] bg-white dark:bg-[#0a0f1d] hover:border-gold-500 text-xs font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5 transition shadow-sm">
-          <span>أرشيف الفعاليات</span>
-          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span data-i18n="activities.archiveBtn">أرشيف الفعاليات</span>
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5 rtl:rotate-0 ltr:rotate-180 transition-transform"></i>
         </a>
       </div>
 
@@ -512,7 +539,7 @@
   </div>
 
   <!-- ==================== التذييل السفلي ==================== -->
-  <footer class="py-6 px-4 border-t border-[#eae7dc] dark:border-[#1e293b] text-xs text-slate-500 text-center">
+  <footer class="py-6 px-4 border-t border-[#eae7dc] dark:border-[#1e293b] text-xs text-slate-500 text-center" data-i18n="footer.tagline">
     نادي الوفاء — الجامعة اللبنانية الدولية في صور • المنصة الطلابية الرسمية
   </footer>
 
@@ -523,48 +550,63 @@
     <div>
       <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
         <div>
-          <h2 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">أقسام المنصة</h2>
-          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">الوصول السريع لكافة الخدمات</p>
+          <h2 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white" data-i18n="nav.sidebarTitle">أقسام المنصة</h2>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="nav.sidebarSubtitle">الوصول السريع لكافة الخدمات</p>
         </div>
-        <button id="closeMenuBtn" aria-label="إغلاق القائمة" class="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-red-500 transition cursor-pointer">
+        <button id="closeMenuBtn" aria-label="إغلاق القائمة" data-i18n-title="nav.closeMenu" class="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-red-500 transition cursor-pointer">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <nav class="p-3.5 sm:p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-140px)] custom-scrollbar">
+      <nav class="p-3.5 sm:p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-210px)] custom-scrollbar">
         <a href="index.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-full bg-gold-500/10 text-gold-500 font-bold text-xs">
           <i data-lucide="layout-grid" class="w-4 h-4"></i>
-          <span>الرئيسية (الأنشطة والخدمات)</span>
+          <span data-i18n="nav.homeLink">الرئيسية (الأنشطة والخدمات)</span>
         </a>
         <a href="resources.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="file-text" class="w-4 h-4 text-slate-400 shrink-0"></i>
-          <span>بنك الامتحانات والموارد</span>
+          <span data-i18n="nav.resourcesLink">بنك الامتحانات والموارد</span>
         </a>
         <a href="books.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="book-open" class="w-4 h-4 text-slate-400 shrink-0"></i>
-          <span>إعارة واستعارة الكتب الورقية</span>
+          <span data-i18n="nav.booksLink">إعارة واستعارة الكتب الورقية</span>
         </a>
         <a href="scholarship.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="graduation-cap" class="w-4 h-4 text-slate-400"></i>
-          <span>المنحة الطلابية السنوية</span>
+          <span data-i18n="nav.scholarshipLink">المنحة الطلابية السنوية</span>
         </a>
         <a href="faculty.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
-          <span>دليل الأساتذة والساعات المكتبية</span>
+          <span data-i18n="nav.facultyLink">دليل الأساتذة والساعات المكتبية</span>
         </a>
         <a href="guidance.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="compass" class="w-4 h-4 text-slate-400"></i>
-          <span>شبكة التوجيه الأكاديمي</span>
+          <span data-i18n="nav.guidanceLink">شبكة التوجيه الأكاديمي</span>
         </a>
         <a href="archive.html" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#131e3a] font-medium text-xs transition">
           <i data-lucide="calendar" class="w-4 h-4 text-slate-400"></i>
-          <span>أرشيف الفعاليات والأنشطة</span>
+          <span data-i18n="nav.archiveLink">أرشيف الفعاليات والأنشطة</span>
         </a>
       </nav>
     </div>
 
-    <div class="p-4 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 text-center">
-      نادي الوفاء — الجامعة اللبنانية الدولية في صور
+    <div>
+      <!-- شريط تبديل اللغة في القائمة الجانبية -->
+      <div class="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center gap-2">
+          <i data-lucide="globe" class="w-4 h-4 text-gold-500"></i>
+          <span data-i18n="nav.selectLang">اللغة</span>
+        </span>
+        <div class="flex items-center gap-1.5">
+          <button type="button" data-set-lang="ar" class="px-2.5 py-1 rounded-full text-xs font-bold border border-slate-200 dark:border-slate-800 transition cursor-pointer">عربي</button>
+          <button type="button" data-set-lang="en" class="px-2.5 py-1 rounded-full text-xs font-bold border border-slate-200 dark:border-slate-800 transition cursor-pointer">EN</button>
+          <button type="button" data-set-lang="fr" class="px-2.5 py-1 rounded-full text-xs font-bold border border-slate-200 dark:border-slate-800 transition cursor-pointer">FR</button>
+        </div>
+      </div>
+
+      <div class="p-3 text-[11px] text-slate-500 text-center border-t border-slate-200 dark:border-slate-800" data-i18n="nav.campusSubtitle">
+        الجامعة اللبنانية الدولية — صور
+      </div>
     </div>
   </aside>
 
@@ -574,7 +616,7 @@
   <!-- الزر العائم -->
   <button id="toggleChatBtn" aria-label="مساعد AI" class="fixed bottom-5 left-5 z-50 flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#0e1726]/95 backdrop-blur-md text-slate-900 dark:text-white text-xs font-bold shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer">
     <i data-lucide="sparkles" class="w-4 h-4 text-gold-500"></i>
-    <span>مساعد AI</span>
+    <span data-i18n="ai.floatingBtn">مساعد AI</span>
   </button>
 
   <div class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50 flex flex-col items-start pointer-events-none">
@@ -590,13 +632,13 @@
           </div>
           <div>
             <h3 class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-              <span>مساعد AI الذكي</span>
-              <span class="px-1.5 py-0.2 rounded-full text-[9px] font-mono bg-gold-500/10 text-gold-500 border border-gold-500/20">Gemini Flash</span>
+              <span data-i18n="ai.windowTitle">مساعد AI الذكي</span>
+              <span class="px-1.5 py-0.2 rounded-full text-[9px] font-mono bg-gold-500/10 text-gold-500 border border-gold-500/20" data-i18n="ai.badgeModel">Gemini Flash</span>
             </h3>
             <div class="flex items-center gap-1.5 text-[10px]">
               <span class="text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>متصل</span>
+                <span data-i18n="ai.statusConnected">متصل</span>
               </span>
               <span class="text-slate-300 dark:text-slate-700">•</span>
               <span id="aiQuotaBadge" class="text-gold-600 dark:text-gold-400 font-bold font-mono">12 استفسار متبقٍ</span>
@@ -611,7 +653,7 @@
       <!-- صندوق الرسائل -->
       <div id="chatMessages" class="flex-1 p-3.5 sm:p-4 overflow-y-auto space-y-3 text-xs leading-relaxed custom-scrollbar">
         <div class="flex items-start gap-2 max-w-[90%]">
-          <div class="p-3.5 rounded-2xl rounded-tr-none bg-slate-100 dark:bg-[#131e3a] text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-800 text-xs leading-relaxed">
+          <div class="p-3.5 rounded-2xl rounded-tr-none bg-slate-100 dark:bg-[#131e3a] text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-800 text-xs leading-relaxed" data-i18n="ai.greeting">
             مرحباً بك زميلي الطالب! أنا مساعد AI الأكاديمي لنادي الوفاء في فرع صور. يمكنك سؤالي عن كل ما يخص الجامعة: اللوائح الأكاديمية ونظام الـ GPA، خدمات الموقع (الامتحانات، الكتب، المنح، والأساتذة)، أو حتى الاستفسار والشرح في مقرراتك الدراسية ونصائح التفوق.
           </div>
         </div>
@@ -619,13 +661,13 @@
 
       <!-- خانة الإدخال مع التحدث الصوتي والإرسال -->
       <form id="chatForm" class="p-2 sm:p-2.5 bg-slate-50 dark:bg-[#080e1c] border-t border-slate-200 dark:border-slate-800 flex items-center gap-1.5 sm:gap-2 shrink-0">
-        <input id="chatInput" type="text" placeholder="اسأل مساعد AI عن المواد، الأساتذة، أو اللوائح..." required class="flex-1 text-base sm:text-xs p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition px-4">
+        <input id="chatInput" type="text" placeholder="اسأل مساعد AI عن المواد، الأساتذة، أو اللوائح..." data-i18n-placeholder="ai.inputPlaceholder" required class="flex-1 text-base sm:text-xs p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-gold-500 transition px-4">
         
-        <button type="button" id="voiceBtn" title="تحدث صوتياً" class="p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-gold-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition shrink-0 cursor-pointer">
+        <button type="button" id="voiceBtn" title="تحدث صوتياً" data-i18n-title="ai.voiceTooltip" class="p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-gold-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition shrink-0 cursor-pointer">
           <i data-lucide="mic" class="w-4 h-4"></i>
         </button>
 
-        <button type="submit" id="sendBtn" title="إرسال" class="p-2.5 rounded-full bg-[#0d172a] dark:bg-gold-500 text-white dark:text-slate-950 hover:opacity-90 transition shrink-0 cursor-pointer">
+        <button type="submit" id="sendBtn" title="إرسال" data-i18n-title="ai.sendTooltip" class="p-2.5 rounded-full bg-[#0d172a] dark:bg-gold-500 text-white dark:text-slate-950 hover:opacity-90 transition shrink-0 cursor-pointer">
           <i data-lucide="send" class="w-4 h-4"></i>
         </button>
       </form>
@@ -689,7 +731,7 @@
     if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeSidebar);
     if (menuOverlay) menuOverlay.addEventListener('click', closeSidebar);
 
-    // 2. إدارة المظهر (النهاري والليلي) بأيقونات فيكتور رسمية
+    // 2. إدارة المظهر (النهاري والليلي) وتحديد اللغة
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const themeIconContainer = document.getElementById('themeIconContainer');
     const themeText = document.getElementById('themeText');
@@ -698,11 +740,11 @@
     function applyTheme(isDark) {
       if (isDark) {
         html.classList.add('dark');
-        if (themeText) themeText.textContent = 'الليلي';
+        if (themeText) themeText.textContent = window.t ? window.t('nav.themeDark') : 'الليلي';
         if (themeIconContainer) themeIconContainer.innerHTML = '<i data-lucide="moon" class="w-4 h-4 text-blue-400"></i>';
       } else {
         html.classList.remove('dark');
-        if (themeText) themeText.textContent = 'النهاري';
+        if (themeText) themeText.textContent = window.t ? window.t('nav.themeLight') : 'النهاري';
         if (themeIconContainer) themeIconContainer.innerHTML = '<i data-lucide="sun" class="w-4 h-4 text-gold-500"></i>';
       }
       lucide.createIcons();
@@ -718,6 +760,33 @@
         localStorage.setItem('clubTheme', isDark ? 'dark' : 'light');
       });
     }
+
+    // إدارة القائمة المنسدلة لاختيار اللغة
+    const langDropdownBtn = document.getElementById('langDropdownBtn');
+    const langDropdownMenu = document.getElementById('langDropdownMenu');
+
+    if (langDropdownBtn && langDropdownMenu) {
+      langDropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        langDropdownMenu.classList.toggle('hidden');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!langDropdownMenu.contains(e.target) && !langDropdownBtn.contains(e.target)) {
+          langDropdownMenu.classList.add('hidden');
+        }
+      });
+    }
+
+    // الاستماع لحدث تبديل اللغة لتحديث المكونات الديناميكية
+    window.addEventListener('languageChanged', () => {
+      if (langDropdownMenu) langDropdownMenu.classList.add('hidden');
+      const isDark = html.classList.contains('dark');
+      applyTheme(isDark);
+      if (_lastHomeData) {
+        renderHomePage(_lastHomeData);
+      }
+    });
 
     // ==================== 3. جلب وعرض البيانات الحية ====================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2S217Wuobe1xxvIzMFJM9tgxbIqh6gPbMA7b7V-fZGMr0S-3x3vfGpp6ZqE7I77kWqA/exec";
@@ -796,6 +865,7 @@
       return false;
     }
 
+    let _lastHomeData = null;
     let _currentHomeActivities = [];
 
     window.openLightboxForActivity = function(idx) {
@@ -811,6 +881,7 @@
 
     function renderHomePage(data) {
       if (!data) return;
+      _lastHomeData = data;
 
       const sec = document.getElementById('announcementSection');
       const txt = document.getElementById('announcementText');
@@ -850,7 +921,7 @@
         const grid = document.getElementById('activitiesGrid');
         if (grid) {
           if (homeActivities.length === 0) {
-            grid.innerHTML = `<div class="col-span-full py-12 text-center text-xs text-slate-400">لا توجد فعاليات معروضة حالياً في الصفحة الرئيسية.</div>`;
+            grid.innerHTML = `<div class="col-span-full py-12 text-center text-xs text-slate-400">${window.t ? window.t('activities.empty') : 'لا توجد فعاليات معروضة حالياً في الصفحة الرئيسية.'}</div>`;
           } else {
             grid.innerHTML = homeActivities.slice(0, 3).map((act, idx) => {
               const title = escapeHtml(act['العنوان'] || act['عنوان النشاط'] || act.title || 'فعالية جامعية');
@@ -869,12 +940,12 @@
                    </div>`;
 
               const badgeMulti = imgs.length > 1
-                ? `<span class="absolute bottom-3 left-3 px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white text-[10px] font-bold flex items-center gap-1 shadow-sm"><i data-lucide="images" class="w-3 h-3"></i> ${imgs.length} صور</span>`
+                ? `<span class="absolute bottom-3 left-3 px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white text-[10px] font-bold flex items-center gap-1 shadow-sm"><i data-lucide="images" class="w-3 h-3"></i> ${imgs.length} ${window.t ? window.t('activities.photos') : 'صور'}</span>`
                 : '';
 
               const isRecent = isRecentActivity(date);
               const statusBadge = isRecent
-                ? `<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-emerald-600/90 backdrop-blur-sm text-white text-[11px] font-bold shadow-sm flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-ping"></span>فعالية حديثة</span>`
+                ? `<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-emerald-600/90 backdrop-blur-sm text-white text-[11px] font-bold shadow-sm flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-ping"></span>${window.t ? window.t('activities.recent') : 'فعالية حديثة'}</span>`
                 : `<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-[#0d172a] text-white text-[11px] font-bold shadow-sm">${cat}</span>`;
 
               return `
@@ -898,8 +969,8 @@
                   <div class="px-5 py-3.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                     <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-3.5 h-3.5"></i> ${date}</span>
                     <a href="archive.html" class="text-gold-500 font-bold hover:underline flex items-center gap-1">
-                      <span>التفاصيل</span>
-                      <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                      <span>${window.t ? window.t('activities.details') : 'التفاصيل'}</span>
+                      <i data-lucide="arrow-left" class="w-3.5 h-3.5 rtl:rotate-0 ltr:rotate-180 transition-transform"></i>
                     </a>
                   </div>
                 </article>
