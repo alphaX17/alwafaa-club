@@ -73,13 +73,21 @@
       aiQuotaBadge = document.getElementById('aiQuotaBadge');
     }
 
+    const t = window.t || ((k, p) => {
+      if (k === 'ai.quotaRemaining') return `${p?.count ?? 12} أسئلة متبقية`;
+      if (k === 'ai.quotaReset') return `يتجدد بعد ${p?.mins ?? 60} د`;
+      if (k === 'ai.quotaExhausted') return `انتهى رصيد الجلسة (يتجدد بعد ${p?.mins ?? 60} دقيقة)`;
+      if (k === 'ai.inputPlaceholder') return 'اسأل الـ AI عن أي شيء تحتاجه...';
+      return '';
+    });
+
     if (aiQuotaBadge) {
       if (state.count <= 0) {
         const remainingMins = Math.max(1, Math.ceil((state.resetAt - Date.now()) / 60000));
-        aiQuotaBadge.textContent = `يتجدد بعد ${remainingMins} د`;
+        aiQuotaBadge.textContent = t('ai.quotaReset', { mins: remainingMins });
         aiQuotaBadge.className = 'text-rose-500 font-bold font-mono';
       } else {
-        aiQuotaBadge.textContent = `${state.count} أسئلة متبقية`;
+        aiQuotaBadge.textContent = t('ai.quotaRemaining', { count: state.count });
         aiQuotaBadge.className = state.count <= 3
           ? 'text-amber-500 font-bold font-mono'
           : 'text-gold-600 dark:text-gold-400 font-bold font-mono';
@@ -89,9 +97,9 @@
     if (chatInput && !isAIBusy) {
       if (state.count <= 0) {
         const remainingMins = Math.max(1, Math.ceil((state.resetAt - Date.now()) / 60000));
-        chatInput.placeholder = `انتهى رصيد الجلسة (يتجدد بعد ${remainingMins} دقيقة)`;
+        chatInput.placeholder = t('ai.quotaExhausted', { mins: remainingMins });
       } else {
-        chatInput.placeholder = 'اسألني عن المواد، الدكاترة، الـ GPA، أو الاستعارة...';
+        chatInput.placeholder = t('ai.inputPlaceholder');
       }
     }
   }
@@ -174,9 +182,10 @@
     const loadingDiv = document.createElement('div');
     loadingDiv.id = 'aiLoading';
     loadingDiv.className = 'flex items-center gap-2 max-w-[90%] text-slate-400 text-[11px] p-2';
+    const loadingText = window.t ? window.t('ai.loading') : 'مساعد AI يحلل الاستفسار الأكاديمي...';
     loadingDiv.innerHTML = `
       <span class="inline-block w-2 h-2 rounded-full bg-gold-500 animate-ping"></span>
-      <span>مساعد AI يحلل الاستفسار الأكاديمي...</span>
+      <span>${loadingText}</span>
     `;
     if (chatMessages) {
       chatMessages.appendChild(loadingDiv);
@@ -259,7 +268,9 @@
           voiceBtn.classList.add('bg-rose-500', 'text-white', 'animate-pulse');
           voiceBtn.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
         }
-        if (chatInput) chatInput.placeholder = 'جارٍ الاستماع إليك... تحدث براحتك دون استعجال';
+        if (chatInput) {
+          chatInput.placeholder = window.t ? window.t('ai.listening') : 'جارٍ الاستماع إليك... تحدث براحتك دون استعجال';
+        }
       };
 
       recognition.onresult = (event) => {
@@ -308,7 +319,7 @@
       voiceBtn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
     }
     if (chatInput) {
-      chatInput.placeholder = 'اسألني عن المواد، الدكاترة، الـ GPA، أو الاستعارة...';
+      chatInput.placeholder = window.t ? window.t('ai.inputPlaceholder') : 'اسأل الـ AI عن أي شيء تحتاجه...';
       if (chatInput.value) chatInput.focus();
     }
   }
@@ -328,6 +339,10 @@
 
     updateQuotaUI();
     initVoiceRecognition();
+
+    window.addEventListener('languageChanged', () => {
+      updateQuotaUI();
+    });
 
     if (toggleChatBtn && chatWindow) {
       toggleChatBtn.addEventListener('click', () => {

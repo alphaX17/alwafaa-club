@@ -395,9 +395,11 @@
         return { label: 'Presentation', icon: 'presentation', colorClass: 'text-amber-500 bg-amber-500/10 border-amber-500/20' };
       }
       if (combined.includes('كتاب') || combined.includes('book') || combined.includes('مرجع')) {
-        return { label: 'كتاب / مرجع', icon: 'book-open', colorClass: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20' };
+        const lbl = window.t ? window.t('resources.fileBook') : 'كتاب / مرجع';
+        return { label: lbl, icon: 'book-open', colorClass: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20' };
       }
-      return { label: 'PDF مستند', icon: 'file-text', colorClass: 'text-rose-500 bg-rose-500/10 border-rose-500/20' };
+      const defaultPdf = window.t ? window.t('resources.filePdf') : 'PDF مستند';
+      return { label: defaultPdf, icon: 'file-text', colorClass: 'text-rose-500 bg-rose-500/10 border-rose-500/20' };
     }
 
     window.copyResourceLink = function(link, btn) {
@@ -559,11 +561,11 @@
                 <span>${fileInfo.label}</span>
               </span>
               <div class="flex items-center gap-1.5">
-                <button onclick="copyResourceLink('${escapedLink}', this)" class="p-2 rounded-full border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] hover:border-gold-500 text-slate-600 dark:text-slate-300 transition shadow-sm cursor-pointer" title="نسخ رابط التحميل">
+                <button onclick="copyResourceLink('${escapedLink}', this)" class="p-2 rounded-full border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] hover:border-gold-500 text-slate-600 dark:text-slate-300 transition shadow-sm cursor-pointer" title="${window.t ? window.t('resources.tooltipCopy') : 'نسخ رابط التحميل'}">
                   <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                 </button>
                 <a href="${link}" target="_blank" rel="noopener noreferrer" class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-[#0b1222] border border-transparent dark:border-[#152033] text-slate-700 dark:text-slate-200 hover:bg-gold-500 hover:text-white dark:hover:bg-gold-500 dark:hover:text-white font-bold text-xs flex items-center gap-1.5 transition shadow-sm">
-                  <span>تحميل</span>
+                  <span>${window.t ? window.t('resources.btnDownload') : 'تحميل'}</span>
                   <i data-lucide="download" class="w-3.5 h-3.5"></i>
                 </a>
               </div>
@@ -620,6 +622,12 @@
     }
 
     fetchLiveResources();
+
+    window.addEventListener('languageChanged', () => {
+      if (resourcesData && resourcesData.length > 0) {
+        renderResources(resourcesData);
+      }
+    });
 
     // إدارة القائمة الجانبية (Sidebar)
     const openMenuBtn = document.getElementById('openMenuBtn');
