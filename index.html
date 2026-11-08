@@ -1081,7 +1081,7 @@
     });
 
     // =========================================================================
-    // Centralized Intersection Observer for Scroll Animations
+    // Centralized Bidirectional Intersection Observer for Scroll Animations
     // =========================================================================
     function initScrollObserver() {
       if (!('IntersectionObserver' in window)) {
@@ -1093,21 +1093,23 @@
 
       const observerOptions = {
         root: null,
-        rootMargin: '0px 0px -50px 0px',
-        threshold: 0.12
+        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.08
       };
 
-      const scrollObserver = new IntersectionObserver(function(entries, observer) {
+      const scrollObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
+          const target = entry.target;
           if (entry.isIntersecting) {
-            const target = entry.target;
             const delay = parseInt(target.getAttribute('data-anim-delay') || '0', 10);
-
-            setTimeout(function() {
+            if (target._revealTimer) clearTimeout(target._revealTimer);
+            target._revealTimer = setTimeout(function() {
               target.classList.add('revealed');
             }, delay);
-
-            observer.unobserve(target);
+          } else {
+            // إعادة التعيين عند الخروج من مجال الرؤية ليتكرر التأثير عند الصعود أو النزول
+            if (target._revealTimer) clearTimeout(target._revealTimer);
+            target.classList.remove('revealed');
           }
         });
       }, observerOptions);
@@ -1143,13 +1145,6 @@
           }
         });
       };
-
-      // 4. Safety Fail-Safe: Force reveal after 3 seconds in case of slow rendering or errors
-      setTimeout(function() {
-        document.querySelectorAll('.scroll-reveal:not(.revealed)').forEach(function(el) {
-          el.classList.add('revealed');
-        });
-      }, 3000);
     }
 
     if (document.readyState === 'loading') {
