@@ -241,41 +241,53 @@
     }
   }
 
-  // ==================== ميزة التحدث الصوتي ====================
+  // ==================== ميزة التحدث الصوتي الاحترافية ====================
   function initVoiceRecognition() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
       recognition = new SpeechRecognition();
       recognition.lang = 'ar-LB';
-      recognition.continuous = false;
-      recognition.interimResults = false;
+      recognition.continuous = true;
+      recognition.interimResults = true;
+
+      let baseTranscript = '';
 
       recognition.onstart = () => {
         isRecording = true;
+        baseTranscript = chatInput ? chatInput.value : '';
         if (voiceBtn) {
           voiceBtn.classList.add('bg-rose-500', 'text-white', 'animate-pulse');
           voiceBtn.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
         }
-        if (chatInput) chatInput.placeholder = 'جارٍ الاستماع إليك... تحدث الآن';
+        if (chatInput) chatInput.placeholder = 'جارٍ الاستماع إليك... تحدث براحتك دون استعجال';
       };
 
       recognition.onresult = (event) => {
-        let transcript = '';
-        for (let i = 0; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
-        }
-        if (chatInput) {
-          chatInput.value = transcript;
-          if (transcript.trim() && chatForm) {
-            setTimeout(() => {
-              chatForm.dispatchEvent(new Event('submit'));
-            }, 400);
+        let currentFinal = '';
+        let interim = '';
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            currentFinal += event.results[i][0].transcript + ' ';
+          } else {
+            interim += event.results[i][0].transcript;
           }
+        }
+
+        if (currentFinal) {
+          baseTranscript = (baseTranscript ? baseTranscript.trim() + ' ' : '') + currentFinal.trim();
+        }
+
+        if (chatInput) {
+          const fullText = (baseTranscript + (interim ? ' ' + interim : '')).trim();
+          chatInput.value = fullText;
         }
       };
 
-      recognition.onerror = () => {
-        stopVoiceRecognition();
+      recognition.onerror = (e) => {
+        if (e.error !== 'no-speech') {
+          stopVoiceRecognition();
+        }
       };
 
       recognition.onend = () => {
@@ -297,6 +309,7 @@
     }
     if (chatInput) {
       chatInput.placeholder = 'اسألني عن المواد، الدكاترة، الـ GPA، أو الاستعارة...';
+      if (chatInput.value) chatInput.focus();
     }
   }
 

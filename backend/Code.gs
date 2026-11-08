@@ -7,6 +7,110 @@ function setGeminiApiKey() {
   }
 }
 
+// دالة فحص وتثبيت النموذج الصاروخي الأسرع من جيل Gemini 3
+function findFastestModel() {
+  var apiKey = PropertiesService.getScriptProperties().getProperty("GEMINI_API_KEY");
+  if (!apiKey) {
+    Logger.log("يرجى التأكد من تشغيل setGeminiApiKey أولاً لحفظ المفتاح.");
+    return;
+  }
+
+  Logger.log("1. جاري استعلام خوادم Google لمعرفة قائمة النماذج المتاحة لمفتاحك بالكامل...");
+  var activeFlashModels = [];
+  try {
+    var listResp = UrlFetchApp.fetch("https://generativelanguage.googleapis.com/v1beta/models?key=" + encodeURIComponent(apiKey), { muteHttpExceptions: true });
+    if (listResp.getResponseCode() === 200) {
+      var listJson = JSON.parse(listResp.getContentText());
+      if (listJson.models) {
+        for (var m = 0; m < listJson.models.length; m++) {
+          var item = listJson.models[m];
+          var methods = item.supportedGenerationMethods || [];
+          if (methods.indexOf("generateContent") !== -1) {
+            var raw = item.name.replace(/^models\//, "");
+            Logger.log("نموذج نشط في حسابك: " + raw);
+            if (raw.indexOf("flash") !== -1) {
+              activeFlashModels.push(raw);
+            }
+          }
+        }
+      }
+    }
+  } catch (errList) {
+    Logger.log("تنبيه في قراءة القائمة: " + errList.toString());
+  }
+
+  // إذا لم نتمكن من القائمة التلقائية، نستخدم نماذج الجيل الثالث الافتراضية
+  var testList = [];
+  if (activeFlashModels.length > 0) {
+    // ترتيب: lite أولاً ثم 3.5 ثم 3.8
+    activeFlashModels.sort(function(a, b) {
+      if (a.indexOf("lite") !== -1) return -1;
+      if (b.indexOf("lite") !== -1) return 1;
+      return 0;
+    });
+    for (var a = 0; a < activeFlashModels.length; a++) {
+      testList.push({ version: "v1beta", model: activeFlashModels[a] });
+    }
+  } else {
+    testList = [
+      { version: "v1beta", model: "gemini-3.5-flash-lite" },
+      { version: "v1beta", model: "gemini-3.5-flash" },
+      { version: "v1beta", model: "gemini-3.8-flash" }
+    ];
+  }
+
+  Logger.log("2. جاري اختبار سرعة استجابة النماذج بالثواني الحقيقية...");
+  var bestModel = null;
+  var bestTime = 999;
+
+  for (var i = 0; i < testList.length; i++) {
+    var c = testList[i];
+    var url = "https://generativelanguage.googleapis.com/" + c.version + "/models/" + c.model + ":generateContent?key=" + encodeURIComponent(apiKey);
+    try {
+      var start = new Date().getTime();
+      var resp = UrlFetchApp.fetch(url, {
+        method: "post",
+        contentType: "application/json",
+        payload: JSON.stringify({
+          contents: [{ parts: [{ text: "hi" }] }],
+          generationConfig: {
+            thinkingConfig: {
+              thinkingLevel: "low"
+            }
+          }
+        }),
+        muteHttpExceptions: true
+      });
+      var timeSec = parseFloat(((new Date().getTime() - start) / 1000).toFixed(2));
+      var code = resp.getResponseCode();
+
+      if (code === 200) {
+        Logger.log("النموذج [" + c.model + "] نجح وسرعته: " + timeSec + " ثانية.");
+        if (timeSec < bestTime) {
+          bestTime = timeSec;
+          bestModel = c;
+          // إذا وجدنا نموذجاً استجاب في أقل من 5 ثوانٍ نختاره فوراً لعدم إضاعة الوقت
+          if (timeSec < 5.0) {
+            break;
+          }
+        }
+      } else {
+        Logger.log("النموذج [" + c.model + "] غير متاح حالياً (كود " + code + ").");
+      }
+    } catch (e) {
+      Logger.log("خطأ في اختبار " + c.model + ": " + e.toString());
+    }
+  }
+
+  if (bestModel) {
+    PropertiesService.getScriptProperties().setProperty("FAST_MODEL", JSON.stringify(bestModel));
+    Logger.log("==================================================");
+    Logger.log("تم بنجاح! تم اعتماد وتثبيت أسرع نموذج: " + bestModel.model);
+    Logger.log("الزمن المحقق: " + bestTime + " ثانية فقط!");
+    Logger.log("==================================================");
+  }
+}
+
 function testAuth() {
   UrlFetchApp.fetch("https://www.google.com");
 }
@@ -97,48 +201,41 @@ function doPost(e) {
         contents: contents,
         generationConfig: {
           temperature: 0.65,
-          maxOutputTokens: 2048
+          maxOutputTokens: 2048,
+          thinkingConfig: {
+            thinkingLevel: "low"
+          }
         }
       };
 
-      var targets = [
-        { version: "v1", model: "gemini-1.5-flash" },
-        { version: "v1beta", model: "gemini-1.5-flash-latest" },
+      // جلب النموذج السريع المثبت مسبقاً في الخصائص الدائمة لضرب النموذج الصحيح فوراً في ثانيتين
+      var savedFastModel = PropertiesService.getScriptProperties().getProperty("FAST_MODEL");
+      var targets = [];
+      if (savedFastModel) {
+        try {
+          var pFast = JSON.parse(savedFastModel);
+          if (pFast && pFast.model && pFast.version) {
+            targets.push(pFast);
+          }
+        } catch (eFast) {}
+      }
+
+      // قائمة النماذج الاحتياطية (تبدأ بالأسرع والأضمن لحسابات Google AI Studio)
+      var defaultCandidates = [
+        { version: "v1beta", model: "gemini-2.5-flash" },
         { version: "v1beta", model: "gemini-2.0-flash" },
-        { version: "v1beta", model: "gemini-2.0-flash-exp" },
-        { version: "v1", model: "gemini-1.5-pro" },
         { version: "v1beta", model: "gemini-1.5-flash" },
-        { version: "v1beta", model: "gemini-2.5-flash" }
+        { version: "v1beta", model: "gemini-1.5-flash-latest" },
+        { version: "v1", model: "gemini-1.5-flash" },
+        { version: "v1beta", model: "gemini-3.8-flash" }
       ];
 
-      // استكشاف النماذج المدعومة والمتاحة للمفتاح تلقائياً من خوادم جوجل
-      try {
-        var listUrl = "https://generativelanguage.googleapis.com/v1beta/models?key=" + encodeURIComponent(apiKey);
-        var listResp = UrlFetchApp.fetch(listUrl, { muteHttpExceptions: true });
-        if (listResp.getResponseCode() === 200) {
-          var listData = JSON.parse(listResp.getContentText());
-          if (listData.models && Array.isArray(listData.models)) {
-            var discovered = [];
-            for (var lm = 0; lm < listData.models.length; lm++) {
-              var mObj = listData.models[lm];
-              var mMethods = mObj.supportedGenerationMethods || [];
-              if (mMethods.indexOf("generateContent") !== -1) {
-                var rawName = String(mObj.name || "").replace(/^models\//, "");
-                if (rawName) {
-                  if (rawName.indexOf("flash") !== -1) {
-                    discovered.unshift({ version: "v1beta", model: rawName });
-                  } else {
-                    discovered.push({ version: "v1beta", model: rawName });
-                  }
-                }
-              }
-            }
-            if (discovered.length > 0) {
-              targets = discovered.concat(targets);
-            }
-          }
+      for (var d = 0; d < defaultCandidates.length; d++) {
+        var alreadyInList = targets.some(function(t) { return t.model === defaultCandidates[d].model; });
+        if (!alreadyInList) {
+          targets.push(defaultCandidates[d]);
         }
-      } catch (eList) {}
+      }
 
       var generatedText = "";
       var lastError = "";
@@ -163,6 +260,17 @@ function doPost(e) {
           var responseText = response.getContentText();
           var jsonRes = JSON.parse(responseText);
 
+          // إذا رفض النموذج القديم خاصية thinkingLevel، نعيد المحاولة فوراً دونه
+          if (responseCode === 400 && payload.generationConfig && payload.generationConfig.thinkingConfig) {
+            var plainPayload = JSON.parse(JSON.stringify(payload));
+            delete plainPayload.generationConfig.thinkingConfig;
+            options.payload = JSON.stringify(plainPayload);
+            response = UrlFetchApp.fetch(apiUrl, options);
+            responseCode = response.getResponseCode();
+            responseText = response.getContentText();
+            jsonRes = JSON.parse(responseText);
+          }
+
           if (responseCode === 200 && jsonRes.candidates && jsonRes.candidates[0] && jsonRes.candidates[0].content && jsonRes.candidates[0].content.parts) {
             var parts = jsonRes.candidates[0].content.parts;
             var textParts = [];
@@ -171,6 +279,8 @@ function doPost(e) {
             }
             generatedText = textParts.join("").trim();
             if (generatedText) {
+              // تثبيت النموذج الناجح فوراً في الخصائص الدائمة لتكون كل المكالمات التالية مباشرة بصفر تأخير
+              PropertiesService.getScriptProperties().setProperty("FAST_MODEL", JSON.stringify({ version: targetVer, model: targetMod }));
               break;
             }
           } else {
