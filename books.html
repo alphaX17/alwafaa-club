@@ -254,62 +254,62 @@
           <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
             <div class="flex items-center gap-2 text-gold-500 mb-1">
               <i data-lucide="gift" class="w-4 h-4"></i>
-              <span class="text-xs font-bold">مبادرة تبادل المراجع الجامعية</span>
+              <span class="text-xs font-bold" data-i18n="books.donateBadge">مبادرة تبادل المراجع الجامعية</span>
             </div>
-            <h2 class="text-base sm:text-lg font-black text-slate-900 dark:text-slate-100">تقديم أو تبرع بكتاب لمكتبة النادي</h2>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+            <h2 class="text-base sm:text-lg font-black text-slate-900 dark:text-slate-100" data-i18n="books.donateHeading">تقديم أو تبرع بكتاب لمكتبة النادي</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed" data-i18n="books.donateSubdesc">
               شارك مراجعك القديمة مع زملائك لدعم مسيرتهم الدراسية. املأ بيانات الكتاب وسيتواصل معك فريق النادي لاستلام النسخة في حرم الجامعة بفرع صور.
             </p>
           </div>
 
           <form id="donateForm" class="space-y-4">
             <div>
-              <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">الاسم الثلاثي الكامل *</label>
-              <input id="donatorName" type="text" required placeholder="اسمك الثلاثي الكامل" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500">
+              <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300" data-i18n="books.formFullName">الاسم الثلاثي الكامل *</label>
+              <input id="donatorName" type="text" required placeholder="اسمك الثلاثي الكامل" data-i18n-placeholder="books.phFullName" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500">
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
               <div>
-                <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">رقم الملف الجامعي (Student ID) *</label>
-                <input id="donatorId" type="text" required placeholder="مثال: 42130000" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+                <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300" data-i18n="books.formStudentId">رقم الملف الجامعي (Student ID) *</label>
+                <input id="donatorId" type="text" required placeholder="مثال: 42130000" data-i18n-placeholder="books.phStudentId" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
               </div>
               <div>
-                <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">رقم الهاتف (واتساب) *</label>
-                <input id="donatorPhone" type="tel" required placeholder="مثال: 70xxxxxx أو 03xxxxxx" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+                <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300" data-i18n="books.formPhone">رقم الهاتف (واتساب) *</label>
+                <input id="donatorPhone" type="tel" required placeholder="مثال: 70xxxxxx أو 03xxxxxx" data-i18n-placeholder="books.phPhone" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
               </div>
             </div>
 
             <div>
-              <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">عنوان الكتاب أو المرجع الأكاديمي *</label>
-              <input id="donatedBookTitle" type="text" required placeholder="مثال: University Physics with Modern Physics أو مبادئ المحاسبة" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500">
+              <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300" data-i18n="books.formBookTitle">عنوان الكتاب أو المرجع الأكاديمي *</label>
+              <input id="donatedBookTitle" type="text" required placeholder="مثال: University Physics with Modern Physics أو مبادئ المحاسبة" data-i18n-placeholder="books.phBookTitle" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500">
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
               <div>
-                <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">اسم المادة أو المقرر الدراسي *</label>
-                <input id="donatedCourseName" type="text" required placeholder="مثال: فيزياء 1 أو تفاضل وتكامل 2" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500">
+                <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300" data-i18n="books.formCourseName">اسم المادة أو المقرر الدراسي *</label>
+                <input id="donatedCourseName" type="text" required placeholder="مثال: فيزياء 1 أو تفاضل وتكامل 2" data-i18n-placeholder="books.phCourseName" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500">
               </div>
               <div>
-                <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">رمز أو كود المادة (Course Code) *</label>
-                <input id="donatedCourseCode" type="text" required placeholder="مثال: PHY 200, MATH 200" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500 text-left font-mono uppercase" dir="ltr">
+                <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300" data-i18n="books.formCourseCode">رمز أو كود المادة (Course Code) *</label>
+                <input id="donatedCourseCode" type="text" required placeholder="مثال: PHY 200, MATH 200" data-i18n-placeholder="books.phCourseCode" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500 text-left font-mono uppercase" dir="ltr">
               </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
               <div>
-                <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">الكلية التابع لها الكتاب *</label>
+                <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300" data-i18n="books.formFaculty">الكلية التابع لها الكتاب *</label>
                 <select id="donatedCollege" required class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500">
-                  <option value="كلية الهندسة">كلية الهندسة (Engineering)</option>
-                  <option value="كلية إدارة الأعمال">كلية إدارة الأعمال (Business)</option>
-                  <option value="كلية الفنون والعلوم">كلية الفنون والعلوم (Arts & Sciences)</option>
-                  <option value="كلية التربية واللغات">كلية التربية واللغات (Education)</option>
-                  <option value="كلية الصيدلة">كلية الصيدلة (Pharmacy)</option>
-                  <option value="عام لكافة الكليات">عام لكافة الكليات</option>
+                  <option value="كلية الهندسة" data-i18n="books.optEngineering">كلية الهندسة (Engineering)</option>
+                  <option value="كلية إدارة الأعمال" data-i18n="books.optBusiness">كلية إدارة الأعمال (Business)</option>
+                  <option value="كلية الفنون والعلوم" data-i18n="books.optScience">كلية الفنون والعلوم (Arts & Sciences)</option>
+                  <option value="كلية التربية واللغات" data-i18n="books.optEducation">كلية التربية واللغات (Education)</option>
+                  <option value="كلية الصيدلة" data-i18n="books.optPharmacy">كلية الصيدلة (Pharmacy)</option>
+                  <option value="عام لكافة الكليات" data-i18n="books.optGeneral">عام لكافة الكليات</option>
                 </select>
               </div>
               <div>
-                <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">الوصف أو الطبعة المعتمدة (اختياري)</label>
-                <input id="donatedBookDesc" type="text" placeholder="مثال: الطبعة الثالثة عشر، بحالة ممتازة" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500">
+                <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300" data-i18n="books.formEdition">الوصف أو الطبعة المعتمدة (اختياري)</label>
+                <input id="donatedBookDesc" type="text" placeholder="مثال: الطبعة الثالثة عشر، بحالة ممتازة" data-i18n-placeholder="books.phEdition" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500">
               </div>
             </div>
 
@@ -320,13 +320,13 @@
 
             <button id="submitDonateBtn" type="submit" class="w-full py-3.5 rounded-full bg-gold-500 text-white font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md mt-6 cursor-pointer">
               <i data-lucide="check" class="w-4 h-4"></i>
-              <span>تأكيد تسجيل التبرع بالكتاب</span>
+              <span data-i18n="books.btnSubmitDonate">تأكيد تسجيل التبرع بالكتاب</span>
             </button>
           </form>
 
           <div id="donateSuccess" class="hidden mt-4 p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs flex items-center gap-2.5">
             <i data-lucide="check-circle-2" class="w-5 h-5 shrink-0"></i>
-            <span>تم تسجيل بيانات الكتاب بنجاح، شكراً لمبادرتك الكريمة! سنتواصل معك عبر واتساب قريباً.</span>
+            <span data-i18n="books.msgDonateSuccess">تم تسجيل بيانات الكتاب بنجاح، شكراً لمبادرتك الكريمة! سنتواصل معك عبر واتساب قريباً.</span>
           </div>
         </div>
       </section>
@@ -339,7 +339,7 @@
     <div class="w-full max-w-md rounded-3xl border border-amber-900/10 dark:border-[#152033] bg-white/95 dark:bg-[#0a0f1d] backdrop-blur-md p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
         <div>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100">تأكيد حجز استعارة كتاب</h3>
+          <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100" data-i18n="books.modalTitle">تأكيد حجز استعارة كتاب</h3>
           <p id="modalBookName" class="text-xs text-gold-500 font-semibold mt-0.5"></p>
         </div>
         <button onclick="closeModal()" aria-label="إغلاق" class="p-1.5 rounded-full bg-slate-100 dark:bg-[#0b1222] text-slate-500 hover:text-red-500 transition cursor-pointer">
@@ -349,18 +349,18 @@
 
       <form id="borrowForm" class="space-y-4">
         <div>
-          <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">الاسم الثلاثي الكامل *</label>
-          <input type="text" required placeholder="اسمك الكامل" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500">
+          <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300" data-i18n="books.formFullName">الاسم الثلاثي الكامل *</label>
+          <input type="text" required placeholder="اسمك الكامل" data-i18n-placeholder="books.phFullName" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500">
         </div>
 
         <div>
-          <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">رقم الملف الجامعي (Student ID) *</label>
-          <input type="text" required placeholder="مثال: 42130000" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+          <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300" data-i18n="books.formStudentId">رقم الملف الجامعي (Student ID) *</label>
+          <input type="text" required placeholder="مثال: 42130000" data-i18n-placeholder="books.phStudentId" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
         </div>
 
         <div>
-          <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">رقم الهاتف (واتساب) *</label>
-          <input type="tel" required placeholder="03xxxxxx / 70xxxxxx" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
+          <label class="block text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300" data-i18n="books.formPhone">رقم الهاتف (واتساب) *</label>
+          <input type="tel" required placeholder="03xxxxxx / 70xxxxxx" data-i18n-placeholder="books.phPhone" class="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-[#152033] bg-slate-50 dark:bg-[#0b1222] text-slate-900 dark:text-slate-100 focus:outline-none focus:border-gold-500 text-left font-mono" dir="ltr">
         </div>
 
         <!-- حقل أمني لمنع روبوتات السبام (Honeypot) -->
@@ -370,11 +370,11 @@
 
         <button type="submit" class="w-full py-3.5 rounded-full bg-gold-500 text-white font-bold text-xs flex items-center justify-center gap-2 hover:opacity-95 transition shadow-md mt-2 cursor-pointer">
           <i data-lucide="bookmark-check" class="w-4 h-4"></i>
-          <span>تأكيد الحجز المباشر</span>
+          <span data-i18n="books.btnConfirmBorrow">تأكيد الحجز المباشر</span>
         </button>
       </form>
 
-      <div id="modalSuccess" class="hidden mt-4 p-3.5 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs">
+      <div id="modalSuccess" class="hidden mt-4 p-3.5 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs" data-i18n="books.msgBorrowSuccess">
         تم حجز نسختك بنجاح! سيتم التواصل معك عبر الواتساب لتسليمك الكتاب داخل فرع صور.
       </div>
     </div>
@@ -836,13 +836,13 @@
 
           localStorage.setItem('nadi_books_last_sub', Date.now());
           if (modalSuccess) modalSuccess.classList.remove('hidden');
-          showToast('تم تسجيل طلب الاستعارة بنجاح', 'success');
+          showToast(window.t ? window.t('books.toastBorrowSuccess') : 'تم تسجيل طلب الاستعارة بنجاح', 'success');
           borrowForm.reset();
           setTimeout(() => {
             closeModal();
           }, 2000);
         } catch (err) {
-          showToast('تعذر تسجيل الحجز، يرجى المحاولة لاحقاً', 'error');
+          showToast(window.t ? window.t('books.toastBorrowError') : 'تعذر تسجيل الحجز، يرجى المحاولة لاحقاً', 'error');
         } finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalBtnText;
@@ -874,12 +874,13 @@
         const originalBtnText = submitDonateBtn.innerHTML;
 
         submitDonateBtn.disabled = true;
+        const submittingText = window.t ? window.t('books.submittingDonate') : 'جاري تسجيل التبرع...';
         submitDonateBtn.innerHTML = `
           <svg class="animate-spin -ml-1 mr-2 h-3.5 w-3.5 text-current inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span>جاري تسجيل التبرع...</span>
+          <span>${submittingText}</span>
         `;
 
         const fullName = document.getElementById('donatorName').value.trim();
@@ -916,10 +917,10 @@
 
           localStorage.setItem('nadi_books_last_sub', Date.now());
           if (donateSuccess) donateSuccess.classList.remove('hidden');
-          showToast('تم تسجيل بيانات التبرع بنجاح، شكراً لمساهمتك', 'success');
+          showToast(window.t ? window.t('books.toastDonateSuccess') : 'تم تسجيل بيانات التبرع بنجاح، شكراً لمساهمتك', 'success');
           donateForm.reset();
         } catch (err) {
-          showToast('تعذر تسجيل التبرع حالياً، يرجى المحاولة لاحقاً', 'error');
+          showToast(window.t ? window.t('books.toastDonateError') : 'تعذر تسجيل التبرع حالياً، يرجى المحاولة لاحقاً', 'error');
         } finally {
           submitDonateBtn.disabled = false;
           submitDonateBtn.innerHTML = originalBtnText;
