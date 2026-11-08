@@ -1,3 +1,12 @@
+function setGeminiApiKey() {
+  // قم بلصق مفتاحك هنا وتشغيل هذه الدالة مرة واحدة فقط لحفظه مشفراً في خادم جوجل
+  var keyToSave = "ضع_مفتاحك_هنا";
+  if (keyToSave && keyToSave.indexOf("ضع_") === -1) {
+    PropertiesService.getScriptProperties().setProperty("GEMINI_API_KEY", keyToSave.trim());
+    Logger.log("تم حفظ المفتاح بنجاح وأمان تام!");
+  }
+}
+
 function testAuth() {
   UrlFetchApp.fetch("https://www.google.com");
 }
@@ -27,8 +36,15 @@ function doPost(e) {
         return createJsonResponse({ status: "error", message: "الرجاء إدخال استفسار أكاديمي صالح." });
       }
 
-      // المفتاح المعتمد للذكاء الاصطناعي
-      var apiKey = "AQ.Ab8RN6IvWik3BwTeS6_dy8EUqohIeZr16IbDjhxdhLhLKd3YyQ";
+      // جلب المفتاح بأمان وسرية من خصائص السكربت المشفرة في خوادم جوجل
+      var apiKey = PropertiesService.getScriptProperties().getProperty("GEMINI_API_KEY");
+      if (!apiKey || apiKey.trim() === "") {
+        return createJsonResponse({
+          status: "error",
+          message: "لم يتم حفظ مفتاح الذكاء الاصطناعي في إعدادات السكربت (GEMINI_API_KEY). يرجى تشغيل دالة setGeminiApiKey مرة واحدة."
+        });
+      }
+      apiKey = apiKey.trim();
 
       // بناء سياق وتاريخ المحادثة
       var history = Array.isArray(data.history) ? data.history : [];
