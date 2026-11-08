@@ -175,6 +175,31 @@
       box-shadow: 0 18px 42px -10px rgba(14, 28, 65, 0.6), 0 0 25px -5px rgba(56, 189, 248, 0.15), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
       transform: translateY(-3px);
     }
+
+    /* =========================================================================
+       Modern Staggered Scroll-Reveal Animation Styles
+       ========================================================================= */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(28px) scale(0.97);
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), 
+                  transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .scroll-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Accessibility: Disable motion if user prefers reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
   </style>
 </head>
 <body class="bg-[#faf8f5] bg-[radial-gradient(ellipse_90%_60%_at_50%_-15%,rgba(217,119,6,0.08),rgba(30,58,138,0.04),transparent)] text-[#0d172a] dark:bg-[#070b14] dark:text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
@@ -881,6 +906,9 @@
               `;
             }).join('');
             lucide.createIcons();
+            if (typeof window.observeDynamicCards === 'function') {
+              window.observeDynamicCards('#activitiesGrid');
+            }
           }
         }
       }
@@ -1051,6 +1079,84 @@
         if (e.key === 'ArrowLeft') navigateLightbox(-1);
       }
     });
+
+    // =========================================================================
+    // Centralized Intersection Observer for Scroll Animations
+    // =========================================================================
+    function initScrollObserver() {
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.scroll-reveal').forEach(function(el) {
+          el.classList.add('revealed');
+        });
+        return;
+      }
+
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -50px 0px',
+        threshold: 0.12
+      };
+
+      const scrollObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            const target = entry.target;
+            const delay = parseInt(target.getAttribute('data-anim-delay') || '0', 10);
+
+            setTimeout(function() {
+              target.classList.add('revealed');
+            }, delay);
+
+            observer.unobserve(target);
+          }
+        });
+      }, observerOptions);
+
+      // 1. Attach to Services Grid Cards («ماذا يقدّم النادي»)
+      const serviceCards = document.querySelectorAll('.service-card, #servicesGrid > div, .services-container > div');
+      serviceCards.forEach(function(card, index) {
+        if (!card.classList.contains('scroll-reveal')) {
+          card.classList.add('scroll-reveal');
+          card.setAttribute('data-anim-delay', (index * 80).toString());
+          scrollObserver.observe(card);
+        }
+      });
+
+      // 2. Attach to Philosophy / Mission Quote Section
+      const quoteSection = document.querySelector('blockquote')?.closest('section') || 
+                           document.querySelector('#quoteSection') || 
+                           document.querySelector('.mission-quote');
+      if (quoteSection && !quoteSection.classList.contains('scroll-reveal')) {
+        quoteSection.classList.add('scroll-reveal');
+        quoteSection.setAttribute('data-anim-delay', '120');
+        scrollObserver.observe(quoteSection);
+      }
+
+      // 3. Global function to animate dynamically fetched cards (Activities Feed)
+      window.observeDynamicCards = function(containerSelector) {
+        const dynamicCards = document.querySelectorAll(containerSelector + ' > article, ' + containerSelector + ' > div');
+        dynamicCards.forEach(function(card, index) {
+          if (!card.classList.contains('scroll-reveal')) {
+            card.classList.add('scroll-reveal');
+            card.setAttribute('data-anim-delay', (index * 90).toString());
+            scrollObserver.observe(card);
+          }
+        });
+      };
+
+      // 4. Safety Fail-Safe: Force reveal after 3 seconds in case of slow rendering or errors
+      setTimeout(function() {
+        document.querySelectorAll('.scroll-reveal:not(.revealed)').forEach(function(el) {
+          el.classList.add('revealed');
+        });
+      }, 3000);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initScrollObserver);
+    } else {
+      initScrollObserver();
+    }
   </script>
 
   <!-- ==================== نافذة تكبير الصور التفاعلية Lightbox Modal ==================== -->
