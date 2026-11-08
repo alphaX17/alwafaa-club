@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nadi-alwafaa-cache-v6';
+const CACHE_NAME = 'nadi-alwafaa-cache-v7';
 const STATIC_ASSETS = [
   './',
   './index.html',
